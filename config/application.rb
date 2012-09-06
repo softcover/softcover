@@ -53,6 +53,14 @@ module Polytexnic
     # Enable the asset pipeline
     config.assets.enabled = true
 
+    # Rails3-generators
+    config.generators do |g|
+      g.orm                  :active_record
+      g.template_engine      :haml
+      g.test_framework       :rspec,         :fixture  =>  true
+      g.fixture_replacement  :factory_girl
+    end
+
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
   end
