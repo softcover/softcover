@@ -1,0 +1,10 @@
+language: ruby
+rvm:
+  - 1.9.3
+env:
+  - RAILS_ENV=test
+before_install: gem install bundler --pre
+before_script:
+  - bundle exec rake --trace db:create
+  - bundle exec rake --trace db:schema:load
+  - bundle exec rake --trace db:test:prepare 
