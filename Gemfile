@@ -33,4 +33,7 @@ end
 group :test do
   gem 'rspec-rails'
   gem "spork-rails"
+
+  # Uncomment latter half to disable by default
+  gem 'simplecov' # , :require => false
 end
