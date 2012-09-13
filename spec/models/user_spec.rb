@@ -84,34 +84,4 @@ describe User do
 
     end
   end
-
-  it 'should have access to books' do
-
-    #============================================
-    # Setup
-    #============================================
-    
-
-    #============================================
-    # user_1 purchases the PDF option of book one
-    #============================================
-
-    #===================================================
-    # user_2 purchases the Screencast option of book two
-    #===================================================
-    #user_2 = Fabricate :user
-    #Fabricate :purchase, book_option: books[1].options.find_by_name(option_2_name), user: user_2
-
-    #user_2.books.should include books[1]
-    #user_2.books.should_not include books[0]
-    #user_2.books.should_not include books[2]
-
-    #user_2.accessible_media.should include books[1].media.find_by_name(medium_2_name)
-    #user_2.accessible_media.should_not include books[0].media.find_by_name(medium_2_name)
-    #user_2.accessible_media.should_not include books[2].media.find_by_name(medium_2_name)
-
-    #===================================================
-    # user_3 purchases the Both option of book three
-    #===================================================
-  end
 end
