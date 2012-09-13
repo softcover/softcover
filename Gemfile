@@ -27,12 +27,13 @@ end
 group :development, :test do
   gem 'debugger'
   gem 'rails3-generators' # to generate factory_girl for testing
-  gem "factory_girl_rails", ">= 4.0.0"
 end
 
 group :test do
   gem 'rspec-rails'
   gem "spork-rails"
+
+  gem 'fabrication'
 
   # Uncomment latter half to disable by default
   gem 'simplecov' # , :require => false
