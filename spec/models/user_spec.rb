@@ -96,7 +96,11 @@ describe User do
         @user.owned_books.should_not include @books[2]
       end
       
-      it 'should tell media if its owned by user' do
+      it 'should tell book/media if its owned by user' do
+        @books[0].owners.should include @user
+        @books[1].owners.should include @user
+        @books[2].owners.should_not include @user
+
         @books[0].media.find_by_name(@medium_1_name).should be_owned_by @user
         @books[0].media.find_by_name(@medium_2_name).should_not be_owned_by @user
 
