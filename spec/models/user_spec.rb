@@ -35,13 +35,13 @@ describe User do
       end
 
       it 'should give user access to book and medium' do
-        @user.books.should include @books[0]
-        @user.books.should_not include @books[1]
-        @user.books.should_not include @books[2]
+        @user.owned_books.should include @books[0]
+        @user.owned_books.should_not include @books[1]
+        @user.owned_books.should_not include @books[2]
 
-        @user.accessible_media.should include @books[0].media.find_by_name(@medium_1_name)
-        @user.accessible_media.should_not include @books[1].media.find_by_name(@medium_1_name)
-        @user.accessible_media.should_not include @books[2].media.find_by_name(@medium_1_name)
+        @user.owned_media.should include @books[0].media.find_by_name(@medium_1_name)
+        @user.owned_media.should_not include @books[1].media.find_by_name(@medium_1_name)
+        @user.owned_media.should_not include @books[2].media.find_by_name(@medium_1_name)
       end
     end
 
@@ -52,15 +52,15 @@ describe User do
       end
 
       it 'should give user access to book and both mediums' do
-        @user.books.should include @books[2]
-        @user.books.should_not include @books[0]
-        @user.books.should_not include @books[1]
+        @user.owned_books.should include @books[2]
+        @user.owned_books.should_not include @books[0]
+        @user.owned_books.should_not include @books[1]
 
-        @user.accessible_media.should include @books[2].media.find_by_name(@medium_1_name)
-        @user.accessible_media.should include @books[2].media.find_by_name(@medium_2_name)
+        @user.owned_media.should include @books[2].media.find_by_name(@medium_1_name)
+        @user.owned_media.should include @books[2].media.find_by_name(@medium_2_name)
 
-        @user.accessible_media.should_not include @books[0].media.find_by_name(@medium_1_name)
-        @user.accessible_media.should_not include @books[1].media.find_by_name(@medium_1_name)
+        @user.owned_media.should_not include @books[0].media.find_by_name(@medium_1_name)
+        @user.owned_media.should_not include @books[1].media.find_by_name(@medium_1_name)
       end
     end
 
@@ -74,12 +74,12 @@ describe User do
       end
 
       it 'should give access to both books and medias' do
-        @user.books.should include @books[0]
-        @user.books.should include @books[1]
-        @user.books.should_not include @books[2]
+        @user.owned_books.should include @books[0]
+        @user.owned_books.should include @books[1]
+        @user.owned_books.should_not include @books[2]
 
-        @user.accessible_media.should include @option_1.media.first
-        @user.accessible_media.should include @option_2.media.first
+        @user.owned_media.should include @option_1.media.first
+        @user.owned_media.should include @option_2.media.first
       end
 
     end

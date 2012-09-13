@@ -2,14 +2,18 @@ class User < ActiveRecord::Base
   attr_accessible :email
   attr_accessor :password, :password_confirmation
 
+  has_many :books
+
   has_many :ownerships, dependent: :destroy
   has_many :purchases, dependent: :destroy
 
-  def books
-    Book.joins(media:{options:{purchases: :ownerships}}).where('ownerships.user_id = ?', id)
+  scope :owners_of, lambda{|book| joins(ownerships:{purchase: :option}).where('book_options.book_id = ?', book.id)}
+
+  def owned_books
+    Book.owned_by self
   end
 
-  def accessible_media
-    BookMedium.joins(options:{purchases: :ownerships}).where('ownerships.user_id = ?', id)
+  def owned_media
+    BookMedium.owned_by self
   end
 end
