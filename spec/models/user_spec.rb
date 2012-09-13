@@ -36,12 +36,20 @@ describe User do
 
       it 'should give user access to book and medium' do
         @user.owned_books.should include @books[0]
+        @user.owned_media.should include @books[0].media.find_by_name(@medium_1_name)
+      end
+
+      it 'should restrict acces to un-owned books and media' do
         @user.owned_books.should_not include @books[1]
         @user.owned_books.should_not include @books[2]
 
-        @user.owned_media.should include @books[0].media.find_by_name(@medium_1_name)
         @user.owned_media.should_not include @books[1].media.find_by_name(@medium_1_name)
         @user.owned_media.should_not include @books[2].media.find_by_name(@medium_1_name)
+      end
+
+      it 'should be an owner of book' do
+        @books[0].owners.should include @user
+        @books[1].owners.should_not include @user
       end
     end
 
@@ -53,11 +61,14 @@ describe User do
 
       it 'should give user access to book and both mediums' do
         @user.owned_books.should include @books[2]
-        @user.owned_books.should_not include @books[0]
-        @user.owned_books.should_not include @books[1]
 
         @user.owned_media.should include @books[2].media.find_by_name(@medium_1_name)
         @user.owned_media.should include @books[2].media.find_by_name(@medium_2_name)
+      end
+
+      it 'should restrict acces to un-owned books and media' do
+        @user.owned_books.should_not include @books[0]
+        @user.owned_books.should_not include @books[1]
 
         @user.owned_media.should_not include @books[0].media.find_by_name(@medium_1_name)
         @user.owned_media.should_not include @books[1].media.find_by_name(@medium_1_name)
@@ -76,10 +87,21 @@ describe User do
       it 'should give access to both books and medias' do
         @user.owned_books.should include @books[0]
         @user.owned_books.should include @books[1]
-        @user.owned_books.should_not include @books[2]
 
         @user.owned_media.should include @option_1.media.first
         @user.owned_media.should include @option_2.media.first
+      end
+
+      it 'should restrict acces to un-owned books and media' do
+        @user.owned_books.should_not include @books[2]
+      end
+      
+      it 'should tell media if its owned by user' do
+        @books[0].media.find_by_name(@medium_1_name).should be_owned_by @user
+        @books[0].media.find_by_name(@medium_2_name).should_not be_owned_by @user
+
+        @books[1].media.find_by_name(@medium_1_name).should_not be_owned_by @user
+        @books[1].media.find_by_name(@medium_2_name).should be_owned_by @user
       end
 
     end

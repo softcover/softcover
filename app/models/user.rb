@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   has_many :ownerships, dependent: :destroy
   has_many :purchases, dependent: :destroy
 
-  scope :owners_of, lambda{|book| joins(ownerships:{purchase: :option}).where('book_options.book_id = ?', book.id)}
+  scope :owners_of, lambda{|book| joins(ownerships:{purchase: :book_option}).where('book_options.book_id = ?', book.id)}
 
   def owned_books
     Book.owned_by self

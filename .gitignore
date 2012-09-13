@@ -14,3 +14,5 @@
 /tmp
 
 *.sw*
+
+.DS_Store
