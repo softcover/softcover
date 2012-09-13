@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120913014013) do
+ActiveRecord::Schema.define(:version => 20120913185505) do
 
   create_table "book_media", :force => true do |t|
     t.string   "name"
@@ -19,9 +19,11 @@ ActiveRecord::Schema.define(:version => 20120913014013) do
     t.string   "url"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "type"
   end
 
   add_index "book_media", ["book_id"], :name => "index_book_media_on_book_id"
+  add_index "book_media", ["type"], :name => "index_book_media_on_type"
 
   create_table "book_medium_options", :force => true do |t|
     t.integer  "book_medium_id"

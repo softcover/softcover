@@ -3,7 +3,12 @@ class Book < ActiveRecord::Base
 
   belongs_to :user
 
-  has_many :media, class_name: 'BookMedium', dependent: :destroy
+  has_many :media, class_name: 'BookMedium', dependent: :destroy do
+    def of_type(klass)
+      find_by_type klass.to_s
+    end
+  end
+
   has_many :options, class_name: 'BookOption', dependent: :destroy
 
   has_many :purchases, through: :options
