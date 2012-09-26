@@ -1,24 +1,14 @@
-# Polytexnic::Gem
+# Polytexnic CLI
 
-TODO: Write a gem description
+Command line interface for Polytexnic.com
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-    gem 'polytexnic-gem'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install polytexnic-gem
+		$ gem install polytexnic
 
 ## Usage
 
-TODO: Write usage instructions here
+		$ polytexnic
 
 ## Contributing
 
