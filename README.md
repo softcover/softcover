@@ -10,6 +10,9 @@ Command line interface for Polytexnic.com
 
 		$ polytexnic
 
+## Development Notes
+		$ polytexnic config:add host=http://localhost:3000
+
 ## Contributing
 
 1. Fork it

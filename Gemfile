@@ -5,5 +5,7 @@ gemspec
 
 gem 'thor'
 gem 'activesupport'
+gem 'rest-client'
 
 gem 'rspec'
+gem 'webmock'
