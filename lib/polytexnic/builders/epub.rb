@@ -1,11 +1,11 @@
 module Polytexnic
-	module Builders
-		class Epub < Builder
+  module Builders
+    class Epub < Builder
 
-			def build!
-				puts 'building epub!'
-			end
+      def build!
+        puts 'building epub!'
+      end
 
-		end
-	end
+    end
+  end
 end

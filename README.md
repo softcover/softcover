@@ -4,11 +4,11 @@ Command line interface for Polytexnic.com
 
 ## Installation
 
-		$ gem install polytexnic
+    $ gem install polytexnic
 
 ## Usage
 
-		$ polytexnic <command>
+    $ polytexnic <command>
 
 ## Commands:
 
@@ -17,10 +17,10 @@ Command line interface for Polytexnic.com
 * build:html, build:pdf, build:epub, build:mobi, build:all
 * build (aliased to build:html)
 * publish
-* new 
+* new
 
 ## Development Notes
-		$ polytexnic config:add host=http://localhost:3000
+    $ polytexnic config:add host=http://localhost:3000
 
 ## Contributing
 

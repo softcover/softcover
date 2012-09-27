@@ -1,11 +1,11 @@
 module Polytexnic
-	module Builders
-		class Html < Builder
+  module Builders
+    class Html < Builder
 
-			def build!
-				puts 'building html!'
-			end
+      def build!
+        puts 'building html!'
+      end
 
-		end
-	end
+    end
+  end
 end

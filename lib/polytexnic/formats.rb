@@ -1,3 +1,3 @@
 module Polytexnic
-	FORMATS = %w{html pdf epub mobi}
+  FORMATS = %w{html pdf epub mobi}
 end

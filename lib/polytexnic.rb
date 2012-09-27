@@ -4,13 +4,13 @@ require 'polytexnic/formats'
 Dir[File.dirname(__FILE__) + '/polytexnic/**/*.rb'].each{|f| require f}
 
 module Polytexnic
-	extend self
+  extend self
 
-	def set_test_mode!
-		@test_mode = true
-	end
+  def set_test_mode!
+    @test_mode = true
+  end
 
-	def test?
-		@test_mode
-	end
+  def test?
+    @test_mode
+  end
 end
