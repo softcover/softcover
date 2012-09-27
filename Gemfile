@@ -8,4 +8,5 @@ gem 'activesupport'
 gem 'rest-client'
 
 gem 'rspec'
-gem 'webmock'
+gem 'webmock', require: false
+gem 'simplecov', require: false
