@@ -29,6 +29,16 @@ describe Polytexnic::Commands::Auth do
 		it 'should not set the api key' do
 			Polytexnic::Config['api_key'].should be_nil
 		end
+	end
 
+	context "logging out" do
+		before do
+			Polytexnic::Config['api_key'] = 'asdfasdf'
+		  Polytexnic::Commands::Auth.logout
+		end
+
+		it "should unset the api_key" do
+			Polytexnic::Config['api_key'].should be_nil
+		end
 	end
 end

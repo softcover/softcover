@@ -8,7 +8,16 @@ Command line interface for Polytexnic.com
 
 ## Usage
 
-		$ polytexnic
+		$ polytexnic <command>
+
+## Commands:
+
+* login
+* logout
+* build:html, build:pdf, build:epub, build:mobi, build:all
+* build (aliased to build:html)
+* publish
+* new 
 
 ## Development Notes
 		$ polytexnic config:add host=http://localhost:3000
