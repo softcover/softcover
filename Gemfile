@@ -12,3 +12,6 @@ gem 'spork'
 gem 'debugger'
 gem 'webmock', require: false
 gem 'simplecov', require: false
+
+gem 'curb'
+gem 'ruby-progressbar'

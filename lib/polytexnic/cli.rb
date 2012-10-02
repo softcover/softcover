@@ -5,6 +5,10 @@ module Polytexnic
   class CLI < Thor
     include Thor::Actions
 
+    # ===============================================
+    # Builder
+    # ===============================================
+
     desc 'build', 'Build all formats.'
     def build
       Polytexnic::Commands::Build.all_formats
@@ -16,6 +20,10 @@ module Polytexnic
         Polytexnic::Commands::Build.for_format format
       end
     end
+
+    # ===============================================
+    # Auth
+    # ===============================================
 
     desc "login", "Log into polytexnic.com account"
     def login
@@ -35,15 +43,28 @@ module Polytexnic
       Polytexnic::Commands::Auth.logout
     end
 
+    # ===============================================
+    # Publisher
+    # ===============================================
+
     desc "publish", "Publish your book on polytexnic.com"
     def publish
+      puts "Publishing..."
       Polytexnic::Commands::Publisher.publish!
     end
+
+    # ===============================================
+    # Generator
+    # ===============================================
 
     desc "new <name>", "Generate new book directory structure."
     def new(name)
       Polytexnic::Commands::Generator.generate_directory name
     end
+
+    # ===============================================
+    # Config
+    # ===============================================
 
     desc "config", "View local config"
     def config
