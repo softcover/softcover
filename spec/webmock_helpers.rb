@@ -21,7 +21,7 @@ module WebmockHelpers
       to_return(:status => 422, body: '')
   end
 
-  def stub_create_book(book)
+  def stub_create_book(book, test_id=1)
     test_bucket = 'test-bucket'
     test_access_key = 'asdf'
 
@@ -38,7 +38,7 @@ module WebmockHelpers
       bucket: test_bucket,
       access_key: test_access_key,
       book: {
-        id: 1
+        id: test_id
       }
     }.to_json
 
@@ -58,7 +58,7 @@ module WebmockHelpers
        with(:body => /.*/).
        to_return(:status => 200, :body => "", :headers => {})
 
-    stub_request(:put, "http://polytexnic.com/api/v1/books/1").
+    stub_request(:put, "http://polytexnic.com/api/v1/books/#{test_id}").
       with(:body => "{\"upload_complete\":true}",
         :headers => {'Accept'=>'application/json', 
           'Accept-Encoding'=>'gzip, deflate', 

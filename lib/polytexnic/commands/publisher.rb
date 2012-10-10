@@ -19,6 +19,7 @@ module Polytexnic::Commands::Publisher
       puts book.errors
       raise 'Could not get upload signature.'
     end
-
+    
+    true
   end
 end

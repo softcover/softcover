@@ -17,7 +17,7 @@ describe Polytexnic::Commands::Build do
   context 'building all' do
     subject {
       lambda {
-        silence_stream($stdout) { Polytexnic::Commands::Build.all_formats }
+        silence { Polytexnic::Commands::Build.all_formats }
       }
     }
 

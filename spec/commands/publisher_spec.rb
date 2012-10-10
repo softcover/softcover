@@ -23,7 +23,7 @@ describe Polytexnic::Commands::Publisher do
 
     it "publishes" do
       silence do
-        Polytexnic::Commands::Publisher.publish!
+        Polytexnic::Commands::Publisher.publish!.should be_true
       end
     end
   end
