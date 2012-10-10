@@ -1,3 +1,22 @@
+# Install Polytexnic CLI for **Development**
+- RVM users: 'rvm @global' or 'rvm <ruby-ver>@global'
+  - CLI depends on where bundle installs to
+- bundle install
+- rake install
+
+- test by opening a iterm tab, then run 'polytexnic'
+- setup to point to localhost
+  - polytexnic config host='http://localhost:3000'
+
+- ensure polytexnic-app setup with S3 credentials
+  - see that project's README
+- should now be able to `polytexnic login` with an email/password from the
+  localhost polytexnic app
+  - in a folder with html files, should be able to `polytexnic publish` to
+    create a book w/chapter objects on the server, upload assets to S3 and link
+    the Rails objects with their S3 locations
+
+
 # Polytexnic CLI
 
 Command line interface for Polytexnic.com
