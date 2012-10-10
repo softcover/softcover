@@ -5,8 +5,6 @@ describe Polytexnic::Commands::Build do
     Polytexnic::FORMATS.each do |format|
       subject { Polytexnic::Commands::Build.builder_for(format) }
       it { should be_a Polytexnic::Builder }
-
-      subject
     end
   end
 

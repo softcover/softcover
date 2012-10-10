@@ -4,6 +4,7 @@ require "thor/group"
 module Polytexnic
   class CLI < Thor
     include Thor::Actions
+    include Polytexnic::Utils
 
     # ===============================================
     # Builder
@@ -27,6 +28,8 @@ module Polytexnic
 
     desc "login", "Log into polytexnic.com account"
     def login
+      puts "Logging in."
+
       logged_in = false
       while not logged_in do
         email = ask "Email:"
@@ -49,6 +52,8 @@ module Polytexnic
 
     desc "publish", "Publish your book on polytexnic.com"
     def publish
+      invoke :login unless logged_in? 
+
       puts "Publishing..."
       Polytexnic::Commands::Publisher.publish!
     end
