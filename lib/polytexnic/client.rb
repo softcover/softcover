@@ -13,6 +13,8 @@ module Polytexnic
       login: 'login',
       books: 'books'
     }
+    
+    attr_accessor :host
 
     def initialize(email=nil,password=nil)
       @email = email
@@ -49,7 +51,7 @@ module Polytexnic
     private
       %w{get put post}.each do |verb|
         define_method verb do |url, params, headers={}|
-          RestClient.post "#{@host}#{url}", 
+          RestClient.send verb, "#{@host}#{url}", 
             params_with_key(params).to_json, 
             formatted_headers(headers)
         end

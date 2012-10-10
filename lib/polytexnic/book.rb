@@ -1,12 +1,16 @@
 class Polytexnic::Book
-  attr_accessor :errors, :files, :total_size
+  include Polytexnic::Utils
+  
+  attr_accessor :errors, :files, :total_size, :slug, :signatures
 
   def initialize
     @files = Dir['**/*'].select do |f| 
       !File.directory?(f) && !(f =~ /_fragment/)
     end
 
-    @total_size = @files.inject(0) { |sum, f| sum += File.size? f }
+    @slug = File.basename Dir['*.pdf'][0], '.*'
+
+    @total_size = @files.inject(0) { |sum, f| sum += File.size?(f) || 0 }
 
     @client = Polytexnic::Client.new
   end
@@ -98,5 +102,3 @@ class Polytexnic::Book
   end
 
 end
-
-

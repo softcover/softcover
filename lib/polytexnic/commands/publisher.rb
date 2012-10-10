@@ -7,7 +7,7 @@ module Polytexnic::Commands::Publisher
   extend self
 
   def publish!
-    return unless in_book_directory?
+    return false unless in_book_directory?
 
     book = Polytexnic::Book.new
 

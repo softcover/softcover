@@ -6,12 +6,12 @@ gemspec
 gem 'thor'
 gem 'activesupport'
 gem 'rest-client'
+gem 'curb'
+gem 'ruby-progressbar'
 
+# ===== TEST =====
 gem 'rspec'
 gem 'spork'
 gem 'debugger'
 gem 'webmock', require: false
 gem 'simplecov', require: false
-
-gem 'curb'
-gem 'ruby-progressbar'
