@@ -1,14 +1,20 @@
 class Polytexnic::Book
   include Polytexnic::Utils
   
-  attr_accessor :errors, :files, :total_size, :slug, :signatures
+  attr_accessor :errors, :files, 
+    :total_size, :slug, :signatures, :chapter_manifest
 
   def initialize
-    @files = Dir['**/*'].select do |f| 
-      !File.directory?(f) && !(f =~ /_fragment/)
-    end
+    @chapter_manifest = Polytexnic::ChapterManifest::read
 
     @slug = File.basename Dir['*.pdf'][0], '.*'
+
+    @files = Dir['**/*'].select do |f| 
+      !File.directory?(f) && 
+        !(File.extname(f) == ".html" && !(f =~ /_fragment/)) &&
+        f != "html/#{@slug}.html" && 
+        f != "html/#{@slug}_fragment.html"
+    end
 
     @total_size = @files.inject(0) { |sum, f| sum += File.size?(f) || 0 }
 
@@ -16,7 +22,7 @@ class Polytexnic::Book
   end
 
   def create
-    res = @client.create_book @files
+    res = @client.create_book @files, @chapter_manifest
 
     if res['book']['errors'] 
       @errors = res['book']['errors']
@@ -53,10 +59,11 @@ class Polytexnic::Book
       # check etag against checksum
       head = Curl::Easy.http_head File.join(upload_host, params['key'])
       etag = head.header_str[/ETag: "(.*?)"/,1]
+      
       digest = Digest::MD5.hexdigest(File.read(path))
 
       if digest == etag
-        bar.title = "#{path} no change"
+        bar.title = "#{path} (skipping)"
         bar.progress += size
         next
       end
@@ -88,6 +95,8 @@ class Polytexnic::Book
         break
       end
     end
+
+    bar.finish
 
     if notify_upload_complete
       puts "Published! #{@client.host}/books/#{@attrs['slug']}"

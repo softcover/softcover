@@ -41,6 +41,10 @@ Command line interface for Polytexnic.com
 ## Development Notes
     $ polytexnic config:add host=http://localhost:3000
 
+  * use "silence=false" to unsilence spec output:
+
+    $ silence=false bundle exec rspec 
+
 ## Contributing
 
 1. Fork it
