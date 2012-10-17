@@ -15,6 +15,7 @@ describe Polytexnic::Commands::Build do
   end
 
   context 'building all' do
+    before { chdir_to_md_book }
     subject {
       lambda {
         silence { Polytexnic::Commands::Build.all_formats }
@@ -22,6 +23,10 @@ describe Polytexnic::Commands::Build do
     }
 
     it { should_not raise_error }
-  end
 
+    after(:all) do 
+      chdir_to_md_book
+      Polytexnic::Builders::Html.new.clean! 
+    end
+  end
 end

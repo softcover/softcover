@@ -45,7 +45,7 @@ module WebmockHelpers
     stub_request(:post, "http://polytexnic.com/api/v1/books").
       with(:body => {
           files: book.files, 
-          chapter_manifest: book.chapter_manifest
+          chapters: book.chapter_manifest.slugs
         }.to_json,
            :headers => {'Accept'=>'application/json', 
             'Accept-Encoding'=>'gzip, deflate', 
@@ -73,6 +73,10 @@ module WebmockHelpers
 
   def chdir_to_book
     Dir.chdir File.join File.dirname(__FILE__), "fixtures/book"
+  end
+
+  def chdir_to_md_book
+    Dir.chdir File.join File.dirname(__FILE__), "fixtures/md-book"
   end
 
   def chdir_to_non_book

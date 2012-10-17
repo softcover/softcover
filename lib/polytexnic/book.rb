@@ -5,9 +5,17 @@ class Polytexnic::Book
     :total_size, :slug, :signatures, :chapter_manifest
 
   def initialize
-    @chapter_manifest = Polytexnic::ChapterManifest::read
+    @chapter_manifest = Polytexnic::ChapterManifest.new
 
-    @slug = File.basename Dir['*.pdf'][0], '.*'
+    @slug = unless Dir['*.pdf'].empty?
+      File.basename Dir['*.pdf'][0], '.*'
+    else
+      dir = File.basename Dir.pwd 
+      if dir == "manuscript" 
+        dir = File.basename(File.expand_path Dir.pwd + "/..")
+      end
+      dir
+    end
 
     @files = Dir['**/*'].select do |f| 
       !File.directory?(f) && 
@@ -22,7 +30,9 @@ class Polytexnic::Book
   end
 
   def create
-    res = @client.create_book @files, @chapter_manifest
+    raise "HTML not built!" if Dir['html/*'].empty?
+
+    res = @client.create_book @files, @chapter_manifest.slugs
 
     if res['book']['errors'] 
       @errors = res['book']['errors']

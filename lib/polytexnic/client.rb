@@ -40,9 +40,9 @@ module Polytexnic
     end
 
     # ============ Publishing ===========
-    def create_book(files, chapter_manifest)
+    def create_book(files, chapters)
       JSON post path_for(:books), files: files, 
-        chapter_manifest: chapter_manifest
+        chapters: chapters
     end
 
     def notify_upload_complete(book_id)

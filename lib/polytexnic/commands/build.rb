@@ -5,7 +5,9 @@ module Polytexnic
 
       def for_format(format)
         raise 'invalid format' unless Polytexnic::FORMATS.include?(format)
+        print "Building #{format}..."
         builder_for(format).build!
+        puts "Done."
       end
 
       def all_formats
