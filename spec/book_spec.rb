@@ -20,8 +20,12 @@ describe Polytexnic::Book do
 
     context "valid md book directory" do
       before { chdir_to_md_book }
-      
+
       its(:slug) { should eq "md-book" }
     end
+  end
+
+  context "#create" do
+
   end
 end

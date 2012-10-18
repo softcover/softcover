@@ -1,0 +1,9 @@
+---
+title: Test Book
+subtitle: Sub Title
+slug: test-book
+cover: images/1.png
+description: Book description
+chapters:
+  - chapter-1
+  - chapter-2: Chapter 2 Long Title

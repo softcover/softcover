@@ -1,17 +1,34 @@
-class Polytexnic::ChapterManifest
+require 'ostruct'
+require 'active_support/core_ext/hash'
 
-  YAML_PATH = "chapters.yml"
+class Polytexnic::BookManifest < OpenStruct
+
+  class Chapter < OpenStruct; end
+
+  YAML_PATH = "book.yml"
+  JSON_PATH = "book.json"
+
   MD_PATH = "Book.txt"
 
-  attr_accessor :chapters
-
   def initialize(opts={})
-    @chapters = case
+    attrs = case
     when md? then read_from_md
     when polytex? then read_from_yml
     else
       fail
+    end.symbolize_keys!
+
+    n = 0
+    attrs[:chapters].map! do |chapter|
+      case chapter
+      when Hash then slug, title = chapter.first[0], chapter.first[1]
+      when String then slug, title = chapter, chapter.titleize
+      end
+
+      Chapter.new slug: slug, title: title, chapter_number: n += 1
     end
+
+    marshal_load attrs
 
     verify_paths! if opts[:verify_paths]
   end
@@ -57,7 +74,7 @@ class Polytexnic::ChapterManifest
 
     def fail
       # TODO: raise error with instructions on adding a chapter manifest
-      raise "No chapter manifest!"
+      raise "No manifest file found!"
     end
 
     def verify_paths!

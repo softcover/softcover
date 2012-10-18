@@ -2,26 +2,22 @@ class Polytexnic::Book
   include Polytexnic::Utils
   
   attr_accessor :errors, :files, 
-    :total_size, :slug, :signatures, :chapter_manifest
+    :total_size, :signatures, :manifest
 
   def initialize
-    @chapter_manifest = Polytexnic::ChapterManifest.new
 
-    @slug = unless Dir['*.pdf'].empty?
-      File.basename Dir['*.pdf'][0], '.*'
-    else
-      dir = File.basename Dir.pwd 
-      if dir == "manuscript" 
-        dir = File.basename(File.expand_path Dir.pwd + "/..")
-      end
-      dir
-    end
+    @manifest = Polytexnic::BookManifest.new
 
+    # read id from file
+    # TODO: should we change to UID?
+    @id = Polytexnic::BookConfig[:id]
+
+    # question: should we use `git ls-files` instead?
     @files = Dir['**/*'].select do |f| 
       !File.directory?(f) && 
         !(File.extname(f) == ".html" && !(f =~ /_fragment/)) &&
-        f != "html/#{@slug}.html" && 
-        f != "html/#{@slug}_fragment.html"
+        f != "html/#{slug}.html" && 
+        f != "html/#{slug}_fragment.html"
     end
 
     @total_size = @files.inject(0) { |sum, f| sum += File.size?(f) || 0 }
@@ -29,17 +25,29 @@ class Polytexnic::Book
     @client = Polytexnic::Client.new
   end
 
+  def chapter_attributes
+    chapters.map(&:marshal_dump)
+  end
+
   def create
     raise "HTML not built!" if Dir['html/*'].empty?
 
-    res = @client.create_book @files, @chapter_manifest.slugs
+    res = @client.create_or_update_book id: @id, 
+      files: @files,
+      title: title, 
+      subtitle: subtitle, 
+      description: description, 
+      chapters: chapter_attributes
 
     if res['book']['errors'] 
       @errors = res['book']['errors']
       return false
     end
 
+    # is this needed?
     @attrs = res['book']
+
+    Polytexnic::BookConfig[:id] = @attrs[:id]
 
     @signatures = res['signatures']
     @bucket = res['bucket']
@@ -120,4 +128,8 @@ class Polytexnic::Book
     JSON(res)
   end
 
+  private
+    def method_missing(name, *args, &block)
+      @manifest.send(name) || super
+    end
 end
