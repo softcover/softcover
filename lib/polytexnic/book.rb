@@ -114,9 +114,9 @@ class Polytexnic::Book
 
         last_chunk = 0
         c.on_progress do |_, _, ul_total, ul_now|
-          ul_now = size if ul_now > size
+          uploaded = ul_now > size ? size : ul_now
 
-          bar.title = "#{path} (#{as_size ul_now} / #{as_size size})"
+          bar.title = "#{path} (#{as_size uploaded} / #{as_size size})"
           bar.progress += ul_now - last_chunk rescue nil
           last_chunk = ul_now
           true
