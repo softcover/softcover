@@ -1,55 +1,83 @@
 class Polytexnic::Book
   include Polytexnic::Utils
-  
+
   attr_accessor :errors, :files, 
-    :total_size, :signatures, :manifest
+    :total_size, :signatures, :manifest, :upload_params
 
   def initialize
 
     @manifest = Polytexnic::BookManifest.new
 
-    # read id from file
-    # TODO: should we change to UID?
-    @id = Polytexnic::BookConfig[:id]
+    @client = Polytexnic::Client.new
+  end
 
+  # TODO: extract pattern to config helper:
+  #   has_config_for :id, :last_uploaded_at, path: ".polytex-book"
+
+  def id
+    Polytexnic::BookConfig['id']
+  end
+
+  def id=(n)
+    Polytexnic::BookConfig['id'] = n
+  end
+
+  # get array of paths and checksums
+  def files
     # question: should we use `git ls-files` instead?
-    @files = Dir['**/*'].select do |f| 
-      !File.directory?(f) && 
+    # TODO: only use pertinent files
+    @files ||= Dir['**/*'].map do |f| 
+
+      next nil unless !File.directory?(f) && 
         !(File.extname(f) == ".html" && !(f =~ /_fragment/)) &&
         f != "html/#{slug}.html" && 
         f != "html/#{slug}_fragment.html"
-    end
 
-    @total_size = @files.inject(0) { |sum, f| sum += File.size?(f) || 0 }
+      {
+        path: f,
+        checksum: Digest::MD5.hexdigest(File.read(f))
+      }
+    end.compact
+  end
 
-    @client = Polytexnic::Client.new
+  def filenames
+    files.map { |f| f[:path] }
   end
 
   def chapter_attributes
     chapters.map(&:marshal_dump)
   end
 
-  def create
+  # TODO: use with `polytexnic open` or `polytexnic info`
+  def url
+    "#{@client.host}/books/#{slug}"
+  end
+
+  def create_or_update
     raise "HTML not built!" if Dir['html/*'].empty?
 
-    res = @client.create_or_update_book id: @id, 
-      files: @files,
+    res = @client.create_or_update_book id: id, 
+      files: files,
       title: title, 
+      slug: slug,
       subtitle: subtitle, 
       description: description, 
+      cover: cover,
       chapters: chapter_attributes
 
-    if res['book']['errors'] 
-      @errors = res['book']['errors']
+    if res['errors'] 
+      @errors = res['errors']
       return false
     end
 
     # is this needed?
     @attrs = res['book']
 
-    Polytexnic::BookConfig[:id] = @attrs[:id]
+    self.id = @attrs['id']
+    Polytexnic::BookConfig['last_uploaded_at'] = Time.now
 
-    @signatures = res['signatures']
+    @upload_params = res['upload_params']
+
     @bucket = res['bucket']
     @access_key = res['access_key']
 
@@ -61,71 +89,76 @@ class Polytexnic::Book
     false
   end
 
+  def total_upload_size
+    @upload_params.inject(0) do |sum, p|
+      sum += File.size? p['path'] || 0
+    end
+  end
+
   def upload!
-    bar = ProgressBar.create title: "Starting Upload...", 
-      format: "%t |%B| %P%% %e", total: @total_size, smoothing: 0.75
 
-    upload_host = "http://#{@bucket}.s3.amazonaws.com"
+    unless @upload_params.empty?
+      bar = ProgressBar.create title: "Starting Upload...", 
+        format: "%t |%B| %P%% %e", total: total_upload_size, smoothing: 0.75
 
-    @files.each_with_index do |path,i|
+      upload_host = "http://#{@bucket}.s3.amazonaws.com"
 
-      # not so clean:
-      params = @signatures[i]
+      @upload_params.each do |params|
+        path = params['path']
 
-      size = File.size? path
+        size = File.size? path
 
-      # check etag against checksum
-      head = Curl::Easy.http_head File.join(upload_host, params['key'])
-      etag = head.header_str[/ETag: "(.*?)"/,1]
-      
-      digest = Digest::MD5.hexdigest(File.read(path))
+        c = Curl::Easy.new "http://#{@bucket}.s3.amazonaws.com"
 
-      if digest == etag
-        bar.title = "#{path} (skipping)"
-        bar.progress += size
-        next
+        c.multipart_form_post = true
+
+        last_chunk = 0
+        c.on_progress do |_, _, ul_total, ul_now|
+          ul_now = size if ul_now > size
+
+          bar.title = "#{path} (#{as_size ul_now} / #{as_size size})"
+          bar.progress += ul_now - last_chunk rescue nil
+          last_chunk = ul_now
+          true
+        end
+
+        c.http_post(
+          Curl::PostField.content('key', params['key']),
+          Curl::PostField.content('acl', params['acl']),
+          Curl::PostField.content('Signature', params['signature']),
+          Curl::PostField.content('Policy', params['policy']),
+          Curl::PostField.content('Content-Type', params['content_type']),
+          Curl::PostField.content('AWSAccessKeyId', @access_key),
+          Curl::PostField.file('file', path)
+        )
+
+        if c.body_str =~ /Error/
+          puts c.body_str
+          break
+        end
+
+        # this could spin off new thread:
+        @client.notify_file_upload id, 
+          path: path, 
+          checksum: @files.find { |f| f[:path] == path }[:checksum] # refactor
       end
 
-      c = Curl::Easy.new "http://#{@bucket}.s3.amazonaws.com"
-
-      c.multipart_form_post = true
-
-      last_chunk = 0
-      c.on_progress do |_, _, ul_total, ul_now|
-        bar.title = "#{path} (#{as_size ul_now} / #{as_size size})"
-        bar.progress += ul_now - last_chunk rescue nil
-        last_chunk = ul_now
-        true
-      end
-
-      c.http_post(
-        Curl::PostField.content('key', params['key']),
-        Curl::PostField.content('acl', params['acl']),
-        Curl::PostField.content('Signature', params['signature']),
-        Curl::PostField.content('Policy', params['policy']),
-        Curl::PostField.content('Content-Type', params['content_type']),
-        Curl::PostField.content('AWSAccessKeyId', @access_key),
-        Curl::PostField.file('file', path)
-      )
-
-      if c.body_str =~ /Error/
-        puts c.body_str
-        break
-      end
+      bar.finish
+    else
+      puts "Nothing to upload."
     end
 
-    bar.finish
+    res = notify_upload_complete
 
-    if notify_upload_complete
-      puts "Published! #{@client.host}/books/#{@attrs['slug']}"
+    if res['errors'].nil?
+      puts "Published! #{url}"
     else
-      puts "Couldn't verify upload, please try again."
+      puts "Couldn't verify upload: #{res['errors']}"
     end
   end
 
   def notify_upload_complete
-    res = @client.notify_upload_complete @attrs['id']
-    JSON(res)
+    @client.notify_upload_complete id
   end
 
   private

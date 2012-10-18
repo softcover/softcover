@@ -1,6 +1,6 @@
 module WebmockHelpers
   def stub_valid_login(email, pass, api_key=TEST_API_KEY)
-    stub_request(:post, "#{Polytexnic::Config::DEFAULTS[:host]}/api/v1/login").
+    stub_request(:post, "#{Polytexnic::BaseConfig::DEFAULTS[:host]}/api/v1/login").
       with(:body => {"email"=>email, "password"=>pass},
         :headers => {'Accept'=>'application/json', 
           'Accept-Encoding'=>'gzip, deflate', 
@@ -11,7 +11,7 @@ module WebmockHelpers
   end
 
   def stub_invalid_login(email, pass)
-    stub_request(:post, "#{Polytexnic::Config::DEFAULTS[:host]}/api/v1/login").
+    stub_request(:post, "#{Polytexnic::BaseConfig::DEFAULTS[:host]}/api/v1/login").
       with(:body => {"email"=>email, "password"=>pass}, 
         :headers => {'Accept'=>'application/json', 
           'Accept-Encoding'=>'gzip, deflate', 
@@ -28,11 +28,14 @@ module WebmockHelpers
     return_body = {
       signatures: book.files.map { |f|
         {
-          :policy          => "asdf",
-          :signature       => "asdf",
-          :acl             => "public-read",
-          :content_type    => "asdf",
-          :key             => File.join(book.slug, f)
+          sig: {
+            :policy          => "asdf",
+            :signature       => "asdf",
+            :acl             => "public-read",
+            :content_type    => "asdf",
+            :key             => File.join(book.slug, f[:path]),
+            :path            => f[:path]
+          }
         }
       },
       bucket: test_bucket,
@@ -44,8 +47,14 @@ module WebmockHelpers
 
     stub_request(:post, "http://polytexnic.com/api/v1/books").
       with(:body => {
+          id: book.id,
           files: book.files, 
-          chapters: book.chapter_manifest.slugs
+          title: book.title, 
+          slug: book.slug,
+          subtitle: book.subtitle, 
+          description: book.description, 
+          chapters: book.chapter_attributes,
+          cover: book.cover
         }.to_json,
            :headers => {'Accept'=>'application/json', 
             'Accept-Encoding'=>'gzip, deflate', 

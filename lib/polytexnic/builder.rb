@@ -3,7 +3,7 @@ module Polytexnic
     attr_accessor :chapter_manifest, :built_files
 
     def initialize
-      @chapter_manifest = Polytexnic::ChapterManifest.new verify_paths: true
+      @manifest = Polytexnic::BookManifest.new verify_paths: true
       @built_files = []
     end
 

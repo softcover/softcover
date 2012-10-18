@@ -42,10 +42,10 @@ class Polytexnic::BookManifest < OpenStruct
   end
 
   def chapter_file_paths
-    @chapters.map do |chapter_path|
+    chapters.map do |chapter|
       file_path = case
-      when md? then chapter_path
-      when polytex? then "chapters/#{chapter_path}.tex"
+      when md? then chapter.slug
+      when polytex? then "chapters/#{chapter_path.slug}.tex"
       end
 
       yield file_path if block_given?
@@ -69,7 +69,8 @@ class Polytexnic::BookManifest < OpenStruct
       f = File.open(MD_PATH) 
       chapters = f.readlines.map { |path| path.gsub /\n/,'' }
       f.close
-      chapters
+
+      {chapters: chapters}
     end
 
     def fail

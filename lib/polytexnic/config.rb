@@ -1,15 +1,13 @@
 require 'yaml/store'
 
 module Polytexnic
-  class Config
+  class BaseConfig
+
+    DEFAULTS = {
+      host: 'http://polytexnic.com'
+    }
+
     class << self
-
-      DEFAULTS = {
-        host: 'http://polytexnic.com'
-      }
-
-      PATH = "~/.polytexnic"
-
       def [](key)
         store.transaction do
           store[key]
@@ -38,16 +36,18 @@ module Polytexnic
         end
 
         def file_path
-          File.expand_path(PATH).tap do |path|
+          File.expand_path(self::PATH).tap do |path|
             path.gsub!(/$/,"-test") if Polytexnic::test?
           end
         end
     end
   end
 
-  class BookConfig < Config
-    class << self
-      PATH = ".polytexnic-book"
-    end
+  class BookConfig < BaseConfig
+    PATH = ".polytexnic-book"
+  end
+
+  class Config < BaseConfig
+    PATH = "~/.polytexnic"
   end
 end

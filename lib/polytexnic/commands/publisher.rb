@@ -11,13 +11,14 @@ module Polytexnic::Commands::Publisher
 
     book = Polytexnic::Book.new
 
-    puts "Getting upload signatures..."
-    if book.create
-      puts "Uploading #{book.files.count} files (#{as_size book.total_size}):"
+    if book.create_or_update
+      puts "Uploading #{book.upload_params.count} files " \
+        "(#{as_size book.total_upload_size}):"
+
       book.upload!
     else
+      puts "Errors:"
       puts book.errors
-      raise 'Could not get upload signature.'
     end
     
     true

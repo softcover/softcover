@@ -44,6 +44,10 @@ module Polytexnic
       JSON post path_for(:books), params
     end
 
+    def notify_file_upload(book_id, params)
+      JSON post path_for(:books, book_id, :notify_file_upload), params
+    end
+
     def notify_upload_complete(book_id)
       JSON put path_for(:books, book_id), upload_complete: true
     end

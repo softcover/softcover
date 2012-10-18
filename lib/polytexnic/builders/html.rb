@@ -9,8 +9,10 @@ module Polytexnic
       end
 
       def build
-        if @chapter_manifest.md?
-          @chapter_manifest.chapters.each do |path|
+        if @manifest.md?
+          @manifest.chapters.each do |chapter|
+            path = chapter.slug
+            
             md = Maruku.new File.read(path)
 
             basename = File.basename path, ".*"
