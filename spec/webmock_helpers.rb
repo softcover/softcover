@@ -1,23 +1,25 @@
 module WebmockHelpers
-  def stub_valid_login(email, pass, api_key=TEST_API_KEY)
-    stub_request(:post, "#{Polytexnic::BaseConfig::DEFAULTS[:host]}/api/v1/login").
-      with(:body => {"email"=>email, "password"=>pass},
-        :headers => {'Accept'=>'application/json', 
+  def api_base_url
+    "#{Polytexnic::BaseConfig::DEFAULTS[:host]}/api/v1"
+  end
+
+  HEADERS = {'Accept'=>'application/json', 
           'Accept-Encoding'=>'gzip, deflate', 
           'Content-Length'=>/.+/, 
           'Content-Type'=>'application/json', 
-          'User-Agent'=>'Ruby'} ).
+          'User-Agent'=>'Ruby'}
+
+  def stub_valid_login(email, pass, api_key=TEST_API_KEY)
+    stub_request(:post, "#{api_base_url}/login").
+      with(:body => {"email"=>email, "password"=>pass},
+        :headers => HEADERS ).
       to_return(:status => 200, :body => {api_key: api_key}.to_json)
   end
 
   def stub_invalid_login(email, pass)
-    stub_request(:post, "#{Polytexnic::BaseConfig::DEFAULTS[:host]}/api/v1/login").
+    stub_request(:post, "#{api_base_url}/login").
       with(:body => {"email"=>email, "password"=>pass}, 
-        :headers => {'Accept'=>'application/json', 
-          'Accept-Encoding'=>'gzip, deflate', 
-          'Content-Length'=>/.+/, 
-          'Content-Type'=>'application/json', 
-          'User-Agent'=>'Ruby'} ).
+        :headers => HEADERS ).
       to_return(:status => 422, body: '')
   end
 
@@ -26,16 +28,14 @@ module WebmockHelpers
     test_access_key = 'asdf'
 
     return_body = {
-      signatures: book.files.map { |f|
+      upload_params: book.files.map { |f|
         {
-          sig: {
-            :policy          => "asdf",
-            :signature       => "asdf",
-            :acl             => "public-read",
-            :content_type    => "asdf",
-            :key             => File.join(book.slug, f[:path]),
-            :path            => f[:path]
-          }
+          :policy          => "asdf",
+          :signature       => "asdf",
+          :acl             => "public-read",
+          :content_type    => "asdf",
+          :key             => File.join(book.slug, f.path),
+          :path            => f.path
         }
       },
       bucket: test_bucket,
@@ -45,7 +45,7 @@ module WebmockHelpers
       }
     }.to_json
 
-    stub_request(:post, "http://polytexnic.com/api/v1/books").
+    stub_request(:post, "#{api_base_url}/books").
       with(:body => {
           id: book.id,
           files: book.files, 
@@ -53,30 +53,29 @@ module WebmockHelpers
           slug: book.slug,
           subtitle: book.subtitle, 
           description: book.description, 
-          chapters: book.chapter_attributes,
-          cover: book.cover
+          cover: book.cover,
+          chapters: book.chapter_attributes
         }.to_json,
-           :headers => {'Accept'=>'application/json', 
-            'Accept-Encoding'=>'gzip, deflate', 
-            'Content-Length'=>/.+/, 
-            'Content-Type'=>'application/json', 
-            'User-Agent'=>'Ruby'}).
+           :headers => HEADERS).
       to_return(:status => 200, :body => return_body, :headers => {})
-
-    stub_request(:head, /s3\.amazonaws\.com/).
-      to_return(:status => 200, :body => "", :headers => {etag: 'asdf'}) 
 
     stub_request(:post, /s3\.amazonaws\.com/).
        with(:body => /.*/).
        to_return(:status => 200, :body => "", :headers => {})
 
-    stub_request(:put, "http://polytexnic.com/api/v1/books/#{test_id}").
+    notify_file_url = "#{api_base_url}/books/#{test_id}/notify_file_upload"
+
+    book.files.each do |file|
+      stub_request(:post, notify_file_url).
+           with(:body => 
+              { path: file.path, checksum: file.checksum }.to_json,
+                :headers => HEADERS).
+           to_return(:status => 200, :body => {}.to_json, :headers => {})
+    end
+
+    stub_request(:put, "#{api_base_url}/books/#{test_id}").
       with(:body => "{\"upload_complete\":true}",
-        :headers => {'Accept'=>'application/json', 
-          'Accept-Encoding'=>'gzip, deflate', 
-          'Content-Length'=>/.*/, 
-          'Content-Type'=>'application/json', 
-          'User-Agent'=>'Ruby'}).
+        :headers => HEADERS).
         to_return(:status => 200, :body => {}.to_json, :headers => {}) 
   end
 

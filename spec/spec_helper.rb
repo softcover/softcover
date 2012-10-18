@@ -13,6 +13,12 @@ RSpec.configure do |config|
   config.before do
     Polytexnic::set_test_mode!
     Polytexnic::Config.remove
+    Polytexnic::BookConfig.remove
+  end
+
+  config.after do
+    Polytexnic::Config.remove
+    Polytexnic::BookConfig.remove
   end
 
   config.include WebmockHelpers

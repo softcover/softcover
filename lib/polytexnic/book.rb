@@ -11,6 +11,23 @@ class Polytexnic::Book
     @client = Polytexnic::Client.new
   end
 
+  class BookFile
+    attr_accessor :path, :checksum
+    def initialize(path)
+      @path = path
+      @checksum = Digest::MD5.hexdigest File.read path
+      (@@lookup ||= {})[path] = self
+    end
+
+    def to_json(opts={})
+      { path: @path, checksum: @checksum }.to_json
+    end
+
+    def self.find(path)
+      @@lookup[path]
+    end
+  end
+
   # TODO: extract pattern to config helper:
   #   has_config_for :id, :last_uploaded_at, path: ".polytex-book"
 
@@ -26,22 +43,19 @@ class Polytexnic::Book
   def files
     # question: should we use `git ls-files` instead?
     # TODO: only use pertinent files
-    @files ||= Dir['**/*'].map do |f| 
+    @files ||= Dir['**/*'].map do |path| 
 
-      next nil unless !File.directory?(f) && 
-        !(File.extname(f) == ".html" && !(f =~ /_fragment/)) &&
-        f != "html/#{slug}.html" && 
-        f != "html/#{slug}_fragment.html"
+      next nil unless !File.directory?(path) && 
+        !(File.extname(path) == ".html" && !(path =~ /_fragment/)) &&
+        path != "html/#{slug}.html" && 
+        path != "html/#{slug}_fragment.html"
 
-      {
-        path: f,
-        checksum: Digest::MD5.hexdigest(File.read(f))
-      }
+      BookFile.new path 
     end.compact
   end
 
   def filenames
-    files.map { |f| f[:path] }
+    files.map &:path
   end
 
   def chapter_attributes
@@ -91,7 +105,7 @@ class Polytexnic::Book
 
   def total_upload_size
     @upload_params.inject(0) do |sum, p|
-      sum += File.size? p['path'] || 0
+      sum += File.size?(p['path']) || 0
     end
   end
 
@@ -137,10 +151,12 @@ class Polytexnic::Book
           break
         end
 
+        book_file = BookFile.find path
+
         # this could spin off new thread:
         @client.notify_file_upload id, 
-          path: path, 
-          checksum: @files.find { |f| f[:path] == path }[:checksum] # refactor
+          path: book_file.path, 
+          checksum: book_file.checksum
       end
 
       bar.finish

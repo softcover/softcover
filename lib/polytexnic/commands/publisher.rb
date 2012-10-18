@@ -19,6 +19,7 @@ module Polytexnic::Commands::Publisher
     else
       puts "Errors:"
       puts book.errors
+      return false
     end
     
     true
