@@ -31,8 +31,7 @@ module Polytexnic
           email: @email, password: @password
 
       rescue RestClient::UnprocessableEntity
-        Polytexnic::Config['api_key'] = nil
-        return false
+        return handle_422
       end
 
       json = JSON response
@@ -42,6 +41,13 @@ module Polytexnic
     # ============ Publishing ===========
     def create_or_update_book(params)
       JSON post path_for(:books), params
+    rescue RestClient::UnprocessableEntity
+      handle_422
+    rescue RestClient::ResourceNotFound
+      { "errors" => 
+        "Book ID #{params[:id]} not found for this account. "+
+        "Either login again or delete this file: .polytexnic-book" 
+      }
     end
 
     def notify_file_upload(book_id, params)
@@ -71,6 +77,11 @@ module Polytexnic
 
       def path_for(action, *args)
         File.join ApiPrefix, Paths[action], *(args.map &:to_s)
+      end
+
+      def handle_422
+        Polytexnic::Config['api_key'] = nil
+        return false
       end
   end
 end

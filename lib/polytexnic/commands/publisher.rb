@@ -17,8 +17,7 @@ module Polytexnic::Commands::Publisher
 
       book.upload!
     else
-      puts "Errors:"
-      puts book.errors
+      puts "Errors: #{book.errors}"
       return false
     end
     

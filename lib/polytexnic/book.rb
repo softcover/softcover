@@ -98,8 +98,7 @@ class Polytexnic::Book
     true
 
   rescue Exception => e
-    puts e # should be able to switch debug mode as needed
-    @errors = ["An unknown error occured."]
+    @errors = [e.message]
     false
   end
 
