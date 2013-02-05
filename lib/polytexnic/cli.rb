@@ -58,6 +58,19 @@ module Polytexnic
       Polytexnic::Commands::Publisher.publish!
     end
 
+    desc "publish:screencasts", "Publish screencasts"
+    method_option :daemon, aliases: '-d', force: false, 
+      desc: "Run as daemon", type: :boolean
+    method_option :watch, aliases: '-w', type: :boolean, 
+      force: false, desc: "Watch a directory to auto upload."
+
+    # TODO: make screencasts dir .book configurable
+    define_method "publish:screencasts" do |dir="./screencasts"|
+
+      puts "Publishing screencasts in #{dir}"
+      Polytexnic::Commands::Publisher.publish_screencasts! dir, options
+    end
+
     # ===============================================
     # Generator
     # ===============================================

@@ -1,14 +1,14 @@
 class Polytexnic::Book
   include Polytexnic::Utils
 
-  attr_accessor :errors, :files, 
-    :total_size, :signatures, :manifest, :upload_params
+  attr_accessor :errors, :files, :uploader, :signatures, :manifest,
+    :processed_screencasts
 
   def initialize
-
     @manifest = Polytexnic::BookManifest.new
+    @client = Polytexnic::Client.new_with_book self
 
-    @client = Polytexnic::Client.new
+    @processed_screencasts = []
   end
 
   class BookFile
@@ -43,7 +43,8 @@ class Polytexnic::Book
   def files
     # question: should we use `git ls-files` instead?
     # TODO: only use pertinent files
-    @files ||= Dir['**/*'].map do |path| 
+    paths = %w{html/**/* images/**/* *.mobi *.epub *.pdf}
+    @files ||= Dir[*paths].map do |path| 
 
       next nil unless !File.directory?(path) && 
         !(File.extname(path) == ".html" && !(path =~ /_fragment/)) &&
@@ -90,15 +91,13 @@ class Polytexnic::Book
     self.id = @attrs['id']
     Polytexnic::BookConfig['last_uploaded_at'] = Time.now
 
-    @upload_params = res['upload_params']
-
-    @bucket = res['bucket']
-    @access_key = res['access_key']
+    @uploader = Polytexnic::Uploader.new res
 
     true
 
   rescue Exception => e
     @errors = [e.message]
+    raise e
     false
   end
 
@@ -109,61 +108,17 @@ class Polytexnic::Book
   end
 
   def upload!
+    @uploader.after_each do |params|
+      book_file = BookFile.find params['path']
 
-    unless @upload_params.empty?
-      bar = ProgressBar.create title: "Starting Upload...", 
-        format: "%t |%B| %P%% %e", total: total_upload_size, smoothing: 0.75
-
-      upload_host = "http://#{@bucket}.s3.amazonaws.com"
-
-      @upload_params.each do |params|
-        path = params['path']
-
-        size = File.size? path
-
-        c = Curl::Easy.new "http://#{@bucket}.s3.amazonaws.com"
-
-        c.multipart_form_post = true
-
-        last_chunk = 0
-        c.on_progress do |_, _, ul_total, ul_now|
-          uploaded = ul_now > size ? size : ul_now
-
-          bar.title = "#{path} (#{as_size uploaded} / #{as_size size})"
-          bar.progress += ul_now - last_chunk rescue nil
-          last_chunk = ul_now
-          true
-        end
-
-        c.http_post(
-          Curl::PostField.content('key', params['key']),
-          Curl::PostField.content('acl', params['acl']),
-          Curl::PostField.content('Signature', params['signature']),
-          Curl::PostField.content('Policy', params['policy']),
-          Curl::PostField.content('Content-Type', params['content_type']),
-          Curl::PostField.content('AWSAccessKeyId', @access_key),
-          Curl::PostField.file('file', path)
-        )
-
-        if c.body_str =~ /Error/
-          puts c.body_str
-          break
-        end
-
-        book_file = BookFile.find path
-
-        # this could spin off new thread:
-        @client.notify_file_upload id, 
-          path: book_file.path, 
-          checksum: book_file.checksum
-      end
-
-      bar.finish
-    else
-      puts "Nothing to upload."
+      # this could spin off new thread:
+      @client.notify_file_upload path: book_file.path, 
+        checksum: book_file.checksum
     end
 
-    res = notify_upload_complete
+    @uploader.upload! 
+
+    res = @client.notify_upload_complete
 
     if res['errors'].nil?
       puts "Published! #{url}"
@@ -172,8 +127,37 @@ class Polytexnic::Book
     end
   end
 
-  def notify_upload_complete
-    @client.notify_upload_complete id
+  # ============================================================================
+  # Screencast handling
+  # ============================================================================
+
+  def process_screencasts(dir)
+    Dir["#{dir}/**/*.mov"].each do |path|
+      next if @processed_screencasts.include?(path)
+
+      # check if file has been written to in the last 5 seconds
+      ctime = File::ctime path
+      if ctime.to_i < Time.now.to_i - 5
+
+        # start upload process here
+        upload_screencast! path
+
+        @processed_screencasts.push path
+      end
+    end
+  end
+
+  def upload_screencast!(path)
+    checksum = Digest::MD5.hexdigest(File.read path)
+
+    res = @client.get_screencast_upload_params path: path, checksum: checksum
+
+    if res['upload_params']
+      screencast_uploader = Polytexnic::Uploader.new res
+      screencast_uploader.upload!
+    end
+
+    # ? notify upload complete?
   end
 
   private

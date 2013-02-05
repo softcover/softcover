@@ -1,4 +1,10 @@
 module Polytexnic::Utils
+  def current_book
+    @current_book ||= begin
+      in_book_directory? ? Polytexnic::Book.new : false
+    end
+  end
+
   def in_book_directory?
     files = Dir['**/*']
 
