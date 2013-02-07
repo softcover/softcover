@@ -11,7 +11,7 @@ describe Polytexnic::Commands::Publisher do
 
       it "rejects the publish" do
         silence do
-          Polytexnic::Commands::Publisher.publish!.should be_false
+          subject.publish!.should be_false
         end
       end
     end
@@ -24,7 +24,7 @@ describe Polytexnic::Commands::Publisher do
 
       it "publishes" do
         silence do
-          Polytexnic::Commands::Publisher.publish!.should be_true
+          subject.publish!.should be_true
         end
       end
     end
@@ -44,31 +44,31 @@ describe Polytexnic::Commands::Publisher do
     it "processes screencasts" do
 
       silence do
-        Polytexnic::Commands::Publisher.publish_screencasts!
+        subject.publish_screencasts!
       end
 
       book.processed_screencasts.length.should > 0
     end
 
     it "daemonizes" do
-      Polytexnic::Commands::Publisher.should_receive(:fork) do |&blk|
+      subject.should_receive(:fork) do |&blk|
         blk.call
       end
 
       silence do
-        Polytexnic::Commands::Publisher.publish_screencasts! daemon: true
+        subject.publish_screencasts! daemon: true
       end
 
       book.processed_screencasts.length.should > 0
     end
 
     it "watches" do
-      Polytexnic::Commands::Publisher.should_receive(:loop) do |&blk|
+      subject.should_receive(:loop) do |&blk|
         blk.call
       end
 
       silence do
-        Polytexnic::Commands::Publisher.publish_screencasts! watch: true
+        subject.publish_screencasts! watch: true
       end
 
       book.processed_screencasts.length.should > 0

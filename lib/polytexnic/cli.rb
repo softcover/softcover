@@ -65,7 +65,8 @@ module Polytexnic
       force: false, desc: "Watch a directory to auto upload."
 
     # TODO: make screencasts dir .book configurable
-    define_method "publish:screencasts" do |dir="./screencasts"|
+    define_method "publish:screencasts" do |dir=
+      Polytexnic::Book::DEFAULT_SCREENCASTS_DIR|
 
       puts "Publishing screencasts in #{dir}"
       Polytexnic::Commands::Publisher.
