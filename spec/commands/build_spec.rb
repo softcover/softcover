@@ -14,6 +14,20 @@ describe Polytexnic::Commands::Build do
     it { should raise_error }
   end
 
+  context 'building each format' do
+    Polytexnic::FORMATS.each do |format|
+      subject { 
+        lambda {
+          silence { Polytexnic::Commands::Build.builder_for(format).build! }
+        }
+      }
+
+      it { should_not raise_error }
+
+      after(:each) { Polytexnic::Commands::Build.builder_for(format).clean! }
+    end
+  end
+
   context 'building all' do
     before { chdir_to_md_book }
     subject {

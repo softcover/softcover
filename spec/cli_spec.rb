@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe Polytexnic::CLI do
 
-  subject { capture(:stdout) { Polytexnic::CLI.start commands } }
-
   context 'help output' do
+    subject { capture(:stdout) { Polytexnic::CLI.start commands } }
+
     let(:commands) { ['help'] }
 
     %w{new login logout publish build}.each do |cmd|

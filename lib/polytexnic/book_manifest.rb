@@ -54,10 +54,6 @@ class Polytexnic::BookManifest < OpenStruct
     end
   end
 
-  def slugs
-    @chapters.map { |c| File.basename c, ".*" }
-  end
-
   private
     def read_from_yml
       YAML.load_file YAML_PATH

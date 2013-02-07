@@ -22,27 +22,30 @@ module Polytexnic::Commands::Publisher
     true
   end
 
-  def publish_screencasts!(dir, options={})
+  # TODO: refactor this flow out of file?
+  def publish_screencasts!(options={})
     return false unless current_book
 
-    @watch_dir = options[:watch]
+    current_book.screencasts_dir = options[:dir] || 
+      Polytexnic::Book::DEFAULT_SCREENCASTS_DIR
 
-    @screencasts_dir = dir
+    @watch = options[:watch]
 
     if options[:daemon]
       pid = fork do
-        STDERR.reopen("/dev/null")
-        STDOUT.reopen("/dev/null")
+        run_publish_screencasts
       end
 
       puts "Daemonized, pid: #{pid}"
     else
       run_publish_screencasts
     end
+
+    current_book
   end
 
   def run_publish_screencasts
-    if @watch_dir
+    if @watch
       puts "Watching..."
 
       Signal.trap("TERM") do
@@ -51,7 +54,7 @@ module Polytexnic::Commands::Publisher
       end
 
       begin
-        while true
+        loop do
           process_screencasts
           sleep 1
         end
@@ -66,7 +69,7 @@ module Polytexnic::Commands::Publisher
   end
 
   def process_screencasts
-    current_book.process_screencasts @screencasts_dir
+    current_book.process_screencasts 
   end
 
   def exit_with_message

@@ -3,6 +3,9 @@ module WebmockHelpers
     "#{Polytexnic::BaseConfig::DEFAULTS[:host]}/api/v1"
   end
 
+  def test_bucket; 'test-bucket' end
+  def test_access_key; 'asdf' end
+
   HEADERS = {'Accept'=>'application/json', 
           'Accept-Encoding'=>'gzip, deflate', 
           'Content-Length'=>/.+/, 
@@ -24,8 +27,6 @@ module WebmockHelpers
   end
 
   def stub_create_book(book, test_id=1)
-    test_bucket = 'test-bucket'
-    test_access_key = 'asdf'
 
     return_body = {
       upload_params: book.files.map { |f|
@@ -59,9 +60,7 @@ module WebmockHelpers
            :headers => HEADERS).
       to_return(:status => 200, :body => return_body, :headers => {})
 
-    stub_request(:post, /s3\.amazonaws\.com/).
-       with(:body => /.*/).
-       to_return(:status => 200, :body => "", :headers => {})
+    stub_s3_post
 
     notify_file_url = "#{api_base_url}/books/#{test_id}/notify_file_upload"
 
@@ -77,6 +76,40 @@ module WebmockHelpers
       with(:body => "{\"upload_complete\":true}",
         :headers => HEADERS).
         to_return(:status => 200, :body => {}.to_json, :headers => {}) 
+  end
+
+  def stub_s3_post
+    stub_request(:post, /s3\.amazonaws\.com/).
+       with(:body => /.*/).
+       to_return(:status => 200, :body => "", :headers => {})
+  end
+
+  def stub_screencasts_upload(book)
+    stub_s3_post
+
+    book.find_screencasts.each do |file|
+      stub_request(:post, 
+          "#{api_base_url}/books/#{book.id}/screencasts").
+           with(:body => {file: file}.to_json, :headers => HEADERS).
+           to_return(:status => 200, :body => {
+              upload_params: [
+                {
+                  :policy          => "asdf",
+                  :signature       => "asdf",
+                  :acl             => "public-read",
+                  :content_type    => "asdf",
+                  :key             => File.join(book.slug, file.path),
+                  :path            => file.path
+                }
+              ],
+              bucket: test_bucket,
+              access_key: test_access_key
+            }.to_json, :headers => {})
+    end
+  end
+
+  def prepare_book_stubs
+    chdir_to_book
   end
 
   def chdir_to_book

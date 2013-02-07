@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Polytexnic::Commands::Publisher do
-  let(:book) { Polytexnic::Book.new }
+  let(:book) { Polytexnic::Utils.current_book }
 
   describe "#publish" do
     context "publishing from non book directory" do
@@ -34,22 +34,44 @@ describe Polytexnic::Commands::Publisher do
     before do
       chdir_to_book
       book.id = 1
-      stub_create_book book
+      stub_screencasts_upload book
+    end
+
+    it "should start with 0 processed_screencasts" do
+      book.processed_screencasts.length.should eq 0
+    end
+
+    it "processes screencasts" do
+
+      silence do
+        Polytexnic::Commands::Publisher.publish_screencasts!
+      end
+
+      book.processed_screencasts.length.should > 0
     end
 
     it "daemonizes" do
-      SimpleCov.at_exit {} # since we're forking
-
-      silence do
-        Polytexnic::Commands::Publisher.publish_screencasts! "./screencasts"
-          #, daemon: true
+      Polytexnic::Commands::Publisher.should_receive(:fork) do |&blk|
+        blk.call
       end
 
-      # http://stackoverflow.com/questions/6158889/how-do-you-test-code-that-forks-using-rspec
+      silence do
+        Polytexnic::Commands::Publisher.publish_screencasts! daemon: true
+      end
 
-      # subject.should_receive(:fork) do |&block|
-      #   block.call
-      # end
+      book.processed_screencasts.length.should > 0
+    end
+
+    it "watches" do
+      Polytexnic::Commands::Publisher.should_receive(:loop) do |&blk|
+        blk.call
+      end
+
+      silence do
+        Polytexnic::Commands::Publisher.publish_screencasts! watch: true
+      end
+
+      book.processed_screencasts.length.should > 0
     end
 
   end

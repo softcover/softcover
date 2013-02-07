@@ -68,7 +68,8 @@ module Polytexnic
     define_method "publish:screencasts" do |dir="./screencasts"|
 
       puts "Publishing screencasts in #{dir}"
-      Polytexnic::Commands::Publisher.publish_screencasts! dir, options
+      Polytexnic::Commands::Publisher.
+        publish_screencasts! options.merge(dir: dir)
     end
 
     # ===============================================

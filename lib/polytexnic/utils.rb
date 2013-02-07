@@ -1,8 +1,15 @@
 module Polytexnic::Utils
+  extend self
+
   def current_book
-    @current_book ||= begin
+    # using module level variable because it should be context independent
+    @@current_book ||= begin
       in_book_directory? ? Polytexnic::Book.new : false
     end
+  end
+
+  def reset_current_book!
+    @@current_book = nil
   end
 
   def in_book_directory?

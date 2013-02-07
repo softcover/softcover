@@ -14,6 +14,8 @@ module Polytexnic
       self
     end
 
+    def clean!; end
+
     private
       def build; end
       def setup; end

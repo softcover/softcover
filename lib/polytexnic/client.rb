@@ -64,8 +64,9 @@ module Polytexnic
     end
 
     # ============ Screencasts ===========
-    def get_screencast_upload_params(path)
-      JSON post path_for(:books, book.id, :screencasts), path
+    def get_screencast_upload_params(file)
+      JSON post path_for(:books, book.id, :screencasts), file: file
+      # TODO: handle errors
     end
 
     # ============ Utils ===========

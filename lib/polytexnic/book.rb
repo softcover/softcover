@@ -1,26 +1,36 @@
 class Polytexnic::Book
   include Polytexnic::Utils
 
+  DEFAULT_SCREENCASTS_DIR = "screencasts"
+
   attr_accessor :errors, :files, :uploader, :signatures, :manifest,
-    :processed_screencasts
+    :processed_screencasts, :screencasts_dir
 
   def initialize
     @manifest = Polytexnic::BookManifest.new
     @client = Polytexnic::Client.new_with_book self
 
+    @screencasts_dir = DEFAULT_SCREENCASTS_DIR
+
     @processed_screencasts = []
   end
 
-  class BookFile
-    attr_accessor :path, :checksum
-    def initialize(path)
-      @path = path
+  class BookFile < Struct.new(:path)
+    LAST_WRITE_HORIZON = 5
+
+    attr_accessor :checksum
+    def initialize(*args)
+      super
       @checksum = Digest::MD5.hexdigest File.read path
       (@@lookup ||= {})[path] = self
     end
 
+    def ready?
+      File::ctime(path).to_i < Time.now.to_i - LAST_WRITE_HORIZON
+    end
+
     def to_json(opts={})
-      { path: @path, checksum: @checksum }.to_json
+      { path: path, checksum: @checksum }.to_json
     end
 
     def self.find(path)
@@ -101,12 +111,6 @@ class Polytexnic::Book
     false
   end
 
-  def total_upload_size
-    @upload_params.inject(0) do |sum, p|
-      sum += File.size?(p['path']) || 0
-    end
-  end
-
   def upload!
     @uploader.after_each do |params|
       book_file = BookFile.find params['path']
@@ -131,30 +135,27 @@ class Polytexnic::Book
   # Screencast handling
   # ============================================================================
 
-  def process_screencasts(dir)
-    Dir["#{dir}/**/*.mov"].each do |path|
-      next if @processed_screencasts.include?(path)
+  def process_screencasts
+    find_screencasts.each do |file|
+      next if @processed_screencasts.include?(file)
 
-      # check if file has been written to in the last 5 seconds
-      ctime = File::ctime path
-      if ctime.to_i < Time.now.to_i - 5
-
-        # start upload process here
-        upload_screencast! path
-
-        @processed_screencasts.push path
+      if file.ready? && upload_screencast!(file)
+        @processed_screencasts.push file
       end
     end
   end
 
-  def upload_screencast!(path)
-    checksum = Digest::MD5.hexdigest(File.read path)
+  def find_screencasts
+    Dir["#{@screencasts_dir}/**/*.mov"].map{|path| BookFile.new path }
+  end
 
-    res = @client.get_screencast_upload_params path: path, checksum: checksum
+  def upload_screencast!(file)
+    res = @client.get_screencast_upload_params file
 
     if res['upload_params']
       screencast_uploader = Polytexnic::Uploader.new res
       screencast_uploader.upload!
+      return true
     end
 
     # ? notify upload complete?
