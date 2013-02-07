@@ -18,7 +18,7 @@ describe Polytexnic::Commands::Build do
     Polytexnic::FORMATS.each do |format|
       subject { 
         lambda {
-          silence { Polytexnic::Commands::Build.builder_for(format).build! }
+          silence { Polytexnic::Commands::Build.for_format format }
         }
       }
 
