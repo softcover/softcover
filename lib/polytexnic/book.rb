@@ -140,27 +140,32 @@ class Polytexnic::Book
   # ============================================================================
 
   def process_screencasts
-    find_screencasts.each do |file|
-      next if @processed_screencasts.include?(file)
+    files_to_upload = find_screencasts.select do |file|
+      next false if @processed_screencasts.include?(file)
 
-      if file.ready? && upload_screencast!(file)
-        @processed_screencasts.push file
-      end
+      file.ready?# && upload_screencast!(file)
     end
+
+    upload_screencasts! files_to_upload
+
+    @processed_screencasts += files_to_upload
   end
 
   def find_screencasts
     Dir["#{@screencasts_dir}/**/*.mov"].map{|path| BookFile.new path }
   end
 
-  def upload_screencast!(file)
-    res = @client.get_screencast_upload_params file
+  def upload_screencasts!(files)
+    return if files.empty?
+    
+    res = @client.get_screencast_upload_params files
 
     if res['upload_params']
       screencast_uploader = Polytexnic::Uploader.new res
+      screencast_uploader.after_each do |params|
+        notify_file_upload params['path']
+      end
       screencast_uploader.upload!
-
-      notify_file_upload file.path
     else
       raise 'server error'
     end

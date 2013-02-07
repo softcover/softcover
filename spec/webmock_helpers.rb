@@ -90,27 +90,27 @@ module WebmockHelpers
   def stub_screencasts_upload(book)
     stub_s3_post
 
-    book.find_screencasts.each do |file|
-      stub_request(:post, 
-          "#{api_base_url}/books/#{book.id}/screencasts").
-           with(:body => {file: file}.to_json, :headers => HEADERS).
-           to_return(:status => 200, :body => {
-              upload_params: [
-                {
-                  :policy          => "asdf",
-                  :signature       => "asdf",
-                  :acl             => "public-read",
-                  :content_type    => "asdf",
-                  :key             => File.join(book.slug, file.path),
-                  :path            => file.path
-                }
-              ],
-              bucket: test_bucket,
-              access_key: test_access_key
-            }.to_json, :headers => {})
+    files = book.find_screencasts
+    stub_request(:post, 
+        "#{api_base_url}/books/#{book.id}/screencasts").
+         with(:body => {files: files }.to_json, 
+          :headers => HEADERS).
+         to_return(:status => 200, :body => {
+            upload_params: files.map {|file| 
+              {
+                :policy          => "asdf",
+                :signature       => "asdf",
+                :acl             => "public-read",
+                :content_type    => "asdf",
+                :key             => File.join(book.slug, file.path),
+                :path            => file.path
+              }
+            },
+            bucket: test_bucket,
+            access_key: test_access_key
+          }.to_json, :headers => {})
 
-      stub_notify_file_upload file
-    end
+    files.each { |file| stub_notify_file_upload file }
   end
 
   def prepare_book_stubs
