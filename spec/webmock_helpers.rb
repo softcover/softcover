@@ -5,6 +5,7 @@ module WebmockHelpers
 
   def test_bucket; 'test-bucket' end
   def test_access_key; 'asdf' end
+  def test_id; 1 end
 
   HEADERS = {'Accept'=>'application/json', 
           'Accept-Encoding'=>'gzip, deflate', 
@@ -26,7 +27,7 @@ module WebmockHelpers
       to_return(:status => 422, body: '')
   end
 
-  def stub_create_book(book, test_id=1)
+  def stub_create_book(book)
 
     return_body = {
       upload_params: book.files.map { |f|
@@ -62,20 +63,22 @@ module WebmockHelpers
 
     stub_s3_post
 
-    notify_file_url = "#{api_base_url}/books/#{test_id}/notify_file_upload"
-
-    book.files.each do |file|
-      stub_request(:post, notify_file_url).
-           with(:body => 
-              { path: file.path, checksum: file.checksum }.to_json,
-                :headers => HEADERS).
-           to_return(:status => 200, :body => {}.to_json, :headers => {})
-    end
+    book.files.each { |file| stub_notify_file_upload file }
 
     stub_request(:put, "#{api_base_url}/books/#{test_id}").
       with(:body => "{\"upload_complete\":true}",
         :headers => HEADERS).
         to_return(:status => 200, :body => {}.to_json, :headers => {}) 
+  end
+
+  def stub_notify_file_upload(file)
+    notify_file_url = "#{api_base_url}/books/#{test_id}/notify_file_upload"
+
+    stub_request(:post, notify_file_url).
+         with(:body => 
+            { path: file.path, checksum: file.checksum }.to_json,
+              :headers => HEADERS).
+         to_return(:status => 200, :body => {}.to_json, :headers => {})
   end
 
   def stub_s3_post
@@ -105,6 +108,8 @@ module WebmockHelpers
               bucket: test_bucket,
               access_key: test_access_key
             }.to_json, :headers => {})
+
+      stub_notify_file_upload file
     end
   end
 

@@ -113,11 +113,7 @@ class Polytexnic::Book
 
   def upload!
     @uploader.after_each do |params|
-      book_file = BookFile.find params['path']
-
-      # this could spin off new thread:
-      @client.notify_file_upload path: book_file.path, 
-        checksum: book_file.checksum
+      notify_file_upload params['path']
     end
 
     @uploader.upload! 
@@ -129,6 +125,14 @@ class Polytexnic::Book
     else
       puts "Couldn't verify upload: #{res['errors']}"
     end
+  end
+
+  def notify_file_upload(path)
+    book_file = BookFile.find path
+
+    # this could spin off new thread:
+    @client.notify_file_upload path: book_file.path, 
+      checksum: book_file.checksum
   end
 
   # ============================================================================
@@ -155,10 +159,11 @@ class Polytexnic::Book
     if res['upload_params']
       screencast_uploader = Polytexnic::Uploader.new res
       screencast_uploader.upload!
-      return true
-    end
 
-    # ? notify upload complete?
+      notify_file_upload file.path
+    else
+      raise 'server error'
+    end
   end
 
   private
