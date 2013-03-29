@@ -45,7 +45,7 @@ class Polytexnic::BookManifest < OpenStruct
     chapters.map do |chapter|
       file_path = case
       when md? then chapter.slug
-      when polytex? then "chapters/#{chapter_path.slug}.tex"
+      when polytex? then "chapters/#{chapter.slug}.tex"
       end
 
       yield file_path if block_given?

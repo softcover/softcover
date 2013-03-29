@@ -1,5 +1,6 @@
 require 'maruku'
 require 'fileutils'
+require 'polytexnic-core'
 
 module Polytexnic
   module Builders
@@ -30,7 +31,7 @@ module Polytexnic
             @built_files.push fragment_path, doc_path
           end
         else
-          raise "Non-markdown building not implemented"
+          puts Polytexnic::Core::Pipeline.new('\emph{Foo!}').process
         end
 
         true
