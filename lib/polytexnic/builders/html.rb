@@ -1,6 +1,5 @@
 require 'maruku'
 require 'fileutils'
-require 'polytexnic-core'
 
 module Polytexnic
   module Builders
