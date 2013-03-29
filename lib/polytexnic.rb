@@ -1,3 +1,4 @@
+require 'polytexnic-core'
 require 'active_support/core_ext/string'
 
 require File.dirname(__FILE__) + '/polytexnic/formats'
