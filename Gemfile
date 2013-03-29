@@ -9,9 +9,11 @@ gem 'rest-client'
 gem 'curb'
 gem 'ruby-progressbar'
 gem 'maruku'
+gem 'polytexnic-core'
 
-# ===== TEST =====
-gem 'rspec'
-gem 'debugger'
-gem 'webmock', require: false
-gem 'simplecov', require: false
+group :test do
+  gem 'rspec'
+  gem 'debugger'
+  gem 'webmock',   require: false
+  gem 'simplecov', require: false
+end
