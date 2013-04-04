@@ -7,11 +7,11 @@ module WebmockHelpers
   def test_access_key; 'asdf' end
   def test_id; 1 end
 
-  HEADERS = {'Accept'=>'application/json', 
-          'Accept-Encoding'=>'gzip, deflate', 
-          'Content-Length'=>/.+/, 
-          'Content-Type'=>'application/json', 
-          'User-Agent'=>'Ruby'}
+  HEADERS = { 'Accept'=>'application/json', 
+              'Accept-Encoding'=>'gzip, deflate', 
+              'Content-Length'=>/.+/, 
+              'Content-Type'=>'application/json', 
+              'User-Agent'=>'Ruby' }
 
   def stub_valid_login(email, pass, api_key=TEST_API_KEY)
     stub_request(:post, "#{api_base_url}/login").
@@ -22,8 +22,8 @@ module WebmockHelpers
 
   def stub_invalid_login(email, pass)
     stub_request(:post, "#{api_base_url}/login").
-      with(:body => {"email"=>email, "password"=>pass}, 
-        :headers => HEADERS ).
+      with(:body => { "email" => email, "password" => pass }, 
+           :headers => HEADERS ).
       to_return(:status => 422, body: '')
   end
 

@@ -4,7 +4,7 @@ class Polytexnic::Book
   DEFAULT_SCREENCASTS_DIR = "screencasts"
 
   attr_accessor :errors, :files, :uploader, :signatures, :manifest,
-    :processed_screencasts, :screencasts_dir
+                :processed_screencasts, :screencasts_dir
 
   def initialize
     @manifest = Polytexnic::BookManifest.new
@@ -82,13 +82,13 @@ class Polytexnic::Book
     raise "HTML not built!" if Dir['html/*'].empty?
 
     res = @client.create_or_update_book id: id, 
-      files: files,
-      title: title, 
-      slug: slug,
-      subtitle: subtitle, 
-      description: description, 
-      cover: cover,
-      chapters: chapter_attributes
+                                        files: files,
+                                        title: title, 
+                                        slug: slug,
+                                        subtitle: subtitle, 
+                                        description: description, 
+                                        cover: cover,
+                                        chapters: chapter_attributes
 
     if res['errors'] 
       @errors = res['errors']
