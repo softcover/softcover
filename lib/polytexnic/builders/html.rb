@@ -12,7 +12,7 @@ module Polytexnic
         if @manifest.md?
           @manifest.chapters.each do |chapter|
             path = chapter.slug
-            
+
             md = Maruku.new File.read(path)
 
             basename = File.basename path, ".*"
