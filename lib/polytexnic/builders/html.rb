@@ -30,7 +30,19 @@ module Polytexnic
             @built_files.push fragment_path, doc_path
           end
         else
-          puts Polytexnic::Core::Pipeline.new('\emph{Foo!}').process
+          basename = File.basename(@manifest.filename, '.tex')
+          polytex_filename = basename + '.tex'
+          polytex = File.open(polytex_filename) { |f| f.read }
+          includes = polytex.scan(/(\\include{(.*?)})/)
+          includes.each do |command, filename|
+            content = File.open(filename + '.tex') { |f| f.read }
+            polytex.gsub!(command, content)
+          end
+          html_body = Polytexnic::Core::Pipeline.new(polytex).to_html
+          html_filename = File.join('html', basename + '.html')
+          File.open(html_filename, 'w') do |f|
+            f.write(template(html_body))
+          end
         end
 
         true
@@ -41,4 +53,27 @@ module Polytexnic
       end
     end
   end
+end
+
+# TODO: Replace this with a file.
+def template(body)
+<<-EOS
+<!DOCTYPE html>
+<head>
+<meta charset="UTF-8">
+<style>
+.tt { font-family: Courier; font-size: 90%; }
+</style>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML">
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      availableFonts: ["TeX"]
+    }
+  });
+</script>
+</head>
+<body>
+#{body}
+</body>
+EOS
 end
