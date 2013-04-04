@@ -30,6 +30,8 @@ class Polytexnic::BookManifest < OpenStruct
 
     marshal_load attrs
 
+    # TODO: verify all attributes
+
     verify_paths! if opts[:verify_paths]
   end
 
@@ -60,9 +62,8 @@ class Polytexnic::BookManifest < OpenStruct
     end
 
     def read_from_md
-      return false unless 
+      return false unless f = File.open(MD_PATH)
 
-      f = File.open(MD_PATH) 
       chapters = f.readlines.map { |path| path.gsub /\n/,'' }
       f.close
 
@@ -77,7 +78,7 @@ class Polytexnic::BookManifest < OpenStruct
     def verify_paths!
       chapter_file_paths do |chapter_path|
         unless File.exists?(chapter_path)
-          raise "Chapter file in manifest not found" 
+          raise "Chapter file in manifest not found"
         end
       end
     end
