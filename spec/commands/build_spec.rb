@@ -37,7 +37,6 @@ describe Polytexnic::Commands::Build do
       }
     }
 
-    it { Polytexnic::Commands::Build.all_formats }
     it { should_not raise_error }
 
     after(:all) do
