@@ -15,8 +15,8 @@ module WebmockHelpers
 
   def stub_valid_login(email, pass, api_key=TEST_API_KEY)
     stub_request(:post, "#{api_base_url}/login").
-      with(:body => {"email"=>email, "password"=>pass},
-        :headers => HEADERS ).
+      with(:body => { "email" => email, "password" => pass },
+           :headers => HEADERS ).
       to_return(:status => 200, :body => {api_key: api_key}.to_json)
   end
 
@@ -49,14 +49,14 @@ module WebmockHelpers
 
     stub_request(:post, "#{api_base_url}/books").
       with(:body => {
-          id: book.id,
-          files: book.files, 
-          title: book.title, 
-          slug: book.slug,
-          subtitle: book.subtitle, 
-          description: book.description, 
-          cover: book.cover,
-          chapters: book.chapter_attributes
+           id: book.id,
+           files: book.files, 
+           title: book.title, 
+           slug: book.slug,
+           subtitle: book.subtitle, 
+           description: book.description, 
+           cover: book.cover,
+           chapters: book.chapter_attributes
         }.to_json,
            :headers => HEADERS).
       to_return(:status => 200, :body => return_body, :headers => {})
@@ -83,8 +83,8 @@ module WebmockHelpers
 
   def stub_s3_post
     stub_request(:post, /s3\.amazonaws\.com/).
-       with(:body => /.*/).
-       to_return(:status => 200, :body => "", :headers => {})
+                 with(:body => /.*/).
+                 to_return(:status => 200, :body => "", :headers => {})
   end
 
   def stub_screencasts_upload(book)
@@ -92,23 +92,24 @@ module WebmockHelpers
 
     files = book.find_screencasts
     stub_request(:post, 
-        "#{api_base_url}/books/#{book.id}/screencasts").
-         with(:body => {files: files }.to_json, 
-          :headers => HEADERS).
-         to_return(:status => 200, :body => {
-            upload_params: files.map {|file| 
-              {
-                :policy          => "asdf",
-                :signature       => "asdf",
-                :acl             => "public-read",
-                :content_type    => "asdf",
-                :key             => File.join(book.slug, file.path),
-                :path            => file.path
-              }
-            },
-            bucket: test_bucket,
-            access_key: test_access_key
-          }.to_json, :headers => {})
+                 "#{api_base_url}/books/#{book.id}/screencasts").
+                  with(:body => {files: files }.to_json, 
+                       :headers => HEADERS).
+                  to_return(:status => 200, :body => {
+                            upload_params: files.map { |file| 
+                              {
+                                :policy          => "asdf",
+                                :signature       => "asdf",
+                                :acl             => "public-read",
+                                :content_type    => "asdf",
+                                :key             => File.join(book.slug,
+                                                              file.path),
+                                :path            => file.path
+                              }
+                             },
+                            bucket: test_bucket,
+                            access_key: test_access_key
+                           }.to_json, :headers => {})
 
     files.each { |file| stub_notify_file_upload file }
   end

@@ -31,7 +31,7 @@ module Polytexnic
 
           if File.exists?(cp_path) && !overwrite_all
             res = thor.ask "#{display_path} already exists. " \
-              "Overwrite? (yes,no,all):"
+                           "Overwrite? (yes,no,all):"
 
             overwrite = case res
             when /y|yes/ then true
@@ -51,7 +51,7 @@ module Polytexnic
           else
             if path =~ /\.erb/
               erb = ERB.new(File.read(path)).result(binding)
-              File.open(cp_path, 'w'){ |f| f.write erb }
+              File.open(cp_path, 'w') { |f| f.write erb }
             else
               FileUtils.cp path, cp_path
             end
