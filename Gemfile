@@ -14,7 +14,7 @@ gem 'maruku'
 
 group :test do
   gem 'rspec'
-  gem 'debugger'
+  gem 'debugger2'
   gem 'webmock',   require: false
   gem 'simplecov', require: false
 end

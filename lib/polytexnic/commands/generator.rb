@@ -1,9 +1,12 @@
+require 'erb'
 module Polytexnic
   module Commands
     module Generator
       extend self
 
       def generate_directory(name)
+        @name = name
+
         thor = Thor::Shell::Basic.new
 
         puts "generating directory: #{name}"
@@ -17,6 +20,13 @@ module Polytexnic
           next if path =~ /\/.$|\/..$/
 
           (cp_path = path.dup).slice! template_dir + "/"
+
+          if path =~ /book\.tex/
+            cp_path = "#{name}.tex"
+          elsif path =~ /\.erb/
+            cp_path = File.basename path.dup, '.erb'
+          end
+
           display_path = File.join name, cp_path
 
           if File.exists?(cp_path) && !overwrite_all
@@ -39,7 +49,12 @@ module Polytexnic
           if File.directory?(path)
             FileUtils.mkdir cp_path unless File.exists?(cp_path)
           else
-            FileUtils.cp path, cp_path
+            if path =~ /\.erb/
+              erb = ERB.new(File.read(path)).result(binding)
+              File.open(cp_path, 'w'){ |f| f.write erb }
+            else
+              FileUtils.cp path, cp_path
+            end
           end
         end
 
@@ -56,12 +71,19 @@ module Polytexnic
       end
 
       def verify!
-        generated_files = Dir.glob("**/*",File::FNM_DOTMATCH).map do |f| 
-          File.basename(f) 
+        generated_files = Dir.glob("**/*",File::FNM_DOTMATCH).map do |f|
+          File.basename(f)
         end
 
         Polytexnic::Commands::Generator.template_files.each do |file|
-          raise unless generated_files.include?(File.basename(file))
+          msg = "missing #{file}"
+          if file =~ /book\.tex/
+            raise msg unless generated_files.include?("#{@name}.tex")
+          elsif file =~ /\.erb/
+            raise msg unless generated_files.include?(File.basename(file, '.erb'))
+          else
+            raise msg unless generated_files.include?(File.basename(file))
+          end
         end
       end
     end
