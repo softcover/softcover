@@ -43,6 +43,8 @@ module Polytexnic
           File.open(html_filename, 'w') do |f|
             f.write(template(html_body))
           end
+
+          @built_files.push html_filename
         end
 
         true

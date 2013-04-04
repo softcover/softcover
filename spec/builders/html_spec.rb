@@ -1,10 +1,27 @@
 require 'spec_helper'
 
 describe Polytexnic::Builders::Html do
+
+  context "in valid tex directory" do
+    before { chdir_to_book }
+
+    describe "#build!" do
+      subject(:builder) { Polytexnic::Builders::Html.new }
+      before { builder.build! }
+
+      its(:built_files) { should include "html/book.html" }
+
+      after(:all) do
+        chdir_to_book
+        builder.clean!
+      end
+    end
+  end
+
   context "in valid MD directory" do
     before { chdir_to_md_book }
 
-    context "#build!" do
+    describe "#build!" do
       subject(:builder) { Polytexnic::Builders::Html.new }
 
       before { builder.build! }
@@ -14,9 +31,9 @@ describe Polytexnic::Builders::Html do
         its(:built_files) { should include "html/chapter#{i+1}_fragment.html" }
       end
 
-      after(:all) do 
+      after(:all) do
         chdir_to_md_book
-        builder.clean! 
+        builder.clean!
       end
     end
   end

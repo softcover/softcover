@@ -76,14 +76,15 @@ module Polytexnic
         end
 
         Polytexnic::Commands::Generator.template_files.each do |file|
-          msg = "missing #{file}"
-          if file =~ /book\.tex/
-            raise msg unless generated_files.include?("#{@name}.tex")
+          path = if file =~ /book\.tex/
+            "#{@name}.tex"
           elsif file =~ /\.erb/
-            raise msg unless generated_files.include?(File.basename(file, '.erb'))
+            File.basename(file, '.erb')
           else
-            raise msg unless generated_files.include?(File.basename(file))
+            File.basename(file)
           end
+
+          raise "missing #{file}" unless generated_files.include?(path)
         end
       end
     end
