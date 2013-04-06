@@ -88,5 +88,6 @@ def template(body)
 <body>
 #{body}
 </body>
-EOS
+</html>
+  EOS
 end
