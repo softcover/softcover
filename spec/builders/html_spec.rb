@@ -11,6 +11,19 @@ describe Polytexnic::Builders::Html do
 
       its(:built_files) { should include "html/book.html" }
 
+      describe "HTML output" do
+        let(:output) { File.open("html/book.html").read }
+        subject { output }
+
+        it { should match('<!DOCTYPE html>') }
+        it { should match('pygments.css') }
+      end
+
+      it "should description" do
+        contents = File.open("html/book.html").read
+        raise contents.inspect
+      end
+
       after(:all) do
         chdir_to_book
         builder.clean!

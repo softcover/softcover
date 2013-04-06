@@ -6,6 +6,9 @@ module Polytexnic
     class Html < Builder
       def setup
         Dir.mkdir "html" unless File.directory?("html")
+        unless File.directory?(File.join("html", "stylesheets"))
+          Dir.mkdir File.join("html", "stylesheets")
+        end
       end
 
       def build
@@ -43,6 +46,10 @@ module Polytexnic
           File.open(html_filename, 'w') do |f|
             f.write(template(html_body))
           end
+          pygments_filename = File.join('html', 'stylesheets', 'pygments.css')
+          File.open(pygments_filename, 'w') do |f|
+            f.write(add_highlight_class(Pygments.css))
+          end
 
           @built_files.push html_filename
         end
@@ -53,16 +60,24 @@ module Polytexnic
       def clean!
         FileUtils.rm_rf "html"
       end
+
+      private
+
+        # Adds a 'highlight' class for MathJax compatibility.
+        def add_highlight_class(pygments_css)
+          pygments_css.gsub(/^/, '.highlight ')
+        end
     end
   end
 end
 
 # TODO: Replace this with a file.
 def template(body)
-<<-EOS
+  <<-EOS
 <!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
+<link href="stylesheets/pygments.css" media="screen" rel="stylesheet" type="text/css" />
 <style>
 .tt { font-family: Courier; font-size: 90%; }
 </style>
