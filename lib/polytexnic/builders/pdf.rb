@@ -12,6 +12,7 @@ module Polytexnic
         latex   = Polytexnic::Core::Pipeline.new(polytex).to_latex
         File.open(latex_filename, 'w') { |f| f.write(latex) }
         cmd = "pdflatex #{latex_filename}"
+        cmd += " > /dev/null" if Polytexnic.test?
         # Run the command twice to guarantee up-to-date cross-references.
         system("#{cmd} && #{cmd}")
         rename_pdf(latex_filename)
