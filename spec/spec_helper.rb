@@ -9,6 +9,11 @@ SimpleCov.start
 
 require 'polytexnic'
 
+# Load support files.
+Dir.glob(File.join(File.dirname(__FILE__), "./support/**/*.rb")).each do |f|
+  require_relative(f)
+end
+
 RSpec.configure do |config|
   config.before do
     Polytexnic::set_test_mode!
