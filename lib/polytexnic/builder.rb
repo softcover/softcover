@@ -1,5 +1,7 @@
 module Polytexnic
   class Builder
+    include Polytexnic::Utils
+
     attr_accessor :manifest, :built_files
 
     def initialize

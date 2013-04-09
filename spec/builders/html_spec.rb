@@ -17,6 +17,10 @@ describe Polytexnic::Builders::Html do
 
         it { should match('<!DOCTYPE html>') }
         it { should match('pygments.css') }
+
+        it "should generate a Pygments stylesheet" do
+          expect('html/stylesheets/pygments.css').to exist
+        end
       end
 
       after(:all) do
