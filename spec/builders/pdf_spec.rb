@@ -17,11 +17,16 @@ describe Polytexnic::Builders::Pdf do
         expect(Polytexnic::Utils.tmpify('book.tex')).to exist
       end
 
-      it "should replace the includes with tmp files"
-
       it "should create tmp files for all chapters" do
         builder.manifest.chapter_file_paths.each do |filename|
           expect(Polytexnic::Utils.tmpify(filename)).to exist
+        end
+      end
+
+      it "should replace the main file's includes with tmp files" do
+        contents = File.open(Polytexnic::Utils.tmpify('book.tex')).read
+        builder.manifest.chapters.each do |chapter|
+          expect(contents).to match("\\include{chapters/#{chapter.slug}.tmp}")
         end
       end
 

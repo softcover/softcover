@@ -10,6 +10,9 @@ module Polytexnic
         polytex_filenames.each do |filename|
           polytex = File.open(filename) { |f| f.read }
           latex   = Polytexnic::Core::Pipeline.new(polytex).to_latex
+          latex.gsub!(/\\include{(.*?)}/) do
+            "\\include{#{$1}.tmp}"
+          end
           File.open(Polytexnic::Utils.tmpify(filename), 'w') do |f|
             f.write(latex)
           end
