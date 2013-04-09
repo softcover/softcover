@@ -1,6 +1,6 @@
 module Polytexnic
   class Builder
-    attr_accessor :chapter_manifest, :built_files
+    attr_accessor :manifest, :built_files
 
     def initialize
       @manifest = Polytexnic::BookManifest.new verify_paths: true

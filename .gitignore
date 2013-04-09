@@ -20,3 +20,4 @@ spec/fixtures/book/log/tralics.log
 *.aux
 *.tmp.*
 spec/fixtures/book/book.pdf
+spec/fixtures/book/html/
