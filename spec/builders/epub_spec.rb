@@ -23,11 +23,35 @@ describe Polytexnic::Builders::Epub do
         end
       end
 
-      it "should be create an EPUB file" do
-        expect(true).to be_true
+      describe "META-INF" do
+        it "should have the right container file" do
+          pending
+        end
+
+        it "should have the right contents" do
+          pending
+          
+        end
       end
 
+      describe "contents" do
 
+        it "should create the right HTML file" do
+          expect("epub/OEBPS/#{builder.manifest.filename}.html").to exist
+        end
+        
+        it "should have the right contents" do
+          content = File.open('html/book.html').read
+          File.open('epub/OEBPS/book.html') do |f|
+            expect(f.read).to match(/#{Regexp.escape(content)}/)
+          end
+        end
+      end
+
+      it "should generate the EPUB" do
+        pending
+      end
+  
     end
   end
 end

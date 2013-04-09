@@ -3,11 +3,10 @@ module Polytexnic
     class Epub < Builder
 
       def build!
-        Dir.mkdir('epub') unless File.directory?('epub')
-        Dir.mkdir('epub/OEBPS') unless File.directory?('epub/OEBPS')
-        Dir.mkdir('epub/META-INF') unless File.directory?('epub/META-INF')
-        File.open('epub/mimetype', 'w') { |f| f.write('application/epub+zip') }
-        # raise manifest.filename
+        build_html
+        create_directories
+        write_mimetype
+        write_contents
       end
 
       def template(title, content)
@@ -29,6 +28,27 @@ module Polytexnic
         </html>)
       end
 
+      def build_html
+        Polytexnic::Builders::Html.new.build!
+      end
+
+      def create_directories
+        Dir.mkdir('epub') unless File.directory?('epub')
+        Dir.mkdir('epub/OEBPS') unless File.directory?('epub/OEBPS')
+        Dir.mkdir('epub/META-INF') unless File.directory?('epub/META-INF')        
+      end
+
+      def write_mimetype
+        File.open('epub/mimetype', 'w') { |f| f.write('application/epub+zip') }
+      end
+
+
+      def write_contents
+        content = File.open("html/#{manifest.filename}.html").read
+        File.open("epub/OEBPS/#{manifest.filename}.html", 'w') do |f|
+          f.write(template(manifest.title, content))
+        end
+      end
     end
   end
 end

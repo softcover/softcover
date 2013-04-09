@@ -22,3 +22,5 @@ spec/fixtures/book/log/tralics.log
 spec/fixtures/book/book.pdf
 spec/fixtures/book/html/
 *.sty
+epub/*
+OEBPS*
