@@ -4,17 +4,14 @@ describe Polytexnic::Builders::Pdf do
   context "in valid TeX directory" do
     before do
       chdir_to_book
-      delete_files_matching('*.tmp.tex')
-      delete_files_matching('chapters/*.tmp.tex')
-      File.delete('book.pdf') if File.exist?('book.pdf')
-      File.delete('pygments.sty') if File.exist?('pygments.sty')
+      clean!
     end
 
     describe "#build!" do
       subject(:builder) { Polytexnic::Builders::Pdf.new }
       before { builder.build! }
 
-      it "should be create a tmp LaTeX file" do
+      it "should create a tmp LaTeX file" do
         expect(Polytexnic::Utils.tmpify('book.tex')).to exist
       end
 
@@ -24,7 +21,7 @@ describe Polytexnic::Builders::Pdf do
         end
       end
 
-      it "should replace the main file's includes with tmp files" do
+      it "should replace the main file's \\includes with tmp files" do
         contents = File.open(Polytexnic::Utils.tmpify('book.tex')).read
         builder.manifest.chapters.each do |chapter|
           expect(contents).to match("\\include{chapters/#{chapter.slug}.tmp}")
@@ -42,6 +39,15 @@ describe Polytexnic::Builders::Pdf do
 
     end
   end
+end
+
+
+# Cleans the fixtures directory as a prep for testing.
+def clean!
+  delete_files_matching('*.tmp.tex')
+  delete_files_matching('chapters/*.tmp.tex')
+  File.delete('book.pdf') if File.exist?('book.pdf')
+  File.delete('pygments.sty') if File.exist?('pygments.sty')
 end
 
 # Deletes the files matching a particular pattern.
