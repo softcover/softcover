@@ -14,18 +14,28 @@ describe Polytexnic::Builders::Pdf do
       before { builder.build! }
 
       it "should be create a tmp LaTeX file" do
-        expect('book.tmp.tex').to exist
+        expect(Polytexnic::Utils.tmpify('book.tex')).to exist
+      end
+
+      it "should replace the includes with tmp files"
+
+      it "should create tmp files for all chapters" do
+        builder.manifest.chapter_file_paths.each do |filename|
+          expect(Polytexnic::Utils.tmpify(filename)).to exist
+        end
       end
 
       it "should build a PDF" do
         expect('book.pdf').to exist
       end
+
     end
   end
 end
 
-# Delete the files matching a particular pattern.
+# Deletes the files matching a particular pattern.
 # E.g., delete_files_matching('*.aux') removes all LaTeX auxiliary files.
 def delete_files_matching(pattern)
   Dir.glob(pattern).each { |file| File.delete(file) }
 end
+

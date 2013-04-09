@@ -47,4 +47,12 @@ module Polytexnic::Utils
 
     "#{number.round} #{UNITS[ exponent ]}"
   end
+
+  # Returns the tmp version of a filename.
+  # E.g., tmpify('foo.tex') => 'foo.tmp.tex'
+  def tmpify(filename)
+    filename.sub('.tex', '.tmp.tex')
+  end
+
 end
+

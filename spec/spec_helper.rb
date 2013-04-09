@@ -8,6 +8,7 @@ require 'simplecov'
 SimpleCov.start
 
 require 'polytexnic'
+require 'polytexnic/utils'
 
 # Load support files.
 Dir.glob(File.join(File.dirname(__FILE__), "./support/**/*.rb")).each do |f|
