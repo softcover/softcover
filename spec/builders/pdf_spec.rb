@@ -7,6 +7,7 @@ describe Polytexnic::Builders::Pdf do
       delete_files_matching('*.tmp.tex')
       delete_files_matching('chapters/*.tmp.tex')
       File.delete('book.pdf') if File.exist?('book.pdf')
+      File.delete('pygments.sty') if File.exist?('pygments.sty')
     end
 
     describe "#build!" do
@@ -32,6 +33,11 @@ describe Polytexnic::Builders::Pdf do
 
       it "should build a PDF" do
         expect('book.pdf').to exist
+      end
+
+      it "should create a Pygments style file" do
+        expect('pygments.sty').to exist
+        expect('pygments.sty').to exist
       end
 
     end

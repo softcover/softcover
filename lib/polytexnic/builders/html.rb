@@ -46,11 +46,7 @@ module Polytexnic
           File.open(html_filename, 'w') do |f|
             f.write(template(html_body))
           end
-          pygments_filename = File.join('html', 'stylesheets', 'pygments.css')
-          File.open(pygments_filename, 'w') do |f|
-            f.write(add_highlight_class(Pygments.css))
-          end
-
+          write_pygments_file(:html, File.join('html', 'stylesheets'))
           @built_files.push html_filename
         end
 

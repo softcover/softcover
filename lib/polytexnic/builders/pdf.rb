@@ -17,6 +17,7 @@ module Polytexnic
             f.write(latex)
           end
         end
+        write_pygments_file(:latex)
         cmd = "pdflatex #{Polytexnic::Utils.tmpify(book_filename)}"
         cmd += " > /dev/null" if Polytexnic.test?
         # Run the command twice to guarantee up-to-date cross-references.
