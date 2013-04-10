@@ -2,6 +2,14 @@ require 'spec_helper'
 
 describe Polytexnic::Builders::Mobi do
   context "in valid TeX directory" do
+    before(:all) do
+      if `which kindlegen` == ''
+        url = 'http://www.amazon.com/gp/feature.html?ie=UTF8&docId=1000765211'
+        msg = "No kindlegen found, install here: #{url}"
+        raise msg
+      end
+    end
+
     before do
       chdir_to_book
       clean!
@@ -22,7 +30,7 @@ describe Polytexnic::Builders::Mobi do
         expect(@built).to match(/kindlegen/)
         expect(@built).to match(/epub\/book.epub/)
       end
-  
+
     end
   end
 end
