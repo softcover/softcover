@@ -3,7 +3,14 @@ module Polytexnic
     class Mobi < Builder
 
       def build!
-        puts 'building mobi!'
+        Polytexnic::Builders::Epub.new.build!
+        kindlegen = `which kindlegen`.strip
+        command = "#{kindlegen} epub/#{manifest.filename}.epub"
+        if Polytexnic.test?
+          command
+        else
+          system(command)
+        end
       end
 
     end
