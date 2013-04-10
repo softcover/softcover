@@ -25,12 +25,13 @@ describe Polytexnic::Builders::Epub do
 
       describe "META-INF" do
         it "should have the right container file" do
-          pending
+          expect('epub/META-INF/container.xml').to exist
         end
 
         it "should have the right contents" do
-          pending
-          
+          File.open('epub/META-INF/container.xml') do |f|
+            expect(f.read).to match(/rootfile full-path="OEBPS\/content.opf"/)
+          end
         end
       end
 
