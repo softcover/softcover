@@ -18,8 +18,14 @@ describe Polytexnic::Builders::Html do
         it { should match('<!DOCTYPE html>') }
         it { should match('pygments.css') }
 
-        it "should generate a Pygments stylesheet" do
-          expect('html/stylesheets/pygments.css').to exist
+        describe "Pygments stylesheet" do
+          let(:stylesheet) { 'html/stylesheets/pygments.css' }
+          subject { stylesheet }
+
+          it { should exist }
+          it "should have a .highlight class" do
+            expect(File.open(stylesheet).read).to match('.highlight')
+          end
         end
       end
 

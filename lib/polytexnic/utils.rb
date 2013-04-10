@@ -59,19 +59,26 @@ module Polytexnic::Utils
   # a LaTeX style file).
   def write_pygments_file(format, path = '.')
       extension = case format
-                when :html
-                  'css'
-                when :latex
-                  'sty'
-                end
+                  when :html
+                    'css'
+                  when :latex
+                    'sty'
+                  end
+    # Here we burrow into the private 'Pygments#mentos' method. 
+    # Pygments exposes a 'css' method to return the CSS,
+    # but we want to be able to output a LaTeX style file as well.
+    # The inclusion of the ':css' symbol is necessary but doesn't actually
+    # result in CSS being output unless the format is 'html'.
+    pygments = Pygments.send(:mentos, :css, [format.to_s, ''])
+    add_highlight_class!(pygments) if format == :html
     File.open(File.join(path, "pygments.#{extension}"), 'w') do |f|
-      # Here we burrow into the private 'Pygments#mentos' method. 
-      # Pygments exposes a 'css' method to return the CSS,
-      # but we want to be able to output a LaTeX style file as well.
-      # The inclusion of the ':css' symbol is necessary but doesn't actually
-      # result in CSS being output unless the format is 'html'.
-      f.write(Pygments.send(:mentos, :css, [format.to_s, '']))
+      f.write(pygments)
     end
+  end
+
+  # Adds a 'highlight' class for MathJax compatibility.
+  def add_highlight_class!(pygments_css)
+    pygments_css.gsub!(/^/, '.highlight ')
   end
 
 end

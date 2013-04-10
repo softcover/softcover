@@ -56,13 +56,7 @@ module Polytexnic
       def clean!
         FileUtils.rm_rf "html"
       end
-
-      private
-
-        # Adds a 'highlight' class for MathJax compatibility.
-        def add_highlight_class(pygments_css)
-          pygments_css.gsub(/^/, '.highlight ')
-        end
+      
     end
   end
 end
