@@ -77,7 +77,7 @@ class Polytexnic::BookManifest < OpenStruct
 
     def verify_paths!
       chapter_file_paths do |chapter_path|
-        unless File.exists?(chapter_path)
+        unless File.exist?(chapter_path)
           raise "Chapter file in manifest not found"
         end
       end

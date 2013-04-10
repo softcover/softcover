@@ -13,7 +13,7 @@ module Polytexnic
 
         overwrite_all = false
 
-        FileUtils.mkdir name unless File.exists?(name)
+        FileUtils.mkdir name unless File.exist?(name)
         Dir.chdir name
 
         template_files.each do |path|
@@ -29,7 +29,7 @@ module Polytexnic
 
           display_path = File.join name, cp_path
 
-          if File.exists?(cp_path) && !overwrite_all
+          if File.exist?(cp_path) && !overwrite_all
             res = thor.ask "#{display_path} already exists. " \
                            "Overwrite? (yes,no,all):"
 
@@ -47,7 +47,7 @@ module Polytexnic
           end
 
           if File.directory?(path)
-            FileUtils.mkdir cp_path unless File.exists?(cp_path)
+            FileUtils.mkdir cp_path unless File.exist?(cp_path)
           else
             if path =~ /\.erb/
               erb = ERB.new(File.read(path)).result(binding)

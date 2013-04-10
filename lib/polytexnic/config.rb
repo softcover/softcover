@@ -25,7 +25,7 @@ module Polytexnic
       end
 
       def remove
-        File.delete(file_path) if File.exists?(file_path)
+        File.delete(file_path) if File.exist?(file_path)
       end
 
       protected
