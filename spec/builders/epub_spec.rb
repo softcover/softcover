@@ -40,13 +40,21 @@ describe Polytexnic::Builders::Epub do
         it "should create the right HTML file" do
           expect("epub/OEBPS/#{builder.manifest.filename}.html").to exist
         end
-        
+      
+        it "should create the right OPF file" do
+          expect('epub/OEBPS/content.opf').to exist
+        end
+
         it "should have the right contents" do
-          content = File.open('html/book.html').read
           File.open('epub/OEBPS/book.html') do |f|
-            expect(f.read).to match(/#{Regexp.escape(content)}/)
+            expect(f.read).to match('chapter-1')
           end
         end
+      end
+
+      it "should generate the toc files" do
+        expect('epub/OEBPS/toc.ncx').to exist
+        expect('epub/OEBPS/toc.html').to exist
       end
 
       it "should generate the EPUB" do
@@ -60,5 +68,8 @@ end
 
 # Cleans the fixtures directory as a prep for testing.
 def clean!
-  FileUtils.rm_r('book.epub', force: true)
+  FileUtils.rm_r('epub/book.epub', force: true)
+  FileUtils.rm_r('epub/OEBPS/*', force: true)
+  FileUtils.rm_r('epub/mimetype', force: true)
+  FileUtils.rm_rf('epub/META-INF/')
 end
