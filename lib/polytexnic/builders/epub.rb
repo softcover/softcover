@@ -8,6 +8,7 @@ module Polytexnic
         write_mimetype
         write_container_xml
         write_contents
+        make_epub
       end
 
       def template(title, content)
@@ -69,6 +70,19 @@ module Polytexnic
         end
       end
 
+      # Make the EPUB, which is basically just a zipped HTML file.
+      def make_epub
+        filename = manifest.filename
+        base_file = "zip -X0    #{filename} mimetype"
+        meta_info = "zip -rDXg9 #{filename} META-INF -x \*.DS_Store -x mimetype"
+        main_info = "zip -rDXg9 #{filename} OEBPS    -x \*.DS_Store"
+        rename = "mv #{filename}.zip #{filename}.epub"
+        commands = [base_file, meta_info, main_info, rename]
+        commands.map! { |c| c += ' > /dev/null' } if Polytexnic.test?
+
+        Dir.chdir('epub')
+        system(commands.join(' && '))
+      end
     end
   end
 end

@@ -50,7 +50,8 @@ describe Polytexnic::Builders::Epub do
       end
 
       it "should generate the EPUB" do
-        pending
+        expect('epub/book.epub').to exist
+        expect('epub/book.zip').not_to exist
       end
   
     end
