@@ -15,7 +15,7 @@ module Polytexnic
 
     def upload!
       unless @params.empty?
-        bar = ProgressBar.create title: "Starting Upload...", 
+        bar = ProgressBar.create title: "Starting Upload...",
           format: "%t |%B| %P%% %e", total: total_size, smoothing: 0.75
 
         upload_host = "http://#{@bucket}.s3.amazonaws.com"

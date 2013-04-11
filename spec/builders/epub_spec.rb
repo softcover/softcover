@@ -40,14 +40,14 @@ describe Polytexnic::Builders::Epub do
         it "should create the right HTML file" do
           expect("epub/OEBPS/#{builder.manifest.filename}.html").to exist
         end
-      
+
         it "should create the right OPF file" do
           expect('epub/OEBPS/content.opf').to exist
         end
 
         it "should have the right contents" do
           File.open('epub/OEBPS/book.html') do |f|
-            expect(f.read).to match('chapter-1')
+            expect(f.read).to match('Chapter 1')
           end
         end
       end
@@ -61,7 +61,7 @@ describe Polytexnic::Builders::Epub do
         expect('epub/book.epub').to exist
         expect('epub/book.zip').not_to exist
       end
-  
+
     end
   end
 end
