@@ -19,7 +19,7 @@ module Polytexnic
       def create_directories
         Dir.mkdir('epub') unless File.directory?('epub')
         Dir.mkdir('epub/OEBPS') unless File.directory?('epub/OEBPS')
-        Dir.mkdir('epub/META-INF') unless File.directory?('epub/META-INF')        
+        Dir.mkdir('epub/META-INF') unless File.directory?('epub/META-INF')
       end
 
       # Writes the mimetype file.
@@ -33,27 +33,29 @@ module Polytexnic
       def write_container_xml
         File.open('epub/META-INF/container.xml', 'w') do |f|
           f.write(container_xml)
-        end        
+        end
       end
 
       def write_contents
-        raw_content = File.open("html/#{manifest.filename}.html").read
+        html_path = File.join('html', manifest.filename+'.html')
+        raw_content = File.open(html_path).read
         # TODO: Do right with Nokogiri
         raw_content =~ /<body>(.*)<\/body>/m
         content = $1
         File.open("epub/OEBPS/#{manifest.filename}.html", 'w') do |f|
           f.write(template(manifest.title, content))
         end
-        File.open('epub/OEBPS/content.opf', 'w') { |f| f.write(content_opf) } 
+        File.open('epub/OEBPS/content.opf', 'w') { |f| f.write(content_opf) }
       end
 
       # Make the EPUB, which is basically just a zipped HTML file.
       def make_epub
         filename = manifest.filename
-        base_file = "zip -X0    #{filename} mimetype"
-        meta_info = "zip -rDXg9 #{filename} META-INF -x \*.DS_Store -x mimetype"
-        main_info = "zip -rDXg9 #{filename} OEBPS    -x \*.DS_Store"
-        rename = "mv #{filename}.zip #{filename}.epub"
+        zip_filename = filename + '.zip'
+        base_file = "zip -X0    #{zip_filename} mimetype"
+        meta_info = "zip -rDXg9 #{zip_filename} META-INF -x \*.DS_Store -x mimetype"
+        main_info = "zip -rDXg9 #{zip_filename} OEBPS    -x \*.DS_Store"
+        rename = "mv #{zip_filename} #{filename}.epub"
         commands = [base_file, meta_info, main_info, rename]
         commands.map! { |c| c += ' > /dev/null' } if Polytexnic.test?
 
@@ -63,8 +65,8 @@ module Polytexnic
       end
 
       def write_toc
-        File.open('epub/OEBPS/toc.ncx',  'w') { |f| f.write(toc_ncx) } 
-        File.open('epub/OEBPS/toc.html', 'w') { |f| f.write(toc_html) } 
+        File.open('epub/OEBPS/toc.ncx',  'w') { |f| f.write(toc_ncx) }
+        File.open('epub/OEBPS/toc.html', 'w') { |f| f.write(toc_html) }
       end
 
       def template(title, content)
@@ -91,7 +93,7 @@ module Polytexnic
     <rootfiles>
         <rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/>
    </rootfiles>
-</container>)        
+</container>)
       end
 
       # This is hard-coded for now, but will eventually be dynamic.
@@ -118,9 +120,9 @@ module Polytexnic
 <itemref idref="sec-1"/>
       </spine>
       <guide>
-        <reference type="toc" title="Table of Contents" href="toc.html"/> 
+        <reference type="toc" title="Table of Contents" href="toc.html"/>
       </guide>
-  </package>)        
+  </package>)
       end
 
       # This is hard-coded for now, but will eventually be dynamic.
@@ -151,7 +153,7 @@ module Polytexnic
             <content src="foo_bar.html"/>
     </navPoint>
     </navMap>
-</ncx>)        
+</ncx>)
       end
 
       # This is hard-coded for now, but will eventually be dynamic.

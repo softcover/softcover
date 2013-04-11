@@ -3,7 +3,11 @@ require 'active_support/core_ext/hash'
 
 class Polytexnic::BookManifest < OpenStruct
 
-  class Chapter < OpenStruct; end
+  class Chapter < OpenStruct
+    def path
+      File.join('chapters', slug + '.tex')
+    end
+  end
 
   YAML_PATH = "book.yml"
   JSON_PATH = "book.json"
@@ -18,17 +22,21 @@ class Polytexnic::BookManifest < OpenStruct
       fail
     end.symbolize_keys!
 
-    n = 0
-    attrs[:chapters].map! do |chapter|
-      case chapter
-      when Hash then slug, title = chapter.first[0], chapter.first[1]
-      when String then slug, title = chapter, chapter.titleize
-      end
-
-      Chapter.new slug: slug, title: title, chapter_number: n += 1
-    end
-
     marshal_load attrs
+
+    if polytex?
+      tex_filename = filename + '.tex'
+      self.chapters = []
+      chapter_regex = /\\include\{chapters\/(.+?)\}/
+      chapter_includes = File.read(tex_filename).scan(chapter_regex).flatten
+      chapter_includes.each_with_index do |slug, i|
+        title_regex = /\\chapter\{(.*?)\}/m
+        title = File.read(File.join('chapters', slug + '.tex'))[title_regex, 1]
+        chapters.push Chapter.new(slug: slug,
+                                  title: title,
+                                  chapter_number: i += 1)
+      end
+    end
 
     # TODO: verify all attributes
 
@@ -64,10 +72,14 @@ class Polytexnic::BookManifest < OpenStruct
     def read_from_md
       return false unless f = File.open(MD_PATH)
 
-      chapters = f.readlines.map { |path| path.gsub /\n/,'' }
+      chapters = f.readlines.each_with_index.map do |path,i|
+        slug = path.gsub(/\n/,'')
+        # TODO: read title from chapter file
+        Chapter.new slug: slug, title: slug, chapter_number: i + 1
+      end
       f.close
 
-      {chapters: chapters}
+      { chapters: chapters, filename: MD_PATH }
     end
 
     def fail
