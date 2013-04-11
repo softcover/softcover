@@ -12,21 +12,29 @@ describe Polytexnic::Builders::Html do
       its(:built_files) { should include "html/book.html" }
 
       describe "HTML output" do
-        let(:output) { File.open("html/book.html").read }
+        let(:output) { File.read("html/book.html") }
         subject { output }
 
         it { should match('<!DOCTYPE html>') }
         it { should match('pygments.css') }
 
-        describe "Pygments stylesheet" do
-          let(:stylesheet) { 'html/stylesheets/pygments.css' }
-          subject { stylesheet }
+      end
 
-          it { should exist }
-          it "should have a .highlight class" do
-            expect(File.open(stylesheet).read).to match('.highlight')
-          end
+      describe "Pygments stylesheet" do
+        let(:stylesheet) { 'html/stylesheets/pygments.css' }
+        subject { stylesheet }
+
+        it { should exist }
+        it "should have a .highlight class" do
+          expect(File.open(stylesheet).read).to match('.highlight')
         end
+      end
+
+      describe "HTML fragments output" do
+        let(:output) { File.read('html/chapter-1_fragment.html') }
+        subject { output }
+
+        it { should match('Chapter 1') }
       end
 
       after(:all) do
