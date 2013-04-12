@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in polytexnic-gem.gemspec
 gemspec
 
-gem 'polytexnic-core', '0.0.2', git: 'git@github.com:mhartl/polytexnic-core.git'
+gem 'polytexnic-core', '0.0.3'
 gem 'nokogiri', '~> 1.5.0'
 gem 'thor'
 gem 'activesupport'
