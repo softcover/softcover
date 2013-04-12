@@ -39,29 +39,34 @@ module Polytexnic
           includes = polytex.scan(/(\\include{(.*?)})/)
           includes.each do |command, filename|
             content = File.open(filename + '.tex') { |f| f.read }
-            polytex.gsub!(command, content)
+            wrapped = %{
+              \\begin{xmlelement}{chapterWr}
+                #{content}
+              \\end{xmlelement}
+            }
+            polytex.gsub!(command, wrapped)
           end
           html_body = Polytexnic::Core::Pipeline.new(polytex).to_html
           html_filename = File.join('html', basename + '.html')
+          file_content = template(html_body)
           File.open(html_filename, 'w') do |f|
-            f.write(template(html_body))
+            f.write(file_content)
           end
           write_pygments_file(:html, File.join('html', 'stylesheets'))
           @built_files.push html_filename
 
           # build html fragments
           # TODO: run original html through nokogiri to preserve x-refs
-          @manifest.chapters.each do |chapter|
-            polytex = File.read(chapter.path)
-            html_body = Polytexnic::Core::Pipeline.new(polytex).to_html
+          xml = Nokogiri::HTML(file_content)
+          xml.css('.chapterWr').each_with_index do |node,i|
+            chapter = @manifest.chapters[i]
 
             html_filename = File.join('html', chapter.slug + '_fragment.html')
             File.open(html_filename, 'w') do |f|
-              f.write(html_body)
+              f.write(node)
             end
 
             @built_files.push html_filename
-
           end
 
         end

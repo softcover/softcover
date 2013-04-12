@@ -10,8 +10,6 @@ class Polytexnic::BookManifest < OpenStruct
   end
 
   YAML_PATH = "book.yml"
-  JSON_PATH = "book.json"
-
   MD_PATH = "Book.txt"
 
   def initialize(opts={})
@@ -62,6 +60,10 @@ class Polytexnic::BookManifest < OpenStruct
 
       file_path
     end
+  end
+
+  def self.valid_directory?
+    [YAML_PATH, MD_PATH].any?{ |f| File.exist?(f) }
   end
 
   private

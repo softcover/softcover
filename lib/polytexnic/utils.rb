@@ -15,15 +15,13 @@ module Polytexnic::Utils
   def in_book_directory?
     files = Dir['**/*']
 
-    is_book_directory = true
-
     Polytexnic::FORMATS.each do |format|
       unless files.any?{|file| File.extname(file) == ".#{format}"}
-        puts "No #{format} found."
-        is_book_directory = false
+        puts "No #{format} found, skipping."
       end
     end
-    return is_book_directory
+
+    return Polytexnic::BookManifest::valid_directory?
   end
 
   def logged_in?
@@ -39,7 +37,7 @@ module Polytexnic::Utils
     else
       max_exp  = UNITS.size - 1
 
-      exponent = ( Math.log( number ) / Math.log( 1024 ) ).to_i 
+      exponent = ( Math.log( number ) / Math.log( 1024 ) ).to_i
       exponent = max_exp if exponent > max_exp
 
       number  /= 1024 ** exponent
@@ -64,7 +62,7 @@ module Polytexnic::Utils
                   when :latex
                     'sty'
                   end
-    # Here we burrow into the private 'Pygments#mentos' method. 
+    # Here we burrow into the private 'Pygments#mentos' method.
     # Pygments exposes a 'css' method to return the CSS,
     # but we want to be able to output a LaTeX style file as well.
     # The inclusion of the ':css' symbol is necessary but doesn't actually
