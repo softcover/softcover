@@ -29,9 +29,12 @@ class Polytexnic::BookManifest < OpenStruct
       chapter_includes = File.read(tex_filename).scan(chapter_regex).flatten
       chapter_includes.each_with_index do |slug, i|
         title_regex = /\\chapter\{(.*?)\}/m
-        title = File.read(File.join('chapters', slug + '.tex'))[title_regex, 1]
+        content = File.read(File.join('chapters', slug + '.tex'))
+        title = content[title_regex, 1]
+        sections = content.scan(/\\section\{(.*?)}/m).flatten
         chapters.push Chapter.new(slug: slug,
                                   title: title,
+                                  sections: sections,
                                   chapter_number: i += 1)
       end
     end
