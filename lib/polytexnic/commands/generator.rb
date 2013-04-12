@@ -71,7 +71,7 @@ module Polytexnic
       end
 
       def verify!
-        generated_files = Dir.glob("**/*",File::FNM_DOTMATCH).map do |f|
+        generated_files = Dir.glob("**/*", File::FNM_DOTMATCH).map do |f|
           File.basename(f)
         end
 

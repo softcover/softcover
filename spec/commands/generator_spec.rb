@@ -20,6 +20,18 @@ describe Polytexnic::Commands::Generator do
       yml['title'].should eq name
     end
 
+    context "generated contents" do
+
+      before { Dir.chdir(name) }
+
+      describe ".gitignore" do
+        subject { File.open('.gitignore').read }
+        it { should match(/html/) }
+      end
+      
+    end
+
+
   end
 
   context "overwriting" do
