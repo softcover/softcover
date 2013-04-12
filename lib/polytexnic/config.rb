@@ -4,7 +4,7 @@ module Polytexnic
   class BaseConfig
 
     DEFAULTS = {
-      host: 'http://softcover.herokuapp.com'
+      host: 'http://softcover.io'
     }
 
     class << self
