@@ -31,7 +31,7 @@ class Polytexnic::BookManifest < OpenStruct
         title_regex = /\\chapter\{(.*?)\}/m
         content = File.read(File.join('chapters', slug + '.tex'))
         title = content[title_regex, 1]
-        sections = content.scan(/\\section\{(.*?)}/m).flatten
+        sections = content.scan(/\\section{(.*?)}/m).flatten
         chapters.push Chapter.new(slug: slug,
                                   title: title,
                                   sections: sections,
@@ -66,7 +66,7 @@ class Polytexnic::BookManifest < OpenStruct
   end
 
   def self.valid_directory?
-    [YAML_PATH, MD_PATH].any?{ |f| File.exist?(f) }
+    [YAML_PATH, MD_PATH].any? { |f| File.exist?(f) }
   end
 
   private
