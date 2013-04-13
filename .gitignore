@@ -21,7 +21,7 @@ spec/fixtures/book/log/tralics.log
 *.tmp.*
 spec/fixtures/book/book.pdf
 spec/fixtures/book/html/
-*.sty
+pygments.sty
 
 # Ignore generated EPUB & MOBI files
 epub/

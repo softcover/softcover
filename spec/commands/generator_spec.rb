@@ -61,7 +61,7 @@ describe Polytexnic::Commands::Generator do
 
         it "should have the necessary weird CreateSpace image file" do
           expect('PSO_Uncoated_ISO12647_bas.ICC').to exist
-        end        
+        end
 
         it "should include the polytexnic style file by default" do
           book_base = File.read('foo_bar.tex')
