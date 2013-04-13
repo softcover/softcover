@@ -60,9 +60,15 @@ describe Polytexnic::Commands::Generator do
         end
       end
       
+      describe "base LaTeX file" do
+        subject { File.open('foo_bar.tex').read }
+
+        it { should match(/\\include{chapters\/a_chapter}/) }
+        it { should match(/\\include{chapters\/another_chapter}/) }
+        it { should match(/\\title{.*?}/) }
+        it { should match(/\\author{.*?}/) }
+      end
     end
-
-
   end
 
   context "overwriting" do
