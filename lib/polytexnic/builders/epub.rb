@@ -9,6 +9,7 @@ module Polytexnic
         write_container_xml
         write_contents
         write_toc
+        copy_stylesheets
         make_epub
       end
 
@@ -17,9 +18,10 @@ module Polytexnic
       end
 
       def create_directories
-        Dir.mkdir('epub') unless File.directory?('epub')
-        Dir.mkdir('epub/OEBPS') unless File.directory?('epub/OEBPS')
-        Dir.mkdir('epub/META-INF') unless File.directory?('epub/META-INF')
+        mkdir('epub')
+        mkdir('epub/OEBPS')
+        mkdir('epub/OEBPS/styles')
+        mkdir('epub/META-INF')
       end
 
       # Writes the mimetype file.
@@ -37,7 +39,7 @@ module Polytexnic
       end
 
       def write_contents
-        html_path = File.join('html', manifest.filename+'.html')
+        html_path = File.join('html', manifest.filename + '.html')
         raw_content = File.open(html_path).read
         # TODO: Do right with Nokogiri
         raw_content =~ /<body>(.*)<\/body>/m
@@ -46,6 +48,11 @@ module Polytexnic
           f.write(template(manifest.title, content))
         end
         File.open('epub/OEBPS/content.opf', 'w') { |f| f.write(content_opf) }
+      end
+
+      def copy_stylesheets
+        FileUtils.cp(File.join('html', 'stylesheets', 'pygments.css'),
+                     File.join('epub', 'OEBPS', 'styles'))
       end
 
       # Make the EPUB, which is basically just a zipped HTML file.
@@ -67,6 +74,10 @@ module Polytexnic
       def write_toc
         File.open('epub/OEBPS/toc.ncx',  'w') { |f| f.write(toc_ncx) }
         File.open('epub/OEBPS/toc.html', 'w') { |f| f.write(toc_html) }
+      end
+
+      def mkdir(dir)
+        Dir.mkdir(dir) unless File.directory?(dir)
       end
 
       def template(title, content)
@@ -111,7 +122,7 @@ module Polytexnic
       <manifest>
           <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
           <item id="page-template.xpgt" href="styles/page-template.xpgt" media-type="application/vnd.adobe-page-template+xml"/>
-          <item id="sec-1" href="foo_bar.html" media-type="application/xhtml+xml"/>
+          <item id="sec-1" href="#{manifest.filename}.html" media-type="application/xhtml+xml"/>
           <item id="toc" href="toc.html" media-type="application/xhtml+xml"/>
           <item id="pygments.css" href="styles/pygments.css" media-type="text/css"/>
       </manifest>
@@ -150,7 +161,7 @@ module Polytexnic
         </navPoint>
             <navPoint id="sec-1" playOrder="2">
             <navLabel><text>Chapter Foo</text></navLabel>
-            <content src="foo_bar.html"/>
+            <content src="#{manifest.filename}.html"/>
     </navPoint>
     </navMap>
 </ncx>)
