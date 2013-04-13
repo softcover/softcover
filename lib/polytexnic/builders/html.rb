@@ -100,7 +100,7 @@ def template(body)
   });
 </script>
 </head>
-<body>
+<body id="book">
 #{body}
 </body>
 </html>
