@@ -67,11 +67,11 @@ module Polytexnic
       end
 
       def template_files
-        Dir.glob File.join(template_dir, "**/*"), File::FNM_DOTMATCH
+        Dir.glob(File.join(template_dir, "**/*"), File::FNM_DOTMATCH)
       end
 
       def verify!
-        generated_files = Dir.glob("**/*",File::FNM_DOTMATCH).map do |f|
+        generated_files = Dir.glob("**/*", File::FNM_DOTMATCH).map do |f|
           File.basename(f)
         end
 
