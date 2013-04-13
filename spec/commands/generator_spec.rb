@@ -26,7 +26,18 @@ describe Polytexnic::Commands::Generator do
 
       describe ".gitignore" do
         subject { File.open('.gitignore').read }
-        it { should match(/html/) }
+
+        it { should match(/\*\.aux/) }
+        it { should match(/\*\.log/) }
+        it { should match(/\*\.toc/) }
+        it { should match(/\*\.tmp\.\*/) }
+        it { should match(/\*\.pdf/) }
+        it { should match(/pygments\.sty/) }
+        it { should match(/html\//) }
+        it { should match(/epub\//) }
+        it { should match(/screencasts\//) }
+        it { should match(/log\//) }
+        it { should match(/\.DS_Store/) }
       end
       
     end
