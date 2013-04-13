@@ -1,2 +1,20 @@
+# Generated LaTeX files
+*.aux
+*.log
+*.toc
+*.tmp.*
+*.pdf
+pygments.sty
+
+# Generated HTML files
 html/
+
+# Generated EPUB/MOBI files
+epub/
+
+# Screencasts (likely to be huge)
 screencasts/
+
+# Other miscellaneous files
+log/
+.DS_Store

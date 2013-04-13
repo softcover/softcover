@@ -1,0 +1,916 @@
+%%
+%% This is file `createspace.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% createspace.dtx  (with options: `package')
+%% 
+%% This is a generated file.
+%% 
+%% Copyright (C) 2011 by Andrzej Giniewicz <andrzej.giniewicz@pwr.wroc.pl>
+%% --------------------------------------------------------------------------
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   http://www.latex-project.org/lppl.txt
+%% and version 1.3 or later is part of all distributions of LaTeX
+%% version 2005/12/01 or later.
+%% 
+\NeedsTeXFormat{LaTeX2e}[1999/12/01]
+\ProvidesPackage{createspace}
+    [2011/07/27 v0.91 package for typesetting books ready for CreateSpace.com]
+\RequirePackage{xkeyval}
+\define@choicekey*+{createspace.sty}{size}[\val\nr]{pocket,halfletter,novel,journal,magazine,square,landscape}{\let\createspace@size\nr\let\createspace@sizename\val}{\PackageWarning{createspace}{unknown book size}}
+\define@choicekey*+{createspace.sty}{trim}[\val\nr]{0,1,2}[1]{\let\createspace@trim\nr\let\createspace@trimname\val}{\PackageWarning{createspace}{unknown trim option}}
+\define@choicekey*+{createspace.sty}{paper}[\val\nr]{white,cream}{\let\createspace@paper\nr\let\createspace@papername\val}{\PackageWarning{createspace}{unknown paper type}}
+\define@choicekey*+{createspace.sty}{preview}[\val\nr]{false,a4,letter}[a4]{\let\createspace@preview\nr\let\createspace@previewname\val}{\PackageWarning{createspace}{unknown preview option}}
+\define@choicekey*+{createspace.sty}{colourpackage}[\val\nr]{none,color,xcolor}{\let\createspace@colourpackage\nr\let\createspace@colourpackagename\val}{\PackageWarning{createspace}{unknown colourpackage option}}
+\define@choicekey*+{createspace.sty}{colorpackage}[\val\nr]{none,color,xcolor}{\let\createspace@colorpackage\nr\let\createspace@colorpackagename\val}{\PackageWarning{createspace}{unknown colorpackage option}}
+\define@boolkeys{createspace.sty}[createspace@]{bleed,colour,color,nopdf,nopage,noicc}[true]
+\define@cmdkeys{createspace.sty}[createspace@]{inner,outer,top,bottom,gutter,geometryextra,customsize}
+\presetkeys{createspace.sty}{size=novel,trim=0,paper=white,preview=false,gutter=0.3in,inner=0.5in,outer=0.5in,top=0.5in,bottom=0.5in,geometryextra={twoside,heightrounded,truedimen},colourpackage=xcolor,colorpackage=xcolor}{}
+\ProcessOptionsX
+\ifcreatespace@color\createspace@colourtrue\fi
+\ifcase\createspace@colourpackage\relax\or\or
+\let\createspace@colourpackage\createspace@colorpackage
+\let\createspace@colourpackagename\createspace@colorpackagename
+\fi
+\newcommand\createspace@PackageInfo[1]{\typeout{Package createspace Info: #1}\typeout{}}
+\newdimen\createspace@l@width
+\newdimen\createspace@l@height
+\newdimen\createspace@l@gutter
+\newdimen\createspace@l@inner
+\newdimen\createspace@l@outer
+\newdimen\createspace@l@top
+\newdimen\createspace@l@bottom
+\newdimen\createspace@l@thickness
+\newcount\createspace@c@minpages
+\newcount\createspace@c@maxpages
+\createspace@l@gutter=\createspace@gutter
+\createspace@l@inner=\createspace@inner
+\createspace@l@outer=\createspace@outer
+\createspace@l@top=\createspace@top
+\createspace@l@bottom=\createspace@bottom
+\newif\ifcreatespace@makepreview
+\newif\ifcreatespace@industrystandard
+\ifcreatespace@colour
+\createspace@industrystandardfalse
+\else
+\ifcase\createspace@paper\relax
+\createspace@industrystandardtrue
+\or
+\createspace@industrystandardfalse
+\fi
+\fi
+\ifdim\createspace@l@inner<0.25in
+\PackageWarning{createspace}{inner margin must be at least 0.25in}
+\else
+\ifdim\createspace@l@inner<0.5in
+\createspace@PackageInfo{inner margin is below recommended value of 0.5in}
+\fi
+\fi
+\ifdim\createspace@l@outer<0.25in
+\PackageWarning{createspace}{outer margin must be at least 0.25in}
+\else
+\ifdim\createspace@l@outer<0.5in
+\createspace@PackageInfo{outer margin is below recommended value of 0.5in}
+\fi
+\fi
+\ifdim\createspace@l@top<0.25in
+\PackageWarning{createspace}{top margin must be at least 0.25in}
+\else
+\ifdim\createspace@l@top<0.5in
+\createspace@PackageInfo{top margin is below recommended value of 0.5in}
+\fi
+\fi
+\ifdim\createspace@l@bottom<0.25in
+\PackageWarning{createspace}{bottom margin must be at least 0.25in}
+\else
+\ifdim\createspace@l@bottom<0.5in
+\createspace@PackageInfo{bottom margin is below recommended value of 0.5in}
+\fi
+\fi
+\ifcreatespace@colour
+\ifcase\createspace@paper\relax\or
+\PackageError{createspace}{cannot print colour book on cream paper}{change paper or colour options}
+\fi
+\createspace@c@maxpages=480
+\createspace@l@thickness=0.002347in
+\else
+\ifcase\createspace@paper\relax
+\createspace@c@maxpages=828
+\createspace@l@thickness=0.002252in
+\or
+\createspace@c@maxpages=740
+\createspace@l@thickness=0.0025in
+\fi
+\fi
+\createspace@c@minpages=24
+\ifx\createspace@customsize\undefined
+\ifcase\createspace@size\relax
+\ifcase\createspace@trim\relax
+  \createspace@l@width=5.25in
+  \createspace@l@height=8in
+  \ifcase\createspace@paper\relax\or
+    \createspace@industrystandardtrue
+  \fi
+\or
+  \createspace@l@width=5.06in
+  \createspace@l@height=7.81in
+\or
+  \createspace@l@width=5in
+  \createspace@l@height=8in
+  \ifcase\createspace@paper\relax\or
+    \createspace@industrystandardtrue
+  \fi
+\fi
+\or
+\ifcase\createspace@trim\relax
+  \createspace@l@width=5.5in
+  \createspace@l@height=8.5in
+  \createspace@industrystandardtrue
+\else
+  \PackageError{createspace}{cannot trim \createspace@sizename\space size}{change size or trim options}
+\fi
+\or
+\ifcase\createspace@trim\relax
+  \createspace@l@width=6in
+  \createspace@l@height=9in
+  \createspace@industrystandardtrue
+\else
+  \PackageError{createspace}{cannot trim \createspace@sizename\space size}{change size or trim options}
+\fi
+\or
+\ifcase\createspace@trim\relax
+  \createspace@l@width=7in
+  \createspace@l@height=10in
+  \ifcreatespace@colour
+    \createspace@industrystandardtrue
+  \fi
+\or
+  \createspace@l@width=6.69in
+  \createspace@l@height=9.61in
+\or
+  \createspace@l@width=6.14in
+  \createspace@l@height=9.21in
+  \ifcreatespace@colour
+    \createspace@industrystandardtrue
+  \fi
+\fi
+\or
+\ifcase\createspace@trim\relax
+  \createspace@l@width=8in
+  \createspace@l@height=10in
+  \ifcreatespace@colour
+    \createspace@industrystandardtrue
+  \else
+    \ifcase\createspace@paper\relax
+    \createspace@c@maxpages=440
+    \or
+    \createspace@c@maxpages=400
+    \fi
+  \fi
+\or
+  \createspace@l@width=7.5in
+  \createspace@l@height=9.25in
+\or
+  \createspace@l@width=7.44in
+  \createspace@l@height=9.69in
+\fi
+\or
+\ifcase\createspace@trim\relax
+  \createspace@l@width=8.25in
+  \createspace@l@height=8.25in
+  \createspace@industrystandardfalse
+  \ifcreatespace@colour
+  \createspace@c@maxpages=212
+  \else
+  \ifcase\createspace@paper\relax
+  \createspace@c@maxpages=220
+  \or
+  \createspace@c@maxpages=200
+  \fi
+  \fi
+\else
+  \PackageError{createspace}{cannot trim \createspace@sizename\space size}{change size or trim options}
+\fi
+\or
+\ifcase\createspace@trim\relax
+  \createspace@l@width=8.25in
+  \createspace@l@height=6in
+  \createspace@industrystandardfalse
+  \ifcreatespace@colour
+  \createspace@c@maxpages=212
+  \else
+  \ifcase\createspace@paper\relax
+  \createspace@c@maxpages=220
+  \or
+  \createspace@c@maxpages=200
+  \fi
+  \fi
+\else
+  \PackageError{createspace}{cannot trim \createspace@sizename\space size}{change size or trim options}
+\fi
+\fi
+\else
+\ifcase\createspace@trim\relax\else
+\PackageError{createspace}{cannot trim custom size}{use predefined sizes instead}
+\fi
+\createspace@industrystandardfalse
+\def\createspace@extractsize#1,#2{\createspace@l@width=#1\createspace@l@height=#2}
+\expandafter\createspace@extractsize\createspace@customsize\relax
+\ifdim\createspace@l@width<4in
+\PackageError{createspace}{page width cannot be smaller than 4in}{change the page dimensions}
+\fi
+\ifdim\createspace@l@width>8.5in
+\PackageError{createspace}{page width cannot be larger than 8.5in}{change the page dimensions}
+\fi
+\ifdim\createspace@l@height<6in
+\PackageError{createspace}{page height cannot be smaller than 6in}{change the page dimensions}
+\fi
+\ifcreatespace@colour
+\ifdim\createspace@l@height>11in
+\PackageError{createspace}{colour page height cannot be larger than 11in}{change the page dimensions}
+\fi
+\else
+\ifdim\createspace@l@height>11.69in
+\PackageError{createspace}{black and white page height cannot be larger than 11.69in}{change the page dimensions}
+\fi
+\fi
+\fi
+\ifcreatespace@bleed
+\advance\createspace@l@width by 0.125in
+\advance\createspace@l@height by 0.25in
+\advance\createspace@l@outer by 0.125in
+\advance\createspace@l@top by 0.125in
+\advance\createspace@l@bottom by 0.125in
+\fi
+\ifcase\createspace@preview\relax
+\createspace@makepreviewfalse
+\or
+\createspace@makepreviewtrue
+\newdimen\createspace@l@previewwidth
+\newdimen\createspace@l@previewheight
+\createspace@l@previewwidth=210mm
+\createspace@l@previewheight=297mm
+\or
+\createspace@makepreviewtrue
+\newdimen\createspace@l@previewwidth
+\newdimen\createspace@l@previewheight
+\createspace@l@previewwidth=8.5in
+\createspace@l@previewheight=11in
+\fi
+\ifcreatespace@makepreview
+\ifdim\createspace@l@width>\createspace@l@previewwidth
+  \ifcase\createspace@preview\relax\or
+    \ifdim\createspace@l@height>11in
+      \PackageError{createspace}{preview paper too small}{you cannot preview page that big}
+    \else
+      \PackageError{createspace}{preview paper too small}{try previewing on letter paper}
+    \fi
+  \or
+    \PackageError{createspace}{preview paper too small}{you cannot preview page that big}
+  \fi
+\fi
+\ifdim\createspace@l@height>\createspace@l@previewheight
+  \ifcase\createspace@preview\relax\or
+    \PackageError{createspace}{preview paper too small}{you cannot preview page that big}
+  \or
+    \ifdim\createspace@l@width>210mm
+      \PackageError{createspace}{preview paper too small}{you cannot preview page that big}
+    \else
+      \PackageError{createspace}{preview paper too small}{try previewing on a4 paper}
+    \fi
+  \fi
+\fi
+\newdimen\createspace@tempx\createspace@tempx=\createspace@l@width
+\newdimen\createspace@tempy\createspace@tempy=\createspace@l@height
+\advance\createspace@tempx by 70pt
+\advance\createspace@tempy by 70pt
+\ifdim\createspace@tempx<\createspace@l@previewwidth
+  \ifdim\createspace@tempy<\createspace@l@previewheight
+    \ifcreatespace@bleed
+      \def\createspace@croptype{camext}
+    \else
+      \def\createspace@croptype{cam}
+    \fi
+  \else
+    \advance\createspace@tempy by -62pt
+    \ifdim\createspace@tempy<\createspace@l@previewheight
+      \ifcreatespace@bleed
+        \def\createspace@croptype{smallext}
+      \else
+        \def\createspace@croptype{small}
+      \fi
+    \else
+      \ifdim\createspace@l@height=\createspace@l@previewheight
+        \def\createspace@croptype{fullheight}
+      \else
+        \def\createspace@croptype{border}
+      \fi
+    \fi
+  \fi
+\else
+  \advance\createspace@tempx by -62pt
+  \advance\createspace@tempy by -62pt
+  \ifdim\createspace@tempx<\createspace@l@previewwidth
+    \ifdim\createspace@tempy<\createspace@l@previewheight
+      \ifcreatespace@bleed
+        \def\createspace@croptype{smallext}
+      \else
+        \def\createspace@croptype{small}
+      \fi
+    \else
+      \ifdim\createspace@l@height=\createspace@l@previewheight
+        \def\createspace@croptype{fullheight}
+      \else
+        \def\createspace@croptype{border}
+      \fi
+    \fi
+  \else
+    \ifdim\createspace@l@width=\createspace@l@previewwidth
+      \ifdim\createspace@l@height=\createspace@l@previewheight
+        \createspace@makepreviewfalse
+      \else
+        \def\createspace@croptype{fullwidth}
+      \fi
+    \else
+      \def\createspace@croptype{border}
+    \fi
+  \fi
+\fi
+\fi
+\RequirePackage{ifpdf}
+\ifcreatespace@nopdf\else
+\ifpdf
+\RequirePackage[unicode=true,draft,bookmarks=false]{hyperref}
+\fi
+\fi
+\ifcreatespace@nopage\else
+\RequirePackage[papersize={\createspace@l@width,\createspace@l@height},hmargin={\createspace@l@inner,\createspace@l@outer},vmargin={\createspace@l@top,\createspace@l@bottom},bindingoffset=\createspace@l@gutter,\createspace@geometryextra]{geometry}
+\fi
+\ifcreatespace@colour
+\ifcase\createspace@colourpackage\relax\or
+\RequirePackage{color}
+\or
+\RequirePackage{xcolor}
+\fi
+\fi
+\ifcreatespace@makepreview
+\ifcase\createspace@preview\relax\or
+  \RequirePackage[a4,center]{crop}
+\or
+  \RequirePackage[letter,center]{crop}
+\fi
+\ifcase\createspace@preview\relax\else
+\newcommand*\CROP@@curc{%
+\ifodd\c@page
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(30,-9){\circle{10}}
+        \put(30,-14){\line(0,1){10}}
+        \put(35,-9){\line(-1,0){30}}
+        \put(25,0){\line(-1,0){30}}
+        \put(-9,30){\circle{10}}
+        \put(-14,30){\line(1,0){10}}
+        \put(-9,35){\line(0,-1){30}}
+        \put(0,25){\line(0,-1){30}}
+    \end{picture}%
+\else
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(30,-9){\circle{10}}
+        \put(30,-14){\line(0,1){10}}
+        \put(35,-9){\line(-1,0){30}}
+        \put(25,0){\line(-1,0){20}}
+        \put(0,30){\circle{10}}
+        \put(-5,30){\line(1,0){10}}
+        \put(0,35){\line(0,-1){30}}
+    \end{picture}%
+\fi
+}
+\newcommand*\CROP@@culc{%
+\ifodd\c@page
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(-30,-9){\circle{10}}
+        \put(-30,-14){\line(0,1){10}}
+        \put(-35,-9){\line(1,0){30}}
+        \put(-25,0){\line(1,0){20}}
+        \put(0,30){\circle{10}}
+        \put(-5,30){\line(1,0){10}}
+        \put(0,35){\line(0,-1){30}}
+    \end{picture}%
+\else
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(-30,-9){\circle{10}}
+        \put(-30,-14){\line(0,1){10}}
+        \put(-35,-9){\line(1,0){30}}
+        \put(-25,0){\line(1,0){30}}
+        \put(9,30){\circle{10}}
+        \put(4,30){\line(1,0){10}}
+        \put(9,35){\line(0,-1){30}}
+        \put(0,25){\line(0,-1){30}}
+    \end{picture}%
+\fi
+}
+\newcommand*\CROP@@clrc{%
+\ifodd\c@page
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(30,9){\circle{10}}
+        \put(30,4){\line(0,1){10}}
+        \put(35,9){\line(-1,0){30}}
+        \put(25,0){\line(-1,0){30}}
+        \put(-9,-30){\circle{10}}
+        \put(-14,-30){\line(1,0){10}}
+        \put(-9,-35){\line(0,1){30}}
+        \put(0,-25){\line(0,1){30}}
+    \end{picture}%
+\else
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(30,9){\circle{10}}
+        \put(30,4){\line(0,1){10}}
+        \put(35,9){\line(-1,0){30}}
+        \put(25,0){\line(-1,0){20}}
+        \put(0,-30){\circle{10}}
+        \put(-5,-30){\line(1,0){10}}
+        \put(0,-35){\line(0,1){30}}
+    \end{picture}%
+\fi
+}
+\newcommand*\CROP@@cllc{%
+\ifodd\c@page
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(-30,9){\circle{10}}
+        \put(-30,4){\line(0,1){10}}
+        \put(-35,9){\line(1,0){30}}
+        \put(-25,0){\line(1,0){20}}
+        \put(0,-30){\circle{10}}
+        \put(-5,-30){\line(1,0){10}}
+        \put(0,-35){\line(0,1){30}}
+    \end{picture}%
+\else
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(-30,9){\circle{10}}
+        \put(-30,4){\line(0,1){10}}
+        \put(-35,9){\line(1,0){30}}
+        \put(-25,0){\line(1,0){30}}
+        \put(9,-30){\circle{10}}
+        \put(4,-30){\line(1,0){10}}
+        \put(9,-35){\line(0,1){30}}
+        \put(0,-25){\line(0,1){30}}
+    \end{picture}%
+\fi
+}
+\newcommand*\CROP@@scurc{%
+\ifodd\c@page
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(4,-9){\line(-1,0){4}}
+        \put(0,0){\line(0,-1){\strip@pt\paperheight}}
+        \put(-9,4){\line(0,-1){4}}
+    \end{picture}%
+\else
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(4,-9){\line(-1,0){3}}
+        \put(0,0){\line(-1,0){\strip@pt\paperwidth}}
+        \put(0,4){\line(0,-1){4}}
+    \end{picture}%
+\fi
+}
+\newcommand*\CROP@@sculc{%
+\ifodd\c@page
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(-4,-9){\line(1,0){3}}
+        \put(0,0){\line(1,0){\strip@pt\paperwidth}}
+        \put(0,4){\line(0,-1){4}}
+    \end{picture}%
+\else
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(-4,-9){\line(1,0){4}}
+        \put(0,0){\line(0,-1){\strip@pt\paperheight}}
+        \put(9,4){\line(0,-1){4}}
+    \end{picture}%
+\fi
+}
+\newcommand*\CROP@@sclrc{%
+\ifodd\c@page
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(4,9){\line(-1,0){4}}
+        \put(-9,-4){\line(0,1){4}}
+    \end{picture}%
+\else
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(4,9){\line(-1,0){3}}
+        \put(0,0){\line(-1,0){\strip@pt\paperwidth}}
+        \put(0,-4){\line(0,1){4}}
+    \end{picture}%
+\fi
+}
+\newcommand*\CROP@@scllc{%
+\ifodd\c@page
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(-4,9){\line(1,0){3}}
+        \put(0,0){\line(1,0){\strip@pt\paperwidth}}
+        \put(0,-4){\line(0,1){4}}
+    \end{picture}%
+\else
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(-4,9){\line(1,0){4}}
+        \put(9,-4){\line(0,1){4}}
+    \end{picture}%
+\fi
+}
+\newcommand*\CROP@@surc{%
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(4,0){\line(-1,0){3}}
+        \put(0,4){\line(0,-1){3}}
+    \end{picture}%
+}
+\newcommand*\CROP@@sulc{%
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(-4,0){\line(1,0){3}}
+        \put(0,4){\line(0,-1){3}}
+    \end{picture}%
+}
+\newcommand*\CROP@@slrc{%
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(4,0){\line(-1,0){3}}
+        \put(0,-4){\line(0,1){3}}
+    \end{picture}%
+}
+\newcommand*\CROP@@sllc{%
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(-4,0){\line(1,0){3}}
+        \put(0,-4){\line(0,1){3}}
+    \end{picture}%
+}
+\newcommand*\CROP@@hor{%
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(0,0){\line(1,0){\strip@pt\paperwidth}}
+    \end{picture}%
+}
+\newcommand*\CROP@@ver{%
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(0,0){\line(0,1){\strip@pt\paperheight}}
+    \end{picture}%
+}
+\newcommand*\CROP@@bul{%
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(0,0){\line(1,0){\strip@pt\paperwidth}}
+        \put(0,0){\line(0,-1){\strip@pt\paperheight}}
+    \end{picture}%
+}
+\newcommand*\CROP@@blr{%
+    \begin{picture}(0,0)
+        \unitlength\p@\thinlines
+        \put(0,0){\line(-1,0){\strip@pt\paperwidth}}
+        \put(0,0){\line(0,1){\strip@pt\paperheight}}
+    \end{picture}%
+}
+\cropdef\CROP@@culc\CROP@@curc\CROP@@cllc\CROP@@clrc{camext}
+\cropdef\CROP@@sculc\CROP@@scurc\CROP@@scllc\CROP@@sclrc{smallext}
+\cropdef\CROP@@sulc\CROP@@surc\CROP@@sllc\CROP@@slrc{small}
+\cropdef\CROP@@bul\relax\relax\CROP@@blr{border}
+\cropdef\CROP@@hor\relax\CROP@@hor\relax{fullwidth}
+\cropdef\relax\CROP@@ver\relax\CROP@@ver{fullheight}
+\crop[\createspace@croptype]
+\fi
+\fi
+\newcommand\cs@calcln[3][65]{
+\ifx\log@digits\undefined\newcount\log@digits\fi
+\log@digits=0
+\def\log@count##1##2\log@tillthis{\advance\log@digits by 1\xdef\log@rest{##2}\ifx\log@rest\@empty\else\log@count ##2\log@tillthis\fi}
+\log@count #2\log@tillthis
+\ifx\log@result\undefined\newdimen\log@result\fi
+\log@result=2.302585093pt
+\multiply\log@result by \log@digits
+\ifx\log@temp\undefined\newdimen\log@temp\fi
+\log@temp=1pt
+\advance\log@temp by -0.#2pt
+\xdef\log@divident{\strip@pt\log@temp}
+\def\log@strip0.##1\log@tillthis{\xdef\log@divident{##1}}
+\expandafter\log@strip\log@divident\log@tillthis
+\log@temp=1pt
+\def\log@tens##1{\ifnum##1=0\else\multiply\log@temp by 10 \advance##1 by -1 \log@tens##1\fi}
+\log@tens\log@digits
+\xdef\log@divisor{\strip@pt\log@temp}
+\ifx\log@current\undefined\newdimen\log@current\fi
+\log@current=1pt
+\log@digits=1
+\def\log@calc{\ifnum\log@digits<#1
+\multiply\log@current by \log@divident
+\divide\log@current by \log@divisor
+\log@temp=\log@current
+\divide\log@temp by \log@digits
+\advance\log@result by -\log@temp
+\advance\log@digits by 1
+\expandafter\log@calc\fi}
+\log@calc
+\expandafter\global\expandafter\xdef\csname #3\endcsname{\strip@pt\log@result}
+}
+\AtEndDocument{
+\ifcase\createspace@preview\relax
+\createspace@PackageInfo{you cannot publish your book as preview, disable preview option before you submit your book}
+\fi
+\newcount\createspace@c@pages \createspace@c@pages=\count0
+\advance\createspace@c@pages 1
+\divide\createspace@c@pages by 2
+\multiply\createspace@c@pages by 2
+\ifnum\count0<\createspace@c@pages
+\createspace@PackageInfo{added one page for calculations to make the page count even}
+\fi
+\newcount\temp \temp=\createspace@c@pages
+\advance\temp 3
+\divide\temp by 4
+\ifnum\temp<6
+\temp=6
+\fi
+\expandafter\cs@calcln\expandafter{\the\temp}{createspace@res}
+\newdimen\createspace@log \createspace@log=\createspace@res pt
+\multiply\createspace@log by 3
+\divide\createspace@log by 20
+\xdef\createspace@rec@gutter{\strip@pt\createspace@log}
+\ifnum\createspace@c@pages<\createspace@c@minpages
+\PackageWarning{createspace}{book requires at least \the\createspace@c@minpages\space pages to be published, yours has only \the\createspace@c@pages}
+\fi
+\ifnum\createspace@c@pages>\createspace@c@maxpages
+\PackageWarning{createspace}{your book has \the\createspace@pages\space pages. This is more than the maximum allowed number of pages (\the\createspace@c@maxpages)}
+\fi
+\ifcreatespace@industrystandard\else
+\createspace@PackageInfo{your book isn't available through Bookstores and Online Retailers Expanded Distribution Channel because it is prepared on custom trim size, you must use industry standard trim size.}
+\ifcreatespace@colour
+\createspace@PackageInfo{industry standard trim sizes for colour books are: halfletter, novel, journal (except for trim=1) and magazine (only with trim=0)}
+\else
+\ifcase\createspace@paper
+\createspace@PackageInfo{industry standard trim sizes for black and white books on white paper are: pocket, halfletter, novel, journal and magazine}
+\or
+\createspace@PackageInfo{industry standard trim sizes for black and white books on cream paper are: pocket (except for trim=1), halfletter and novel}
+\fi
+\fi
+\fi
+\ifnum\createspace@c@pages<151
+\ifdim\createspace@l@gutter<0.125in
+\PackageWarning{createspace}{books of up to 150 pages require a gutter of at least 0.125in}
+\fi
+\else
+\ifnum\createspace@c@pages<401
+\ifdim\createspace@l@gutter<0.5in
+\PackageWarning{createspace}{books of 151 to 400 pages require a gutter of at least 0.5in}
+\fi
+\else
+\ifnum\createspace@c@pages<601
+\ifdim\createspace@l@gutter<0.625in
+\PackageWarning{createspace}{books of 401 to 600 pages require a gutter of at least 0.625in}
+\fi
+\else
+\ifdim\createspace@l@gutter<0.75in
+\PackageWarning{createspace}{books of more than 600 pages require a gutter of at least 0.75in}
+\fi
+\fi
+\fi
+\fi
+\ifdim\createspace@l@gutter<\createspace@rec@gutter in
+\createspace@PackageInfo{recommended gutter for book with \the\createspace@c@pages\space page(s) is at least \createspace@rec@gutter in (0.15 ln(n/4) in)}
+\fi
+\multiply\temp by 4
+\newdimen\createspace@l@spine
+\createspace@l@spine=\createspace@l@thickness
+\multiply\createspace@l@spine by \temp
+\createspace@PackageInfo{spine is about \the\createspace@l@spine\space wide}
+\ifnum\createspace@c@pages<100
+\createspace@PackageInfo{you need at least 100 pages for text can be printed on the spine}
+\else
+\ifnum\createspace@c@pages<130
+\createspace@PackageInfo{you have minimum page count for text to appear on spine, but it's recommended to not use spine text for books with less than 130 pages}
+\fi
+\fi
+\newcount\createspace@cents\newcount\createspace@dols
+\ifcreatespace@colour
+\ifnum\createspace@c@pages<41
+\createspace@PackageInfo{book cost is 6.55USD (3.65USD for pro plan)}
+\else
+\createspace@cents=12
+\multiply\createspace@cents by \createspace@c@pages
+\advance\createspace@cents by 175
+\createspace@dols=\createspace@cents
+\divide\createspace@dols by 100
+\multiply\createspace@dols by 100
+\advance\createspace@cents by -\createspace@dols
+\divide\createspace@dols by 100
+\xdef\createspace@standard@price{%
+\ifnum\createspace@cents<10
+\the\createspace@dols.0\the\createspace@cents
+\else
+\the\createspace@dols.\the\createspace@cents
+\fi
+}
+\createspace@cents=7
+\multiply\createspace@cents by \createspace@c@pages
+\advance\createspace@cents by 85
+\createspace@dols=\createspace@cents
+\divide\createspace@dols by 100
+\multiply\createspace@dols by 100
+\advance\createspace@cents by -\createspace@dols
+\divide\createspace@dols by 100
+\xdef\createspace@pro@price{%
+\ifnum\createspace@cents<10
+\the\createspace@dols.0\the\createspace@cents
+\else
+\the\createspace@dols.\the\createspace@cents
+\fi
+}
+\createspace@PackageInfo{book cost is \createspace@standard@price USD (\createspace@pro@price USD for pro plan)}
+\fi
+\else
+\ifnum\createspace@c@pages<109
+\createspace@PackageInfo{book cost is 3.66USD (2.15USD for pro plan)}
+\else
+\createspace@cents=2
+\multiply\createspace@cents by \createspace@c@pages
+\advance\createspace@cents by 150
+\createspace@dols=\createspace@cents
+\divide\createspace@dols by 100
+\multiply\createspace@dols by 100
+\advance\createspace@cents by -\createspace@dols
+\divide\createspace@dols by 100
+\xdef\createspace@standard@price{%
+\ifnum\createspace@cents<10
+\the\createspace@dols.0\the\createspace@cents
+\else
+\the\createspace@dols.\the\createspace@cents
+\fi
+}
+\createspace@cents=12
+\multiply\createspace@cents by \createspace@c@pages
+\advance\createspace@cents by 850
+\divide\createspace@cents by 10
+\createspace@dols=\createspace@cents
+\divide\createspace@dols by 100
+\multiply\createspace@dols by 100
+\advance\createspace@cents by -\createspace@dols
+\divide\createspace@dols by 100
+\xdef\createspace@pro@price{%
+\ifnum\createspace@cents<10
+\the\createspace@dols.0\the\createspace@cents
+\else
+\the\createspace@dols.\the\createspace@cents
+\fi
+}
+\createspace@PackageInfo{book cost is \createspace@standard@price USD (\createspace@pro@price USD for pro plan)}
+\fi
+\fi
+}
+\RequirePackage{ifpdf}
+\ifcreatespace@nopdf\else
+\ifpdf
+\def\@pdfsubject{}
+\def\@pdfkeywords{}
+\let\@pdftitle\@empty
+\let\@pdfauthor\@empty
+\let\cs@author\author
+\let\cs@title\title
+\renewcommand\author[1]{\pdfauthor{#1}\cs@author{#1}}
+\renewcommand\title[1]{\pdftitle{#1}\cs@title{#1}}
+\newcommand\pdfauthor[1]{\pdfstringdef\@pdfauthor{#1}}
+\newcommand\pdftitle[1]{\pdfstringdef\@pdftitle{#1}}
+\newcommand\pdfsubject[1]{\pdfstringdef\@pdfsubject{#1}}
+\newcommand\pdfkeywords[1]{\pdfstringdef\@pdfkeywords{#1}}
+\begingroup
+  \catcode`P=12
+  \catcode`T=12
+  \lowercase{
+    \def\x{\def\truncrem@pt##1.##2PT{##1}}}
+  \expandafter\endgroup\x
+\def\truncstrip@pt{\expandafter\truncrem@pt\the}
+\AtBeginDocument{%
+\pdfobjcompresslevel=0%
+\pdfminorversion=3%
+\ifx\@pdftitle\@empty
+\PackageError{createspace}{you must specify book title}{specify title using \protect\title\space or \protect\pdftitle\space command}
+\fi
+\ifx\@pdfauthor\@empty
+\PackageError{createspace}{you must specify book author}{specify author using \protect\author\space or \protect\pdfauthor\space command}
+\fi
+\ifcreatespace@noicc
+\pdfinfo{
+  /Title (\@pdftitle)
+  /Author (\@pdfauthor)
+  /Subject (\@pdfsubject)
+  /Keywords (\@pdfkeywords)
+}%
+\else
+\pdfinfo{
+  /Title (\@pdftitle)
+  /Author (\@pdfauthor)
+  /Subject (\@pdfsubject)
+  /Keywords (\@pdfkeywords)
+  /GTS_PDFXVersion (PDF/X-1:2001)
+  /GTS_PDFXConformance (PDF/X-1a:2001)
+}%
+\ifcase\createspace@paper\relax
+\immediate\pdfobj stream attr{/N 4}  file{PSO_Uncoated_ISO12647_bas.ICC}%
+\edef\cs@profile{\the\pdflastobj}%
+\xdef\cs@profilename{PSO Uncoated ISO12647}%
+\else
+\immediate\pdfobj stream attr{/N 4}  file{ISOuncoatedyellowish_bas.ICC}%
+\edef\cs@profile{\the\pdflastobj}%
+\xdef\cs@profilename{ISO Uncoated Yellowish}%
+\fi
+\def\cs@backslash{\expandafter\@gobble\string\\}
+\pdfcatalog{
+  /PageMode /UseNone
+  /OutputIntents [ <<
+    /Type /OutputIntent
+    /S /GTS_PDFX
+    /OutputConditionIdentifier (\cs@profilename\space\cs@backslash(basICColor\cs@backslash))
+    /DestOutputProfile \cs@profile\space 0 R
+    /RegistryName (http://www.color.org/)
+  >> ]
+}%
+\fi
+\newcount\cs@temp
+\newdimen\cs@width\newdimen\cs@widthb
+\cs@width=\dimexpr\createspace@l@width*800/803\relax
+\advance\cs@width by 0.005pt\relax
+\xdef\cs@value{\truncstrip@pt\cs@width}%
+\cs@temp=\cs@value
+\xdef\cs@widthbp{\the\cs@temp}%
+\cs@widthb=\cs@widthbp pt\relax
+\advance\cs@width by -\cs@widthb
+\multiply\cs@width by 100\relax
+\xdef\cs@value{\truncstrip@pt\cs@width}%
+\cs@temp=\cs@value
+\xdef\cs@widthbp{\the\cs@temp}%
+\cs@width=0.\cs@widthbp pt\relax
+\advance\cs@width by \cs@widthb
+\xdef\cs@widthbp{\strip@pt\cs@width}%
+\cs@widthb=\cs@widthbp bp\relax
+\advance\cs@widthb by -\createspace@l@width
+\ifdim\cs@widthb<0pt\multiply\cs@widthb by -1\fi
+\ifdim\cs@widthb<0.01bp\else
+\PackageWarning{createspace}{during conversion of width to PostScript Points rounding of more than 0.01 occured}
+\fi
+\newdimen\cs@height\newdimen\cs@heightb
+\cs@height=\dimexpr\createspace@l@height*800/803\relax
+\advance\cs@height by 0.005pt\relax
+\xdef\cs@value{\truncstrip@pt\cs@height}%
+\cs@temp=\cs@value
+\xdef\cs@heightbp{\the\cs@temp}%
+\cs@heightb=\cs@heightbp pt\relax
+\advance\cs@height by -\cs@heightb
+\multiply\cs@height by 100\relax
+\xdef\cs@value{\truncstrip@pt\cs@height}%
+\cs@temp=\cs@value
+\xdef\cs@heightbp{\the\cs@temp}%
+\cs@height=0.\cs@heightbp pt\relax
+\advance\cs@height by \cs@heightb
+\xdef\cs@heightbp{\strip@pt\cs@height}%
+\cs@heightb=\cs@heightbp bp\relax
+\advance\cs@heightb by -\createspace@l@height
+\ifdim\cs@heightb<0pt\multiply\cs@heightb by -1\fi
+\ifdim\cs@heightb<0.01bp\else
+\PackageWarning{createspace}{during conversion of height to PostScript Points rounding of more than 0.01 occured}
+\fi
+\newdimen\cs@bleedT\cs@bleedT=0pt\relax
+\newdimen\cs@bleedR\cs@bleedR=\cs@width
+\newdimen\cs@bleedB\cs@bleedB=\cs@height
+\ifcreatespace@bleed
+\advance\cs@bleedT by 9pt\relax
+\advance\cs@bleedR by -9pt\relax
+\advance\cs@bleedB by -9pt\relax
+\fi
+\xdef\cs@attr{%
+/BleedBox [0 0 \strip@pt\cs@width\space\strip@pt\cs@height]^^J%
+/TrimBox [0 \strip@pt\cs@bleedT\space\strip@pt\cs@bleedR\space\strip@pt\cs@bleedB]%
+}%
+\expandafter\pdfpageattr\expandafter{\cs@attr}%
+}
+\else
+\PackageError{createspace}{no PDF supported engine detected}{recompile this document using PDFLaTeX}
+\fi
+\fi
+\endinput
+%%
+%% End of file `createspace.sty'.

@@ -26,7 +26,7 @@ describe Polytexnic::Builders::Html do
 
         it { should exist }
         it "should have a .highlight class" do
-          expect(File.open(stylesheet).read).to match('.highlight')
+          expect(File.read(stylesheet)).to match('.highlight')
         end
       end
 
