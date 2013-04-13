@@ -39,6 +39,26 @@ describe Polytexnic::Commands::Generator do
         it { should match(/log\//) }
         it { should match(/\.DS_Store/) }
       end
+
+      describe "styles" do
+
+        it "should have a PolyTeXnic style file" do
+          expect('polytexnic.sty').to exist
+        end
+        
+        it "should have a createspace style file" do
+          expect('createspace.sty').to exist
+        end
+
+        it "should have the necessary weird CreateSpace image file" do
+          expect('PSO_Uncoated_ISO12647_bas.ICC').to exist
+        end        
+
+        it "should include the polytexnic style file by default" do
+          book_base = File.open('foo_bar.tex').read
+          expect(book_base).to match(/^\\usepackage{polytexnic}/)
+        end
+      end
       
     end
 
