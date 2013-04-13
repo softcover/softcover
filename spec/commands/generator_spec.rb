@@ -24,8 +24,17 @@ describe Polytexnic::Commands::Generator do
 
       before { Dir.chdir(name) }
 
+      it "should have a base LaTeX file" do
+        expect('foo_bar.tex').to exist
+      end
+
+      it "should have chapter files" do
+        expect('chapters/a_chapter.tex').to exist
+        expect('chapters/another_chapter.tex').to exist
+      end
+
       describe ".gitignore" do
-        subject { File.open('.gitignore').read }
+        subject { File.read('.gitignore') }
 
         it { should match(/\*\.aux/) }
         it { should match(/\*\.log/) }
@@ -55,18 +64,33 @@ describe Polytexnic::Commands::Generator do
         end        
 
         it "should include the polytexnic style file by default" do
-          book_base = File.open('foo_bar.tex').read
+          book_base = File.read('foo_bar.tex')
           expect(book_base).to match(/^\\usepackage{polytexnic}/)
         end
       end
       
       describe "base LaTeX file" do
-        subject { File.open('foo_bar.tex').read }
+        subject { File.read('foo_bar.tex') }
 
         it { should match(/\\include{chapters\/a_chapter}/) }
         it { should match(/\\include{chapters\/another_chapter}/) }
         it { should match(/\\title{.*?}/) }
         it { should match(/\\author{.*?}/) }
+      end
+
+      shared_examples "a chapter" do
+        it { should include('\chapter') }
+        it { should include('\label') }
+      end
+
+      describe "first chapter file" do
+        subject { File.read('chapters/a_chapter.tex') }
+        it_should_behave_like "a chapter"
+      end
+
+      describe "second chapter file" do
+        subject { File.read('chapters/another_chapter.tex') }
+        it_should_behave_like "a chapter"
       end
     end
   end
