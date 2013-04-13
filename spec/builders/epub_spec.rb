@@ -57,6 +57,10 @@ describe Polytexnic::Builders::Epub do
         expect('epub/OEBPS/toc.html').to exist
       end
 
+      it "should create the stylesheet file(s)" do
+        expect('epub/OEBPS/styles/pygments.css').to exist
+      end
+
       it "should generate the EPUB" do
         expect('epub/book.epub').to exist
         expect('epub/book.zip').not_to exist
