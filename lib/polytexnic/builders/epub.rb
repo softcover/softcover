@@ -41,9 +41,7 @@ module Polytexnic
       def write_contents
         html_path = File.join('html', manifest.filename + '.html')
         raw_content = File.open(html_path).read
-        # TODO: Do right with Nokogiri
-        raw_content =~ /<body>(.*)<\/body>/m
-        content = $1
+        content = Nokogiri::HTML(raw_content).at_css('body').inner_html
         File.open("epub/OEBPS/#{manifest.filename}.html", 'w') do |f|
           f.write(template(manifest.title, content))
         end

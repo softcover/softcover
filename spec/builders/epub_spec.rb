@@ -47,7 +47,7 @@ describe Polytexnic::Builders::Epub do
 
         it "should have the right contents" do
           File.open('epub/OEBPS/book.html') do |f|
-            expect(f.read).to match('Chapter 1')
+            expect(f.read).to match('<span>Chapter 1</span>')
           end
         end
       end
