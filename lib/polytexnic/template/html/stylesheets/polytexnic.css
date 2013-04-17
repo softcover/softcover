@@ -1,0 +1,318 @@
+body #book {
+  width: 41em;
+  font-family: Georgia, serif;
+  line-height: 1.5em;
+  margin-left: 5em;
+  color: #070707;
+}
+
+#book h1 {
+  font-size: 230%;
+  border-top: 2px solid #333;
+  padding-top: 1em;
+}
+
+#book h2 {
+  font-size: 180%;
+}
+
+#book img.tex {
+  vertical-align: -6px;
+}
+
+/* Title and subtitle */
+
+#book h1.title {
+  text-align: center;
+  font-size: 250%;
+}
+
+#book h1.subtitle {
+  border-top: none;
+  padding-top: 0;
+  margin: 0;
+  text-align: center;
+  font-size: 140%;
+}
+
+#book h2.author {
+  margin-top: 1em;
+  text-align: center;
+}
+
+#book a {
+  color: #002f72;
+  text-decoration: none;
+}
+
+#book tt {
+  font-size: 130%;
+}
+
+#book code {
+  font-size: 130%;
+  color: darkgreen;
+  font-weight: bold;
+}
+
+#book .number {
+  margin-right: 1em;
+}
+
+#book h1 span.number {
+  display: block;
+  margin-bottom: 0.5em;
+  font-size: 80%;
+}
+
+#book .label {
+  font-weight: bold;
+  margin-right: 0.5em;
+}
+
+#book .header {
+  font-weight: bold;
+  margin-right: 0.5em;
+}
+
+#book .caption .header {
+  font-weight: normal;
+}
+
+#book .code {
+  margin-top: 0.5em;
+  width: 100%;
+}
+
+
+#book .codelisting {
+  width: 100%;
+}
+
+#book .verb {
+  font-size: 120%;
+}
+
+#book a.ref {
+  color: #002f72;
+}
+
+#book .figure {
+  text-align: center;
+  margin-top: 2em;
+}
+
+#book .table {
+  text-align: center;
+  margin-top: 2em;
+}
+
+#book .table table.tabular {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#book .center {
+  text-align: center;
+}
+
+#book .figure img {
+  border: 1px solid #666;
+}
+
+#book .displaymath {
+  text-align: center;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+#book .caption {
+  text-align: center;
+  margin-bottom: 3em;
+  margin-top: 1em;
+}
+
+#book .equation_number {
+  float: right;
+}
+
+#book table.tabular {
+  border-collapse: collapse;
+}
+
+#book .tabular th {
+  padding: 0.5em;
+}
+
+#book .tabular th.align_left {
+  text-align: left;
+}
+
+#book .tabular th.align_center {
+  text-align: center;
+}
+
+#book .tabular th.align_right {
+  text-align: right;
+}
+
+#book .tabular th.left_bar {
+  border-left: 1px solid black;
+}
+
+#book .tabular th.right_bar {
+  border-right: 1px solid black;
+}
+
+#book .tabular td {
+  padding: 0.5em;
+}
+
+#book .tabular td.align_left {
+  text-align: left;
+}
+
+#book .tabular td.align_center {
+  text-align: center;
+}
+
+#book .tabular td.align_right {
+  text-align: right;
+}
+
+#book .tabular td.left_bar {
+  border-left: 1px solid black;
+}
+
+#book .tabular td.right_bar {
+  border-right: 1px solid black;
+}
+
+#book .tabular tr.top_bar {
+  border-top: 1px solid black;
+}
+
+#book .tabular tr.bottom_bar {
+  border-bottom: 1px solid black;
+}
+
+#book .footnotes {
+  border-top: 1px solid black;
+  margin-top: 1em;
+  font-size: 90%;
+}
+
+#book sup.footnote {
+  font-size: 75%;
+  margin-right: 5px;
+}
+
+#book sup.footnote a {
+  text-decoration: none;
+}
+
+#book sup.footnote a:visited {
+  color: #002f72;
+}
+
+
+#book .footnotes .header {
+  padding-top: 1em;
+  padding-bottom: 0.5em;
+  margin-left: 0.5em;
+  font-size: 120%;
+  font-weight: bold;
+}
+
+#book a.arrow {
+  text-decoration: none;
+}
+
+#book a:visited.arrow {
+  color: #002f72;
+}
+
+#book a.section  {
+  color: #070707;
+  text-decoration: none;
+}
+
+#book a.heading {
+  color: #000;
+}
+
+#book a:hover.heading {
+  text-decoration: underline;
+}
+
+#book .sidebar {
+  border: 1px solid #999;
+  padding: 0.5em;
+  padding-right: 1.5em;
+  background: #eee;
+  width: 100%;
+}
+
+#book .sidebar .description {
+  font-weight: bold;
+}
+
+#book .highlight {
+  border: 1px solid #999;
+  width: 100%;
+  background: #eee;
+  padding-right: 1.5em;
+}
+
+#book .highlight .go {
+  color: darkgreen;
+}
+
+
+#book pre {
+  line-height: 1.2em;
+  font-family: monospace;
+}
+
+#book .highlight pre {
+  margin: 1em 0 1em 1em;
+  font-size: 100%;
+}
+
+#book #table_of_contents {
+  margin-top: -1em;
+  margin-bottom: 3em;
+}
+
+#book #table_of_contents ol {
+  list-style-type: none;
+  list-style-position: outside;
+  padding-left: 0;
+  line-height: 1.2em;
+}
+
+#book #table_of_contents li.chapter {
+  font-weight: bold;
+  padding-top: 1.2em;
+}
+
+#book #table_of_contents ol li {
+  padding-left: 3.1em;
+}
+
+#book #table_of_contents a {
+  color: #002f72;
+}
+
+#book .navigation {
+  font-size: 90%;
+  padding-bottom: 2em;
+}
+
+#book .navigation .prev_page {
+  float: left;
+}
+
+#book .navigation .next_page {
+  float: right;
+}

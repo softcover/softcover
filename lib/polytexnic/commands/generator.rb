@@ -25,6 +25,8 @@ module Polytexnic
             cp_path = "#{name}.tex"
           elsif path =~ /\.erb/
             cp_path = File.basename path.dup, '.erb'
+          elsif path =~ /gitignore/
+            cp_path = '.gitignore'
           end
 
           display_path = File.join name, cp_path
@@ -80,6 +82,8 @@ module Polytexnic
             "#{@name}.tex"
           elsif file =~ /\.erb/
             File.basename(file, '.erb')
+          elsif file =~ /gitignore/
+            '.gitignore'
           else
             File.basename(file)
           end

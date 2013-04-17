@@ -89,6 +89,7 @@ def template(body)
 <head>
 <meta charset="UTF-8">
 <link href="stylesheets/pygments.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="stylesheets/polytexnic.css" media="screen" rel="stylesheet" type="text/css" />
 <style>
 .tt { font-family: Courier; font-size: 90%; }
 </style>
@@ -100,7 +101,7 @@ def template(body)
   });
 </script>
 </head>
-<body>
+<body id="book">
 #{body}
 </body>
 </html>
