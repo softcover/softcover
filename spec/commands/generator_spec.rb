@@ -24,6 +24,10 @@ describe Polytexnic::Commands::Generator do
 
       before { Dir.chdir(name) }
 
+      it "should build all formats without error" do
+        expect { `poly build` }.not_to raise_error
+      end
+
       it "should have a base LaTeX file" do
         expect('foo_bar.tex').to exist
       end
@@ -55,14 +59,6 @@ describe Polytexnic::Commands::Generator do
           expect('polytexnic.sty').to exist
         end
         
-        it "should have a createspace style file" do
-          expect('createspace.sty').to exist
-        end
-
-        it "should have the necessary weird CreateSpace image file" do
-          expect('PSO_Uncoated_ISO12647_bas.ICC').to exist
-        end
-
         it "should include the polytexnic style file by default" do
           book_base = File.read('foo_bar.tex')
           expect(book_base).to match(/^\\usepackage{polytexnic}/)
