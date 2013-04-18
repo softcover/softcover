@@ -13,6 +13,12 @@ gem 'ruby-progressbar'
 gem 'maruku'
 gem 'pygments.rb'
 
+# for server
+gem 'rack'
+gem 'thin'
+gem 'listen'
+gem 'rb-fsevent'
+
 group :test do
   gem 'rspec'
   gem 'debugger2'

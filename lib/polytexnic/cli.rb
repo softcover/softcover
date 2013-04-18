@@ -23,6 +23,21 @@ module Polytexnic
     end
 
     # ===============================================
+    # Server
+    # ===============================================
+
+    desc 'server', 'Run local server.'
+    method_option :port, type: :numeric, default: 4000, aliases: '-p'
+    def server
+      if Polytexnic::BookManifest::valid_directory?
+        Polytexnic::Commands::Server.run options[:port]
+      else
+        puts 'Not in a valid book directory.'
+        exit 1
+      end
+    end
+
+    # ===============================================
     # Auth
     # ===============================================
 
@@ -52,16 +67,16 @@ module Polytexnic
 
     desc "publish", "Publish your book on polytexnic.com"
     def publish
-      invoke :login unless logged_in? 
+      invoke :login unless logged_in?
 
       puts "Publishing..."
       Polytexnic::Commands::Publisher.publish!
     end
 
     desc "publish:screencasts", "Publish screencasts"
-    method_option :daemon, aliases: '-d', force: false, 
+    method_option :daemon, aliases: '-d', force: false,
       desc: "Run as daemon", type: :boolean
-    method_option :watch, aliases: '-w', type: :boolean, 
+    method_option :watch, aliases: '-w', type: :boolean,
       force: false, desc: "Watch a directory to auto upload."
 
     # TODO: make screencasts dir .book configurable
