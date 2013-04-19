@@ -26,7 +26,7 @@ module Polytexnic
     # Auth
     # ===============================================
 
-    desc "login", "Log into SoftCover account"
+    desc "login", "Log into Softcover account"
     def login
       puts "Logging in."
 
@@ -41,7 +41,7 @@ module Polytexnic
       puts "Welcome back, #{email}!"
     end
 
-    desc "logout", "Log out of SoftCover account"
+    desc "logout", "Log out of Softcover account"
     def logout
       Polytexnic::Commands::Auth.logout
     end
@@ -50,7 +50,7 @@ module Polytexnic
     # Publisher
     # ===============================================
 
-    desc "publish", "Publish your book on SoftCover"
+    desc "publish", "Publish your book on Softcover"
     def publish
       invoke :login unless logged_in?
 
@@ -86,7 +86,7 @@ module Polytexnic
     # Open
     # ===============================================
 
-    desc "open", "Opens book on SoftCover"
+    desc "open", "Opens book on Softcover"
     def open
       Polytexnic::Commands::Opener.open!
     end
