@@ -54,14 +54,14 @@ class Polytexnic::Book
     # question: should we use `git ls-files` instead?
     # TODO: only use pertinent files
     paths = %w{html/**/* images/**/* *.mobi *.epub *.pdf}
-    @files ||= Dir[*paths].map do |path| 
+    @files ||= Dir[*paths].map do |path|
 
-      next nil unless !File.directory?(path) && 
+      next nil unless !File.directory?(path) &&
         !(File.extname(path) == ".html" && !(path =~ /_fragment/)) &&
-        path != "html/#{slug}.html" && 
+        path != "html/#{slug}.html" &&
         path != "html/#{slug}_fragment.html"
 
-      BookFile.new path 
+      BookFile.new path
     end.compact
   end
 
@@ -73,24 +73,28 @@ class Polytexnic::Book
     chapters.map(&:marshal_dump)
   end
 
-  # TODO: use with `polytexnic open` or `polytexnic info`
   def url
+    # TODO: append api_token to auto-login?
     "#{@client.host}/books/#{slug}"
+  end
+
+  def open_in_browser
+    `open #{url}`
   end
 
   def create_or_update
     raise "HTML not built!" if Dir['html/*'].empty?
 
-    res = @client.create_or_update_book id: id, 
+    res = @client.create_or_update_book id: id,
                                         files: files,
-                                        title: title, 
+                                        title: title,
                                         slug: slug,
-                                        subtitle: subtitle, 
-                                        description: description, 
+                                        subtitle: subtitle,
+                                        description: description,
                                         cover: cover,
                                         chapters: chapter_attributes
 
-    if res['errors'] 
+    if res['errors']
       @errors = res['errors']
       return false
     end
@@ -116,7 +120,7 @@ class Polytexnic::Book
       notify_file_upload params['path']
     end
 
-    @uploader.upload! 
+    @uploader.upload!
 
     res = @client.notify_upload_complete
 
@@ -131,7 +135,7 @@ class Polytexnic::Book
     book_file = BookFile.find path
 
     # this could spin off new thread:
-    @client.notify_file_upload path: book_file.path, 
+    @client.notify_file_upload path: book_file.path,
       checksum: book_file.checksum
   end
 
@@ -157,7 +161,7 @@ class Polytexnic::Book
 
   def upload_screencasts!(files)
     return if files.empty?
-    
+
     res = @client.get_screencast_upload_params files
 
     if res['upload_params']

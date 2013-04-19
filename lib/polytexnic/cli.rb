@@ -26,7 +26,7 @@ module Polytexnic
     # Auth
     # ===============================================
 
-    desc "login", "Log into polytexnic.com account"
+    desc "login", "Log into Softcover account"
     def login
       puts "Logging in."
 
@@ -41,7 +41,7 @@ module Polytexnic
       puts "Welcome back, #{email}!"
     end
 
-    desc "logout", "Log out of polytexnic.com account"
+    desc "logout", "Log out of Softcover account"
     def logout
       Polytexnic::Commands::Auth.logout
     end
@@ -50,18 +50,18 @@ module Polytexnic
     # Publisher
     # ===============================================
 
-    desc "publish", "Publish your book on polytexnic.com"
+    desc "publish", "Publish your book on Softcover"
     def publish
-      invoke :login unless logged_in? 
+      invoke :login unless logged_in?
 
       puts "Publishing..."
       Polytexnic::Commands::Publisher.publish!
     end
 
     desc "publish:screencasts", "Publish screencasts"
-    method_option :daemon, aliases: '-d', force: false, 
+    method_option :daemon, aliases: '-d', force: false,
       desc: "Run as daemon", type: :boolean
-    method_option :watch, aliases: '-w', type: :boolean, 
+    method_option :watch, aliases: '-w', type: :boolean,
       force: false, desc: "Watch a directory to auto upload."
 
     # TODO: make screencasts dir .book configurable
@@ -80,6 +80,15 @@ module Polytexnic
     desc "new <name>", "Generate new book directory structure."
     def new(name)
       Polytexnic::Commands::Generator.generate_directory name
+    end
+
+    # ===============================================
+    # Open
+    # ===============================================
+
+    desc "open", "Opens book on Softcover"
+    def open
+      Polytexnic::Commands::Opener.open!
     end
 
     # ===============================================
