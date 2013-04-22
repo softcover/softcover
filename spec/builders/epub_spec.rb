@@ -41,8 +41,23 @@ describe Polytexnic::Builders::Epub do
           expect("epub/OEBPS/#{builder.manifest.filename}.html").to exist
         end
 
-        it "should create the right OPF file" do
-          expect('epub/OEBPS/content.opf').to exist
+        describe "opf file" do
+          let(:content_opf) { 'epub/OEBPS/content.opf' }
+          let(:doc) { Nokogiri.XML(File.read(content_opf)) }
+
+          subject { content_opf }
+
+          it { should exist }
+
+          it "should have the chapter right items" do
+            expect(doc.css('item#chapter-1')).not_to be_empty
+            expect(doc.css('item#chapter-2')).not_to be_empty
+          end
+
+          it "should have the right TOC chpater refs" do
+            toc_refs = doc.css('itemref').map { |node| node['idref'] }
+            expect(toc_refs).to eql(%w[chapter-1 chapter-2])
+          end
         end
 
         it "should have the right contents" do
@@ -52,10 +67,26 @@ describe Polytexnic::Builders::Epub do
         end
       end
 
-      it "should generate the toc files" do
-        expect('epub/OEBPS/toc.ncx').to exist
+      describe "spine toc" do
+        let(:toc) { 'epub/OEBPS/toc.ncx' }
+        subject { toc }
+
+        it { should exist }
+
+        it "should contain the right filenames in the right order" do
+          filenames = ['chapter-1.html', 'chapter-2.html']
+          doc = Nokogiri::XML(File.read(toc))
+          source_files = doc.css('content').map { |node| node['src'] }
+          expect(source_files).to eql(filenames)
+        end
       end
 
+      it "should create the HTML files" do
+        builder.manifest.chapters.each do |chapter|
+          expect("epub/OEBPS/#{chapter.slug}.html").to exist
+        end
+      end
+  
       it "should create the stylesheet file(s)" do
         expect('epub/OEBPS/styles/pygments.css').to exist
       end
