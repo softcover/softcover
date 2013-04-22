@@ -71,7 +71,6 @@ module Polytexnic
 
       def write_toc
         File.open('epub/OEBPS/toc.ncx',  'w') { |f| f.write(toc_ncx) }
-        File.open('epub/OEBPS/toc.html', 'w') { |f| f.write(toc_html) }
       end
 
       def mkdir(dir)

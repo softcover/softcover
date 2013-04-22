@@ -54,7 +54,6 @@ describe Polytexnic::Builders::Epub do
 
       it "should generate the toc files" do
         expect('epub/OEBPS/toc.ncx').to exist
-        expect('epub/OEBPS/toc.html').to exist
       end
 
       it "should create the stylesheet file(s)" do
@@ -73,7 +72,7 @@ end
 # Cleans the fixtures directory as a prep for testing.
 def clean!
   FileUtils.rm_r('epub/book.epub', force: true)
-  FileUtils.rm_r('epub/OEBPS/*', force: true)
   FileUtils.rm_r('epub/mimetype', force: true)
   FileUtils.rm_rf('epub/META-INF/')
+  FileUtils.rm_rf('epub/OEBPS/')
 end
