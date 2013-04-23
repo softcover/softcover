@@ -34,11 +34,6 @@ describe Polytexnic::Builders::Epub do
 
   describe "OEBPS" do
     describe "contents" do
-
-      it "should create the right HTML file" do
-        expect("epub/OEBPS/#{builder.manifest.filename}.html").to exist
-      end
-
       describe "opf file" do
         let(:content_opf) { 'epub/OEBPS/content.opf' }
         let(:doc) { Nokogiri.XML(File.read(content_opf)) }
@@ -57,12 +52,6 @@ describe Polytexnic::Builders::Epub do
           expect(toc_refs).to eql(%w[a_chapter another_chapter])
         end
       end
-
-      # it "should have the right contents" do
-      #   File.open('epub/OEBPS/book.html') do |f|
-      #     expect(f.read).to match('<span>Chapter 1</span>')
-      #   end
-      # end
     end
 
     describe "spine toc" do
