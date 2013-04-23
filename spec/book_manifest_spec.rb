@@ -2,24 +2,27 @@ require 'spec_helper'
 
 describe Polytexnic::BookManifest do
   context "in valid book directory" do
-    before { chdir_to_book }
+    before(:all) { generate_book }
+    after(:all)  { remove_book }
 
-    its(:title) { should eq "Test Book" }
-    its(:subtitle) { should eq "Sub Title" }
-    its(:description) { should eq "Book description" }
-    its(:cover) { should eq "images/1.png" }
+    describe "basic information" do
+      its(:title) { should eq "book" }
+      its(:subtitle) { should eq "Change-me" }
+      its(:description) { should eq "Change me." }
+      its(:cover) { should eq "images/change-me.png" }
+    end
 
-    its("chapters.first") { should be_a Polytexnic::BookManifest::Chapter }
-    its("chapters.first.title") { should eq "Chapter 1" }
-    its("chapters.first.slug") { should eq "chapter-1" }
-    its("chapters.first.chapter_number") { should eq 1 }
-    its("chapters.first.sections.first") { should eq 'Section 1a' }
-    its("chapters.first.sections.last") { should eq 'Section 1b' }
+    describe "chapter information" do
+      its("chapters.first") { should be_a Polytexnic::BookManifest::Chapter }
+      its("chapters.first.title") { should eq "Lorem ipsum" }
+      its("chapters.first.slug") { should eq "a_chapter" }
+      its("chapters.first.chapter_number") { should eq 1 }
+      its("chapters.first.sections.first") { should eq 'Bacon ipsum' }
+      its("chapters.first.sections.last") { should eq 'Pig fatback' }
 
-    its("chapters.last.title") { should eq "Chapter 2 Long Title" }
-    its("chapters.last.slug") { should eq "chapter-2" }
-    its("chapters.last.chapter_number") { should eq 2 }
-    its("chapters.last.sections.first") { should eq 'Section 2a' }
-    its("chapters.last.sections.last") { should eq 'Section 2b' }
+      its("chapters.last.title") { should eq "Foo bar" }
+      its("chapters.last.slug") { should eq "another_chapter" }
+      its("chapters.last.chapter_number") { should eq 2 }
+    end
   end
 end

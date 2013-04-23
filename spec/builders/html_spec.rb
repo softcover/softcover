@@ -2,8 +2,9 @@ require 'spec_helper'
 
 describe Polytexnic::Builders::Html do
 
-  context "in valid tex directory" do
-    before { chdir_to_book }
+  context "in valid TeX directory" do
+    before(:all) { generate_book }
+    after(:all)  { remove_book }
 
     describe "#build!" do
       subject(:builder) { Polytexnic::Builders::Html.new }
@@ -31,15 +32,10 @@ describe Polytexnic::Builders::Html do
       end
 
       describe "HTML fragments output" do
-        let(:output) { File.read('html/chapter-1_fragment.html') }
+        let(:output) { File.read('html/a_chapter_fragment.html') }
         subject { output }
 
-        it { should match('Chapter 1') }
-      end
-
-      after(:all) do
-        chdir_to_book
-        builder.clean!
+        it { should match('Lorem ipsum') }
       end
     end
   end

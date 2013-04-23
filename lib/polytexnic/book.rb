@@ -26,6 +26,7 @@ class Polytexnic::Book
     end
 
     def ready?
+      return true if Polytexnic::test?
       File::ctime(path).to_i < Time.now.to_i - LAST_WRITE_HORIZON
     end
 
@@ -156,7 +157,7 @@ class Polytexnic::Book
   end
 
   def find_screencasts
-    Dir["#{@screencasts_dir}/**/*.mov"].map{|path| BookFile.new path }
+    Dir["#{@screencasts_dir}/**/*.mov"].map{ |path| BookFile.new path }
   end
 
   def upload_screencasts!(files)
