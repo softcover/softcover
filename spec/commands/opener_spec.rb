@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 describe Polytexnic::Commands::Opener do
-  before { chdir_to_book }
+  before(:all) { generate_book }
+  after(:all)  { remove_book }
 
   it 'opens in browser' do
     opened = false

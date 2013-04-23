@@ -6,7 +6,7 @@ require 'polytexnic/version'
 Gem::Specification.new do |gem|
   gem.name          = "polytexnic"
   gem.version       = Polytexnic::VERSION
-  gem.authors       = ["Nick Merwin"]
+  gem.authors       = ["Nick Merwin", "Michael Hartl"]
   gem.email         = ["nick@lemurheavy.com"]
   gem.description   = %q{CLI interface for polytexnic.com}
   gem.summary       = %q{publish books}

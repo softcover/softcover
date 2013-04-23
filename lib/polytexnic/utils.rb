@@ -16,7 +16,7 @@ module Polytexnic::Utils
     files = Dir['**/*']
 
     Polytexnic::FORMATS.each do |format|
-      unless files.any?{|file| File.extname(file) == ".#{format}"}
+      unless files.any?{ |file| File.extname(file) == ".#{format}" }
         puts "No #{format} found, skipping."
       end
     end

@@ -9,7 +9,8 @@ module Polytexnic
         write_container_xml
         write_contents
         write_toc
-        copy_stylesheets
+        create_html
+        create_style_files
         make_epub
       end
 
@@ -39,17 +40,23 @@ module Polytexnic
       end
 
       def write_contents
-        html_path = File.join('html', manifest.filename + '.html')
-        raw_content = File.open(html_path).read
-        content = Nokogiri::HTML(raw_content).at_css('body').inner_html
-        File.open("epub/OEBPS/#{manifest.filename}.html", 'w') do |f|
-          f.write(template(manifest.title, content))
-        end
         File.open('epub/OEBPS/content.opf', 'w') { |f| f.write(content_opf) }
       end
 
-      def copy_stylesheets
+      def create_html
+        manifest.chapters.each_with_index do |chapter, i|
+          source_filename = File.join('epub', 'OEBPS', "#{chapter.slug}.html")
+          File.open(source_filename, 'w') do |f|
+            content = File.read("html/#{chapter.slug}_fragment.html")
+            f.write(chapter_template("Chapter #{i+1}", content))
+          end
+        end
+      end
+
+      def create_style_files
         FileUtils.cp(File.join('html', 'stylesheets', 'pygments.css'),
+                     File.join('epub', 'OEBPS', 'styles'))
+        FileUtils.cp(File.join('html', 'stylesheets', 'polytexnic.css'),
                      File.join('epub', 'OEBPS', 'styles'))
       end
 
@@ -59,7 +66,7 @@ module Polytexnic
         zip_filename = filename + '.zip'
         base_file = "zip -X0    #{zip_filename} mimetype"
         meta_info = "zip -rDXg9 #{zip_filename} META-INF -x \*.DS_Store -x mimetype"
-        main_info = "zip -rDXg9 #{zip_filename} OEBPS    -x \*.DS_Store"
+        main_info = "zip -rDXg9 #{zip_filename} OEBPS    -x \*.DS_Store \*.gitkeep"
         rename = "mv #{zip_filename} #{filename}.epub"
         commands = [base_file, meta_info, main_info, rename]
         commands.map! { |c| c += ' > /dev/null' } if Polytexnic.test?
@@ -70,8 +77,7 @@ module Polytexnic
       end
 
       def write_toc
-        File.open('epub/OEBPS/toc.ncx',  'w') { |f| f.write(toc_ncx) }
-        File.open('epub/OEBPS/toc.html', 'w') { |f| f.write(toc_html) }
+        File.open('epub/OEBPS/toc.ncx', 'w') { |f| f.write(toc_ncx) }
       end
 
       def mkdir(dir)
@@ -87,6 +93,7 @@ module Polytexnic
         <head>
           <title>#{title}</title>
           <link rel="stylesheet" href="styles/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="styles/polytexnic.css" type="text/css" />
           <link rel="stylesheet" type="application/vnd.adobe-page-template+xml" href="styles/page-template.xpgt" />
         </head>
 
@@ -105,8 +112,15 @@ module Polytexnic
 </container>)
       end
 
-      # This is hard-coded for now, but will eventually be dynamic.
+      # Returns the content configuration file.
       def content_opf
+          man_ch = manifest.chapters.map do |chapter| 
+                     %(<item id="#{chapter.slug}" href="#{chapter.slug}.html" media-type="application/xhtml+xml"/>)
+                   end
+
+          toc_ch = manifest.chapters.map do |chapter|
+                     %(<itemref idref="#{chapter.slug}"/>)
+                   end
 %(<?xml version="1.0" encoding="UTF-8"?>
   <package xmlns="http://www.idpf.org/2007/opf" unique-identifier="BookID" version="2.0">
       <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
@@ -120,22 +134,28 @@ module Polytexnic
       <manifest>
           <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
           <item id="page-template.xpgt" href="styles/page-template.xpgt" media-type="application/vnd.adobe-page-template+xml"/>
-          <item id="sec-1" href="#{manifest.filename}.html" media-type="application/xhtml+xml"/>
-          <item id="toc" href="toc.html" media-type="application/xhtml+xml"/>
           <item id="pygments.css" href="styles/pygments.css" media-type="text/css"/>
+          <item id="polytexnic.css" href="styles/polytexnic.css" media-type="text/css"/>
+          #{man_ch.join("\n")}
       </manifest>
       <spine toc="ncx">
-<itemref idref="toc"/>
-<itemref idref="sec-1"/>
+        #{toc_ch.join("\n")}
       </spine>
       <guide>
-        <reference type="toc" title="Table of Contents" href="toc.html"/>
       </guide>
   </package>)
       end
 
-      # This is hard-coded for now, but will eventually be dynamic.
+      # Returns the Table of Contents for the spine.
       def toc_ncx
+        chapter_nav = []
+        manifest.chapters.each_with_index do |chapter, n|
+          chapter_nav << %(<navPoint id="#{chapter.slug}" playOrder="#{n+1}">)
+          chapter_nav << %(    <navLabel><text>Chapter #{n+1}</text></navLabel>)
+          chapter_nav << %(    <content src="#{chapter.slug}.html"/>)
+          chapter_nav << %(</navPoint>)
+        end
+
 %(<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx 2005-1//EN"
    "http://www.daisy.org/z3986/2005/ncx-2005-1.dtd">
@@ -151,16 +171,7 @@ module Polytexnic
         <text>Foo Bar</text>
     </docTitle>
     <navMap>
-        <navPoint id="navPoint-1" playOrder="1">
-            <navLabel>
-                <text>Detailed Table of Contents</text>
-            </navLabel>
-            <content src="toc.html" />
-        </navPoint>
-            <navPoint id="sec-1" playOrder="2">
-            <navLabel><text>Chapter Foo</text></navLabel>
-            <content src="#{manifest.filename}.html"/>
-    </navPoint>
+      #{chapter_nav.join("\n")}
     </navMap>
 </ncx>)
       end
@@ -185,6 +196,25 @@ module Polytexnic
 </html>)
       end
 
+      # Returns the HTML template for a chapter.
+      def chapter_template(title, content)
+        %(<?xml version="1.0" encoding="utf-8"?>
+        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+          "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+        <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+          <title>#{title}</title>
+          <link rel="stylesheet" href="styles/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="styles/polytexnic.css" type="text/css" />
+          <link rel="stylesheet" type="application/vnd.adobe-page-template+xml" href="styles/page-template.xpgt" />
+        </head>
+
+        <body>
+          #{content}
+        </body>
+        </html>)
+      end
     end
   end
 end

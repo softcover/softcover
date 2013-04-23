@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 describe Polytexnic::Commands::Build do
-  before { chdir_to_book }
+  before(:all) { generate_book }
+  after(:all)  { remove_book }
 
   context 'valid builder formats' do
     Polytexnic::FORMATS.each do |format|
@@ -25,8 +26,6 @@ describe Polytexnic::Commands::Build do
       }
 
       it { should_not raise_error }
-
-      after(:each) { Polytexnic::Commands::Build.builder_for(format).clean! }
     end
   end
 

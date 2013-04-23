@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe Polytexnic::Commands::Publisher do
   let(:book) { Polytexnic::Utils.current_book }
+  before(:all) { generate_book }
+  after(:all)  { remove_book }
 
   describe "#publish" do
     context "publishing from non book directory" do

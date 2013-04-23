@@ -118,6 +118,10 @@ module WebmockHelpers
     chdir_to_book
   end
 
+  def chdir_to_fixtures
+    Dir.chdir File.join File.dirname(__FILE__), "fixtures"    
+  end
+
   def chdir_to_book
     Dir.chdir File.join File.dirname(__FILE__), "fixtures/book"
   end
@@ -128,5 +132,27 @@ module WebmockHelpers
 
   def chdir_to_non_book
     Dir.chdir File.join File.dirname(__FILE__), "fixtures/non-book"
+  end
+
+  # Generates a sample book using the same method as `poly new`.
+  # It also creates test books of all standard formats and a screencasts
+  # directory with a stub file.
+  def generate_book(name = 'book')
+    remove_book
+    Dir.chdir File.join File.dirname(__FILE__), "fixtures/"
+    silence do
+      Polytexnic::Commands::Generator.generate_directory name
+    end
+    chdir_to_book    
+    Polytexnic::FORMATS.each do |format|
+      File.open("test-book.#{format}", 'w') { |f| f.write('test') }
+    end
+    Dir.mkdir("screencasts") unless File.directory?("screencasts")
+    File.open(File.join('screencasts', 'ch1.mov'), 'w') { |f| f.write('test') }
+  end
+
+  def remove_book
+    FileUtils.rm_rf(File.join File.dirname(__FILE__), "fixtures/book")    
+    chdir_to_fixtures
   end
 end
