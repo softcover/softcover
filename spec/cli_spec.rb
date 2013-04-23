@@ -14,5 +14,7 @@ describe Polytexnic::CLI do
     Polytexnic::FORMATS.each do |format|
       it { should =~ /build:#{format}/ }
     end
+
+    it { should =~ /epub:validate/ }
   end
 end

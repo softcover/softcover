@@ -83,6 +83,10 @@ class Polytexnic::Book
     `open #{url}`
   end
 
+  def validated
+    
+  end
+
   def create_or_update
     raise "HTML not built!" if Dir['html/*'].empty?
 
