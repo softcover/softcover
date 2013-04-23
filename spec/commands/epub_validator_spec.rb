@@ -6,7 +6,7 @@ describe Polytexnic::Commands::EpubValidator do
 
   it "should validate the EPUB" do
     validated = false
-    Polytexnic::Book.any_instance.stub(:validate) do
+    Polytexnic::Book.any_instance.stub(:epubcheck) do
       validated = true
     end
 

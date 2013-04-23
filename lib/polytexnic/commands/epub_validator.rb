@@ -5,7 +5,7 @@ module Polytexnic
 
       def validate!
         book = Polytexnic::Book.new
-        book.validate
+        book.epubcheck
       end
 
     end

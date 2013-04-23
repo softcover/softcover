@@ -8,6 +8,10 @@ describe Polytexnic::Builders::Epub do
   before { chdir_to_book }
   before { builder.build! }
 
+  it "should be valid" do
+    `poly epub:validate`.should =~ /No errors or warnings/
+  end
+
   describe "mimetype file" do
     it "should exist in the right directory" do
       expect('epub/mimetype').to exist
