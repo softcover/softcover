@@ -92,6 +92,15 @@ module Polytexnic
     end
 
     # ===============================================
+    # EPUB validate
+    # ===============================================
+
+    desc "epub:validate", "Validate EPUB with epubcheck"
+    define_method "epub:validate" do
+      Polytexnic::Commands::EpubValidator.validate!
+    end
+
+    # ===============================================
     # Config
     # ===============================================
 
