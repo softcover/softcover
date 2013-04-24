@@ -61,7 +61,14 @@ describe Polytexnic::Builders::Epub do
         end
 
         it "should have the right author" do
-          expect(doc.to_xml).to match(/>J\. Random Hacker</)
+          author = Regexp.escape(builder.manifest.author)
+          expect(doc.to_xml).to match(/>#{author}</)
+        end
+
+        it "should have the right copyright line" do
+          copyright = Regexp.escape("Copyright (c) 2012")
+          author = Regexp.escape(builder.manifest.author)
+          expect(doc.to_xml).to match(/>#{copyright} #{author}</)
         end
       end
     end
