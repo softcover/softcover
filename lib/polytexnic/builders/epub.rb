@@ -114,22 +114,25 @@ module Polytexnic
 
       # Returns the content configuration file.
       def content_opf
-          man_ch = manifest.chapters.map do |chapter| 
-                     %(<item id="#{chapter.slug}" href="#{chapter.slug}.html" media-type="application/xhtml+xml"/>)
-                   end
-
-          toc_ch = manifest.chapters.map do |chapter|
-                     %(<itemref idref="#{chapter.slug}"/>)
-                   end
+        title  = manifest.title
+        author = manifest.author
+        copyright = manifest.copyright
+        uuid = manifest.uuid
+        man_ch = manifest.chapters.map do |chapter| 
+                   %(<item id="#{chapter.slug}" href="#{chapter.slug}.html" media-type="application/xhtml+xml"/>)
+                 end
+        toc_ch = manifest.chapters.map do |chapter|
+                   %(<itemref idref="#{chapter.slug}"/>)
+                 end
 %(<?xml version="1.0" encoding="UTF-8"?>
   <package xmlns="http://www.idpf.org/2007/opf" unique-identifier="BookID" version="2.0">
       <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
-          <dc:title>Foo Bar</dc:title>
+          <dc:title>#{title}</dc:title>
     <dc:language>en</dc:language>
-          <dc:rights>Copyright 2012 Michael Hartl</dc:rights>
-          <dc:creator opf:role="aut">Michael Hartl</dc:creator>
+          <dc:rights>Copyright (c) #{copyright} #{author}</dc:rights>
+          <dc:creator opf:role="aut">#{author}</dc:creator>
           <dc:publisher>Softcover</dc:publisher>
-          <dc:identifier id="BookID" opf:scheme="UUID">d430b920-e684-11e1-aff1-0800200c9a66</dc:identifier>
+          <dc:identifier id="BookID" opf:scheme="UUID">#{uuid}</dc:identifier>
       </metadata>
       <manifest>
           <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
@@ -148,6 +151,7 @@ module Polytexnic
 
       # Returns the Table of Contents for the spine.
       def toc_ncx
+        title = manifest.title
         chapter_nav = []
         manifest.chapters.each_with_index do |chapter, n|
           chapter_nav << %(<navPoint id="#{chapter.slug}" playOrder="#{n+1}">)
@@ -168,7 +172,7 @@ module Polytexnic
         <meta name="dtb:maxPageNumber" content="0"/>
     </head>
     <docTitle>
-        <text>Foo Bar</text>
+        <text>#{title}</text>
     </docTitle>
     <navMap>
       #{chapter_nav.join("\n")}

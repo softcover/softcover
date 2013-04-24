@@ -16,6 +16,10 @@ Dir.glob(File.join(File.dirname(__FILE__), "./support/**/*.rb")).each do |f|
 end
 
 RSpec.configure do |config|
+  config.expect_with :rspec do |c|
+    c.syntax = :expect
+  end
+
   config.before do
     Polytexnic::set_test_mode!
     Polytexnic::Utils.reset_current_book!

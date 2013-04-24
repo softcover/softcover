@@ -12,6 +12,6 @@ describe Polytexnic::Commands::Opener do
 
     Polytexnic::Commands::Opener.open!
 
-    opened.should be_true
+    expect(opened).to be_true
   end
 end
