@@ -55,6 +55,11 @@ describe Polytexnic::Builders::Epub do
           toc_refs = doc.css('itemref').map { |node| node['idref'] }
           expect(toc_refs).to eql(%w[a_chapter another_chapter])
         end
+
+        it "should have the right title" do
+          title = builder.manifest.title
+          expect(doc.to_xml).to match(/#{title}/)
+        end
       end
     end
 
