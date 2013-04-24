@@ -15,9 +15,16 @@ describe Polytexnic::Commands::Generator do
       Polytexnic::Commands::Generator.verify!.should be_true
     end
 
-    it "should edit book.yml" do
-      yml = YAML.load_file(File.join name, 'book.yml')
-      yml['title'].should eq name
+    describe "book.yml" do
+      subject(:yml) { YAML.load_file(File.join name, 'book.yml') }
+
+      it "should have the right title" do
+        expect(yml['title']).to eq name
+      end
+
+      it "should have the right copyright year" do
+        expect(yml['copyright']).to eq Time.new.year
+      end
     end
 
     context "generated contents" do
