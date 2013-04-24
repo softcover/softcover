@@ -9,7 +9,7 @@ describe Polytexnic::Builders::Epub do
   before { builder.build! }
 
   it "should be valid" do
-    `poly epub:validate`.should =~ /No errors or warnings/
+    expect(`poly epub:validate`).to match(/No errors or warnings/)
   end
 
   describe "mimetype file" do

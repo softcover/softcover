@@ -12,6 +12,6 @@ describe Polytexnic::Commands::EpubValidator do
 
     Polytexnic::Commands::EpubValidator.validate!
 
-    validated.should be_true
+    expect(validated).to be_true
   end
 end

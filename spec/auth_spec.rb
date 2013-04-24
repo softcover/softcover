@@ -12,7 +12,7 @@ describe Polytexnic::Commands::Auth do
     end
 
     it 'should set the api key' do
-      Polytexnic::Config['api_key'].should eq TEST_API_KEY
+      expect(Polytexnic::Config['api_key']).to eq TEST_API_KEY
     end
   end
 
@@ -27,7 +27,7 @@ describe Polytexnic::Commands::Auth do
     end
 
     it 'should not set the api key' do
-      Polytexnic::Config['api_key'].should be_nil
+      expect(Polytexnic::Config['api_key']).to be_nil
     end
   end
 
@@ -38,7 +38,7 @@ describe Polytexnic::Commands::Auth do
     end
 
     it "should unset the api_key" do
-      Polytexnic::Config['api_key'].should be_nil
+      expect(Polytexnic::Config['api_key']).to be_nil
     end
   end
 end

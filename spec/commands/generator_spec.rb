@@ -12,7 +12,7 @@ describe Polytexnic::Commands::Generator do
     end
 
     it "should copy files" do
-      Polytexnic::Commands::Generator.verify!.should be_true
+      expect(Polytexnic::Commands::Generator.verify!).to be_true
     end
 
     describe "book.yml" do
@@ -113,7 +113,7 @@ describe Polytexnic::Commands::Generator do
     end
 
     it "should overwrite files" do
-      Polytexnic::Commands::Generator.verify!.should be_true
+      expect(Polytexnic::Commands::Generator.verify!).to be_true
     end
   end
 
