@@ -117,6 +117,7 @@ module Polytexnic
         title  = manifest.title
         author = manifest.author
         copyright = manifest.copyright
+        uuid = manifest.uuid
         man_ch = manifest.chapters.map do |chapter| 
                    %(<item id="#{chapter.slug}" href="#{chapter.slug}.html" media-type="application/xhtml+xml"/>)
                  end
@@ -131,7 +132,7 @@ module Polytexnic
           <dc:rights>Copyright (c) #{copyright} #{author}</dc:rights>
           <dc:creator opf:role="aut">#{author}</dc:creator>
           <dc:publisher>Softcover</dc:publisher>
-          <dc:identifier id="BookID" opf:scheme="UUID">d430b920-e684-11e1-aff1-0800200c9a66</dc:identifier>
+          <dc:identifier id="BookID" opf:scheme="UUID">#{uuid}</dc:identifier>
       </metadata>
       <manifest>
           <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>

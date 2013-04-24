@@ -25,6 +25,10 @@ describe Polytexnic::Commands::Generator do
       it "should have the right copyright year" do
         expect(yml['copyright']).to eq Time.new.year
       end
+
+      it "should have a UUID" do
+        expect(yml['uuid']).not_to be_blank
+      end
     end
 
     context "generated contents" do

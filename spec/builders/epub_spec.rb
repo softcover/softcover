@@ -70,6 +70,11 @@ describe Polytexnic::Builders::Epub do
           author = Regexp.escape(builder.manifest.author)
           expect(doc.to_xml).to match(/>#{copyright} #{author}</)
         end
+
+        it "should have a unique UUID" do
+          uuid = Regexp.escape(builder.manifest.uuid)
+          expect(doc.to_xml).to match(/>#{uuid}</)
+        end
       end
     end
 
