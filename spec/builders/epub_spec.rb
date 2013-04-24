@@ -57,22 +57,25 @@ describe Polytexnic::Builders::Epub do
         end
 
         it "should have the right title" do
-          title = builder.manifest.title
-          expect(doc.to_xml).to match(/#{title}/)
+          expect(doc.to_xml).to match(/>#{builder.manifest.title}</)
         end
       end
     end
 
     describe "spine toc" do
       subject(:toc) { 'epub/OEBPS/toc.ncx' }
+      let(:doc) { Nokogiri::XML(File.read(toc)) }
 
       it { should exist }
 
       it "should contain the right filenames in the right order" do
         filenames = ['a_chapter.html', 'another_chapter.html']
-        doc = Nokogiri::XML(File.read(toc))
         source_files = doc.css('content').map { |node| node['src'] }
         expect(source_files).to eql(filenames)
+      end
+
+      it "should have the right title" do
+        expect(doc.to_xml).to match(/>#{builder.manifest.title}</)
       end
     end
 

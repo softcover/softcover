@@ -148,6 +148,7 @@ module Polytexnic
 
       # Returns the Table of Contents for the spine.
       def toc_ncx
+        title = manifest.title
         chapter_nav = []
         manifest.chapters.each_with_index do |chapter, n|
           chapter_nav << %(<navPoint id="#{chapter.slug}" playOrder="#{n+1}">)
@@ -168,7 +169,7 @@ module Polytexnic
         <meta name="dtb:maxPageNumber" content="0"/>
     </head>
     <docTitle>
-        <text>Foo Bar</text>
+        <text>#{title}</text>
     </docTitle>
     <navMap>
       #{chapter_nav.join("\n")}
