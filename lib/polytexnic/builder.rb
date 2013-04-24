@@ -11,7 +11,7 @@ module Polytexnic
 
     def build!
       setup
-      build 
+      build
       verify
       self
     end
