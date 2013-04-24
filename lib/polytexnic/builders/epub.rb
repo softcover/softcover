@@ -116,6 +116,7 @@ module Polytexnic
       def content_opf
         title  = manifest.title
         author = manifest.author
+        copyright = manifest.copyright
         man_ch = manifest.chapters.map do |chapter| 
                    %(<item id="#{chapter.slug}" href="#{chapter.slug}.html" media-type="application/xhtml+xml"/>)
                  end
@@ -127,7 +128,7 @@ module Polytexnic
       <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
           <dc:title>#{title}</dc:title>
     <dc:language>en</dc:language>
-          <dc:rights>Copyright (c) 2012 #{author}</dc:rights>
+          <dc:rights>Copyright (c) #{copyright} #{author}</dc:rights>
           <dc:creator opf:role="aut">#{author}</dc:creator>
           <dc:publisher>Softcover</dc:publisher>
           <dc:identifier id="BookID" opf:scheme="UUID">d430b920-e684-11e1-aff1-0800200c9a66</dc:identifier>
