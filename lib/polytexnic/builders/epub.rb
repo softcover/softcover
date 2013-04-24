@@ -114,7 +114,8 @@ module Polytexnic
 
       # Returns the content configuration file.
       def content_opf
-        title = manifest.title
+        title  = manifest.title
+        author = manifest.author
         man_ch = manifest.chapters.map do |chapter| 
                    %(<item id="#{chapter.slug}" href="#{chapter.slug}.html" media-type="application/xhtml+xml"/>)
                  end
@@ -127,7 +128,7 @@ module Polytexnic
           <dc:title>#{title}</dc:title>
     <dc:language>en</dc:language>
           <dc:rights>Copyright 2012 Michael Hartl</dc:rights>
-          <dc:creator opf:role="aut">Michael Hartl</dc:creator>
+          <dc:creator opf:role="aut">#{author}</dc:creator>
           <dc:publisher>Softcover</dc:publisher>
           <dc:identifier id="BookID" opf:scheme="UUID">d430b920-e684-11e1-aff1-0800200c9a66</dc:identifier>
       </metadata>

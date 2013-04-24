@@ -59,6 +59,10 @@ describe Polytexnic::Builders::Epub do
         it "should have the right title" do
           expect(doc.to_xml).to match(/>#{builder.manifest.title}</)
         end
+
+        it "should have the right author" do
+          expect(doc.to_xml).to match(/>J\. Random Hacker</)
+        end
       end
     end
 
