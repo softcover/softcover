@@ -9,7 +9,7 @@ describe Polytexnic::Builders::Epub do
   before { builder.build! }
 
   it "should be valid" do
-    `poly epub:validate`.should =~ /No errors or warnings/
+    expect(`poly epub:validate`).to match(/No errors or warnings/)
   end
 
   describe "mimetype file" do
@@ -55,19 +55,43 @@ describe Polytexnic::Builders::Epub do
           toc_refs = doc.css('itemref').map { |node| node['idref'] }
           expect(toc_refs).to eql(%w[a_chapter another_chapter])
         end
+
+        it "should have the right title" do
+          expect(doc.to_xml).to match(/>#{builder.manifest.title}</)
+        end
+
+        it "should have the right author" do
+          author = Regexp.escape(builder.manifest.author)
+          expect(doc.to_xml).to match(/>#{author}</)
+        end
+
+        it "should have the right copyright line" do
+          copyright = Regexp.escape("Copyright (c) 2013")
+          author = Regexp.escape(builder.manifest.author)
+          expect(doc.to_xml).to match(/>#{copyright} #{author}</)
+        end
+
+        it "should have a unique UUID" do
+          uuid = Regexp.escape(builder.manifest.uuid)
+          expect(doc.to_xml).to match(/>#{uuid}</)
+        end
       end
     end
 
     describe "spine toc" do
       subject(:toc) { 'epub/OEBPS/toc.ncx' }
+      let(:doc) { Nokogiri::XML(File.read(toc)) }
 
       it { should exist }
 
       it "should contain the right filenames in the right order" do
         filenames = ['a_chapter.html', 'another_chapter.html']
-        doc = Nokogiri::XML(File.read(toc))
         source_files = doc.css('content').map { |node| node['src'] }
         expect(source_files).to eql(filenames)
+      end
+
+      it "should have the right title" do
+        expect(doc.to_xml).to match(/>#{builder.manifest.title}</)
       end
     end
 
