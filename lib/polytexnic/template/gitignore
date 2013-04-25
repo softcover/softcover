@@ -7,7 +7,7 @@
 pygments.sty
 
 # Generated HTML files
-html/
+html/*.html
 
 # Generated EPUB/MOBI files
 epub/

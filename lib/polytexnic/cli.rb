@@ -41,7 +41,7 @@ module Polytexnic
     # Auth
     # ===============================================
 
-    desc "login", "Log into polytexnic.com account"
+    desc "login", "Log into Softcover account"
     def login
       puts "Logging in."
 
@@ -56,7 +56,7 @@ module Polytexnic
       puts "Welcome back, #{email}!"
     end
 
-    desc "logout", "Log out of polytexnic.com account"
+    desc "logout", "Log out of Softcover account"
     def logout
       Polytexnic::Commands::Auth.logout
     end
@@ -65,7 +65,7 @@ module Polytexnic
     # Publisher
     # ===============================================
 
-    desc "publish", "Publish your book on polytexnic.com"
+    desc "publish", "Publish your book on Softcover"
     def publish
       invoke :login unless logged_in?
 
@@ -95,6 +95,24 @@ module Polytexnic
     desc "new <name>", "Generate new book directory structure."
     def new(name)
       Polytexnic::Commands::Generator.generate_directory name
+    end
+
+    # ===============================================
+    # Open
+    # ===============================================
+
+    desc "open", "Opens book on Softcover"
+    def open
+      Polytexnic::Commands::Opener.open!
+    end
+
+    # ===============================================
+    # EPUB validate
+    # ===============================================
+
+    desc "epub:validate", "Validate EPUB with epubcheck"
+    define_method "epub:validate" do
+      Polytexnic::Commands::EpubValidator.validate!
     end
 
     # ===============================================

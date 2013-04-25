@@ -10,10 +10,8 @@ describe Polytexnic::Builders::Mobi do
       end
     end
 
-    before do
-      chdir_to_book
-      clean!
-    end
+    before(:all) { generate_book }
+    after(:all)  { remove_book }
 
     describe "#build!" do
       subject(:builder) { Polytexnic::Builders::Mobi.new }

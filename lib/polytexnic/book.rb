@@ -26,6 +26,7 @@ class Polytexnic::Book
     end
 
     def ready?
+      return true if Polytexnic::test?
       File::ctime(path).to_i < Time.now.to_i - LAST_WRITE_HORIZON
     end
 
@@ -54,14 +55,14 @@ class Polytexnic::Book
     # question: should we use `git ls-files` instead?
     # TODO: only use pertinent files
     paths = %w{html/**/* images/**/* *.mobi *.epub *.pdf}
-    @files ||= Dir[*paths].map do |path| 
+    @files ||= Dir[*paths].map do |path|
 
-      next nil unless !File.directory?(path) && 
+      next nil unless !File.directory?(path) &&
         !(File.extname(path) == ".html" && !(path =~ /_fragment/)) &&
-        path != "html/#{slug}.html" && 
+        path != "html/#{slug}.html" &&
         path != "html/#{slug}_fragment.html"
 
-      BookFile.new path 
+      BookFile.new path
     end.compact
   end
 
@@ -73,24 +74,45 @@ class Polytexnic::Book
     chapters.map(&:marshal_dump)
   end
 
-  # TODO: use with `polytexnic open` or `polytexnic info`
   def url
+    # TODO: append api_token to auto-login?
     "#{@client.host}/books/#{slug}"
+  end
+
+  def open_in_browser
+    `open #{url}`
+  end
+
+  def epubcheck
+    epub = File.join('epub', "#{manifest.filename}.epub")
+    java = `which java`.strip
+    if java.empty?
+      system("EPUB validation requires java to be on the path") 
+      exit 1
+    end
+    epubcheck = File.join(Dir.home, 'epubcheck-3.0', 'epubcheck-3.0.jar')
+    if !File.exist?(epubcheck)
+      puts "Install EpubCheck version 3.0 to your home directory"
+      puts 'https://code.google.com/p/epubcheck/downloads/detail?name=epubcheck-3.0.zip'
+      exit 1
+    end
+    puts "Validating EPUB..."
+    system("#{java} -jar #{epubcheck} #{epub}")
   end
 
   def create_or_update
     raise "HTML not built!" if Dir['html/*'].empty?
 
-    res = @client.create_or_update_book id: id, 
+    res = @client.create_or_update_book id: id,
                                         files: files,
-                                        title: title, 
+                                        title: title,
                                         slug: slug,
-                                        subtitle: subtitle, 
-                                        description: description, 
+                                        subtitle: subtitle,
+                                        description: description,
                                         cover: cover,
                                         chapters: chapter_attributes
 
-    if res['errors'] 
+    if res['errors']
       @errors = res['errors']
       return false
     end
@@ -116,7 +138,7 @@ class Polytexnic::Book
       notify_file_upload params['path']
     end
 
-    @uploader.upload! 
+    @uploader.upload!
 
     res = @client.notify_upload_complete
 
@@ -131,7 +153,7 @@ class Polytexnic::Book
     book_file = BookFile.find path
 
     # this could spin off new thread:
-    @client.notify_file_upload path: book_file.path, 
+    @client.notify_file_upload path: book_file.path,
       checksum: book_file.checksum
   end
 
@@ -152,12 +174,12 @@ class Polytexnic::Book
   end
 
   def find_screencasts
-    Dir["#{@screencasts_dir}/**/*.mov"].map{|path| BookFile.new path }
+    Dir["#{@screencasts_dir}/**/*.mov"].map{ |path| BookFile.new path }
   end
 
   def upload_screencasts!(files)
     return if files.empty?
-    
+
     res = @client.get_screencast_upload_params files
 
     if res['upload_params']
