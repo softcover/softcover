@@ -85,7 +85,7 @@ describe Polytexnic::Builders::Epub do
       it { should exist }
 
       it "should contain the right filenames in the right order" do
-        filenames = ['a_chapter.html', 'another_chapter.html']
+        filenames = ['a_chapter_fragment.html', 'another_chapter_fragment.html']
         source_files = doc.css('content').map { |node| node['src'] }
         expect(source_files).to eql(filenames)
       end
@@ -97,10 +97,10 @@ describe Polytexnic::Builders::Epub do
 
     it "should create the HTML files" do
       builder.manifest.chapters.each do |chapter|
-        expect("epub/OEBPS/#{chapter.slug}.html").to exist
+        expect("epub/OEBPS/#{chapter.slug}_fragment.html").to exist
       end
     end
-    
+
     it "should create the style files" do
       expect('epub/OEBPS/styles/page-template.xpgt').to exist
       expect('epub/OEBPS/styles/pygments.css').to exist

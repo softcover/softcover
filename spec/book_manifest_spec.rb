@@ -18,8 +18,7 @@ describe Polytexnic::BookManifest do
       its("chapters.first.title") { should eq "Lorem ipsum" }
       its("chapters.first.slug") { should eq "a_chapter" }
       its("chapters.first.chapter_number") { should eq 1 }
-      its("chapters.first.sections.first") { should eq 'Bacon ipsum' }
-      its("chapters.first.sections.last") { should eq 'Pig fatback' }
+      its("chapters.first.sections.first.name") { should eq 'Bacon ipsum' }
 
       its("chapters.last.title") { should eq "Foo bar" }
       its("chapters.last.slug") { should eq "another_chapter" }

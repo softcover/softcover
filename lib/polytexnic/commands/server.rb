@@ -25,6 +25,8 @@ module Polytexnic::Commands::Server
   end
 
   def start_server(port)
+    rebuild
+
     app = Rack::Builder.new do
       use Rack::Static, urls: ['/'], root: 'html'
       run lambda { [200, {}, ['']] }
