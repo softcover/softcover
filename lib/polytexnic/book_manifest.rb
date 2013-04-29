@@ -11,6 +11,10 @@ class Polytexnic::BookManifest < OpenStruct
     def fragment_name
       "#{slug}_fragment.html"
     end
+
+    def nodes
+      @nodes ||= []
+    end
   end
 
   class Section < OpenStruct

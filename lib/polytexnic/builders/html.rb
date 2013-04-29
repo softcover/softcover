@@ -75,14 +75,14 @@ module Polytexnic
               ref_map[labeled_node['data-tralics-id']] = current_chapter
             end
 
-            (current_chapter.nodes ||= []).push node
+            current_chapter.nodes.push node
           end
 
           # write chapter nodes to fragment file
           @manifest.chapters.each do |chapter|
             # update cross-chapter refs
             chapter.nodes.each do |node|
-              node.css('a.ref').each do |ref_node|
+              node.css('a.hyperref').each do |ref_node|
                 # todo: pull finder to poly-core
                 target = xml.xpath("//*[@id='#{ref_node['href'][1..-1]}']").first
                 id = target['id']
