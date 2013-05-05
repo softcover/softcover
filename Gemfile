@@ -14,8 +14,9 @@ gem 'maruku'
 gem 'pygments.rb'
 
 # for server
-gem 'rack'
-gem 'thin'
+gem 'sinatra'
+gem 'sinatra-respond_to'
+gem 'coffee-script'
 gem 'listen'
 gem 'rb-fsevent'
 
@@ -24,4 +25,5 @@ group :test do
   gem 'debugger2'
   gem 'webmock',   require: false
   gem 'simplecov', require: false
+  gem 'rack-test'
 end

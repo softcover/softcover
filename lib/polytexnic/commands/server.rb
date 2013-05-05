@@ -1,14 +1,19 @@
-require 'rack'
 require 'listen'
 
 module Polytexnic::Commands::Server
   extend self
 
   def listen_for_changes
-    Thread.new do
+    server_pid = Process.pid
+    fork do
       puts 'Listening for changes.'
-      Listen.to!('.', 'chapters', filter: /(\.tex|\.md)$/) do
-        rebuild
+      begin
+        Listen.to('.', 'chapters', filter: /(\.tex|\.md)$/) do
+          rebuild
+          Process.kill("USR2", server_pid)
+        end
+      rescue Interrupt
+        puts 'Shutting down listener.'
       end
     end
   end
@@ -20,19 +25,10 @@ module Polytexnic::Commands::Server
     puts "Done. (#{(Time.now - t).round(2)}s)"
   end
 
-  def handler
-    Rack::Handler::Thin
-  end
-
   def start_server(port)
     rebuild
-
-    app = Rack::Builder.new do
-      use Rack::Static, urls: ['/'], root: 'html'
-      run lambda { [200, {}, ['']] }
-    end
-
-    handler.run(app, :Port => port)
+    Polytexnic::App.set :port, port
+    Polytexnic::App.run!
   end
 
   def run(port)

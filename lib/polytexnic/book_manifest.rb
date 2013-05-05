@@ -12,6 +12,10 @@ class Polytexnic::BookManifest < OpenStruct
       "#{slug}_fragment.html"
     end
 
+    def fragment_path
+      File.join('html', fragment_name)
+    end
+
     def nodes
       @nodes ||= []
     end
@@ -79,6 +83,10 @@ class Polytexnic::BookManifest < OpenStruct
 
       file_path
     end
+  end
+
+  def find_chapter_by_slug(slug)
+    chapters.find { |chapter| chapter.slug == slug }
   end
 
   def self.valid_directory?

@@ -41,7 +41,12 @@ module Polytexnic
           end
           html_body = Polytexnic::Core::Pipeline.new(polytex).to_html
           html_filename = File.join('html', basename + '.html')
-          file_content = template(html_body)
+          @html = html_body
+          @title = basename
+          erb_file = File.read(File.join(File.dirname(__FILE__),
+                                         '../server/views/book.html.erb'))
+          file_content = ERB.new(erb_file).result(binding)
+
           File.open(html_filename, 'w') do |f|
             f.write(file_content)
           end
@@ -63,7 +68,7 @@ module Polytexnic
           chapter_number = 0
           current_chapter = @manifest.chapters.first
 
-          xml.css('body>div').each do |node|
+          xml.css('#book>div').each do |node|
             if node.attributes['class'].to_s == 'chapter'
               current_chapter = @manifest.chapters[chapter_number]
               node['data-chapter'] = current_chapter.slug
@@ -116,25 +121,5 @@ end
 # TODO: Replace this with a file.
 def template(body)
   <<-EOS
-<!DOCTYPE html>
-<head>
-<meta charset="UTF-8">
-<link href="stylesheets/pygments.css" media="screen" rel="stylesheet" type="text/css" />
-<link href="stylesheets/polytexnic.css" media="screen" rel="stylesheet" type="text/css" />
-<style>
-.tt { font-family: Courier; font-size: 90%; }
-</style>
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML">
-  MathJax.Hub.Config({
-    "HTML-CSS": {
-      availableFonts: ["TeX"]
-    }
-  });
-</script>
-</head>
-<body id="book">
-#{body}
-</body>
-</html>
   EOS
 end
