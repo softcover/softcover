@@ -18,6 +18,8 @@ describe Polytexnic::Builders::Html do
 
         it { should match('<!DOCTYPE html>') }
         it { should match('pygments.css') }
+        it { should match('<div id=\"cha-lorem_ipsum\" data-tralics-id=\"cid1\"'+
+                          ' class=\"chapter\" data-number=\"1\">') }
 
       end
 

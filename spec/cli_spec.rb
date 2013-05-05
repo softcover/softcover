@@ -7,7 +7,7 @@ describe Polytexnic::CLI do
 
     let(:commands) { ['help'] }
 
-    %w{new login logout publish build}.each do |cmd|
+    %w{new login logout publish build server}.each do |cmd|
       it { should =~ /#{cmd}/ }
     end
 

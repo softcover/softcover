@@ -7,6 +7,21 @@ class Polytexnic::BookManifest < OpenStruct
     def path
       File.join('chapters', slug + '.tex')
     end
+
+    def fragment_name
+      "#{slug}_fragment.html"
+    end
+
+    def fragment_path
+      File.join('html', fragment_name)
+    end
+
+    def nodes
+      @nodes ||= []
+    end
+  end
+
+  class Section < OpenStruct
   end
 
   YAML_PATH = "book.yml"
@@ -33,7 +48,10 @@ class Polytexnic::BookManifest < OpenStruct
         title_regex = /\\chapter\{(.*?)\}/m
         content = File.read(File.join('chapters', slug + '.tex'))
         title = content[title_regex, 1]
-        sections = content.scan(/\\section{(.*?)}/m).flatten
+        j = 0
+        sections = content.scan(/\\section{(.*?)}/m).flatten.map do |name|
+          Section.new(name: name, section_number: j += 1)
+        end
         chapters.push Chapter.new(slug: slug,
                                   title: title,
                                   sections: sections,
@@ -65,6 +83,10 @@ class Polytexnic::BookManifest < OpenStruct
 
       file_path
     end
+  end
+
+  def find_chapter_by_slug(slug)
+    chapters.find { |chapter| chapter.slug == slug }
   end
 
   def self.valid_directory?

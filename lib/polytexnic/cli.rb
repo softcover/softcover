@@ -23,6 +23,21 @@ module Polytexnic
     end
 
     # ===============================================
+    # Server
+    # ===============================================
+
+    desc 'server', 'Run local server.'
+    method_option :port, type: :numeric, default: 4000, aliases: '-p'
+    def server
+      if Polytexnic::BookManifest::valid_directory?
+        Polytexnic::Commands::Server.run options[:port]
+      else
+        puts 'Not in a valid book directory.'
+        exit 1
+      end
+    end
+
+    # ===============================================
     # Auth
     # ===============================================
 
