@@ -45,10 +45,23 @@ module Polytexnic
 
       def create_html
         manifest.chapters.each_with_index do |chapter, i|
-          source_filename = File.join('epub', 'OEBPS', "#{chapter.slug}.html")
+          source_filename = File.join('epub', 'OEBPS', chapter.fragment_name)
           File.open(source_filename, 'w') do |f|
-            content = File.read("html/#{chapter.slug}_fragment.html")
-            f.write(chapter_template("Chapter #{i+1}", content))
+            content = File.read("html/#{chapter.fragment_name}")
+
+            # strip data attributes
+            doc = Nokogiri::HTML(content)
+            %w{tralics-id label number chapter}.each do |attr|
+              doc.xpath("//@data-#{attr}").remove
+            end
+
+            # add .html to links
+            # doc.css('a.ref').each do |node|
+            #   node
+            # end
+
+            html = doc.at_css('body').children.to_html
+            f.write(chapter_template("Chapter #{i+1}", html))
           end
         end
       end
@@ -118,8 +131,8 @@ module Polytexnic
         author = manifest.author
         copyright = manifest.copyright
         uuid = manifest.uuid
-        man_ch = manifest.chapters.map do |chapter| 
-                   %(<item id="#{chapter.slug}" href="#{chapter.slug}.html" media-type="application/xhtml+xml"/>)
+        man_ch = manifest.chapters.map do |chapter|
+                   %(<item id="#{chapter.slug}" href="#{chapter.fragment_name}" media-type="application/xhtml+xml"/>)
                  end
         toc_ch = manifest.chapters.map do |chapter|
                    %(<itemref idref="#{chapter.slug}"/>)
@@ -156,7 +169,7 @@ module Polytexnic
         manifest.chapters.each_with_index do |chapter, n|
           chapter_nav << %(<navPoint id="#{chapter.slug}" playOrder="#{n+1}">)
           chapter_nav << %(    <navLabel><text>Chapter #{n+1}</text></navLabel>)
-          chapter_nav << %(    <content src="#{chapter.slug}.html"/>)
+          chapter_nav << %(    <content src="#{chapter.fragment_name}"/>)
           chapter_nav << %(</navPoint>)
         end
 

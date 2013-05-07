@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link href="stylesheets/pygments.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="stylesheets/polytexnic.css" media="screen" rel="stylesheet" type="text/css" />
+    <style>
+    .tt { font-family: Courier; font-size: 90%; }
+    </style>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML">
+      MathJax.Hub.Config({
+        "HTML-CSS": {
+          availableFonts: ["TeX"]
+        }
+      });
+    </script>
+    <% if @local_server %>
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
+      <script src="/refresh.js"></script>
+    <% end %>
+    <title><%= @title %></title>
+  </head>
+  <body>
+    <div id="book">
+      <%= @html %>
+    </div>
+  </body>
+</html>

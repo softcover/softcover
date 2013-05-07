@@ -7,6 +7,8 @@ module Polytexnic
       host: 'http://softcover.io'
     }
 
+    PATH = '.'
+
     class << self
       def [](key)
         store.transaction do
