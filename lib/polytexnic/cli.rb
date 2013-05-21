@@ -16,7 +16,7 @@ module Polytexnic
     end
 
     Polytexnic::FORMATS.each do |format|
-      desc "build:#{format}", "Build #{format}"
+      desc "build:#{format}", "Build #{format.upcase}"
       define_method "build:#{format}" do
         Polytexnic::Commands::Build.for_format format
       end
@@ -26,7 +26,7 @@ module Polytexnic
     # Server
     # ===============================================
 
-    desc 'server', 'Run local server.'
+    desc 'server', 'Run local server'
     method_option :port, type: :numeric, default: 4000, aliases: '-p'
     def server
       if Polytexnic::BookManifest::valid_directory?
@@ -101,7 +101,7 @@ module Polytexnic
     # Open
     # ===============================================
 
-    desc "open", "Opens book on Softcover"
+    desc "open", "Open book on Softcover website (OS X only)"
     def open
       Polytexnic::Commands::Opener.open!
     end

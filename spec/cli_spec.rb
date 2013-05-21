@@ -13,6 +13,7 @@ describe Polytexnic::CLI do
 
     Polytexnic::FORMATS.each do |format|
       it { should =~ /build:#{format}/ }
+      it { should =~ /Build #{format.upcase}/ }
     end
 
     it { should =~ /epub:validate/ }
