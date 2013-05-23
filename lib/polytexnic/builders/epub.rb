@@ -69,8 +69,6 @@ module Polytexnic
       def create_style_files
         FileUtils.cp(File.join('html', 'stylesheets', 'pygments.css'),
                      File.join('epub', 'OEBPS', 'styles'))
-        FileUtils.cp(File.join('html', 'stylesheets', 'polytexnic.css'),
-                     File.join('epub', 'OEBPS', 'styles'))
       end
 
       # Make the EPUB, which is basically just a zipped HTML file.
@@ -78,8 +76,9 @@ module Polytexnic
         filename = manifest.filename
         zip_filename = filename + '.zip'
         base_file = "zip -X0    #{zip_filename} mimetype"
-        meta_info = "zip -rDXg9 #{zip_filename} META-INF -x \*.DS_Store -x mimetype"
-        main_info = "zip -rDXg9 #{zip_filename} OEBPS    -x \*.DS_Store \*.gitkeep"
+        zip = "zip -rDXg9"
+        meta_info = "#{zip} #{zip_filename} META-INF -x \*.DS_Store -x mimetype"
+        main_info = "#{zip} #{zip_filename} OEBPS    -x \*.DS_Store \*.gitkeep"
         rename = "mv #{zip_filename} #{filename}.epub"
         commands = [base_file, meta_info, main_info, rename]
         commands.map! { |c| c += ' > /dev/null' } if Polytexnic.test?

@@ -4,8 +4,8 @@ module Polytexnic
       extend self
 
       def for_format(format)
-        raise 'invalid format' unless Polytexnic::FORMATS.include?(format)
-        print "Building #{format}..."
+        raise 'Invalid format' unless Polytexnic::FORMATS.include?(format)
+        print "Building #{format.upcase}..."
         builder_for(format).build!
         puts "Done."
       end
