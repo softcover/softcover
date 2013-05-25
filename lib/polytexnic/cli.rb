@@ -10,7 +10,7 @@ module Polytexnic
     # Builder
     # ===============================================
 
-    desc 'build', 'Build all formats.'
+    desc 'build', 'Build all formats'
     def build
       Polytexnic::Commands::Build.all_formats
     end
