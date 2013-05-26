@@ -8,7 +8,7 @@ module Polytexnic::Commands::Server
     fork do
       puts 'Listening for changes.'
       begin
-        Listen.to('.', 'chapters', filter: /(\.tex|\.md)$/) do
+        Listen.to!('.', 'chapters', filter: /(\.tex|\.md)$/) do
           rebuild
           Process.kill("USR2", server_pid)
         end
