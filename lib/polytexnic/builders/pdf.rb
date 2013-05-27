@@ -18,6 +18,7 @@ module Polytexnic
           end
         end
         write_pygments_file(:latex)
+        write_polytexnic_commands_file
         cmd = "xelatex #{Polytexnic::Utils.tmpify(book_filename)}"
         cmd += " > /dev/null" if Polytexnic.test?
         # Run the command twice to guarantee up-to-date cross-references.
@@ -33,6 +34,13 @@ module Polytexnic
           tmp_pdf = basename + '.tmp.pdf'
           pdf     = basename + '.pdf'
           File.rename(tmp_pdf, pdf)
+        end
+
+        # Writes out the PolyTeXnic commands from polytexnic-core.
+        def write_polytexnic_commands_file
+          File.open('polytexnic_commands.sty', 'w') do |f|
+            f.write(Polytexnic::Core::Utils.new_commands)
+          end
         end
 
     end

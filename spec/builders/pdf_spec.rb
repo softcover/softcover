@@ -31,9 +31,11 @@ describe Polytexnic::Builders::Pdf do
 
     it "should create a Pygments style file" do
       expect('pygments.sty').to exist
-      expect('pygments.sty').to exist
     end
 
+    it "should write the correct PolyTeXnic commands file" do
+      expect(File.read('polytexnic_commands.sty')).to match /newcommand/
+    end
   end
 end
 
