@@ -55,7 +55,7 @@ class Polytexnic::Book
     # question: should we use `git ls-files` instead?
     # TODO: only use pertinent files
     paths = %w{html/**/* images/**/* *.mobi *.epub *.pdf}
-    @files ||= Dir[*paths].map do |path|
+    Dir[*paths].map do |path|
 
       next nil unless !File.directory?(path) &&
         !(File.extname(path) == ".html" && !(path =~ /_fragment/)) &&
@@ -87,7 +87,7 @@ class Polytexnic::Book
     epub = File.join('epub', "#{manifest.filename}.epub")
     java = `which java`.strip
     if java.empty?
-      system("EPUB validation requires java to be on the path") 
+      system("EPUB validation requires java to be on the path")
       exit 1
     end
     epubcheck = File.join(Dir.home, 'epubcheck-3.0', 'epubcheck-3.0.jar')
@@ -143,7 +143,7 @@ class Polytexnic::Book
     res = @client.notify_upload_complete
 
     if res['errors'].nil?
-      puts "Published! #{url}"
+      puts "Published! http://#{url}"
     else
       puts "Couldn't verify upload: #{res['errors']}"
     end
