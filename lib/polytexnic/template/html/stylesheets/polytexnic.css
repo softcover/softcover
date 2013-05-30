@@ -126,6 +126,9 @@ body #book {
   margin-bottom: 1em;
 }
 
+#MathJax_Message { display: none }
+
+
 #book .caption {
   text-align: center;
   margin-bottom: 3em;
