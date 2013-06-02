@@ -210,6 +210,7 @@ body #book {
 #book sup.footnote {
   font-size: 75%;
   margin-right: 5px;
+  line-height: 0;
 }
 
 #book sup.footnote a {
