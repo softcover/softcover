@@ -1,3 +1,5 @@
+/* This file is auto-generated. Do not edit. */
+
 body #book {
   width: 41em;
   font-family: Georgia, serif;
@@ -42,11 +44,7 @@ body #book {
 
 #book a {
   color: #002f72;
-  text-decoration: none;
-}
-
-#book tt {
-  font-size: 130%;
+  text-decoration: underline;
 }
 
 #book code {
@@ -125,6 +123,9 @@ body #book {
   margin-top: 1em;
   margin-bottom: 1em;
 }
+
+#MathJax_Message { display: none }
+
 
 #book .caption {
   text-align: center;
@@ -205,6 +206,7 @@ body #book {
 #book sup.footnote {
   font-size: 75%;
   margin-right: 5px;
+  line-height: 0;
 }
 
 #book sup.footnote a {
@@ -214,7 +216,6 @@ body #book {
 #book sup.footnote a:visited {
   color: #002f72;
 }
-
 
 #book .footnotes .header {
   padding-top: 1em;
@@ -239,6 +240,7 @@ body #book {
 
 #book a.heading {
   color: #000;
+  text-decoration: none;
 }
 
 #book a:hover.heading {
@@ -315,4 +317,17 @@ body #book {
 
 #book .navigation .next_page {
   float: right;
+}
+
+#book a span.undefined_ref {
+  color: red;
+}
+
+#book .tt {
+  font-family: Courier;
+  font-size: 90%;
+}
+
+#book .sc {
+  font-variant: small-caps;
 }
