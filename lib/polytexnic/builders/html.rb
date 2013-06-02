@@ -50,6 +50,10 @@ module Polytexnic
           File.open(html_filename, 'w') do |f|
             f.write(file_content)
           end
+          polytexnic_css = File.join('html', 'stylesheets', 'polytexnic.css')
+          source_css     = File.join(File.dirname(__FILE__),
+                                     "../template/#{polytexnic_css}")
+          FileUtils.cp source_css, polytexnic_css
           write_pygments_file(:html, File.join('html', 'stylesheets'))
           @built_files.push html_filename
 
@@ -89,10 +93,13 @@ module Polytexnic
             chapter.nodes.each do |node|
               node.css('a.hyperref').each do |ref_node|
                 # todo: pull finder to poly-core
-                target = xml.xpath("//*[@id='#{ref_node['href'][1..-1]}']").first
-                id = target['id']
-                ref_chapter = ref_map[target['data-tralics-id']]
-                ref_node['href'] = "#{ref_chapter.fragment_name}##{id}"
+                target = xml.xpath("//*[@id='#{ref_node['href'][1..-1]}']")
+                unless target.empty?
+                  target = target.first
+                  id = target['id']
+                  ref_chapter = ref_map[target['data-tralics-id']]
+                  ref_node['href'] = "#{ref_chapter.fragment_name}##{id}"
+                end
               end
             end
 

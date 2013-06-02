@@ -1,3 +1,5 @@
+/* This file is auto-generated. Do not edit. */
+
 body #book {
   width: 41em;
   font-family: Georgia, serif;
@@ -42,7 +44,7 @@ body #book {
 
 #book a {
   color: #002f72;
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 #book tt {
@@ -218,7 +220,6 @@ body #book {
   color: #002f72;
 }
 
-
 #book .footnotes .header {
   padding-top: 1em;
   padding-bottom: 0.5em;
@@ -242,6 +243,7 @@ body #book {
 
 #book a.heading {
   color: #000;
+  text-decoration: none;
 }
 
 #book a:hover.heading {
@@ -318,4 +320,8 @@ body #book {
 
 #book .navigation .next_page {
   float: right;
+}
+
+#book a span.undefined_ref {
+  color: red;
 }
