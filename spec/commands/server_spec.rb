@@ -10,7 +10,7 @@ describe Polytexnic::Commands::Server do
     subject.should_receive(:fork) do |&block|
       block.call
     end
-    Listen.should_receive(:to) do |&block|
+    Listen.should_receive(:to!) do |&block|
       block.call
     end
     expect { silence { subject.listen_for_changes } }.to raise_error SignalException
