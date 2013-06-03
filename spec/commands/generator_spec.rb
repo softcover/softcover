@@ -64,18 +64,31 @@ describe Polytexnic::Commands::Generator do
         it { should match(/\.DS_Store/) }
       end
 
+      describe "CSS" do
+
+        let(:css_file) { 'html/stylesheets/polytexnic.css' }
+
+        it "should have a polytexnic CSS file" do
+          expect(css_file).to exist
+        end
+
+        it "should suppress the MathJax progress box" do
+          expect(File.read(css_file)).to match(/#MathJax_Message/)
+        end
+      end
+
       describe "styles" do
 
         it "should have a PolyTeXnic style file" do
           expect('polytexnic.sty').to exist
         end
-        
+
         it "should include the polytexnic style file by default" do
           book_base = File.read('foo_bar.tex')
           expect(book_base).to match(/^\\usepackage{polytexnic}/)
         end
       end
-      
+
       describe "base LaTeX file" do
         subject { File.read('foo_bar.tex') }
 
