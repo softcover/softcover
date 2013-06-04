@@ -13,7 +13,9 @@ describe Polytexnic::Commands::Server do
     Listen.should_receive(:to!) do |&block|
       block.call
     end
-    expect { silence { subject.listen_for_changes } }.to raise_error SignalException
+    expect do
+      silence { subject.listen_for_changes }
+    end.to raise_error SignalException
   end
 
   it '#run' do
