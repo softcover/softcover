@@ -47,10 +47,6 @@ body #book {
   text-decoration: underline;
 }
 
-#book tt {
-  font-size: 130%;
-}
-
 #book code {
   font-size: 130%;
   color: darkgreen;
@@ -325,4 +321,13 @@ body #book {
 
 #book a span.undefined_ref {
   color: red;
+}
+
+#book .tt {
+  font-family: Courier;
+  font-size: 90%;
+}
+
+#book .sc {
+  font-variant: small-caps;
 }
