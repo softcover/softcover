@@ -60,7 +60,12 @@ module Polytexnic
           end
         end
 
-        Dir.chdir ".."
+        # Symlink the images directory.
+        Dir.chdir "html"
+        FileUtils.rm_f("images") if File.directory?("images")
+        File.symlink("../images", "images")
+
+        Dir.chdir "../.."
         puts "Done. Please update book.yml"
       end
 
