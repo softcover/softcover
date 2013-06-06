@@ -60,7 +60,7 @@ module Polytexnic
             #   node
             # end
 
-            html = doc.at_css('body').children.to_html
+            html = doc.at_css('body').children.to_xhtml
             f.write(chapter_template("Chapter #{i+1}", html))
           end
         end

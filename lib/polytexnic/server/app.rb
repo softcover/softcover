@@ -31,7 +31,7 @@ class Polytexnic::App < Sinatra::Base
     doc.css('a.hyperref').each do |node|
       node['href'] = node['href'].gsub(/_fragment\.html/, '')
     end
-    @html = doc.to_html
+    @html = doc.to_xhtml
 
     respond_to do |format|
       format.js do
