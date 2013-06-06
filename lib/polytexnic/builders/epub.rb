@@ -11,6 +11,7 @@ module Polytexnic
         write_toc
         create_html
         create_style_files
+        copy_image_files
         make_epub
       end
 
@@ -69,6 +70,11 @@ module Polytexnic
       def create_style_files
         FileUtils.cp(File.join('html', 'stylesheets', 'pygments.css'),
                      File.join('epub', 'OEBPS', 'styles'))
+      end
+
+      def copy_image_files
+        FileUtils.cp_r(File.join('html', 'images'),
+                       File.join('epub', 'OEBPS'))
       end
 
       # Make the EPUB, which is basically just a zipped HTML file.
@@ -136,6 +142,10 @@ module Polytexnic
         toc_ch = manifest.chapters.map do |chapter|
                    %(<itemref idref="#{chapter.slug}"/>)
                  end
+        images = Dir['images/**/*'].select { |f| File.file?(f) }.map do |image|
+                   ext = File.extname(image).sub('.', '')   # e.g., 'png'
+                   %(<item id="#{File.basename(image)}" href="#{image}" media-type="image/#{ext}"/>)
+                 end
 %(<?xml version="1.0" encoding="UTF-8"?>
   <package xmlns="http://www.idpf.org/2007/opf" unique-identifier="BookID" version="2.0">
       <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
@@ -152,6 +162,7 @@ module Polytexnic
           <item id="pygments.css" href="styles/pygments.css" media-type="text/css"/>
           <item id="polytexnic.css" href="styles/polytexnic.css" media-type="text/css"/>
           #{man_ch.join("\n")}
+          #{images.join("\n")}
       </manifest>
       <spine toc="ncx">
         #{toc_ch.join("\n")}
