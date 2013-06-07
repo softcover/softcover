@@ -15,3 +15,16 @@
 
 \DefineVerbatimEnvironment%
   {code}{Verbatim}{fontsize=\relsize{-0.5},fontseries=b}
+% The metacode environment exists solely to allow meta-discussion of the code
+% environment, as in
+%   %= lang:latex
+%   \begin{metacode}
+%   %= lang:ruby
+%   \begin{code}
+%   def foo
+%     "bar"
+%   end
+%   \end{code}
+%   \end{metacode}
+\DefineVerbatimEnvironment%
+  {metacode}{Verbatim}{fontsize=\relsize{-0.5},fontseries=b}
