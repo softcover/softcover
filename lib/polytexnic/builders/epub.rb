@@ -16,7 +16,7 @@ module Polytexnic
       end
 
       def build_html
-        Polytexnic::Builders::Html.new.build!
+        # Polytexnic::Builders::Html.new.build!
       end
 
       def create_directories
