@@ -18,8 +18,10 @@ initMathJax = ->
   script.innerHTML = '
       MathJax.Hub.Config({
         "HTML-CSS": {
-          availableFonts: ["TeX"]
-        }
+          availableFonts: ["TeX"],
+        },
+        showProcessingMessages: false,
+        messageStyle: "none"
       });
     '
 

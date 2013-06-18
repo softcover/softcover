@@ -1,10 +1,12 @@
 require 'polytexnic-core'
 require 'active_support/core_ext/string'
 
-require File.dirname(__FILE__) + '/polytexnic/formats'
-require File.dirname(__FILE__) + '/polytexnic/utils'
+require_relative 'polytexnic/formats'
+require_relative 'polytexnic/utils'
 
-Dir[File.dirname(__FILE__) + '/polytexnic/**/*.rb'].each{|f| require f}
+Dir[File.join(File.dirname(__FILE__), '/polytexnic/**/*.rb')].each do |file|
+  require file.chomp(File.extname(file))
+end
 
 module Polytexnic
   extend self

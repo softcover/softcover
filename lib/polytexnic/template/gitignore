@@ -2,6 +2,7 @@
 *.aux
 *.log
 *.toc
+*.out
 *.tmp.*
 *.pdf
 pygments.sty

@@ -124,9 +124,6 @@ body #book {
   margin-bottom: 1em;
 }
 
-#MathJax_Message { display: none }
-
-
 #book .caption {
   text-align: center;
   margin-bottom: 3em;
@@ -157,11 +154,11 @@ body #book {
   text-align: right;
 }
 
-#book .tabular th.left_bar {
+#book .tabular th.left_border {
   border-left: 1px solid black;
 }
 
-#book .tabular th.right_bar {
+#book .tabular th.right_border {
   border-right: 1px solid black;
 }
 
@@ -181,19 +178,19 @@ body #book {
   text-align: right;
 }
 
-#book .tabular td.left_bar {
+#book .tabular td.left_border {
   border-left: 1px solid black;
 }
 
-#book .tabular td.right_bar {
+#book .tabular td.right_border {
   border-right: 1px solid black;
 }
 
-#book .tabular tr.top_bar {
+#book .tabular tr.top_border {
   border-top: 1px solid black;
 }
 
-#book .tabular tr.bottom_bar {
+#book .tabular tr.bottom_border {
   border-bottom: 1px solid black;
 }
 
@@ -333,5 +330,9 @@ body #book {
 }
 
 #book blockquote.verse {
+  line-height: 0.5;
+}
+
+#book .texhtml {
   line-height: 0.5;
 }

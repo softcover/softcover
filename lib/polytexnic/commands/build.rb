@@ -7,6 +7,9 @@ module Polytexnic
         raise 'Invalid format' unless Polytexnic::FORMATS.include?(format)
         print "Building #{format.upcase}..."
         builder_for(format).build!
+        if format == 'html'
+          puts "Tralics debug information ouput to log/tralics.log"
+        end
         puts "Done."
       end
 
