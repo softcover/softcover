@@ -10,11 +10,11 @@ require_relative 'polytexnic/utils'
 $stderr.puts Time.now - t
 $stderr.puts "bar"
 
-Dir[File.join(File.dirname(__FILE__), '/polytexnic/**/*.rb')].each do |file|
-  t1 = Time.now
-  require file.chomp(File.extname(file))
-  $stderr.puts "#{Time.now - t1} #{File.basename(file)}"
-end
+# Dir[File.join(File.dirname(__FILE__), '/polytexnic/**/*.rb')].each do |file|
+#   t1 = Time.now
+#   require file.chomp(File.extname(file))
+#   $stderr.puts "#{Time.now - t1} #{File.basename(file)}"
+# end
 
 require_relative 'polytexnic/book'
 require_relative 'polytexnic/book_manifest'
@@ -31,7 +31,6 @@ require_relative 'polytexnic/commands/generator'
 require_relative 'polytexnic/commands/opener'
 require_relative 'polytexnic/commands/publisher'
 require_relative 'polytexnic/commands/server'
-require_relative 'polytexnic/server/app'
 require_relative 'polytexnic/uploader'
 require_relative 'polytexnic/version'
 

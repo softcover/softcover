@@ -11,6 +11,7 @@ require 'json'
 require 'polytexnic'
 require 'polytexnic/utils'
 require 'polytexnic/config'
+require 'polytexnic/server/app'
 
 # Load support files.
 Dir.glob(File.join(File.dirname(__FILE__), "./support/**/*.rb")).each do |f|
