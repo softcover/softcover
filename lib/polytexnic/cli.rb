@@ -121,6 +121,7 @@ module Polytexnic
 
     desc "config", "View local config"
     def config
+      require "polytexnic/config"
       Polytexnic::Config.read
     end
 

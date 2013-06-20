@@ -7,8 +7,10 @@ require 'webmock_helpers'
 require 'simplecov'
 SimpleCov.start
 
+require 'json'
 require 'polytexnic'
 require 'polytexnic/utils'
+require 'polytexnic/config'
 
 # Load support files.
 Dir.glob(File.join(File.dirname(__FILE__), "./support/**/*.rb")).each do |f|
@@ -39,7 +41,7 @@ TEST_API_KEY = 'asdfasdfasdfasdfasdf'
 
 def silence
   return yield if ENV['silence'] == 'false'
-  
+
   silence_stream(STDOUT) do
     yield
   end
