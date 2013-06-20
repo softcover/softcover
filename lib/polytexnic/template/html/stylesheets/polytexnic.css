@@ -244,7 +244,7 @@ body #book {
   text-decoration: underline;
 }
 
-#book .sidebar {
+#book .aside {
   border: 1px solid #999;
   padding: 0.5em;
   padding-right: 1.5em;
@@ -252,7 +252,7 @@ body #book {
   width: 100%;
 }
 
-#book .sidebar .description {
+#book .aside .heading {
   font-weight: bold;
 }
 
