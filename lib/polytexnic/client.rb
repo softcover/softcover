@@ -5,15 +5,15 @@ module Polytexnic
   class Client
     include Polytexnic::Utils
 
-    ApiVerion = 1
+    ApiVersion = 1
 
-    ApiPrefix = "/api/v#{ApiVerion}"
+    ApiPrefix = "/api/v#{ApiVersion}"
 
     Paths = {
       login: 'login',
       books: 'books'
     }
-    
+
     attr_accessor :host, :book
 
     def initialize(email=nil,password=nil,book=nil)
@@ -32,7 +32,7 @@ module Polytexnic
     # ============ Auth ===========
     def login!
       begin
-        response = post path_for(:login), 
+        response = post path_for(:login),
           email: @email, password: @password
 
       rescue RestClient::UnprocessableEntity
@@ -49,9 +49,9 @@ module Polytexnic
     rescue RestClient::UnprocessableEntity
       handle_422
     rescue RestClient::ResourceNotFound
-      { "errors" => 
+      { "errors" =>
         "Book ID #{params[:id]} not found for this account. "+
-        "Either login again or delete this file: .polytexnic-book" 
+        "Either login again or delete this file: .polytexnic-book"
       }
     end
 
@@ -73,8 +73,8 @@ module Polytexnic
     private
       %w{get put post}.each do |verb|
         define_method verb do |url, params, headers={}|
-          RestClient.send verb, "#{@host}#{url}", 
-            params_with_key(params).to_json, 
+          RestClient.send verb, "#{@host}#{url}",
+            params_with_key(params).to_json,
             formatted_headers(headers)
         end
       end
