@@ -71,10 +71,6 @@ describe Polytexnic::Commands::Generator do
         it "should have a polytexnic CSS file" do
           expect(css_file).to exist
         end
-
-        it "should suppress the MathJax progress box" do
-          expect(File.read(css_file)).to match(/#MathJax_Message/)
-        end
       end
 
       describe "styles" do
