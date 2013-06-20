@@ -4,6 +4,7 @@ module Polytexnic
       extend self
 
       def login(email, password)
+        require "polytexnic/client"
         client = Polytexnic::Client.new email, password
         client.login!
       end

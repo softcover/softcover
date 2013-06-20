@@ -1,5 +1,5 @@
-require 'maruku'
 require 'fileutils'
+require 'rdiscount'
 
 module Polytexnic
   module Builders
@@ -16,7 +16,7 @@ module Polytexnic
           @manifest.chapters.each do |chapter|
             path = chapter.slug
 
-            md = Maruku.new File.read(path)
+            md = RDiscount.new File.read(path)
 
             basename = File.basename path, ".*"
 
@@ -27,7 +27,7 @@ module Polytexnic
 
             doc_path = "html/#{basename}.html"
             f = File.open doc_path, "w"
-            f.write md.to_html_document
+            f.write md.to_html
             f.close
 
             @built_files.push fragment_path, doc_path
