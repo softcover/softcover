@@ -1,5 +1,5 @@
 require 'ostruct'
-require 'active_support/core_ext/hash'
+# require 'active_support/core_ext/hash'
 
 class Polytexnic::BookManifest < OpenStruct
 

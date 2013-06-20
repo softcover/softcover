@@ -67,6 +67,7 @@ module Polytexnic
 
     desc "publish", "Publish your book on Softcover"
     def publish
+      require 'polytexnic/commands/publisher'
       invoke :login unless logged_in?
 
       puts "Publishing..."
