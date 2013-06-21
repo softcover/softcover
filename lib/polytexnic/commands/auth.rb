@@ -10,6 +10,7 @@ module Polytexnic
       end
 
       def logout
+        require "polytexnic/config"
         Polytexnic::Config['api_key'] = nil
       end
     end

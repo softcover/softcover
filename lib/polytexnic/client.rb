@@ -17,6 +17,7 @@ module Polytexnic
     attr_accessor :host, :book
 
     def initialize(email=nil,password=nil,book=nil)
+      require "polytexnic/config"
       @email = email
       @password = password
       @book = book
@@ -31,6 +32,7 @@ module Polytexnic
 
     # ============ Auth ===========
     def login!
+      require "polytexnic/config"
       begin
         response = post path_for(:login),
           email: @email, password: @password
@@ -92,6 +94,7 @@ module Polytexnic
       end
 
       def handle_422
+        require "polytexnic/config"
         Polytexnic::Config['api_key'] = nil
         return false
       end

@@ -128,6 +128,7 @@ module Polytexnic
 
     desc "config:add key=value", "Add to your local config vars"
     define_method "config:add" do |pair|
+      require "polytexnic/config"
       key, value = pair.split "="
       Polytexnic::Config[key] = value
 
