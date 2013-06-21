@@ -48,7 +48,7 @@ module Polytexnic
         def copy_polytexnic_sty
           polytexnic_sty = 'polytexnic.sty'
           source_sty     = File.join(File.dirname(__FILE__),
-                                         "../template/#{polytexnic_sty}")
+                                     "../template/#{polytexnic_sty}")
           FileUtils.cp source_sty, polytexnic_sty
         end
 
