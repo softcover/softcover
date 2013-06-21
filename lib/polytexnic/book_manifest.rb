@@ -1,5 +1,5 @@
 require 'ostruct'
-require 'active_support/core_ext/hash'
+# require 'active_support/core_ext/hash'
 
 class Polytexnic::BookManifest < OpenStruct
 
@@ -95,6 +95,7 @@ class Polytexnic::BookManifest < OpenStruct
 
   private
     def read_from_yml
+      require 'polytexnic/config'
       YAML.load_file YAML_PATH
     end
 

@@ -1,4 +1,3 @@
-require 'maruku'
 require 'fileutils'
 
 module Polytexnic
@@ -13,6 +12,7 @@ module Polytexnic
 
       def build
         if @manifest.md?
+          require 'maruku'
           @manifest.chapters.each do |chapter|
             path = chapter.slug
 

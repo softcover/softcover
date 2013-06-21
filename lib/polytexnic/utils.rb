@@ -25,6 +25,7 @@ module Polytexnic::Utils
   end
 
   def logged_in?
+    require 'polytexnic/config'
     Polytexnic::Config['api_key'].present?
   end
 
