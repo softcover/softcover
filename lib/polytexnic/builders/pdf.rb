@@ -19,6 +19,7 @@ module Polytexnic
         end
         write_pygments_file(:latex)
         write_polytexnic_commands_file
+        copy_polytexnic_sty
         cmd = "xelatex #{Polytexnic::Utils.tmpify(book_filename)}"
         cmd += " > /dev/null" if Polytexnic.test?
         # Run the command twice to guarantee up-to-date cross-references.
@@ -41,6 +42,14 @@ module Polytexnic
           File.open('polytexnic_commands.sty', 'w') do |f|
             f.write(Polytexnic::Core::Utils.new_commands)
           end
+        end
+
+        # Copies the PolyTeXnic style file to ensure it's always fresh.
+        def copy_polytexnic_sty
+          polytexnic_sty = 'polytexnic.sty'
+          source_sty     = File.join(File.dirname(__FILE__),
+                                         "../template/#{polytexnic_sty}")
+          FileUtils.cp source_sty, polytexnic_sty
         end
 
     end
