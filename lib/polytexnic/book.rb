@@ -7,6 +7,7 @@ class Polytexnic::Book
                 :processed_screencasts, :screencasts_dir
 
   def initialize
+    require "polytexnic/client"
     @manifest = Polytexnic::BookManifest.new
     @client = Polytexnic::Client.new_with_book self
 
