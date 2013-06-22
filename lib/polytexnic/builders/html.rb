@@ -1,4 +1,3 @@
-require 'maruku'
 require 'fileutils'
 
 module Polytexnic
@@ -13,6 +12,7 @@ module Polytexnic
 
       def build
         if @manifest.md?
+          require 'maruku'
           @manifest.chapters.each do |chapter|
             path = chapter.slug
 
@@ -36,7 +36,7 @@ module Polytexnic
           basename = File.basename(@manifest.filename, '.tex')
           polytex_filename = basename + '.tex'
           polytex = File.read(polytex_filename)
-          polytex.gsub!(/(\\include{(.*?)})/) do
+          polytex.gsub!(/(^\s*\\include{(.*?)})/) do
             File.read($2 + '.tex')
           end
           html_body = Polytexnic::Core::Pipeline.new(polytex).to_html
