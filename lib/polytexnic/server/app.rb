@@ -1,6 +1,7 @@
 require 'sinatra/base'
 require 'sinatra/respond_to'
 require 'coffee_script'
+require 'json'
 
 class Polytexnic::App < Sinatra::Base
   register Sinatra::RespondTo
@@ -47,6 +48,7 @@ class Polytexnic::App < Sinatra::Base
   end
 
   get '/:chapter_slug/wait' do
+
     $changed = false
     Signal.trap("USR2") do
       $changed = true
