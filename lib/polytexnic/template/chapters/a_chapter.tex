@@ -12,6 +12,28 @@ Include graphics like this:
 
 \includegraphics{images/michael_hartl.png}
 
+Include code like this:
+
+%= lang:ruby
+\begin{code}
+def hello
+  "hello, world!"
+end
+\end{code}
+
+Make a code listing as in Listing~\ref{code:hello}.
+
+\begin{codelisting}
+\heading{A hello program in Ruby.}
+\label{code:hello}
+%= lang:ruby
+\begin{code}
+def hello
+  "hello, world!"
+end
+\end{code}
+\end{codelisting}
+
 Typeset inline code using the \verb+\kode+ environment: \kode{foobar}.
 
 \section{\emph{Bacon} ipsum}
