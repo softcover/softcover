@@ -25,7 +25,7 @@ initMathJax = ->
           extensions: ["AMSmath.js", "AMSsymbols.js"],
           equationNumbers: {
             autoNumber: "AMS",
-            formatNumber: function (n) { return "#{chapter_number}." + n }
+            formatNumber: function (n) { return "' + chapter_number + '." + n }
           },
         },
         showProcessingMessages: false,
