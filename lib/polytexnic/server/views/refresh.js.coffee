@@ -10,6 +10,7 @@ initMathJax = ->
   $('#mathJaxJS').remove()
   delete MathJax
 
+  chapter_number = $('.chapter').attr('data-number')
   script = document.createElement( 'script' )
   script.id = 'mathJaxJS'
   script.type = 'text/javascript'
@@ -19,6 +20,13 @@ initMathJax = ->
       MathJax.Hub.Config({
         "HTML-CSS": {
           availableFonts: ["TeX"],
+        },
+        TeX: {
+          extensions: ["AMSmath.js", "AMSsymbols.js"],
+          equationNumbers: {
+            autoNumber: "AMS",
+            formatNumber: function (n) { return "#{chapter_number}." + n }
+          },
         },
         showProcessingMessages: false,
         messageStyle: "none"
