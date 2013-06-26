@@ -47,6 +47,10 @@ body #book {
   text-decoration: underline;
 }
 
+#book span.eqref a {
+  text-decoration: none;
+}
+
 #book code {
   font-size: 130%;
   color: darkgreen;
