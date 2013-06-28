@@ -21,3 +21,5 @@ spec/fixtures/book/log/tralics.log
 *.tmp.*
 spec/fixtures/book/
 pygments.sty
+.api_token
+.project_id
