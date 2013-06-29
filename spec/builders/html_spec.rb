@@ -45,6 +45,7 @@ describe Polytexnic::Builders::Html do
         subject { output }
 
         it { should match 'MathJax.Hub.Config' }
+        it { should match 'TeX-AMS-MML_SVG' }
         it { should match 'Lorem ipsum' }
       end
     end

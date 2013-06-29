@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Polytexnic::Builders::Epub do
   before(:all) { generate_book }
-  after(:all)  { remove_book }
+  # after(:all)  { remove_book }
   subject(:builder) { Polytexnic::Builders::Epub.new }
 
   before { chdir_to_book }
@@ -110,7 +110,10 @@ describe Polytexnic::Builders::Epub do
       end
 
       it "should create the HTML files" do
-        builder.manifest.chapters.each do |chapter|
+        builder.manifest.chapters.each_with_index do |chapter, i|
+          content = File.read("html/#{chapter.slug}_fragment.html")
+          # Make sure at least one template file has math.
+          expect(builder.math?(content)).to be_true if i.zero?
           expect("epub/OEBPS/#{chapter.slug}_fragment.html").to exist
         end
       end

@@ -63,7 +63,14 @@ module Polytexnic
 
             inner_html = doc.at_css('body').children.to_xhtml
             if math?(inner_html)
-              # shell out to phantomjs
+              content = File.read("html/#{chapter.slug}.html")
+              pagejs = "#{File.dirname(__FILE__)}/utils/page.js"
+              url = "file://#{Dir.pwd}/html/#{chapter.slug}.html"
+              cmd = "phantomjs #{pagejs} #{url}"
+              system cmd
+              html = Nokogiri::HTML(File.read('source.html')).at_css('body').
+                                    children.to_xhtml
+              # FileUtils.
             else
               html = inner_html
             end
@@ -74,7 +81,7 @@ module Polytexnic
 
       # Returns true if a string appears to have LaTeX math.
       def math?(string)
-        string.match(/(?:\\\(|\\\[|\\begin{equation)/)
+        !!string.match(/(?:\\\(|\\\[|\\begin{equation)/)
       end
 
       def create_style_files

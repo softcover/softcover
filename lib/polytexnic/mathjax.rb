@@ -23,5 +23,8 @@ module Polytexnic
       });
       EOS
     end
+
+    AMS_HTML = 'TeX-AMS_HTML'
+    AMS_SVG  = 'TeX-AMS-MML_SVG'
   end
 end

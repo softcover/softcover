@@ -15,7 +15,7 @@ initMathJax = ->
   script.id = 'mathJaxJS'
   script.type = 'text/javascript'
   script.src = 'http://cdn.mathjax.org/mathjax/latest/MathJax.js' +
-               '?config=TeX-AMS_HTML'
+               '?config=<%= @mathjax_src %>'
   script.innerHTML = """
     <%= @mathjax_config %>
     """
