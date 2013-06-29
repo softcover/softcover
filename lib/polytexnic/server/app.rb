@@ -18,7 +18,8 @@ class Polytexnic::App < Sinatra::Base
   end
 
   get '/refresh' do
-    coffee :refresh
+    @mathjax_config = mathjax_config
+    coffee erb :refresh
   end
 
   get '/stylesheets/pygments' do
@@ -69,5 +70,24 @@ class Polytexnic::App < Sinatra::Base
       @chapter = @manifest.find_chapter_by_slug(params[:chapter_slug])
       raise Sinatra::NotFound unless @chapter
     end
+  end
+
+  def mathjax_config
+    <<-EOS
+      MathJax.Hub.Config({
+        "HTML-CSS": {
+          availableFonts: ["TeX"],
+        },
+        TeX: {
+          extensions: ["AMSmath.js", "AMSsymbols.js"],
+          equationNumbers: {
+            autoNumber: "AMS",
+            formatNumber: function (n) { return \#{chapter_number} + '.' + n }
+          },
+        },
+        showProcessingMessages: false,
+        messageStyle: "none"
+      });
+    EOS
   end
 end

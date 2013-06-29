@@ -124,9 +124,3 @@ module Polytexnic
     end
   end
 end
-
-# TODO: Replace this with a file.
-def template(body)
-  <<-EOS
-  EOS
-end
