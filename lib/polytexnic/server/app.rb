@@ -18,7 +18,8 @@ class Polytexnic::App < Sinatra::Base
   end
 
   get '/refresh' do
-    coffee :refresh
+    @mathjax_config = Polytexnic::Mathjax::config
+    coffee erb :refresh
   end
 
   get '/stylesheets/pygments' do

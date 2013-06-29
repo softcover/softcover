@@ -9,6 +9,11 @@
       <script src="/refresh.js"></script>
     <% end %>
     <title><%= @title %></title>
+    <% if @mathjax %>
+      <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML">
+        <%= @mathjax %>
+      </script>
+    <% end %>
   </head>
   <body>
     <div id="book">

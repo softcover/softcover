@@ -39,6 +39,14 @@ describe Polytexnic::Builders::Html do
 
         it { should match('Lorem ipsum') }
       end
+
+      describe "HTML MathJax output" do
+        let(:output) { File.read('html/a_chapter.html') }
+        subject { output }
+
+        it { should match 'MathJax.Hub.Config' }
+        it { should match 'Lorem ipsum' }
+      end
     end
   end
 

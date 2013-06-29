@@ -16,22 +16,9 @@ initMathJax = ->
   script.type = 'text/javascript'
   script.src = 'http://cdn.mathjax.org/mathjax/latest/MathJax.js' +
                '?config=TeX-AMS_HTML'
-  script.innerHTML = '
-      MathJax.Hub.Config({
-        "HTML-CSS": {
-          availableFonts: ["TeX"],
-        },
-        TeX: {
-          extensions: ["AMSmath.js", "AMSsymbols.js"],
-          equationNumbers: {
-            autoNumber: "AMS",
-            formatNumber: function (n) { return "' + chapter_number + '." + n }
-          },
-        },
-        showProcessingMessages: false,
-        messageStyle: "none"
-      });
-    '
+  script.innerHTML = """
+    <%= @mathjax_config %>
+    """
 
   $('head').append script
 
