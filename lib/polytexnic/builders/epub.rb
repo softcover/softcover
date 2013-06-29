@@ -61,10 +61,20 @@ module Polytexnic
             #   node
             # end
 
-            html = doc.at_css('body').children.to_xhtml
+            inner_html = doc.at_css('body').children.to_xhtml
+            if math?(inner_html)
+              # shell out to phantomjs
+            else
+              html = inner_html
+            end
             f.write(chapter_template("Chapter #{i+1}", html))
           end
         end
+      end
+
+      # Returns true if a string appears to have LaTeX math.
+      def math?(string)
+        string.match(/(?:\\\(|\\\[|\\begin{equation)/)
       end
 
       def create_style_files

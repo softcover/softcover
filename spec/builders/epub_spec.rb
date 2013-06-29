@@ -95,9 +95,24 @@ describe Polytexnic::Builders::Epub do
       end
     end
 
-    it "should create the HTML files" do
-      builder.manifest.chapters.each do |chapter|
-        expect("epub/OEBPS/#{chapter.slug}_fragment.html").to exist
+    context "HTML generation" do
+
+      context "math? method" do
+        it "should return true when there's math" do
+          expect(builder.math?('\(')).to be_true
+          expect(builder.math?('\[')).to be_true
+          expect(builder.math?('\begin{equation}')).to be_true
+        end
+
+        it "should return false when there's no math" do
+          expect(builder.math?('foo')).to be_false
+        end
+      end
+
+      it "should create the HTML files" do
+        builder.manifest.chapters.each do |chapter|
+          expect("epub/OEBPS/#{chapter.slug}_fragment.html").to exist
+        end
       end
     end
 
