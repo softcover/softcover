@@ -3,6 +3,7 @@ require 'fileutils'
 module Polytexnic
   module Builders
     class Html < Builder
+
       def setup
         Dir.mkdir "html" unless File.directory?("html")
         unless File.directory?(File.join("html", "stylesheets"))
@@ -88,7 +89,7 @@ module Polytexnic
           end
 
           # write chapter nodes to fragment file
-          @manifest.chapters.each do |chapter|
+          @manifest.chapters.each_with_index do |chapter, i|
             # update cross-chapter refs
             chapter.nodes.each do |node|
               node.css('a.hyperref').each do |ref_node|
@@ -105,12 +106,21 @@ module Polytexnic
 
             html_filename = File.join('html', chapter.slug + '_fragment.html')
             File.open(html_filename, 'w') do |f|
+              # TODO: replace this with chapter.to_xhtml?
               chapter.nodes.each do |node|
                 f.write(node.to_xhtml)
               end
             end
 
             @built_files.push html_filename
+
+            html_filename = File.join('html', chapter.slug + '.html')
+            File.open(html_filename, 'w') do |f|
+              @html = chapter.nodes.map(&:to_xhtml).join("\n")
+              @mathjax = Polytexnic::Mathjax::config(chapter_number: i+1)
+              file_content = ERB.new(erb_file).result(binding)
+              f.write(file_content)
+            end
           end
         end
 
@@ -120,7 +130,6 @@ module Polytexnic
       def clean!
         FileUtils.rm_rf "html"
       end
-
     end
   end
 end

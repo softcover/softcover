@@ -27,6 +27,7 @@ require_relative 'polytexnic/commands/epub_validator'
 require_relative 'polytexnic/commands/generator'
 require_relative 'polytexnic/commands/opener'
 require_relative 'polytexnic/commands/server'
+require_relative 'polytexnic/mathjax'
 require_relative 'polytexnic/uploader'
 require_relative 'polytexnic/version'
 
