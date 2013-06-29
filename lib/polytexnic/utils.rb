@@ -80,5 +80,9 @@ module Polytexnic::Utils
     pygments_css.gsub!(/^/, '.highlight ')
   end
 
+  # Returns a digest of the string.
+  def digest(string)
+    Digest::SHA1.hexdigest(string)
+  end
 end
 

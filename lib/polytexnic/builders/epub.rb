@@ -9,9 +9,9 @@ module Polytexnic
         write_container_xml
         write_contents
         write_toc
+        copy_image_files
         create_html
         create_style_files
-        copy_image_files
         make_epub
       end
 
@@ -68,9 +68,18 @@ module Polytexnic
               url = "file://#{Dir.pwd}/html/#{chapter.slug}.html"
               cmd = "phantomjs #{pagejs} #{url}"
               system cmd
-              html = Nokogiri::HTML(File.read('source.html')).at_css('body').
-                                    children.to_xhtml
-              # FileUtils.
+              source = Nokogiri::HTML(File.read('source.html'))
+              # Suck out all the SVGs
+              source.css('div#book svg').each do |svg|
+                # Fix case of viewBox
+                svg['viewBox'] = svg['viewbox']
+                svg.remove_attribute('viewbox')
+                # Save SVG file
+                output = svg.to_xml
+                svg_filename = "epub/OEBPS/images/#{digest(output)}.svg"
+                File.write(svg_filename, output)
+              end
+              html = source.at_css('body').children.to_xhtml
             else
               html = inner_html
             end
