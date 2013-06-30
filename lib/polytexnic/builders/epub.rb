@@ -45,6 +45,10 @@ module Polytexnic
       end
 
       def create_html
+        texmath_dir = 'epub/OEBPS/images/texmath'
+        Dir.mkdir(texmath_dir) unless File.directory?(texmath_dir)
+
+        pngs = []
         manifest.chapters.each_with_index do |chapter, i|
           source_filename = File.join('epub', 'OEBPS', chapter.fragment_name)
           File.open(source_filename, 'w') do |f|
@@ -74,29 +78,26 @@ module Polytexnic
               else
                 system cmd
               end
-              source = Nokogiri::HTML(File.read('phantomjs_source.html'))
-              FileUtils.rm('phantomjs_source.html')
+              raw_source = File.read('phantomjs_source.html')
+              source = Nokogiri::HTML(raw_source)
+              # FileUtils.rm('phantomjs_source.html')
               # Remove the first body div, which is the hidden MathJax SVGs
               source.at_css('body div').remove
               # Remove all the unneeded raw TeX displays.
               source.css('script').each(&:remove)
-              texmath_dir = 'epub/OEBPS/images/texmath'
-              Dir.mkdir(texmath_dir) unless File.directory?(texmath_dir)
-              png_files = Dir[File.join(texmath_dir, '*.png')]
-              pngs = []
               # Suck out all the SVGs
-              source.css('div#book svg').each do |svg|
-                # Fix case of viewBox
-                svg['viewBox'] = svg['viewbox']
-                svg.remove_attribute('viewbox')
+              raw_svgs = raw_source.scan(/<svg.*?>.*?<\/svg>/m)
+              svgs = source.css('div#book svg')
+              raise "SVG mismatch" unless svgs.length == raw_svgs.length
+              svgs.zip(raw_svgs).each do |svg, raw_svg|
                 # Save SVG file
-                output = svg.to_xml
+                output = raw_svg
                 svg_filename = File.join(texmath_dir, "#{digest(output)}.svg")
                 File.write(svg_filename, output)
                 # Convert to PNG
                 png_filename = svg_filename.sub('.svg', '.png')
                 pngs << png_filename
-                unless png_files.include?(png_filename)
+                unless File.exist?(png_filename)
                   puts "Creating #{png_filename}" unless Polytexnic::test?
                   inkscape = '/Applications/Inkscape.app/Contents/Resources/bin/inkscape'
                   svg_height = svg['style'].scan(/height: (.*?);/).first.first
@@ -116,17 +117,20 @@ module Polytexnic
                                        File.basename(png_filename))
                 png['alt'] = png_filename.sub('.png', '')
                 svg.replace(png)
-                # Clean up unused PNGs
-                # (png_files - pngs).each do |f|
-                #   puts "Removing unused PNG #{f}" unless Polytexnic::test?
-                #   FileUtils.rm(f)
-                # end
               end
               html = source.at_css('body').children.to_xhtml
             else
               html = inner_html
             end
             f.write(chapter_template("Chapter #{i+1}", html))
+          end
+        end
+        # Clean up unused PNGs.
+        png_files = Dir[File.join(texmath_dir, '*.png')]
+        (png_files - pngs).each do |f|
+          if File.exist?(f)
+            puts "Removing unused PNG #{f}" unless Polytexnic::test?
+            FileUtils.rm(f)
           end
         end
       end
