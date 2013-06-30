@@ -114,10 +114,12 @@ module Polytexnic
 
             @built_files.push html_filename
 
+            # Write complete documents, including MathJax.
             html_filename = File.join('html', chapter.slug + '.html')
             File.open(html_filename, 'w') do |f|
               @html = chapter.nodes.map(&:to_xhtml).join("\n")
               @mathjax = Polytexnic::Mathjax::config(chapter_number: i+1)
+              @src     = Polytexnic::Mathjax::AMS_SVG
               file_content = ERB.new(erb_file).result(binding)
               f.write(file_content)
             end

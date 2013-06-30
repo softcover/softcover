@@ -9,9 +9,9 @@ module Polytexnic
         write_container_xml
         write_contents
         write_toc
+        copy_image_files
         create_html
         create_style_files
-        copy_image_files
         make_epub
       end
 
@@ -45,6 +45,10 @@ module Polytexnic
       end
 
       def create_html
+        texmath_dir = 'epub/OEBPS/images/texmath'
+        Dir.mkdir(texmath_dir) unless File.directory?(texmath_dir)
+
+        pngs = []
         manifest.chapters.each_with_index do |chapter, i|
           source_filename = File.join('epub', 'OEBPS', chapter.fragment_name)
           File.open(source_filename, 'w') do |f|
@@ -61,10 +65,106 @@ module Polytexnic
             #   node
             # end
 
-            html = doc.at_css('body').children.to_xhtml
+            inner_html = doc.at_css('body').children.to_xhtml
+            if math?(inner_html)
+              content = File.read("html/#{chapter.slug}.html")
+              pagejs = "#{File.dirname(__FILE__)}/utils/page.js"
+              url = "file://#{Dir.pwd}/html/#{chapter.slug}.html"
+              cmd = "phantomjs #{pagejs} #{url}"
+              if Polytexnic::test?
+                silence_stream(STDOUT) do
+                  system cmd
+                end
+              else
+                system cmd
+              end
+              raw_source = File.read('phantomjs_source.html')
+              source = Nokogiri::HTML(raw_source)
+              # FileUtils.rm('phantomjs_source.html')
+              # Remove the first body div, which is the hidden MathJax SVGs
+              # source.at_css('body div').remove
+              # Remove all the unneeded raw TeX displays.
+              source.css('script').each(&:remove)
+              # Suck out all the SVGs
+              # raw_svgs = raw_source.scan(/<svg.*?>.*?<\/svg>/m)
+              # raw_svgs = raw_svgs[1..-1]
+              svgs = source.css('div#book svg')
+              frames = source.css('span.MathJax_SVG')
+
+
+              # svgs.each do |svg|
+              #   html = svg.inner_html
+              #   raise html.inspect
+              #   html = html.gsub(/<use ([^>]*)href/) { "<use #{$1}xlink:href" }
+              #   svg.inner_html = html
+              # end
+          # var div = document.createElement("div");
+          # div.appendChild(svg[1]);
+          # return [
+          #   '<?xml version="1.0" standalone="no"?>',
+          #   '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">',
+          #   div.innerHTML.replace(/><([^/])/g,">\n<$1")
+          #                .replace(/(<\/[a-z]*>)(?=<\/)/g,"$1\n")
+          #                .replace(/<svg /,'<svg xmlns="http://www.w3.org/2000/svg" ')
+          #
+          # ].join("\n");
+
+
+
+              # raise "SVG mismatch" unless svgs.length == raw_svgs.length
+              svgs.zip(frames).each do |svg, frame|
+                # Save SVG file
+                svg['viewBox'] = svg['viewbox']
+                svg.remove_attribute('viewbox')
+                first_child = frame.children.first
+                first_child.replace(svg) unless svg == first_child
+                output = svg.to_xhtml
+                svg_filename = File.join(texmath_dir, "#{digest(output)}.svg")
+                File.write(svg_filename, output)
+                # Convert to PNG
+                png_filename = svg_filename.sub('.svg', '.png')
+                pngs << png_filename
+                unless File.exist?(png_filename)
+                  puts "Creating #{png_filename}" unless Polytexnic::test?
+                  inkscape = '/Applications/Inkscape.app/Contents/Resources/bin/inkscape'
+                  svg_height = svg['style'].scan(/height: (.*?);/).first.first
+                  height = 9 * svg_height.to_f
+                  cmd = "#{inkscape} -f #{svg_filename} -e #{png_filename} -h #{height}pt"
+                  if Polytexnic::test?
+                    silence_stream(STDOUT) do
+                      silence_stream(STDERR) { system cmd }
+                    end
+                  else
+                    silence_stream(STDERR) { system cmd }
+                  end
+                end
+                FileUtils.rm(svg_filename) if File.exist?(svg_filename)
+                png = Nokogiri::XML::Node.new('img', source)
+                png['src'] = File.join('images', 'texmath',
+                                       File.basename(png_filename))
+                png['alt'] = png_filename.sub('.png', '')
+                svg.replace(png)
+              end
+              html = source.at_css('body').children.to_xhtml
+            else
+              html = inner_html
+            end
             f.write(chapter_template("Chapter #{i+1}", html))
           end
         end
+        # Clean up unused PNGs.
+        png_files = Dir[File.join(texmath_dir, '*.png')]
+        (png_files - pngs).each do |f|
+          if File.exist?(f)
+            puts "Removing unused PNG #{f}" unless Polytexnic::test?
+            FileUtils.rm(f)
+          end
+        end
+      end
+
+      # Returns true if a string appears to have LaTeX math.
+      def math?(string)
+        !!string.match(/(?:\\\(|\\\[|\\begin{equation)/)
       end
 
       def create_style_files
