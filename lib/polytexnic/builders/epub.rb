@@ -74,9 +74,16 @@ module Polytexnic
               else
                 system cmd
               end
-              source = Nokogiri::HTML(File.read('source.html'))
+              source = Nokogiri::HTML(File.read('phantomjs_source.html'))
+              FileUtils.rm('phantomjs_source.html')
               # Remove the first body div, which is the hidden MathJax SVGs
               source.at_css('body div').remove
+              # Remove all the unneeded raw TeX displays.
+              source.css('script').each(&:remove)
+              texmath_dir = 'epub/OEBPS/images/texmath'
+              Dir.mkdir(texmath_dir) unless File.directory?(texmath_dir)
+              png_files = Dir[File.join(texmath_dir, '*.png')]
+              pngs = []
               # Suck out all the SVGs
               source.css('div#book svg').each do |svg|
                 # Fix case of viewBox
@@ -84,14 +91,17 @@ module Polytexnic
                 svg.remove_attribute('viewbox')
                 # Save SVG file
                 output = svg.to_xml
-                svg_filename = "epub/OEBPS/images/#{digest(output)}.svg"
+                svg_filename = File.join(texmath_dir, "#{digest(output)}.svg")
                 File.write(svg_filename, output)
                 # Convert to PNG
                 png_filename = svg_filename.sub('.svg', '.png')
-                unless File.exist?(png_filename)
+                pngs << png_filename
+                unless png_files.include?(png_filename)
+                  puts "Creating #{png_filename}" unless Polytexnic::test?
                   inkscape = '/Applications/Inkscape.app/Contents/Resources/bin/inkscape'
-                  height = '20pt'
-                  cmd = "#{inkscape} -f #{svg_filename} -e #{png_filename} -h #{height}"
+                  svg_height = svg['style'].scan(/height: (.*?);/).first.first
+                  height = 9 * svg_height.to_f
+                  cmd = "#{inkscape} -f #{svg_filename} -e #{png_filename} -h #{height}pt"
                   if Polytexnic::test?
                     silence_stream(STDOUT) do
                       silence_stream(STDERR) { system cmd }
@@ -100,10 +110,17 @@ module Polytexnic
                     silence_stream(STDERR) { system cmd }
                   end
                 end
+                FileUtils.rm(svg_filename) if File.exist?(svg_filename)
                 png = Nokogiri::XML::Node.new('img', source)
-                png['src'] = File.join('images', File.basename(png_filename))
+                png['src'] = File.join('images', 'texmath',
+                                       File.basename(png_filename))
                 png['alt'] = png_filename.sub('.png', '')
                 svg.replace(png)
+                # Clean up unused PNGs
+                # (png_files - pngs).each do |f|
+                #   puts "Removing unused PNG #{f}" unless Polytexnic::test?
+                #   FileUtils.rm(f)
+                # end
               end
               html = source.at_css('body').children.to_xhtml
             else
