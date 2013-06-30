@@ -82,16 +82,40 @@ module Polytexnic
               source = Nokogiri::HTML(raw_source)
               # FileUtils.rm('phantomjs_source.html')
               # Remove the first body div, which is the hidden MathJax SVGs
-              source.at_css('body div').remove
+              # source.at_css('body div').remove
               # Remove all the unneeded raw TeX displays.
               source.css('script').each(&:remove)
               # Suck out all the SVGs
-              raw_svgs = raw_source.scan(/<svg.*?>.*?<\/svg>/m)
+              # raw_svgs = raw_source.scan(/<svg.*?>.*?<\/svg>/m)
+              # raw_svgs = raw_svgs[1..-1]
               svgs = source.css('div#book svg')
-              raise "SVG mismatch" unless svgs.length == raw_svgs.length
-              svgs.zip(raw_svgs).each do |svg, raw_svg|
+
+
+              # svgs.each do |svg|
+              #   html = svg.inner_html
+              #   raise html.inspect
+              #   html = html.gsub(/<use ([^>]*)href/) { "<use #{$1}xlink:href" }
+              #   svg.inner_html = html
+              # end
+          # var div = document.createElement("div");
+          # div.appendChild(svg[1]);
+          # return [
+          #   '<?xml version="1.0" standalone="no"?>',
+          #   '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">',
+          #   div.innerHTML.replace(/><([^/])/g,">\n<$1")
+          #                .replace(/(<\/[a-z]*>)(?=<\/)/g,"$1\n")
+          #                .replace(/<svg /,'<svg xmlns="http://www.w3.org/2000/svg" ')
+          #
+          # ].join("\n");
+
+
+
+              # raise "SVG mismatch" unless svgs.length == raw_svgs.length
+              svgs.each do |svg|
                 # Save SVG file
-                output = raw_svg
+                svg['viewBox'] = svg['viewbox']
+                svg.remove_attribute('viewbox')
+                output = svg.to_xhtml
                 svg_filename = File.join(texmath_dir, "#{digest(output)}.svg")
                 File.write(svg_filename, output)
                 # Convert to PNG
