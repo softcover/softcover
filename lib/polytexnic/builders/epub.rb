@@ -89,6 +89,7 @@ module Polytexnic
               # raw_svgs = raw_source.scan(/<svg.*?>.*?<\/svg>/m)
               # raw_svgs = raw_svgs[1..-1]
               svgs = source.css('div#book svg')
+              frames = source.css('span.MathJax_SVG')
 
 
               # svgs.each do |svg|
@@ -111,10 +112,12 @@ module Polytexnic
 
 
               # raise "SVG mismatch" unless svgs.length == raw_svgs.length
-              svgs.each do |svg|
+              svgs.zip(frames).each do |svg, frame|
                 # Save SVG file
                 svg['viewBox'] = svg['viewbox']
                 svg.remove_attribute('viewbox')
+                first_child = frame.children.first
+                first_child.replace(svg) unless svg == first_child
                 output = svg.to_xhtml
                 svg_filename = File.join(texmath_dir, "#{digest(output)}.svg")
                 File.write(svg_filename, output)
