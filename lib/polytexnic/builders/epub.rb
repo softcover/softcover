@@ -67,8 +67,16 @@ module Polytexnic
               pagejs = "#{File.dirname(__FILE__)}/utils/page.js"
               url = "file://#{Dir.pwd}/html/#{chapter.slug}.html"
               cmd = "phantomjs #{pagejs} #{url}"
-              system cmd
+              if Polytexnic::test?
+                silence_stream(STDOUT) do
+                  system cmd
+                end
+              else
+                system cmd
+              end
               source = Nokogiri::HTML(File.read('source.html'))
+              # Remove the first body div, which is the hidden MathJax SVGs
+              source.at_css('body div').remove
               # Suck out all the SVGs
               source.css('div#book svg').each do |svg|
                 # Fix case of viewBox
@@ -78,6 +86,24 @@ module Polytexnic
                 output = svg.to_xml
                 svg_filename = "epub/OEBPS/images/#{digest(output)}.svg"
                 File.write(svg_filename, output)
+                # Convert to PNG
+                png_filename = svg_filename.sub('.svg', '.png')
+                unless File.exist?(png_filename)
+                  inkscape = '/Applications/Inkscape.app/Contents/Resources/bin/inkscape'
+                  height = '20pt'
+                  cmd = "#{inkscape} -f #{svg_filename} -e #{png_filename} -h #{height}"
+                  if Polytexnic::test?
+                    silence_stream(STDOUT) do
+                      silence_stream(STDERR) { system cmd }
+                    end
+                  else
+                    silence_stream(STDERR) { system cmd }
+                  end
+                end
+                png = Nokogiri::XML::Node.new('img', source)
+                png['src'] = File.join('images', File.basename(png_filename))
+                png['alt'] = png_filename.sub('.png', '')
+                svg.replace(png)
               end
               html = source.at_css('body').children.to_xhtml
             else
