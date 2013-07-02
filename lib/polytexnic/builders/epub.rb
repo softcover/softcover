@@ -7,10 +7,10 @@ module Polytexnic
         create_directories
         write_mimetype
         write_container_xml
-        write_contents
         write_toc
         copy_image_files
         create_html
+        write_contents
         create_style_files
         make_epub
       end
@@ -45,8 +45,10 @@ module Polytexnic
       end
 
       def create_html
-        texmath_dir = 'epub/OEBPS/images/texmath'
-        Dir.mkdir(texmath_dir) unless File.directory?(texmath_dir)
+        images_dir  = 'epub/OEBPS/images'
+        texmath_dir = File.join(images_dir, 'texmath')
+        mkdir(images_dir)
+        mkdir(texmath_dir)
 
         pngs = []
         manifest.chapters.each_with_index do |chapter, i|
@@ -54,17 +56,11 @@ module Polytexnic
           File.open(source_filename, 'w') do |f|
             content = File.read("html/#{chapter.fragment_name}")
 
-            # strip data attributes
-            doc = Nokogiri::HTML(content)
-            %w{tralics-id label number chapter}.each do |attr|
-              doc.xpath("//@data-#{attr}").remove
-            end
-
             # add .html to links
             # doc.css('a.ref').each do |node|
             #   node
             # end
-
+            doc = strip_attributes(Nokogiri::HTML(content))
             inner_html = doc.at_css('body').children.to_xhtml
             if math?(inner_html)
               content = File.read("html/#{chapter.slug}.html")
@@ -79,7 +75,7 @@ module Polytexnic
                 system cmd
               end
               raw_source = File.read('phantomjs_source.html')
-              source = Nokogiri::HTML(raw_source)
+              source = strip_attributes(Nokogiri::HTML(raw_source))
               # FileUtils.rm('phantomjs_source.html')
               # Remove the first body div, which is the hidden MathJax SVGs
               # source.at_css('body div').remove
@@ -158,6 +154,17 @@ module Polytexnic
           if File.exist?(f)
             puts "Removing unused PNG #{f}" unless Polytexnic::test?
             FileUtils.rm(f)
+          end
+        end
+      end
+
+      # Strip attributes that are invalid in EPUB documents.
+      def strip_attributes(doc)
+        attrs = %w[data-tralics-id data-label data-number data-chapter
+                   role aria-readonly]
+        doc.tap do
+          attrs.each do |attr|
+            doc.xpath("//@#{attr}").remove
           end
         end
       end
@@ -242,9 +249,13 @@ module Polytexnic
         toc_ch = manifest.chapters.map do |chapter|
                    %(<itemref idref="#{chapter.slug}"/>)
                  end
-        images = Dir['images/**/*'].select { |f| File.file?(f) }.map do |image|
+        image_files = Dir['epub/OEBPS/images/**/*'].select { |f| File.file?(f) }
+        images = image_files.map do |image|
                    ext = File.extname(image).sub('.', '')   # e.g., 'png'
-                   %(<item id="#{File.basename(image)}" href="#{image}" media-type="image/#{ext}"/>)
+                   # Strip off the leading 'epub/OEBPS'.
+                   sep  = File::SEPARATOR
+                   href = image.split(sep)[2..-1].join(sep)
+                   %(<item id="#{File.basename(image)}" href="#{href}" media-type="image/#{ext}"/>)
                  end
 %(<?xml version="1.0" encoding="UTF-8"?>
   <package xmlns="http://www.idpf.org/2007/opf" unique-identifier="BookID" version="2.0">
