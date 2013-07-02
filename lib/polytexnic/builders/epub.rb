@@ -234,7 +234,11 @@ module Polytexnic
                    # Strip off the leading 'epub/OEBPS'.
                    sep  = File::SEPARATOR
                    href = image.split(sep)[2..-1].join(sep)
-                   %(<item id="#{File.basename(image)}" href="#{href}" media-type="image/#{ext}"/>)
+                   # Define an id based on the filename.
+                   # Prefix with 'img-' in case the filname starts with an
+                   # invalid character such as a number.
+                   id = "img-#{File.basename(image, '.*')}"
+                   %(<item id="#{id}" href="#{href}" media-type="image/#{ext}"/>)
                  end
 %(<?xml version="1.0" encoding="UTF-8"?>
   <package xmlns="http://www.idpf.org/2007/opf" unique-identifier="BookID" version="2.0">
