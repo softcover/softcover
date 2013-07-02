@@ -27,6 +27,7 @@ RSpec.configure do |config|
   Polytexnic::set_test_mode!
 
   config.before do
+    Polytexnic::set_test_mode!
     Polytexnic::Utils.reset_current_book!
     Polytexnic::Config.remove
     Polytexnic::BookConfig.remove
