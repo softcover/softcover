@@ -7,10 +7,10 @@ module Polytexnic
         create_directories
         write_mimetype
         write_container_xml
-        write_contents
         write_toc
         copy_image_files
         create_html
+        write_contents
         create_style_files
         make_epub
       end
@@ -45,8 +45,10 @@ module Polytexnic
       end
 
       def create_html
-        texmath_dir = 'epub/OEBPS/images/texmath'
-        Dir.mkdir(texmath_dir) unless File.directory?(texmath_dir)
+        images_dir  = 'epub/OEBPS/images'
+        texmath_dir = File.join(images_dir, 'texmath')
+        mkdir(images_dir)
+        mkdir(texmath_dir)
 
         pngs = []
         manifest.chapters.each_with_index do |chapter, i|
@@ -242,9 +244,13 @@ module Polytexnic
         toc_ch = manifest.chapters.map do |chapter|
                    %(<itemref idref="#{chapter.slug}"/>)
                  end
-        images = Dir['images/**/*'].select { |f| File.file?(f) }.map do |image|
+        image_files = Dir['epub/OEBPS/images/**/*'].select { |f| File.file?(f) }
+        images = image_files.map do |image|
                    ext = File.extname(image).sub('.', '')   # e.g., 'png'
-                   %(<item id="#{File.basename(image)}" href="#{image}" media-type="image/#{ext}"/>)
+                   # Strip off the leading 'epub/OEBPS'.
+                   sep  = File::SEPARATOR
+                   href = image.split(sep)[2..-1].join(sep)
+                   %(<item id="#{File.basename(image)}" href="#{href}" media-type="image/#{ext}"/>)
                  end
 %(<?xml version="1.0" encoding="UTF-8"?>
   <package xmlns="http://www.idpf.org/2007/opf" unique-identifier="BookID" version="2.0">
