@@ -1,12 +1,14 @@
 require 'spec_helper'
 
 describe Polytexnic::Builders::Epub do
-  before(:all) { generate_book }
+  before(:all) do
+    generate_book
+    @builder = Polytexnic::Builders::Epub.new
+    @builder.build!
+    chdir_to_book
+  end
   after(:all)  { remove_book }
-  subject(:builder) { Polytexnic::Builders::Epub.new }
-
-  before { chdir_to_book }
-  before { builder.build! }
+  subject(:builder) { @builder }
 
   it "should be valid" do
     expect(`poly epub:validate`).to match(/No errors or warnings/)
@@ -113,7 +115,7 @@ describe Polytexnic::Builders::Epub do
         builder.manifest.chapters.each_with_index do |chapter, i|
           content = File.read("html/#{chapter.slug}_fragment.html")
           # Make sure at least one template file has math.
-          expect(builder.math?(content)).to be_true if i.zero?
+          expect(builder.math?(content)).to be_true if i == 0
           expect("epub/OEBPS/#{chapter.slug}_fragment.html").to exist
         end
       end

@@ -9,7 +9,7 @@ module Polytexnic
         write_container_xml
         write_toc
         copy_image_files
-        create_html
+        write_html
         write_contents
         create_style_files
         make_epub
@@ -44,7 +44,7 @@ module Polytexnic
         File.open('epub/OEBPS/content.opf', 'w') { |f| f.write(content_opf) }
       end
 
-      def create_html
+      def write_html
         images_dir  = 'epub/OEBPS/images'
         texmath_dir = File.join(images_dir, 'texmath')
         mkdir(images_dir)
@@ -76,7 +76,7 @@ module Polytexnic
               end
               raw_source = File.read('phantomjs_source.html')
               source = strip_attributes(Nokogiri::HTML(raw_source))
-              FileUtils.rm('phantomjs_source.html')
+              rm('phantomjs_source.html')
               # Remove the first body div, which is the hidden MathJax SVGs
               source.at_css('body div').remove
               # Remove all the unneeded raw TeX displays.
@@ -113,7 +113,7 @@ module Polytexnic
                     silence_stream(STDERR) { system cmd }
                   end
                 end
-                FileUtils.rm(svg_filename) if File.exist?(svg_filename)
+                rm(svg_filename)
                 png = Nokogiri::XML::Node.new('img', source)
                 png['src'] = File.join('images', 'texmath',
                                        File.basename(png_filename))
@@ -186,6 +186,10 @@ module Polytexnic
 
       def mkdir(dir)
         Dir.mkdir(dir) unless File.directory?(dir)
+      end
+
+      def rm(file)
+        FileUtils.rm(file) if File.exist?(file)
       end
 
       def template(title, content)
