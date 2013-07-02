@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Polytexnic::Builders::Epub do
   before(:all) { generate_book }
-  # after(:all)  { remove_book }
+  after(:all)  { remove_book }
   subject(:builder) { Polytexnic::Builders::Epub.new }
 
   before { chdir_to_book }
