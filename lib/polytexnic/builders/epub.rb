@@ -126,13 +126,13 @@ module Polytexnic
             end
             f.write(chapter_template("Chapter #{i+1}", html))
           end
-        end
-        # Clean up unused PNGs.
-        png_files = Dir[File.join(texmath_dir, '*.png')]
-        (png_files - pngs).each do |f|
-          if File.exist?(f)
-            puts "Removing unused PNG #{f}" unless Polytexnic::test?
-            FileUtils.rm(f)
+          # Clean up unused PNGs.
+          png_files = Dir[File.join(texmath_dir, '*.png')]
+          (png_files - pngs).each do |f|
+            if File.exist?(f)
+              puts "Removing unused PNG #{f}" unless Polytexnic::test?
+              FileUtils.rm(f)
+            end
           end
         end
       end
