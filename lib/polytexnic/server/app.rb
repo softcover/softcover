@@ -7,6 +7,7 @@ class Polytexnic::App < Sinatra::Base
   register Sinatra::RespondTo
 
   set :public_folder, File.join(File.dirname(__FILE__),'../template/html')
+  set :bind, '0.0.0.0'
 
   before do
     @manifest = Polytexnic::BookManifest.new
