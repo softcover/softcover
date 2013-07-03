@@ -1,12 +1,14 @@
 require 'spec_helper'
 
 describe Polytexnic::Builders::Epub do
-  before(:all) { generate_book }
+  before(:all) do
+    generate_book
+    @builder = Polytexnic::Builders::Epub.new
+    @builder.build!
+    chdir_to_book
+  end
   after(:all)  { remove_book }
-  subject(:builder) { Polytexnic::Builders::Epub.new }
-
-  before { chdir_to_book }
-  before { builder.build! }
+  subject(:builder) { @builder }
 
   it "should be valid" do
     expect(`poly epub:validate`).to match(/No errors or warnings/)
@@ -95,9 +97,27 @@ describe Polytexnic::Builders::Epub do
       end
     end
 
-    it "should create the HTML files" do
-      builder.manifest.chapters.each do |chapter|
-        expect("epub/OEBPS/#{chapter.slug}_fragment.html").to exist
+    context "HTML generation" do
+
+      context "math? method" do
+        it "should return true when there's math" do
+          expect(builder.math?('\(')).to be_true
+          expect(builder.math?('\[')).to be_true
+          expect(builder.math?('\begin{equation}')).to be_true
+        end
+
+        it "should return false when there's no math" do
+          expect(builder.math?('foo')).to be_false
+        end
+      end
+
+      it "should create the HTML files" do
+        builder.manifest.chapters.each_with_index do |chapter, i|
+          content = File.read("html/#{chapter.slug}_fragment.html")
+          # Make sure at least one template file has math.
+          expect(builder.math?(content)).to be_true if i == 0
+          expect("epub/OEBPS/#{chapter.slug}_fragment.html").to exist
+        end
       end
     end
 

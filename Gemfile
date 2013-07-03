@@ -10,7 +10,7 @@ gem 'activesupport'
 gem 'rest-client'
 gem 'curb'
 gem 'ruby-progressbar'
-gem 'maruku'
+gem 'rdiscount'
 gem 'pygments.rb'
 
 # for server

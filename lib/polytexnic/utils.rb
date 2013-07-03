@@ -25,6 +25,7 @@ module Polytexnic::Utils
   end
 
   def logged_in?
+    require 'polytexnic/config'
     Polytexnic::Config['api_key'].present?
   end
 
@@ -79,5 +80,9 @@ module Polytexnic::Utils
     pygments_css.gsub!(/^/, '.highlight ')
   end
 
+  # Returns a digest of the string.
+  def digest(string)
+    Digest::SHA1.hexdigest(string)
+  end
 end
 

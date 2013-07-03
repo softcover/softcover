@@ -35,7 +35,7 @@ describe Polytexnic::App do
     expect(last_response.body).not_to match Regexp.new('<html>')
   end
 
-  it 'GET non existant chapter' do
+  it 'GET nonexistent chapter' do
     get '/boom'
     expect(last_response.status).to eq 404
   end

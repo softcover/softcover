@@ -7,11 +7,11 @@ module Polytexnic
         create_directories
         write_mimetype
         write_container_xml
-        write_contents
         write_toc
-        create_html
-        create_style_files
         copy_image_files
+        write_html
+        write_contents
+        create_style_files
         make_epub
       end
 
@@ -44,27 +44,113 @@ module Polytexnic
         File.open('epub/OEBPS/content.opf', 'w') { |f| f.write(content_opf) }
       end
 
-      def create_html
+      def write_html
+        images_dir  = 'epub/OEBPS/images'
+        texmath_dir = File.join(images_dir, 'texmath')
+        mkdir(images_dir)
+        mkdir(texmath_dir)
+
+        pngs = []
         manifest.chapters.each_with_index do |chapter, i|
           source_filename = File.join('epub', 'OEBPS', chapter.fragment_name)
           File.open(source_filename, 'w') do |f|
             content = File.read("html/#{chapter.fragment_name}")
 
-            # strip data attributes
-            doc = Nokogiri::HTML(content)
-            %w{tralics-id label number chapter}.each do |attr|
-              doc.xpath("//@data-#{attr}").remove
-            end
-
             # add .html to links
             # doc.css('a.ref').each do |node|
             #   node
             # end
+            doc = strip_attributes(Nokogiri::HTML(content))
+            inner_html = doc.at_css('body').children.to_xhtml
+            if math?(inner_html)
+              content = File.read("html/#{chapter.slug}.html")
+              pagejs = "#{File.dirname(__FILE__)}/utils/page.js"
+              url = "file://#{Dir.pwd}/html/#{chapter.slug}.html"
+              cmd = "phantomjs #{pagejs} #{url}"
+              if Polytexnic::test?
+                silence_stream(STDOUT) do
+                  system cmd
+                end
+              else
+                system cmd
+              end
+              raw_source = File.read('phantomjs_source.html')
+              source = strip_attributes(Nokogiri::HTML(raw_source))
+              rm('phantomjs_source.html')
+              # Remove the first body div, which is the hidden MathJax SVGs
+              source.at_css('body div').remove
+              # Remove all the unneeded raw TeX displays.
+              source.css('script').each(&:remove)
+              # Remove all the MathJax preview spans.
+              source.css('MathJax_Preview').each(&:remove)
 
-            html = doc.at_css('body').children.to_xhtml
+              # Suck out all the SVGs
+              svgs   = source.css('div#book svg')
+              frames = source.css('span.MathJax_SVG')
+              svgs.zip(frames).each do |svg, frame|
+                # Save SVG file.
+                svg['viewBox'] = svg['viewbox']
+                svg.remove_attribute('viewbox')
+                first_child = frame.children.first
+                first_child.replace(svg) unless svg == first_child
+                output = svg.to_xhtml
+                svg_filename = File.join(texmath_dir, "#{digest(output)}.svg")
+                File.write(svg_filename, output)
+                # Convert to PNG.
+                png_filename = svg_filename.sub('.svg', '.png')
+                pngs << png_filename
+                unless File.exist?(png_filename)
+                  puts "Creating #{png_filename}" unless Polytexnic::test?
+                  inkscape = '/Applications/Inkscape.app/Contents/Resources/bin/inkscape'
+                  svg_height = svg['style'].scan(/height: (.*?);/).first.first
+                  height = 9 * svg_height.to_f
+                  cmd = "#{inkscape} -f #{svg_filename} -e #{png_filename} -h #{height}pt"
+                  if Polytexnic::test?
+                    silence_stream(STDOUT) do
+                      silence_stream(STDERR) { system cmd }
+                    end
+                  else
+                    silence_stream(STDERR) { system cmd }
+                  end
+                end
+                rm(svg_filename)
+                png = Nokogiri::XML::Node.new('img', source)
+                png['src'] = File.join('images', 'texmath',
+                                       File.basename(png_filename))
+                png['alt'] = png_filename.sub('.png', '')
+                svg.replace(png)
+              end
+              html = source.at_css('body').children.to_xhtml
+            else
+              html = inner_html
+            end
             f.write(chapter_template("Chapter #{i+1}", html))
           end
+          # Clean up unused PNGs.
+          png_files = Dir[File.join(texmath_dir, '*.png')]
+          (png_files - pngs).each do |f|
+            if File.exist?(f)
+              puts "Removing unused PNG #{f}" unless Polytexnic::test?
+              FileUtils.rm(f)
+            end
+          end
         end
+      end
+
+      # Strip attributes that are invalid in EPUB documents.
+      def strip_attributes(doc)
+        attrs = %w[data-tralics-id data-label data-number data-chapter
+                   role aria-readonly]
+        doc.tap do
+          attrs.each do |attr|
+            doc.xpath("//@#{attr}").remove
+          end
+        end
+      end
+
+      # Returns true if a string appears to have LaTeX math.
+      def math?(string)
+        !!string.match(/(?:\\\(|\\\[|\\begin{equation)/)
       end
 
       def create_style_files
@@ -100,6 +186,10 @@ module Polytexnic
 
       def mkdir(dir)
         Dir.mkdir(dir) unless File.directory?(dir)
+      end
+
+      def rm(file)
+        FileUtils.rm(file) if File.exist?(file)
       end
 
       def template(title, content)
@@ -142,9 +232,17 @@ module Polytexnic
         toc_ch = manifest.chapters.map do |chapter|
                    %(<itemref idref="#{chapter.slug}"/>)
                  end
-        images = Dir['images/**/*'].select { |f| File.file?(f) }.map do |image|
+        image_files = Dir['epub/OEBPS/images/**/*'].select { |f| File.file?(f) }
+        images = image_files.map do |image|
                    ext = File.extname(image).sub('.', '')   # e.g., 'png'
-                   %(<item id="#{File.basename(image)}" href="#{image}" media-type="image/#{ext}"/>)
+                   # Strip off the leading 'epub/OEBPS'.
+                   sep  = File::SEPARATOR
+                   href = image.split(sep)[2..-1].join(sep)
+                   # Define an id based on the filename.
+                   # Prefix with 'img-' in case the filname starts with an
+                   # invalid character such as a number.
+                   id = "img-#{File.basename(image, '.*')}"
+                   %(<item id="#{id}" href="#{href}" media-type="image/#{ext}"/>)
                  end
 %(<?xml version="1.0" encoding="UTF-8"?>
   <package xmlns="http://www.idpf.org/2007/opf" unique-identifier="BookID" version="2.0">

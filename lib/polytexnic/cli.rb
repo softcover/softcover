@@ -67,6 +67,7 @@ module Polytexnic
 
     desc "publish", "Publish your book on Softcover"
     def publish
+      require 'polytexnic/commands/publisher'
       invoke :login unless logged_in?
 
       puts "Publishing..."
@@ -121,11 +122,13 @@ module Polytexnic
 
     desc "config", "View local config"
     def config
+      require "polytexnic/config"
       Polytexnic::Config.read
     end
 
     desc "config:add key=value", "Add to your local config vars"
     define_method "config:add" do |pair|
+      require "polytexnic/config"
       key, value = pair.split "="
       Polytexnic::Config[key] = value
 

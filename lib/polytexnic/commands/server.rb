@@ -26,6 +26,7 @@ module Polytexnic::Commands::Server
   end
 
   def start_server(port)
+    require 'polytexnic/server/app'
     rebuild
     Polytexnic::App.set :port, port
     Polytexnic::App.run!

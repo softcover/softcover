@@ -10,20 +10,15 @@ initMathJax = ->
   $('#mathJaxJS').remove()
   delete MathJax
 
+  chapter_number = $('.chapter').attr('data-number')
   script = document.createElement( 'script' )
   script.id = 'mathJaxJS'
   script.type = 'text/javascript'
   script.src = 'http://cdn.mathjax.org/mathjax/latest/MathJax.js' +
-               '?config=TeX-AMS_HTML'
-  script.innerHTML = '
-      MathJax.Hub.Config({
-        "HTML-CSS": {
-          availableFonts: ["TeX"],
-        },
-        showProcessingMessages: false,
-        messageStyle: "none"
-      });
-    '
+               '?config=<%= @mathjax_src %>'
+  script.innerHTML = """
+    <%= @mathjax_config %>
+    """
 
   $('head').append script
 

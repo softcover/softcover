@@ -10,12 +10,38 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 Include graphics like this:
 
-\includegraphics{images/michael_hartl.png}
+\includegraphics{images/2011_michael_hartl.png}
 
-\section{Bacon ipsum}
+Include code like this:
+
+%= lang:ruby
+\begin{code}
+def hello
+  "hello, world!"
+end
+\end{code}
+
+Make a code listing as in Listing~\ref{code:hello}.
+
+\begin{codelisting}
+\heading{A hello program in Ruby.}
+\label{code:hello}
+%= lang:ruby
+\begin{code}
+def hello
+  "hello, world!"
+end
+\end{code}
+\end{codelisting}
+
+Typeset inline code using the \verb+\kode+ environment: \kode{foobar}.
+
+\section{\emph{Bacon} ipsum}
 \label{sec:bacon_ipsum}
 
 Bacon ipsum dolor sit amet salami doner shoulder, brisket pork chop beef cow bacon strip steak filet mignon jerky bresaola turducken venison ham. Biltong meatloaf chuck rump pork loin. Pancetta fatback prosciutto shankle corned beef flank beef ribs tail tri-tip kielbasa drumstick. Andouille bacon pork drumstick meatball pig t-bone hamburger, ball tip meatloaf sausage.
+
+This is some math: $\int_a^b f'\,dx = f(b) - f(a)$.
 
 See Chapter~\ref{cha:foo_bar} and Section~\ref{sec:pig_fatback}.
 
