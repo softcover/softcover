@@ -10,13 +10,15 @@ describe Polytexnic::Builders::Mobi do
       end
     end
 
-    before(:all) { generate_book }
+    before(:all) do
+      generate_book
+      @builder = Polytexnic::Builders::Mobi.new
+      @built = @builder.build!
+      chdir_to_book
+    end
     after(:all)  { remove_book }
 
     describe "#build!" do
-      subject(:builder) { Polytexnic::Builders::Mobi.new }
-      before { @built = builder.build! }
-
       it "should generate the EPUB" do
         expect('epub/book.epub').to exist
       end
@@ -24,11 +26,11 @@ describe Polytexnic::Builders::Mobi do
       # Because of the way kindlegen uses tempfiles, testing for the
       # actual generation of the MOBI causes an error, so we just
       # check the command.
-      it "should generate the MOBI" do
-        expect(@built).to match(/kindlegen/)
-        expect(@built).to match(/epub\/book.epub/)
+      describe "MOBI generation" do
+        subject(:built) { @built }
+        it { should match /kindlegen/ }
+        it { should match /epub\/book\.epub/ }
       end
-
     end
   end
 end
