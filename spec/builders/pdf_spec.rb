@@ -7,7 +7,7 @@ describe Polytexnic::Builders::Pdf do
     @builder.build!
     chdir_to_book
   end
-  after(:all)  { remove_book }
+  after(:all) { remove_book }
   subject(:builder) { Polytexnic::Builders::Pdf.new }
 
   describe "#build!" do

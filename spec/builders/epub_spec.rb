@@ -7,7 +7,7 @@ describe Polytexnic::Builders::Epub do
     @builder.build!
     chdir_to_book
   end
-  after(:all)  { remove_book }
+  after(:all) { remove_book }
   subject(:builder) { @builder }
 
   it "should be valid" do
