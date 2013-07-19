@@ -16,7 +16,7 @@ describe Polytexnic::Builders::Mobi do
       @built = @builder.build!
       chdir_to_book
     end
-    after(:all)  { remove_book }
+    after(:all) { remove_book }
 
     describe "#build!" do
       it "should generate the EPUB" do

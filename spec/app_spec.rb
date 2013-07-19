@@ -4,10 +4,13 @@ require 'rack/test'
 describe Polytexnic::App do
   include Rack::Test::Methods
 
-  before(:all) { generate_book }
+  before(:all) do
+    generate_book
+    Polytexnic::Builders::Html.new.build!
+  end
   after(:all)  { remove_book }
+
   before { chdir_to_book }
-  before { Polytexnic::Builders::Html.new.build! }
 
   let(:manifest) { Polytexnic::BookManifest.new }
   let(:chapter) { manifest.chapters.first }
