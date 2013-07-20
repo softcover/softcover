@@ -14,8 +14,7 @@ initMathJax = ->
   script = document.createElement( 'script' )
   script.id = 'mathJaxJS'
   script.type = 'text/javascript'
-  script.src = 'http://cdn.mathjax.org/mathjax/latest/MathJax.js' +
-               '?config=<%= @mathjax_src %>'
+  script.src = '<%= @mathjax_src %>'
   script.innerHTML = """
     <%= @mathjax_config %>
     """

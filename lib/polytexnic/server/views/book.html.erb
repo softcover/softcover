@@ -5,7 +5,7 @@
     <link href="stylesheets/pygments.css" media="screen" rel="stylesheet" type="text/css" />
     <link href="stylesheets/polytexnic.css" media="screen" rel="stylesheet" type="text/css" />
     <% if @local_server %>
-      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
+      <script src="/jquery/1.9.1/jquery.min.js" ></script>
       <script src="/refresh.js"></script>
     <% end %>
     <title><%= @title %></title>
@@ -13,7 +13,7 @@
       <script type="text/x-mathjax-config">
         <%= @mathjax %>
       </script>
-      <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=<%= @src %>"></script>
+      <script type="text/javascript" src="<%= @src %>"></script>
     <% end %>
   </head>
   <body>

@@ -55,16 +55,10 @@ class Polytexnic::Book
   def files
     # question: should we use `git ls-files` instead?
     # TODO: only use pertinent files
-    paths = %w{html/**/* images/**/* *.mobi *.epub *.pdf}
-    Dir[*paths].map do |path|
-
-      next nil unless !File.directory?(path) &&
-        !(File.extname(path) == ".html" && !(path =~ /_fragment/)) &&
-        path != "html/#{slug}.html" &&
-        path != "html/#{slug}_fragment.html"
-
+    paths = %w{html/*_fragment.html images/**/* *.mobi *.epub *.pdf}
+    Dir[*paths].reject { |path| File.directory?(path) }.map do |path|
       BookFile.new path
-    end.compact
+    end
   end
 
   def filenames
