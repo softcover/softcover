@@ -16,7 +16,15 @@ module Polytexnic
         FileUtils.mkdir name unless File.exist?(name)
         Dir.chdir name
 
-        template_files.each do |path|
+        # Create directories.
+        # There was some trouble with MathJax where it was trying to copy a
+        # file before the directory had been created.
+        template_files.select { |path| File.directory?(path) }.each do |path|
+          (cp_path = path.dup).slice! template_dir + "/"
+          FileUtils.mkdir cp_path unless File.exist?(cp_path)
+        end
+
+        template_files.reject { |path| File.directory?(path) }.each do |path|
           next if path =~ /\/.$|\/..$/
 
           (cp_path = path.dup).slice! template_dir + "/"
@@ -48,15 +56,12 @@ module Polytexnic
             puts display_path
           end
 
-          if File.directory?(path)
-            FileUtils.mkdir cp_path unless File.exist?(cp_path)
+          if path =~ /\.erb/
+            erb = ERB.new(File.read(path)).result(binding)
+            File.open(cp_path, 'w') { |f| f.write erb }
           else
-            if path =~ /\.erb/
-              erb = ERB.new(File.read(path)).result(binding)
-              File.open(cp_path, 'w') { |f| f.write erb }
-            else
-              FileUtils.cp path, cp_path
-            end
+            # puts "*********#{path}----#{File.exist?(path).inspect}********"
+            FileUtils.cp path, cp_path
           end
         end
 
@@ -74,7 +79,7 @@ module Polytexnic
       end
 
       def template_files
-        Dir.glob(File.join(template_dir, "**/*"), File::FNM_DOTMATCH)
+        Dir.glob(File.join(template_dir, "**/*"), File::FNM_DOTMATCH).sort
       end
 
       def verify!
