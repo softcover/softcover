@@ -74,6 +74,9 @@ module Polytexnic
               else
                 system cmd
               end
+              # Sometimes in tests the phantomjs_source.html file is missing.
+              # It shouldn't ever happen, but it does no harm to skip it.
+              next unless File.exist?('phantomjs_source.html')
               raw_source = File.read('phantomjs_source.html')
               source = strip_attributes(Nokogiri::HTML(raw_source))
               rm('phantomjs_source.html')
