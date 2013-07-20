@@ -25,8 +25,8 @@ module Polytexnic
       EOS
     end
 
-    MATHJAX  = '/MathJax/MathJax.js?config='
-    AMS_HTML = MATHJAX + 'TeX-AMS_HTML'
+    MATHJAX  = 'MathJax/MathJax.js?config='
+    AMS_HTML = '/' + MATHJAX + 'TeX-AMS_HTML'
     AMS_SVG  = MATHJAX + 'TeX-AMS-MML_SVG'
   end
 end
