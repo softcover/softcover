@@ -5,7 +5,7 @@ module Polytexnic
 
       def for_format(format)
         raise 'Invalid format' unless Polytexnic::FORMATS.include?(format)
-        print "Building #{format.upcase}..."
+        puts "Building #{format.upcase}..."
         builder_for(format).build!
         puts " Done."
         if format == 'html'
