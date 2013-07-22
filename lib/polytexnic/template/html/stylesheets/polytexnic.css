@@ -64,6 +64,10 @@ body #book {
   font-size: 80%;
 }
 
+#book span.number {
+  font-weight: bold;
+}
+
 #book .label {
   font-weight: bold;
   margin-right: 0.5em;
