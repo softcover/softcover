@@ -27,3 +27,7 @@ group :test do
   gem 'simplecov', require: false
   gem 'rack-test'
 end
+
+group :development do
+  gem 'rake'
+end
