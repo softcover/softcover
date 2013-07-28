@@ -60,7 +60,6 @@ module Polytexnic
             erb = ERB.new(File.read(path)).result(binding)
             File.open(cp_path, 'w') { |f| f.write erb }
           else
-            # puts "*********#{path}----#{File.exist?(path).inspect}********"
             FileUtils.cp path, cp_path
           end
         end
@@ -79,7 +78,7 @@ module Polytexnic
       end
 
       def template_files
-        Dir.glob(File.join(template_dir, "**/*"), File::FNM_DOTMATCH).sort
+        Dir.glob(File.join(template_dir, "**/*"), File::FNM_DOTMATCH)
       end
 
       def verify!
