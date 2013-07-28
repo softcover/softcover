@@ -17,30 +17,27 @@ describe Polytexnic::Commands::Build do
     it { should raise_error }
   end
 
-  context 'building each format' do
-    Polytexnic::FORMATS.each do |format|
-      subject {
-        lambda {
-          silence { Polytexnic::Commands::Build.for_format format }
-        }
-      }
-
-      it { should_not raise_error }
-    end
-  end
-
   context 'building all' do
-    subject {
-      lambda {
-        silence { Polytexnic::Commands::Build.all_formats }
-      }
-    }
+    subject(:build) { Polytexnic::Commands::Build }
 
-    it { should_not raise_error }
+    it { should respond_to(:all_formats) }
+    it "should build all formats" do
+      pdf_builder  = build.builder_for('pdf')
+      html_builder = build.builder_for('html')
+      epub_builder = build.builder_for('epub')
+      mobi_builder = build.builder_for('mobi')
 
-    after(:all) do
-      chdir_to_md_book
-      Polytexnic::Builders::Html.new.clean!
+      pdf_builder .should_receive(:build!)
+      html_builder.should_receive(:build!)
+      epub_builder.should_receive(:build!)
+      mobi_builder.should_receive(:build!)
+
+      build.should_receive(:builder_for).with('pdf') .and_return(pdf_builder)
+      build.should_receive(:builder_for).with('html').and_return(html_builder)
+      build.should_receive(:builder_for).with('epub').and_return(epub_builder)
+      build.should_receive(:builder_for).with('mobi').and_return(mobi_builder)
+
+      silence { build.all_formats }
     end
   end
 end

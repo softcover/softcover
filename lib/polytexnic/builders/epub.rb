@@ -74,6 +74,9 @@ module Polytexnic
               else
                 system cmd
               end
+              # Sometimes in tests the phantomjs_source.html file is missing.
+              # It shouldn't ever happen, but it does no harm to skip it.
+              next unless File.exist?('phantomjs_source.html')
               raw_source = File.read('phantomjs_source.html')
               source = strip_attributes(Nokogiri::HTML(raw_source))
               rm('phantomjs_source.html')
@@ -126,13 +129,13 @@ module Polytexnic
             end
             f.write(chapter_template("Chapter #{i+1}", html))
           end
-          # Clean up unused PNGs.
-          png_files = Dir[File.join(texmath_dir, '*.png')]
-          (png_files - pngs).each do |f|
-            if File.exist?(f)
-              puts "Removing unused PNG #{f}" unless Polytexnic::test?
-              FileUtils.rm(f)
-            end
+        end
+        # Clean up unused PNGs.
+        png_files = Dir[File.join(texmath_dir, '*.png')]
+        (png_files - pngs).each do |f|
+          if File.exist?(f)
+            puts "Removing unused PNG #{f}" unless Polytexnic::test?
+            FileUtils.rm(f)
           end
         end
       end

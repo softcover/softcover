@@ -1,12 +1,16 @@
 require 'spec_helper'
 
 describe Polytexnic::Builders::Pdf do
-  before(:all) { generate_book }
-  after(:all)  { remove_book }
+  before(:all) do
+    generate_book
+    @builder = Polytexnic::Builders::Pdf.new
+    @builder.build!
+    chdir_to_book
+  end
+  after(:all) { remove_book }
+  subject(:builder) { Polytexnic::Builders::Pdf.new }
 
   describe "#build!" do
-    subject(:builder) { Polytexnic::Builders::Pdf.new }
-    before { builder.build! }
 
     it "should create a tmp LaTeX file" do
       expect(Polytexnic::Utils.tmpify('book.tex')).to exist
