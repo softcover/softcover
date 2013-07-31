@@ -211,6 +211,10 @@ body #book {
   line-height: 0;
 }
 
+#book sup.footnote a {
+  text-decoration: none;
+}
+
 #book sup.footnote a:visited {
   color: #002f72;
 }
