@@ -13,7 +13,7 @@ describe Polytexnic::Builders::Mobi do
     before(:all) do
       generate_book
       @builder = Polytexnic::Builders::Mobi.new
-      @built = @builder.build!
+      silence { @built = @builder.build! }
       chdir_to_book
     end
     after(:all) { remove_book }
