@@ -211,7 +211,7 @@ body #book {
   line-height: 0;
 }
 
-#book sup.footnote a {
+#book ol.footnotes a.arrow {
   text-decoration: none;
 }
 
