@@ -90,7 +90,7 @@ module Polytexnic
 
           # write chapter nodes to fragment file
           @manifest.chapters.each_with_index do |chapter, i|
-            # update cross-chapter refs
+            # Update cross-chapter refs.
             chapter.nodes.each do |node|
               node.css('a.hyperref').each do |ref_node|
                 # todo: pull finder to poly-core
@@ -106,7 +106,6 @@ module Polytexnic
 
             html_filename = File.join('html', chapter.slug + '_fragment.html')
             File.open(html_filename, 'w') do |f|
-              # TODO: replace this with chapter.to_xhtml?
               chapter.nodes.each do |node|
                 f.write(node.to_xhtml)
               end

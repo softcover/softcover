@@ -29,6 +29,21 @@ class Polytexnic::App < Sinatra::Base
                                gsub!(/^/, '.highlight ')
   end
 
+  # Gets the image specified by the path and content type.
+  get '/images/*' do |path|
+    extension  = response.header['Content-Type'].split('/').last
+    # Arrange to handle both '.jpeg' and '.jpg' extensions.
+    if extension == 'jpeg' && !File.exist?(image_filename(path, extension))
+      extension = 'jpg'
+    end
+    File.read(image_filename(path, extension))
+  end
+
+  # Returns the image filename for the local document.
+  def image_filename(path, extension)
+    "html/images/#{path}.#{extension}"
+  end
+
   get '/:chapter_slug' do
     get_chapter
     doc = Nokogiri::HTML.fragment(File.read(@chapter.fragment_path))
