@@ -31,7 +31,7 @@ describe Polytexnic::Commands::Generator do
       end
     end
 
-    context "generated contents" do
+    context "generated contents from template" do
 
       before { Dir.chdir(name) }
 
@@ -39,8 +39,12 @@ describe Polytexnic::Commands::Generator do
         expect { `poly build` }.not_to raise_error
       end
 
-      it "should have a base LaTeX file" do
-        expect('foo_bar.tex').to exist
+      describe "base LaTeX file" do
+        subject(:base) { 'foo_bar.tex' }
+        it { should exist }
+        it "should use the 14-point extbook doctype" do
+          expect(File.read(base)).to match(/\[14pt\]\{extbook\}/)
+        end
       end
 
       it "should have chapter files" do
