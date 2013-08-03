@@ -20,14 +20,19 @@ module Polytexnic
         write_pygments_file(:latex)
         write_polytexnic_commands_file
         copy_polytexnic_sty
-        cmd = "xelatex #{Polytexnic::Utils.tmpify(book_filename)}"
-        cmd += " > /dev/null" if Polytexnic.test?
+        cmd = "#{xelatex} #{Polytexnic::Utils.tmpify(book_filename)}"
         # Run the command twice to guarantee up-to-date cross-references.
         system("#{cmd} && #{cmd}")
         rename_pdf(basename)
       end
 
       private
+
+        def xelatex
+          filename = `which xelatex`.chomp
+          message  = "Install LaTeX (http://latex-project.org/ftp.html)"
+          @inkscape ||= executable(filename, message)
+        end
 
         # Renames the temp PDF so that it matches the original filename.
         # For example, foo_bar.tex should produce foo_bar.pdf.

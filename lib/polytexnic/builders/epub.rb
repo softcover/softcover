@@ -151,11 +151,6 @@ module Polytexnic
         @inkscape ||= executable(filename, message)
       end
 
-      # Returns the executable if it exists, raising an error otherwise.
-      def executable(filename, message)
-        filename.tap { |f| raise message unless File.exist?(f) }
-      end
-
       # Strip attributes that are invalid in EPUB documents.
       def strip_attributes(doc)
         attrs = %w[data-tralics-id data-label data-number data-chapter

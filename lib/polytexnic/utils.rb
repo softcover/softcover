@@ -84,5 +84,10 @@ module Polytexnic::Utils
   def digest(string)
     Digest::SHA1.hexdigest(string)
   end
+
+  # Returns the executable if it exists, raising an error otherwise.
+  def executable(filename, message)
+    filename.tap { |f| raise message unless File.exist?(f) }
+  end
 end
 
