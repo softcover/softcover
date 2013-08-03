@@ -79,7 +79,7 @@ class Polytexnic::Book
   end
 
   def epubcheck
-    epub = File.join('epub', "#{manifest.filename}.epub")
+    epub = File.join('ebooks', "#{manifest.filename}.epub")
     java = `which java`.strip
     if java.empty?
       system("EPUB validation requires java to be on the path")

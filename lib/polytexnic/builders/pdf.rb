@@ -36,10 +36,12 @@ module Polytexnic
 
         # Renames the temp PDF so that it matches the original filename.
         # For example, foo_bar.tex should produce foo_bar.pdf.
+        # While we're at it, we move it to the standard ebooks/ directory.
         def rename_pdf(basename)
           tmp_pdf = basename + '.tmp.pdf'
           pdf     = basename + '.pdf'
-          File.rename(tmp_pdf, pdf)
+          mkdir('ebooks')
+          FileUtils.mv(tmp_pdf, File.join('ebooks', pdf))
         end
 
         # Writes out the PolyTeXnic commands from polytexnic-core.

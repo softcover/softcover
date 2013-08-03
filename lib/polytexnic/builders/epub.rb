@@ -13,6 +13,7 @@ module Polytexnic
         write_contents
         create_style_files
         make_epub
+        FileUtils.mv(File.join('epub', "#{manifest.filename}.epub"), 'ebooks')
       end
 
       def build_html
@@ -24,6 +25,7 @@ module Polytexnic
         mkdir('epub/OEBPS')
         mkdir('epub/OEBPS/styles')
         mkdir('epub/META-INF')
+        mkdir('ebooks')
       end
 
       # Writes the mimetype file.
@@ -197,14 +199,6 @@ module Polytexnic
 
       def write_toc
         File.open('epub/OEBPS/toc.ncx', 'w') { |f| f.write(toc_ncx) }
-      end
-
-      def mkdir(dir)
-        Dir.mkdir(dir) unless File.directory?(dir)
-      end
-
-      def rm(file)
-        FileUtils.rm(file) if File.exist?(file)
       end
 
       def template(title, content)

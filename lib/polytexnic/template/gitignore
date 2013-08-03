@@ -10,8 +10,9 @@ pygments.sty
 # Generated HTML files
 html/*.html
 
-# Generated EPUB/MOBI files
+# Generated ebook files
 epub/
+ebooks/
 
 # Screencasts (likely to be huge)
 screencasts/

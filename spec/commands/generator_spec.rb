@@ -63,6 +63,7 @@ describe Polytexnic::Commands::Generator do
         it { should match(/pygments\.sty/) }
         it { should match(/html\//) }
         it { should match(/epub\//) }
+        it { should match(/ebooks\//) }
         it { should match(/screencasts\//) }
         it { should match(/log\//) }
         it { should match(/\.DS_Store/) }

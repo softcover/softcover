@@ -3,17 +3,8 @@ module Polytexnic
     class Mobi < Builder
 
       def build!
-        kindlegen = `which kindlegen`.strip
-
-        if kindlegen == ''
-          url = 'http://www.amazon.com/gp/feature.html?ie=UTF8&docId=1000765211'
-          puts "Error: You must install kindlegen to build mobi: #{url}"
-          exit 1
-        end
-
         Polytexnic::Builders::Epub.new.build!
-
-        command = "#{kindlegen} epub/#{manifest.filename}.epub"
+        command = "#{kindlegen} ebooks/#{manifest.filename}.epub"
         if Polytexnic.test?
           command
         else
@@ -21,6 +12,14 @@ module Polytexnic
         end
       end
 
+      private
+
+        def kindlegen
+          filename = `which kindlegen`.chomp
+          url = 'http://www.amazon.com/gp/feature.html?ie=UTF8&docId=1000765211'
+          message  = "Install LaTeX (#{url})"
+          @kindlegen ||= executable(filename, message)
+        end
     end
   end
 end
