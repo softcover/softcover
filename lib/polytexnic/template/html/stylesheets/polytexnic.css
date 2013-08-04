@@ -110,7 +110,7 @@ body #book {
   margin-top: 2em;
 }
 
-#book .table table.tabular {
+#book table.tabular {
   margin-left: auto;
   margin-right: auto;
 }
