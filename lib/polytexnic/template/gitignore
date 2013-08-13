@@ -10,6 +10,9 @@ pygments.sty
 # Generated HTML files
 html/*.html
 
+# Code highlighting cache
+.highlight_cache.yml
+
 # Generated ebook files
 epub/
 ebooks/
