@@ -115,6 +115,7 @@ module Polytexnic
     define_method "epub:validate" do
       Polytexnic::Commands::EpubValidator.validate!
     end
+    map "epub:check" => "epub:validate"
 
     # ===============================================
     # Config
