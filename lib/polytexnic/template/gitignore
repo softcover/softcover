@@ -11,7 +11,7 @@ pygments.sty
 html/*.html
 
 # Code highlighting cache
-.highlight_cache.yml
+.highlight_cache
 
 # Generated ebook files
 epub/

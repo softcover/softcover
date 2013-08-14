@@ -12,6 +12,11 @@ module Polytexnic
       end
 
       def build
+        if Polytexnic::profiling?
+          require 'ruby-prof'
+          RubyProf.start
+        end
+
         if @manifest.md?
           require 'maruku'
           @manifest.chapters.each do |chapter|
@@ -60,13 +65,7 @@ module Polytexnic
 
           xml = Nokogiri::HTML(file_content)
 
-          # create HTML fragments
-          current_chapter = @manifest.chapters.first
-
-          @manifest.chapters.each do |chapter|
-            filename = File.join('html', chapter.slug + '_fragment.html')
-            File.unlink(filename) if File.exists?(filename)
-          end
+          create_html_fragments
 
           # split nodes to chapters
           ref_map = {}
@@ -88,15 +87,19 @@ module Polytexnic
             current_chapter.nodes.push node
           end
 
+          target_cache = {}
+          xml.xpath("//*[@id]").each do |target|
+            target_cache[target['id']] = target
+          end
+
           # write chapter nodes to fragment file
           @manifest.chapters.each_with_index do |chapter, i|
             # Update cross-chapter refs.
             chapter.nodes.each do |node|
               node.css('a.hyperref').each do |ref_node|
-                # todo: pull finder to poly-core
-                target = xml.xpath("//*[@id='#{ref_node['href'][1..-1]}']")
-                unless target.empty?
-                  target = target.first
+                ref_id = ref_node['href'][1..-1].inspect  # i.e., 'code-foobar'
+                target = target_cache[ref_id]
+                unless target.nil?
                   id = target['id']
                   ref_chapter = ref_map[target['data-tralics-id']]
                   ref_node['href'] = "#{ref_chapter.fragment_name}##{id}"
@@ -125,7 +128,22 @@ module Polytexnic
           end
         end
 
+        if Polytexnic::profiling?
+          result = RubyProf.stop
+          printer = RubyProf::GraphPrinter.new(result)
+          printer.print(STDOUT, {})
+        end
+
         true
+      end
+
+      def create_html_fragments
+        current_chapter = @manifest.chapters.first
+
+        @manifest.chapters.each do |chapter|
+          filename = File.join('html', chapter.slug + '_fragment.html')
+          File.unlink(filename) if File.exists?(filename)
+        end
       end
 
       def clean!
