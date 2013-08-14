@@ -97,7 +97,7 @@ module Polytexnic
             # Update cross-chapter refs.
             chapter.nodes.each do |node|
               node.css('a.hyperref').each do |ref_node|
-                ref_id = ref_node['href'][1..-1].inspect  # i.e., 'code-foobar'
+                ref_id = ref_node['href'][1..-1]  # i.e., 'cha-foo_bar'
                 target = target_cache[ref_id]
                 unless target.nil?
                   id = target['id']
