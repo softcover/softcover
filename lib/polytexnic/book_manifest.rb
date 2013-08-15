@@ -23,16 +23,17 @@ class Polytexnic::BookManifest < OpenStruct
   class Section < OpenStruct
   end
 
-  YAML_PATH = "book.yml"
   MD_PATH = File.join('markdown', 'Book.txt')
+  YAML_PATH = "book.yml"
 
-  def initialize(opts={})
+  def initialize(options = {})
+    @format = options[:format] || :polytex
     attrs = case
-    when markdown? then read_from_md
-    when polytex?  then read_from_yml
-    else
-      fail
-    end.symbolize_keys!
+            when markdown? then read_from_md
+            when polytex?  then read_from_yml
+            else
+              fail
+            end.symbolize_keys!
 
     marshal_load attrs
 
@@ -61,15 +62,16 @@ class Polytexnic::BookManifest < OpenStruct
 
     # TODO: verify all attributes
 
-    verify_paths! if opts[:verify_paths]
+    verify_paths! if options[:verify_paths]
   end
 
   def markdown?
-    File.exists?(MD_PATH)
+    @format == :markdown || @format == :md
   end
+  alias :md? :markdown?
 
   def polytex?
-    File.exists?(YAML_PATH)
+    @format == :polytex
   end
 
   def chapter_file_paths
@@ -101,6 +103,7 @@ class Polytexnic::BookManifest < OpenStruct
 
     def read_from_md
       return false unless f = File.open(MD_PATH)
+
 
       chapters = f.readlines.each_with_index.map do |path, i|
         name = path.gsub(/\n/, '')

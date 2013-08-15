@@ -17,32 +17,18 @@ module Polytexnic
           RubyProf.start
         end
 
-        if @manifest.md? && !options[:force_polytex]
-          @manifest.chapters.each do |chapter|
+        if manifest.markdown?
+          manifest.chapters.each do |chapter|
             path = File.join('markdown', chapter.slug)
-
             md = Polytexnic::Core::Pipeline.new(File.read(path), format: :md)
             basename = File.basename path, ".*"
-            File.open(File.join("chapters", "#{basename}.tex"), 'w') do |f|
-              f.write(md.polytex)
-            end
-            build(force_polytex: true)
-
-            # fragment_path = "html/#{basename}_fragment.html"
-            # f = File.open fragment_path, "w"
-            # f.write md.to_html
-            # f.close
-
-            # doc_path = "html/#{basename}.html"
-            # f = File.open doc_path, "w"
-            # f.write md.to_html_document
-            # f.close
-
-            # @built_files.push fragment_path, doc_path
+            File.write(File.join("chapters", "#{basename}.tex"), md.polytex)
+            manifest = Polytexnic::BookManifest.new(format: :polytex,
+                                                    verify_paths: true)
+            build
           end
         else
-          basename = File.basename(@manifest.filename, '.tex')
-          basename = 'book'
+          basename = File.basename(manifest.filename, '.tex')
           polytex_filename = basename + '.tex'
           polytex = File.read(polytex_filename)
           polytex.gsub!(/(^\s*\\include{(.*?)})/) do
@@ -73,11 +59,11 @@ module Polytexnic
           # split nodes to chapters
           ref_map = {}
           chapter_number = 0
-          current_chapter = @manifest.chapters.first
+          current_chapter = manifest.chapters.first
 
           xml.css('#book>div').each do |node|
             if node.attributes['class'].to_s == 'chapter'
-              current_chapter = @manifest.chapters[chapter_number]
+              current_chapter = manifest.chapters[chapter_number]
               node['data-chapter'] = current_chapter.slug
               chapter_number += 1
             end
@@ -96,7 +82,7 @@ module Polytexnic
           end
 
           # write chapter nodes to fragment file
-          @manifest.chapters.each_with_index do |chapter, i|
+          manifest.chapters.each_with_index do |chapter, i|
             # Update cross-chapter refs.
             chapter.nodes.each do |node|
               node.css('a.hyperref').each do |ref_node|
@@ -142,9 +128,9 @@ module Polytexnic
       end
 
       def create_html_fragments
-        current_chapter = @manifest.chapters.first
+        current_chapter = manifest.chapters.first
 
-        @manifest.chapters.each do |chapter|
+        manifest.chapters.each do |chapter|
           filename = File.join('html', chapter.slug + '_fragment.html')
           File.unlink(filename) if File.exists?(filename)
         end
