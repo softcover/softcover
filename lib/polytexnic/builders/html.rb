@@ -25,6 +25,7 @@ module Polytexnic
             File.write(File.join("chapters", "#{basename}.tex"), md.polytex)
             manifest = Polytexnic::BookManifest.new(format: :polytex,
                                                     verify_paths: true)
+            # Recursively call `build` using the new PolyTeX manifest.
             build
           end
         else
