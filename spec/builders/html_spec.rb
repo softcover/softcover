@@ -67,7 +67,7 @@ describe Polytexnic::Builders::Html do
 
       after(:all) do
         chdir_to_md_book
-        builder.clean!
+        # builder.clean!
       end
     end
   end

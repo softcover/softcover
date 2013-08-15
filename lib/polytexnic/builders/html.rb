@@ -11,35 +11,38 @@ module Polytexnic
         end
       end
 
-      def build
+      def build(options = {})
         if Polytexnic::profiling?
           require 'ruby-prof'
           RubyProf.start
         end
 
-        if @manifest.md?
-          require 'maruku'
+        if @manifest.md? && !options[:force_polytex]
           @manifest.chapters.each do |chapter|
-            path = chapter.slug
+            path = File.join('markdown', chapter.slug)
 
-            md = Maruku.new File.read(path)
-
+            md = Polytexnic::Core::Pipeline.new(File.read(path), format: :md)
             basename = File.basename path, ".*"
+            File.open(File.join("chapters", "#{basename}.tex"), 'w') do |f|
+              f.write(md.polytex)
+            end
+            build(force_polytex: true)
 
-            fragment_path = "html/#{basename}_fragment.html"
-            f = File.open fragment_path, "w"
-            f.write md.to_html
-            f.close
+            # fragment_path = "html/#{basename}_fragment.html"
+            # f = File.open fragment_path, "w"
+            # f.write md.to_html
+            # f.close
 
-            doc_path = "html/#{basename}.html"
-            f = File.open doc_path, "w"
-            f.write md.to_html_document
-            f.close
+            # doc_path = "html/#{basename}.html"
+            # f = File.open doc_path, "w"
+            # f.write md.to_html_document
+            # f.close
 
-            @built_files.push fragment_path, doc_path
+            # @built_files.push fragment_path, doc_path
           end
         else
           basename = File.basename(@manifest.filename, '.tex')
+          basename = 'book'
           polytex_filename = basename + '.tex'
           polytex = File.read(polytex_filename)
           polytex.gsub!(/(^\s*\\include{(.*?)})/) do
@@ -125,6 +128,7 @@ module Polytexnic
               file_content = ERB.new(erb_file).result(binding)
               f.write(file_content)
             end
+            @built_files.push html_filename
           end
         end
 

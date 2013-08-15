@@ -24,12 +24,12 @@ class Polytexnic::BookManifest < OpenStruct
   end
 
   YAML_PATH = "book.yml"
-  MD_PATH = "Book.txt"
+  MD_PATH = File.join('markdown', 'Book.txt')
 
   def initialize(opts={})
     attrs = case
-    when md? then read_from_md
-    when polytex? then read_from_yml
+    when markdown? then read_from_md
+    when polytex?  then read_from_yml
     else
       fail
     end.symbolize_keys!
@@ -43,7 +43,8 @@ class Polytexnic::BookManifest < OpenStruct
       self.author = base_contents.scan(/^\s*\\author\{(.*?)\}/).flatten.first
       chapter_regex = /^\s*\\include\{chapters\/(.*?)\}/
       chapter_includes = base_contents.scan(chapter_regex).flatten
-      chapter_includes.each_with_index do |slug, i|
+      chapter_includes.each_with_index do |name, i|
+        slug = File.basename(name, '.*')
         title_regex = /^\s*\\chapter{(.*)}/
         content = File.read(File.join('chapters', slug + '.tex'))
         title = content[title_regex, 1]
@@ -63,7 +64,7 @@ class Polytexnic::BookManifest < OpenStruct
     verify_paths! if opts[:verify_paths]
   end
 
-  def md?
+  def markdown?
     File.exists?(MD_PATH)
   end
 
@@ -74,8 +75,8 @@ class Polytexnic::BookManifest < OpenStruct
   def chapter_file_paths
     chapters.map do |chapter|
       file_path = case
-      when md? then chapter.slug
-      when polytex? then "chapters/#{chapter.slug}.tex"
+      when markdown? then File.join("markdown", "#{chapter.slug}.md")
+      when polytex?  then File.join("chapters", "#{chapter.slug}.tex")
       end
 
       yield file_path if block_given?
@@ -101,8 +102,9 @@ class Polytexnic::BookManifest < OpenStruct
     def read_from_md
       return false unless f = File.open(MD_PATH)
 
-      chapters = f.readlines.each_with_index.map do |path,i|
-        slug = path.gsub(/\n/,'')
+      chapters = f.readlines.each_with_index.map do |path, i|
+        name = path.gsub(/\n/, '')
+        slug = File.basename(name, '.*')
         # TODO: read title from chapter file
         Chapter.new slug: slug, title: slug, chapter_number: i + 1
       end
