@@ -97,7 +97,7 @@ module Polytexnic
               end
             end
 
-            html_filename = File.join('html', chapter.slug + '_fragment.html')
+            html_filename = File.join('html', "#{chapter.slug}_fragment.html")
             File.open(html_filename, 'w') do |f|
               chapter.nodes.each do |node|
                 f.write(node.to_xhtml)
