@@ -104,7 +104,6 @@ class Polytexnic::BookManifest < OpenStruct
     def read_from_md
       return false unless f = File.open(MD_PATH)
 
-
       chapters = f.readlines.each_with_index.map do |path, i|
         name = path.gsub(/\n/, '')
         slug = File.basename(name, '.*')

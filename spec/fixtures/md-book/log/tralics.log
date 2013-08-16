@@ -1,99 +1,99 @@
 This is tralics 2.15.1, a LaTeX to XML translator, running on mhartl
 Copyright INRIA/MIAOU/APICS/MARELLE 2002-2012, Jos\'e Grimm
 Licensed under the CeCILL Free Software Licensing Agreement
-Starting translation of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex.
+Starting translation of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex.
 Dummy default configuration file used.
-Error signaled at line 14 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 14 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Undefined command \VerbatimFootnotes.
 Tralics Warning: Unused global option
    14pt.
-Error signaled at line 22 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 22 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Bad \documentclass
 The following command is not in outer vertical mode: \documentclass.
-Error signaled at line 22 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 22 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Bad \usepackage command
 The following command is not in outer vertical mode: \usepackage.
-Error signaled at line 23 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 23 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Bad \usepackage command
 The following command is not in outer vertical mode: \usepackage.
-Error signaled at line 24 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 24 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Bad \usepackage command
 The following command is not in outer vertical mode: \usepackage.
-Error signaled at line 25 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 25 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Bad \usepackage command
 The following command is not in outer vertical mode: \usepackage.
-Error signaled at line 26 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 26 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Bad \usepackage command
 The following command is not in outer vertical mode: \usepackage.
-Error signaled at line 27 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 27 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Bad \usepackage command
 The following command is not in outer vertical mode: \usepackage.
-Error signaled at line 28 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 28 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Undefined command \ifxetex.
-Error signaled at line 28 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 28 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Missing = inserted for comparison \relax.
-Error signaled at line 28 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 28 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Missing number, treated as zero scanned by \ifnum.
-Error signaled at line 28 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 28 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Undefined command \ifluatex.
-Error signaled at line 28 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 28 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Extra \fi
 I'm ignoring this; it doesn't match any \if.
-Error signaled at line 29 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 29 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Bad \usepackage command
 The following command is not in outer vertical mode: \usepackage.
-Error signaled at line 30 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 30 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Extra \else
 I'm ignoring this; it doesn't match any \if.
-Error signaled at line 31 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 31 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Bad \usepackage command
 The following command is not in outer vertical mode: \usepackage.
-Error signaled at line 32 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 32 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Undefined command \ifxetex.
-Error signaled at line 33 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 33 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Bad \usepackage command
 The following command is not in outer vertical mode: \usepackage.
-Error signaled at line 34 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 34 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Extra \fi
 I'm ignoring this; it doesn't match any \if.
-Error signaled at line 35 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 35 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Undefined command \defaultfontfeatures.
-Error signaled at line 37 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 37 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Extra \fi
 I'm ignoring this; it doesn't match any \if.
-Error signaled at line 39 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 39 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Undefined command \ifxetex.
-Error signaled at line 40 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 40 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Bad \usepackage command
 The following command is not in outer vertical mode: \usepackage.
-Error signaled at line 43 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 43 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Extra \else
 I'm ignoring this; it doesn't match any \if.
-Error signaled at line 44 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 44 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Bad \usepackage command
 The following command is not in outer vertical mode: \usepackage.
 Option clash in \usepackage hyperref
 Old options: setpagesize=false,unicode=false,xetex.
 New options: unicode=true.
-Error signaled at line 45 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 45 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Extra \fi
 I'm ignoring this; it doesn't match any \if.
-Error signaled at line 46 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 46 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Undefined command \hypersetup.
-Error signaled at line 54 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 54 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Undefined command \urlstyle.
-Error signaled at line 58 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 58 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Unknown counter `secnumdepth'.
-Error signaled at line 63 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.tex:
+Error signaled at line 63 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.tex:
 Two environments named document.
 Translating section command div0: Chapter One.
 Bib stats: seen 0 entries.
 Math stats: formulas 0, kernels 0, trivial 0, \mbox 0, large 0, small 0.
-Buffer realloc 1, string 1572, size 16498, merge 0
+Buffer realloc 1, string 1573, size 16495, merge 0
 Macros created 191, deleted 11; hash size 2390; foonotes 0.
 Save stack +34 -30.
 Attribute list search 1617(1505) found 1127 in 1157 elements (1120 at boot).
 Number of ref 0, of used labels 0, of defined labels 0, of ext. ref. 0.
-Output written on /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.xml (2057 bytes).
+Output written on /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.xml (2057 bytes).
 There were 30 errors.
-(For more information, see transcript file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-62364-kmgdgo.log)
+(For more information, see transcript file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-66729-v8a2k4.log)
