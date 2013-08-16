@@ -81,7 +81,7 @@ module Polytexnic
       end
 
       def all_files_and_directories
-        @afd ||= files_directories_maybe_markdown
+        files_directories_maybe_markdown
       end
 
       def files_directories_maybe_markdown
