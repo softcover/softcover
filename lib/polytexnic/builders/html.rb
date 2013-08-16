@@ -17,22 +17,18 @@ module Polytexnic
           RubyProf.start
         end
 
-        # raise manifest.inspect
-        manifest.markdown?
-        # if manifest.markdown?
-        #   raise "foo"
-        #   manifest.chapters.each do |chapter|
-        #     path = File.join('markdown', chapter.slug + '.md')
-        #     md = Polytexnic::Core::Pipeline.new(File.read(path), format: :md)
-        #     basename = File.basename path, ".*"
-        #     File.write(File.join("chapters", "#{basename}.tex"), md.polytex)
-        #   end
-        #   # Reset the manifest to use PolyTeX.
-        #   manifest = Polytexnic::BookManifest.new(format: :polytex,
-        #                                           verify_paths: true)
-        # end
+        if manifest.markdown?
+          manifest.chapters.each do |chapter|
+            path = File.join('markdown', chapter.slug + '.md')
+            md = Polytexnic::Core::Pipeline.new(File.read(path), format: :md)
+            basename = File.basename path, ".*"
+            File.write(File.join("chapters", "#{basename}.tex"), md.polytex)
+          end
+          # Reset the manifest to use PolyTeX.
+          @manifest = Polytexnic::BookManifest.new(format: :polytex,
+                                                   verify_paths: true)
+        end
 
-        raise manifest.inspect
         if manifest.polytex?
           basename = File.basename(manifest.filename, '.tex')
           @html = converted_html(basename)
