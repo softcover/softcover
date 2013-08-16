@@ -19,11 +19,9 @@ module Polytexnic
 
         if manifest.markdown?
           manifest.chapters.each do |chapter|
-            path = File.join('markdown', chapter.slug + '.md')
-            md = Polytexnic::Core::Pipeline.new(File.read(path), format: :md)
-            basename = File.basename path, ".*"
-            File.write(File.join("chapters", "#{basename}.tex"), md.polytex)
+            write_latex_files(chapter)
           end
+          rewrite_master_latex_file
           # Reset the manifest to use PolyTeX.
           @manifest = Polytexnic::BookManifest.new(format: :polytex,
                                                    verify_paths: true)
@@ -47,6 +45,28 @@ module Polytexnic
         end
 
         true
+      end
+
+      # Writes the LaTeX files for a given Markdown chapter.
+      def write_latex_files(chapter)
+        path = File.join('markdown', chapter.slug + '.md')
+        md = Polytexnic::Core::Pipeline.new(File.read(path), format: :md)
+        File.write(File.join("chapters", "#{chapter.slug}.tex"), md.polytex)
+      end
+
+      # Rewrites the master LaTeX file <name>.tex to use chapters from Book.txt.
+      def rewrite_master_latex_file
+        filename = Dir['*.tex'].reject { |f| f =~ /\.tmp/}.first
+        includes = manifest.chapters.map do |chapter|
+          "  \\include{chapters/#{chapter.slug}}"
+        end
+        # In order to capture all the includes, we match everything to the
+        # end of the document, so add it back. (There's probably a nicer
+        # way to do this.)
+        includes << '\end{document}'
+        content = File.read(filename)
+        content.gsub!(/^\s*\\include.*\}/m, includes.join("\n"))
+        File.write(filename, content)
       end
 
       # Returns the converted HTML.

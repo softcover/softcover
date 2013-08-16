@@ -1,9 +1,9 @@
 This is tralics 2.15.1, a LaTeX to XML translator, running on mhartl
 Copyright INRIA/MIAOU/APICS/MARELLE 2002-2012, Jos\'e Grimm
 Licensed under the CeCILL Free Software Licensing Agreement
-Starting translation of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-78936-gjo7tf.tex.
+Starting translation of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130816-99624-1qjn23a.tex.
 Dummy default configuration file used.
-Error signaled at line 14 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-78936-gjo7tf.tex:
+Error signaled at line 14 of file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130816-99624-1qjn23a.tex:
 Undefined command \VerbatimFootnotes.
 Tralics Warning: Unused global option
    14pt.
@@ -11,11 +11,11 @@ Translating section command div0: Chapter One.
 Translating section command div0: Chapter 2.
 Bib stats: seen 0 entries.
 Math stats: formulas 0, kernels 0, trivial 0, \mbox 0, large 0, small 0.
-Buffer realloc 1, string 1401, size 13350, merge 0
+Buffer realloc 1, string 1401, size 13362, merge 0
 Macros created 190, deleted 11; hash size 2383; foonotes 0.
 Save stack +24 -24.
 Attribute list search 1533(1505) found 1082 in 1128 elements (1120 at boot).
 Number of ref 0, of used labels 0, of defined labels 0, of ext. ref. 0.
-Output written on /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-78936-gjo7tf.xml (415 bytes).
+Output written on /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130816-99624-1qjn23a.xml (415 bytes).
 There was one error.
-(For more information, see transcript file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130815-78936-gjo7tf.log)
+(For more information, see transcript file /var/folders/l9/ntjhwvcd6t36bckr45x_bp3h0000gn/T/polytex20130816-99624-1qjn23a.log)
