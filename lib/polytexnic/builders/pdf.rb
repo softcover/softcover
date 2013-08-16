@@ -31,7 +31,7 @@ module Polytexnic
         def xelatex
           filename = `which xelatex`.chomp
           message  = "Install LaTeX (http://latex-project.org/ftp.html)"
-          @inkscape ||= executable(filename, message)
+          @xelatex ||= executable(filename, message)
         end
 
         # Renames the temp PDF so that it matches the original filename.
