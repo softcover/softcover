@@ -52,6 +52,10 @@ describe Polytexnic::Commands::Generator do
         expect('chapters/another_chapter.tex').to exist
       end
 
+      it "should not have the markdown files" do
+        expect('markdown/a_chapter.md').not_to exist
+      end
+
       describe ".gitignore" do
         subject { File.read('.gitignore') }
 

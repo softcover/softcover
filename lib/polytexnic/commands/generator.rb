@@ -4,8 +4,9 @@ module Polytexnic
     module Generator
       extend self
 
-      def generate_directory(name)
+      def generate_directory(name, markdown = false)
         @name = name
+        @markdown = markdown
 
         thor = Thor::Shell::Basic.new
 
@@ -16,15 +17,17 @@ module Polytexnic
         FileUtils.mkdir name unless File.exist?(name)
         Dir.chdir name
 
-        # Create directories.
+        # Create the directories.
         # There was some trouble with MathJax where it was trying to copy a
-        # file before the directory had been created.
-        template_files.select { |path| File.directory?(path) }.each do |path|
+        # file before the directory had been created, so we now create all
+        # the directories first.
+        directories.each do |path|
           (cp_path = path.dup).slice! template_dir + "/"
           FileUtils.mkdir cp_path unless File.exist?(cp_path)
         end
 
-        template_files.reject { |path| File.directory?(path) }.each do |path|
+        # Create the files.
+        files.each do |path|
           next if path =~ /\/.$|\/..$/
 
           (cp_path = path.dup).slice! template_dir + "/"
@@ -77,8 +80,31 @@ module Polytexnic
         File.expand_path File.join File.dirname(__FILE__), "../template"
       end
 
-      def template_files
-        Dir.glob(File.join(template_dir, "**/*"), File::FNM_DOTMATCH)
+      def all_files_and_directories
+        @afd ||= files_directories_maybe_markdown
+      end
+
+      def files_directories_maybe_markdown
+        fds = Dir.glob(File.join(template_dir, "**/*"), File::FNM_DOTMATCH)
+        if markdown?
+          # Skip the PolyTeX chapter files, which will be generated later.
+          fds.reject { |e| e =~ /\/chapters\/.*/ }
+        else
+          # Skip the markdown directory.
+          fds.reject { |e| e =~ /markdown/ }
+        end
+      end
+
+      def directories
+        all_files_and_directories.select { |path| File.directory?(path) }
+      end
+
+      def files
+        all_files_and_directories.reject { |path| File.directory?(path) }
+      end
+
+      def markdown?
+        @markdown
       end
 
       def verify!
@@ -86,17 +112,16 @@ module Polytexnic
           File.basename(f)
         end
 
-        Polytexnic::Commands::Generator.template_files.each do |file|
+        Polytexnic::Commands::Generator.all_files_and_directories.each do |file|
           path = if file =~ /book\.tex/
-            "#{@name}.tex"
-          elsif file =~ /\.erb/
-            File.basename(file, '.erb')
-          elsif file =~ /gitignore/
-            '.gitignore'
-          else
-            File.basename(file)
-          end
-
+                   "#{@name}.tex"
+                 elsif file =~ /\.erb/
+                   File.basename(file, '.erb')
+                 elsif file =~ /gitignore/
+                   '.gitignore'
+                 else
+                   File.basename(file)
+                 end
           raise "missing #{file}" unless generated_files.include?(path)
         end
       end
