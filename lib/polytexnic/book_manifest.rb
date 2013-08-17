@@ -27,7 +27,7 @@ class Polytexnic::BookManifest < OpenStruct
   YAML_PATH = "book.yml"
 
   def initialize(options = {})
-    @format = options[:format] || :polytex
+    @source = options[:source] || :polytex
     attrs = case
             when markdown? then read_from_md
             when polytex?  then read_from_yml
@@ -66,12 +66,12 @@ class Polytexnic::BookManifest < OpenStruct
   end
 
   def markdown?
-    @format == :markdown || @format == :md
+    @source == :markdown || @source == :md
   end
   alias :md? :markdown?
 
   def polytex?
-    @format == :polytex
+    @source == :polytex
   end
 
   def chapter_file_paths

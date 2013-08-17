@@ -53,7 +53,7 @@ describe Polytexnic::Builders::Html do
   end
 
   describe "when generating from Markdown source" do
-    before(:all) { generate_book(format: :markdown) }
+    before(:all) { generate_book(source: :markdown) }
     after(:all)  { remove_book }
 
     describe "#build!" do
