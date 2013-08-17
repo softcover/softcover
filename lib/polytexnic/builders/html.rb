@@ -50,7 +50,7 @@ module Polytexnic
       # Writes the LaTeX files for a given Markdown chapter.
       def write_latex_files(chapter)
         path = File.join('markdown', chapter.slug + '.md')
-        md = Polytexnic::Core::Pipeline.new(File.read(path), format: :md)
+        md = Polytexnic::Core::Pipeline.new(File.read(path), source: :md)
         File.write(File.join("chapters", "#{chapter.slug}.tex"), md.polytex)
       end
 
