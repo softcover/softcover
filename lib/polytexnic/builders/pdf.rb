@@ -6,8 +6,7 @@ module Polytexnic
         # Build the PolyTeX filename so it accepts both 'foo' and 'foo.tex'.
         if markdown_directory?
           Polytexnic::Builders::Html.new.build!
-          @manifest = Polytexnic::BookManifest.new(source: :polytex,
-                                                   verify_paths: true)
+          @manifest = Polytexnic::BookManifest.new(source: :polytex)
         end
         basename = File.basename(@manifest.filename, '.tex')
         book_filename = basename + '.tex'

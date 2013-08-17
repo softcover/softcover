@@ -139,3 +139,20 @@ describe Polytexnic::Builders::Epub do
     expect('epub/book.zip').not_to exist
   end
 end
+
+describe Polytexnic::Builders::Epub do
+  context "for a Markdown book" do
+    before(:all) do
+      generate_book(source: :markdown)
+      @builder = Polytexnic::Builders::Epub.new
+      silence { @builder.build! }
+      chdir_to_book
+    end
+    after(:all) { remove_book }
+    subject(:builder) { @builder }
+
+    it "should not raise an error" do
+      expect { subject }.not_to raise_error
+    end
+  end
+end

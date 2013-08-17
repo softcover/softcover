@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Polytexnic::Builders::Mobi do
-  context "in valid TeX directory" do
+  context "for a PolyTeX book" do
     before(:all) do
       generate_book
       @builder = Polytexnic::Builders::Mobi.new
@@ -25,10 +25,23 @@ describe Polytexnic::Builders::Mobi do
       end
     end
   end
-end
 
-# Cleans the fixtures directory as a prep for testing.
-def clean!
-  FileUtils.rm_r('epub/book.epub', force: true)
-  FileUtils.rm_r('epub/book.mobi', force: true)
+  context "for a Markdown book" do
+    before(:all) do
+      generate_book(source: :markdown)
+      @builder = Polytexnic::Builders::Mobi.new
+      silence { @built = @builder.build! }
+      chdir_to_book
+    end
+    after(:all) { remove_book }
+
+    describe "#build!" do
+      describe "MOBI generation" do
+        subject(:built) { @built }
+        it { should match /kindlegen/ }
+        it { should match /ebooks\/book\.epub/ }
+        it { should_not match /Book.txt.epub/ }
+      end
+    end
+  end
 end
