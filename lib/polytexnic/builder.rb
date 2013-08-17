@@ -24,7 +24,7 @@ module Polytexnic
       def verify; end
 
       def source
-        File.directory?('markdown') ? :markdown : :polytex
+        markdown_directory? ? :markdown : :polytex
       end
   end
 end
