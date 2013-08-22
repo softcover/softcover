@@ -91,7 +91,12 @@ module Polytexnic::Utils
 
   # Returns the executable if it exists, raising an error otherwise.
   def executable(filename, message)
-    filename.tap { |f| raise message unless File.exist?(f) }
+    filename.tap do |f|
+      unless File.exist?(f)
+        $stderr.puts message
+        exit 1
+      end
+    end
   end
 
   def mkdir(dir)
