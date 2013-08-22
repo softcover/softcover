@@ -4,7 +4,7 @@ describe Polytexnic::Builders::Epub do
   before(:all) do
     generate_book
     @builder = Polytexnic::Builders::Epub.new
-    @builder.build!
+    silence { @builder.build! }
     chdir_to_book
   end
   after(:all) { remove_book }
@@ -119,6 +119,11 @@ describe Polytexnic::Builders::Epub do
           expect("epub/OEBPS/#{chapter.slug}_fragment.html").to exist
         end
       end
+
+      it "should create math PNGs" do
+        expect("epub/OEBPS/images/texmath").to exist
+        expect(Dir["epub/OEBPS/images/texmath/*.png"]).not_to be_empty
+      end
     end
 
     it "should create the style files" do
@@ -129,7 +134,25 @@ describe Polytexnic::Builders::Epub do
   end
 
   it "should generate the EPUB" do
-    expect('epub/book.epub').to exist
+    expect('ebooks/book.epub').to exist
+    expect('epub/book.epub').not_to exist
     expect('epub/book.zip').not_to exist
+  end
+end
+
+describe Polytexnic::Builders::Epub do
+  context "for a Markdown book" do
+    before(:all) do
+      generate_book(source: :markdown)
+      @builder = Polytexnic::Builders::Epub.new
+      silence { @builder.build! }
+      chdir_to_book
+    end
+    after(:all) { remove_book }
+    subject(:builder) { @builder }
+
+    it "should not raise an error" do
+      expect { subject }.not_to raise_error
+    end
   end
 end

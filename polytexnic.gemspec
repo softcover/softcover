@@ -17,8 +17,8 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
-
   gem.add_dependency 'polytexnic-core'
+  gem.add_dependency 'msgpack', '~> 0.4.2'
   gem.add_dependency 'nokogiri', '~> 1.5.0'
   gem.add_dependency 'thor'
   gem.add_dependency 'activesupport'
@@ -27,6 +27,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'ruby-progressbar'
   gem.add_dependency 'maruku'
   gem.add_dependency 'pygments.rb'
+  gem.add_dependency 'kramdown'
 
   gem.add_dependency 'sinatra'
   gem.add_dependency 'sinatra-respond_to'

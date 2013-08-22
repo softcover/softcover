@@ -10,8 +10,12 @@ pygments.sty
 # Generated HTML files
 html/*.html
 
-# Generated EPUB/MOBI files
+# Code highlighting cache
+.highlight_cache
+
+# Generated ebook files
 epub/
+ebooks/
 
 # Screencasts (likely to be huge)
 screencasts/

@@ -31,7 +31,7 @@ describe Polytexnic::Commands::Generator do
       end
     end
 
-    context "generated contents" do
+    context "generated contents from template" do
 
       before { Dir.chdir(name) }
 
@@ -39,13 +39,21 @@ describe Polytexnic::Commands::Generator do
         expect { `poly build` }.not_to raise_error
       end
 
-      it "should have a base LaTeX file" do
-        expect('foo_bar.tex').to exist
+      describe "base LaTeX file" do
+        subject(:base) { 'foo_bar.tex' }
+        it { should exist }
+        it "should use the 14-point extbook doctype" do
+          expect(File.read(base)).to match(/\[14pt\]\{extbook\}/)
+        end
       end
 
       it "should have chapter files" do
         expect('chapters/a_chapter.tex').to exist
         expect('chapters/another_chapter.tex').to exist
+      end
+
+      it "should not have the markdown files" do
+        expect('markdown/a_chapter.md').not_to exist
       end
 
       describe ".gitignore" do
@@ -59,6 +67,7 @@ describe Polytexnic::Commands::Generator do
         it { should match(/pygments\.sty/) }
         it { should match(/html\//) }
         it { should match(/epub\//) }
+        it { should match(/ebooks\//) }
         it { should match(/screencasts\//) }
         it { should match(/log\//) }
         it { should match(/\.DS_Store/) }

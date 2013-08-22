@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Polytexnic::Builders::Html do
 
-  context "in valid TeX directory" do
+  describe "when generating from PolyTeX sourde" do
     before(:all) { generate_book }
     after(:all)  { remove_book }
 
@@ -52,22 +52,27 @@ describe Polytexnic::Builders::Html do
     end
   end
 
-  context "in valid MD directory" do
-    before { chdir_to_md_book }
+  describe "when generating from Markdown source" do
+    before(:all) { generate_book(source: :markdown) }
+    after(:all)  { remove_book }
 
     describe "#build!" do
       subject(:builder) { Polytexnic::Builders::Html.new }
 
       before { builder.build! }
 
-      2.times do |i|
-        its(:built_files) { should include "html/chapter#{i+1}.html" }
-        its(:built_files) { should include "html/chapter#{i+1}_fragment.html" }
-      end
+      its(:built_files) { should include "html/a_chapter.html" }
+      its(:built_files) { should include "html/a_chapter_fragment.html" }
+      its(:built_files) { should include "html/another_chapter.html" }
+      its(:built_files) { should include "html/another_chapter_fragment.html" }
 
-      after(:all) do
-        chdir_to_md_book
-        builder.clean!
+      describe "master LaTeX file" do
+        let(:master_file) { Dir['*.tex'].reject { |f| f =~ /\.tmp/}.first }
+        subject { File.read(master_file) }
+        it { should include '  \include{chapters/a_chapter}' }
+        it { should include '  \include{chapters/another_chapter}' }
+        it { should include '  \include{chapters/yet_another_chapter}' }
+        it { should include '\end{document}' }
       end
     end
   end

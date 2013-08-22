@@ -94,8 +94,13 @@ module Polytexnic
     # ===============================================
 
     desc "new <name>", "Generate new book directory structure."
-    def new(name)
-      Polytexnic::Commands::Generator.generate_directory name
+    method_option :markdown,
+                  :type => :boolean,
+                  :default => false,
+                  :aliases => "-m",
+                  :desc => "Generate a Markdown book."
+    def new(n)
+      Polytexnic::Commands::Generator.generate_directory(n, options.markdown?)
     end
 
     # ===============================================
@@ -111,10 +116,11 @@ module Polytexnic
     # EPUB validate
     # ===============================================
 
-    desc "epub:validate", "Validate EPUB with epubcheck"
+    desc "epub:validate, epub:check", "Validate EPUB with epubcheck"
     define_method "epub:validate" do
       Polytexnic::Commands::EpubValidator.validate!
     end
+    map "epub:check" => "epub:validate"
 
     # ===============================================
     # Config

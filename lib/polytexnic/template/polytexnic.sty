@@ -1,14 +1,36 @@
-% This is a generated file. Do not edit.
+% Page size
+% These settings are optimized ebooks. Remove or comment out these lines
+% for a more print-friendly version.
+\setlength{\oddsidemargin}{.25in}
+\setlength{\evensidemargin}{.25in}
+\setlength{\textheight}{8in}
+\setlength{\textwidth}{6.25in}
+\setlength{\topmargin}{0in}
 
+% Font encodings
+\usepackage[T1]{fontenc}
+% Be able to define colors
 \usepackage{xcolor}
+% Include graphics
 \usepackage{graphicx}
+% Commands included by PolyTeXnic
 \usepackage{polytexnic_commands}
+% Syntax highlighting
 \usepackage{pygments}
+% American Mathematical Society extensions
 \usepackage{amsmath}
-\usepackage{fancyvrb} % to get 'Verbatim' environment
+% 'Verbatim' environment
+\usepackage{fancyvrb}
+% Be able to resize text relative to other text
 \usepackage{relsize}
+% Configure hyperref footnotes
 \usepackage[hyperfootnotes=false]{hyperref}
 \hypersetup{hyperfootnotes=false}
+
+% Configure fonts
+\renewcommand{\rmdefault}{ptm}
+\usepackage{courier}
+\normalfont % in case the EC fonts aren't available
 
 % Links
 \definecolor{darkblue}{rgb}{0,0.18,0.45}
@@ -17,7 +39,7 @@
 
 % Code environments
 \DefineVerbatimEnvironment%
-  {code}{Verbatim}{fontsize=\relsize{-0.5},fontseries=b}
+  {code}{Verbatim}{fontsize=\relsize{-1.5},fontseries=b}
 % The metacode environment exists solely to allow meta-discussion of the code
 % environment, as in
 %   %= lang:latex
@@ -30,7 +52,14 @@
 %   \end{code}
 %   \end{metacode}
 \DefineVerbatimEnvironment%
-  {metacode}{Verbatim}{fontsize=\relsize{-0.5},fontseries=b}
+  {metacode}{Verbatim}{fontsize=\relsize{-1.5},fontseries=b}
+% Use a nice font in code environments.
+\usepackage[scaled=0.92]{helvet}
+% Fix quotes in code environments
+\usepackage{upquote}
+
+% Size-constrained images
+\newcommand{\image}[1]{\fbox{\includegraphics[width=0.95\textwidth]{#1}}}
 
 % Aside boxes
 \usepackage{framed}

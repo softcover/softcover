@@ -43,4 +43,9 @@ module Polytexnic
   def test?
     @test_mode
   end
+
+  def profiling?
+    return false if test?
+    false
+  end
 end

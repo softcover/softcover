@@ -29,6 +29,10 @@ module Polytexnic::Utils
     Polytexnic::Config['api_key'].present?
   end
 
+  def markdown_directory?
+    File.directory?('markdown')
+  end
+
   UNITS = %W(B KB MB GB TB).freeze
 
   def as_size(number)
@@ -83,6 +87,19 @@ module Polytexnic::Utils
   # Returns a digest of the string.
   def digest(string)
     Digest::SHA1.hexdigest(string)
+  end
+
+  # Returns the executable if it exists, raising an error otherwise.
+  def executable(filename, message)
+    filename.tap { |f| raise message unless File.exist?(f) }
+  end
+
+  def mkdir(dir)
+    Dir.mkdir(dir) unless File.directory?(dir)
+  end
+
+  def rm(file)
+    FileUtils.rm(file) if File.exist?(file)
   end
 end
 
