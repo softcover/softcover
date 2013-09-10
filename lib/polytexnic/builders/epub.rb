@@ -11,6 +11,7 @@ module Polytexnic
         write_mimetype
         write_container_xml
         write_toc
+        write_nav
         copy_image_files
         write_html
         write_contents
@@ -34,19 +35,17 @@ module Polytexnic
       # Writes the mimetype file.
       # This is required by the EPUB standard.
       def write_mimetype
-        File.open('epub/mimetype', 'w') { |f| f.write('application/epub+zip') }
+        File.write('epub/mimetype', 'application/epub+zip')
       end
 
       # Writes the container XML file.
       # This is required by the EPUB standard.
       def write_container_xml
-        File.open('epub/META-INF/container.xml', 'w') do |f|
-          f.write(container_xml)
-        end
+        File.write('epub/META-INF/container.xml', container_xml)
       end
 
       def write_contents
-        File.open('epub/OEBPS/content.opf', 'w') { |f| f.write(content_opf) }
+        File.write('epub/OEBPS/content.opf', content_opf)
       end
 
       def write_html
@@ -204,26 +203,11 @@ module Polytexnic
       end
 
       def write_toc
-        File.open('epub/OEBPS/toc.ncx', 'w') { |f| f.write(toc_ncx) }
+        File.write('epub/OEBPS/toc.ncx', toc_ncx)
       end
 
-      def template(title, content)
-        %(<?xml version="1.0" encoding="utf-8"?>
-        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-          "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-
-        <html xmlns="http://www.w3.org/1999/xhtml">
-        <head>
-          <title>#{title}</title>
-          <link rel="stylesheet" href="styles/pygments.css" type="text/css" />
-          <link rel="stylesheet" href="styles/polytexnic.css" type="text/css" />
-          <link rel="stylesheet" type="application/vnd.adobe-page-template+xml" href="styles/page-template.xpgt" />
-        </head>
-
-        <body>
-          #{content}
-        </body>
-        </html>)
+      def write_nav
+        File.write('epub/OEBPS/nav.html', nav_html)
       end
 
       def container_xml
@@ -261,28 +245,28 @@ module Polytexnic
                    %(<item id="#{id}" href="#{href}" media-type="image/#{ext}"/>)
                  end
 %(<?xml version="1.0" encoding="UTF-8"?>
-  <package xmlns="http://www.idpf.org/2007/opf" unique-identifier="BookID" version="2.0">
-      <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
-          <dc:title>#{title}</dc:title>
-    <dc:language>en</dc:language>
-          <dc:rights>Copyright (c) #{copyright} #{author}</dc:rights>
-          <dc:creator opf:role="aut">#{author}</dc:creator>
-          <dc:publisher>Softcover</dc:publisher>
-          <dc:identifier id="BookID" opf:scheme="UUID">#{uuid}</dc:identifier>
-      </metadata>
-      <manifest>
-          <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
-          <item id="page-template.xpgt" href="styles/page-template.xpgt" media-type="application/vnd.adobe-page-template+xml"/>
-          <item id="pygments.css" href="styles/pygments.css" media-type="text/css"/>
-          <item id="polytexnic.css" href="styles/polytexnic.css" media-type="text/css"/>
-          #{man_ch.join("\n")}
-          #{images.join("\n")}
-      </manifest>
-      <spine toc="ncx">
-        #{toc_ch.join("\n")}
-      </spine>
-      <guide>
-      </guide>
+  <package unique-identifier="BookID" version="3.0" xmlns="http://www.idpf.org/2007/opf">
+    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"
+        xmlns:opf="http://www.idpf.org/2007/opf">
+        <dc:title>#{title}</dc:title>
+        <dc:language>en</dc:language>
+        <dc:rights>Copyright (c) #{copyright} #{author}</dc:rights>
+        <dc:creator>#{author}</dc:creator>
+        <dc:publisher>Softcover</dc:publisher>
+        <dc:identifier id="BookID">urn:uuid:#{uuid}</dc:identifier>
+        <meta property="dcterms:modified">#{Time.now.strftime('%Y-%m-%dT%H:%M:%S')}Z</meta>
+    </metadata>
+    <manifest>
+        <item href="nav.html" id="nav" media-type="application/xhtml+xml" properties="nav"/>          <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+        <item id="page-template.xpgt" href="styles/page-template.xpgt" media-type="application/vnd.adobe-page-template+xml"/>
+        <item id="pygments.css" href="styles/pygments.css" media-type="text/css"/>
+        <item id="polytexnic.css" href="styles/polytexnic.css" media-type="text/css"/>
+        #{man_ch.join("\n")}
+        #{images.join("\n")}
+    </manifest>
+    <spine toc="ncx">
+      #{toc_ch.join("\n")}
+    </spine>
   </package>)
       end
 
@@ -296,11 +280,7 @@ module Polytexnic
           chapter_nav << %(    <content src="#{chapter.fragment_name}"/>)
           chapter_nav << %(</navPoint>)
         end
-
 %(<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx 2005-1//EN"
-   "http://www.daisy.org/z3986/2005/ncx-2005-1.dtd">
-
 <ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
     <head>
         <meta name="dtb:uid" content="d430b920-e684-11e1-aff1-0800200c9a66"/>
@@ -315,6 +295,30 @@ module Polytexnic
       #{chapter_nav.join("\n")}
     </navMap>
 </ncx>)
+      end
+
+      # Returns the nav HTML content.
+      def nav_html
+        title = manifest.title
+        nav_list = manifest.chapters.map do |chapter|
+                     %(<li><a href="#{chapter.fragment_name}">#{chapter.title}</a></li>)
+                   end
+%(<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <meta charset="UTF-8" />
+        <title>#{title}</title>
+    </head>
+    <body>
+        <nav epub:type="toc">
+            <h1>#{title}</h1>
+            <ol>
+              #{nav_list.join("\n")}
+            </ol>
+        </nav>
+    </body>
+</html>
+)
       end
 
       # This is hard-coded for now, but will eventually be dynamic.
@@ -340,8 +344,7 @@ module Polytexnic
       # Returns the HTML template for a chapter.
       def chapter_template(title, content)
         %(<?xml version="1.0" encoding="utf-8"?>
-        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-          "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+        <!DOCTYPE html>
 
         <html xmlns="http://www.w3.org/1999/xhtml">
         <head>
