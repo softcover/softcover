@@ -3,14 +3,6 @@ require 'spec_helper'
 describe Polytexnic::Builders::Mobi do
   context "in valid TeX directory" do
     before(:all) do
-      if `which kindlegen` == ''
-        url = 'http://www.amazon.com/gp/feature.html?ie=UTF8&docId=1000765211'
-        msg = "No kindlegen found, install here: #{url}"
-        raise msg
-      end
-    end
-
-    before(:all) do
       generate_book
       @builder = Polytexnic::Builders::Mobi.new
       silence { @built = @builder.build! }
@@ -20,7 +12,7 @@ describe Polytexnic::Builders::Mobi do
 
     describe "#build!" do
       it "should generate the EPUB" do
-        expect('epub/book.epub').to exist
+        expect('ebooks/book.epub').to exist
       end
 
       # Because of the way kindlegen uses tempfiles, testing for the
@@ -29,7 +21,7 @@ describe Polytexnic::Builders::Mobi do
       describe "MOBI generation" do
         subject(:built) { @built }
         it { should match /kindlegen/ }
-        it { should match /epub\/book\.epub/ }
+        it { should match /ebooks\/book\.epub/ }
       end
     end
   end

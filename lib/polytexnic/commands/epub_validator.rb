@@ -7,7 +7,6 @@ module Polytexnic
         book = Polytexnic::Book.new
         book.epubcheck
       end
-
     end
   end
 end

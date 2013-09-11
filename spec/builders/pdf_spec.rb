@@ -30,7 +30,7 @@ describe Polytexnic::Builders::Pdf do
     end
 
     it "should build a PDF" do
-      expect('book.pdf').to exist
+      expect('ebooks/book.pdf').to exist
     end
 
     it "should create a Pygments style file" do

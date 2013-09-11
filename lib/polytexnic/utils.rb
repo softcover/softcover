@@ -89,5 +89,13 @@ module Polytexnic::Utils
   def executable(filename, message)
     filename.tap { |f| raise message unless File.exist?(f) }
   end
+
+  def mkdir(dir)
+    Dir.mkdir(dir) unless File.directory?(dir)
+  end
+
+  def rm(file)
+    FileUtils.rm(file) if File.exist?(file)
+  end
 end
 
