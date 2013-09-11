@@ -47,7 +47,7 @@ module Polytexnic
       end
 
       def write_html
-        images_dir  = 'epub/OEBPS/images'
+        images_dir  = File.join('epub', 'OEBPS', 'images')
         texmath_dir = File.join(images_dir, 'texmath')
         mkdir(images_dir)
         mkdir(texmath_dir)
@@ -88,7 +88,7 @@ module Polytexnic
       # SHAs of their contents, which arranges both for unique filenames
       # and for automatic caching.
       def html_with_math(chapter, images_dir, texmath_dir, pngs)
-        content = File.read("html/#{chapter.slug}.html")
+        content = File.read(File.join("html", "#{chapter.slug}.html"))
         pagejs = "#{File.dirname(__FILE__)}/utils/page.js"
         url = "file://#{Dir.pwd}/html/#{chapter.slug}.html"
         cmd = "#{phantomjs} #{pagejs} #{url}"
@@ -175,9 +175,12 @@ module Polytexnic
                      File.join('epub', 'OEBPS', 'styles'))
       end
 
+      # Copies the image files from the HTML version of the document.
+      # We remove PDF images, which are valid in PDF documents but not in EPUB.
       def copy_image_files
         FileUtils.cp_r(File.join('html', 'images'),
                        File.join('epub', 'OEBPS'))
+        File.delete(*Dir['epub/OEBPS/images/**/*.pdf'])
       end
 
       # Make the EPUB, which is basically just a zipped HTML file.
@@ -250,7 +253,8 @@ module Polytexnic
                    # Define an id based on the filename.
                    # Prefix with 'img-' in case the filname starts with an
                    # invalid character such as a number.
-                   id = "img-#{File.basename(image, '.*')}"
+                   label = File.basename(image).gsub('.', '-')
+                   id = "img-#{label}"
                    %(<item id="#{id}" href="#{href}" media-type="image/#{ext}"/>)
                  end
 %(<?xml version="1.0" encoding="UTF-8"?>

@@ -111,10 +111,11 @@ module Polytexnic
     # EPUB validate
     # ===============================================
 
-    desc "epub:validate", "Validate EPUB with epubcheck"
+    desc "epub:validate, epub:check", "Validate EPUB with epubcheck"
     define_method "epub:validate" do
       Polytexnic::Commands::EpubValidator.validate!
     end
+    map "epub:check" => "epub:validate"
 
     # ===============================================
     # Config
