@@ -94,8 +94,13 @@ module Polytexnic
     # ===============================================
 
     desc "new <name>", "Generate new book directory structure."
-    def new(name)
-      Polytexnic::Commands::Generator.generate_directory name
+    method_option :markdown,
+                  :type => :boolean,
+                  :default => false,
+                  :aliases => "-m",
+                  :desc => "Generate a Markdown book."
+    def new(n)
+      Polytexnic::Commands::Generator.generate_directory(n, options.markdown?)
     end
 
     # ===============================================

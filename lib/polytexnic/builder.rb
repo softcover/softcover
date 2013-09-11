@@ -5,7 +5,8 @@ module Polytexnic
     attr_accessor :manifest, :built_files
 
     def initialize
-      @manifest = Polytexnic::BookManifest.new verify_paths: true
+      @manifest = Polytexnic::BookManifest.new(verify_paths: true,
+                                               format: format)
       @built_files = []
     end
 
@@ -19,8 +20,15 @@ module Polytexnic
     def clean!; end
 
     private
-      def build; end
       def setup; end
       def verify; end
+
+      def format
+        markdown? ? :markdown : :polytex
+      end
+
+      def markdown?
+        File.directory?('markdown')
+      end
   end
 end

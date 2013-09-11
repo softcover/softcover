@@ -16,7 +16,6 @@ test/tmp
 test/version_tmp
 tmp
 .DS_Store
-spec/fixtures/book/log/tralics.log
 *.aux
 *.tmp.*
 spec/fixtures/book/
