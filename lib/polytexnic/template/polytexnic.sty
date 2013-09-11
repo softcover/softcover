@@ -17,7 +17,7 @@
 
 % Code environments
 \DefineVerbatimEnvironment%
-  {code}{Verbatim}{fontsize=\relsize{-0.5},fontseries=b}
+  {code}{Verbatim}{fontsize=\relsize{-1.5},fontseries=b}
 % The metacode environment exists solely to allow meta-discussion of the code
 % environment, as in
 %   %= lang:latex
@@ -30,7 +30,9 @@
 %   \end{code}
 %   \end{metacode}
 \DefineVerbatimEnvironment%
-  {metacode}{Verbatim}{fontsize=\relsize{-0.5},fontseries=b}
+  {metacode}{Verbatim}{fontsize=\relsize{-1.5},fontseries=b}
+% Use a nice font in code environments.
+\usepackage[scaled=0.92]{helvet}
 
 % Aside boxes
 \usepackage{framed}
