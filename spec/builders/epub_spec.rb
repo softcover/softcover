@@ -4,7 +4,7 @@ describe Polytexnic::Builders::Epub do
   before(:all) do
     generate_book
     @builder = Polytexnic::Builders::Epub.new
-    @builder.build!
+    silence { @builder.build! }
     chdir_to_book
   end
   after(:all) { remove_book }
@@ -118,6 +118,11 @@ describe Polytexnic::Builders::Epub do
           expect(builder.math?(content)).to be_true if i == 0
           expect("epub/OEBPS/#{chapter.slug}_fragment.html").to exist
         end
+      end
+
+      it "should create math PNGs" do
+        expect("epub/OEBPS/images/texmath").to exist
+        expect(Dir["epub/OEBPS/images/texmath/*.png"]).not_to be_empty
       end
     end
 

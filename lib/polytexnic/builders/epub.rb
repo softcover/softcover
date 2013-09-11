@@ -56,74 +56,11 @@ module Polytexnic
           File.open(source_filename, 'w') do |f|
             content = File.read("html/#{chapter.fragment_name}")
 
-            # add .html to links
-            # doc.css('a.ref').each do |node|
-            #   node
-            # end
             doc = strip_attributes(Nokogiri::HTML(content))
             inner_html = doc.at_css('body').children.to_xhtml
             if math?(inner_html)
-              content = File.read("html/#{chapter.slug}.html")
-              pagejs = "#{File.dirname(__FILE__)}/utils/page.js"
-              url = "file://#{Dir.pwd}/html/#{chapter.slug}.html"
-              cmd = "phantomjs #{pagejs} #{url}"
-              if Polytexnic::test?
-                silence_stream(STDOUT) do
-                  system cmd
-                end
-              else
-                system cmd
-              end
-              # Sometimes in tests the phantomjs_source.html file is missing.
-              # It shouldn't ever happen, but it does no harm to skip it.
-              next unless File.exist?('phantomjs_source.html')
-              raw_source = File.read('phantomjs_source.html')
-              source = strip_attributes(Nokogiri::HTML(raw_source))
-              rm('phantomjs_source.html')
-              # Remove the first body div, which is the hidden MathJax SVGs
-              source.at_css('body div').remove
-              # Remove all the unneeded raw TeX displays.
-              source.css('script').each(&:remove)
-              # Remove all the MathJax preview spans.
-              source.css('MathJax_Preview').each(&:remove)
-
-              # Suck out all the SVGs
-              svgs   = source.css('div#book svg')
-              frames = source.css('span.MathJax_SVG')
-              svgs.zip(frames).each do |svg, frame|
-                # Save SVG file.
-                svg['viewBox'] = svg['viewbox']
-                svg.remove_attribute('viewbox')
-                first_child = frame.children.first
-                first_child.replace(svg) unless svg == first_child
-                output = svg.to_xhtml
-                svg_filename = File.join(texmath_dir, "#{digest(output)}.svg")
-                File.write(svg_filename, output)
-                # Convert to PNG.
-                png_filename = svg_filename.sub('.svg', '.png')
-                pngs << png_filename
-                unless File.exist?(png_filename)
-                  puts "Creating #{png_filename}" unless Polytexnic::test?
-                  inkscape = '/Applications/Inkscape.app/Contents/Resources/bin/inkscape'
-                  svg_height = svg['style'].scan(/height: (.*?);/).first.first
-                  height = 9 * svg_height.to_f
-                  cmd = "#{inkscape} -f #{svg_filename} -e #{png_filename} -h #{height}pt"
-                  if Polytexnic::test?
-                    silence_stream(STDOUT) do
-                      silence_stream(STDERR) { system cmd }
-                    end
-                  else
-                    silence_stream(STDERR) { system cmd }
-                  end
-                end
-                rm(svg_filename)
-                png = Nokogiri::XML::Node.new('img', source)
-                png['src'] = File.join('images', 'texmath',
-                                       File.basename(png_filename))
-                png['alt'] = png_filename.sub('.png', '')
-                svg.replace(png)
-              end
-              html = source.at_css('body').children.to_xhtml
+              html = html_with_math(chapter, images_dir, texmath_dir, pngs)
+              next if html.nil?
             else
               html = inner_html
             end
@@ -134,10 +71,89 @@ module Polytexnic
         png_files = Dir[File.join(texmath_dir, '*.png')]
         (png_files - pngs).each do |f|
           if File.exist?(f)
-            puts "Removing unused PNG #{f}" unless Polytexnic::test?
+            puts "Removing unused PNG #{f}"
             FileUtils.rm(f)
           end
         end
+      end
+
+      # Returns HTML for source with math.
+      # As a side-effect, html_with_math creates PNGs corresponding to any
+      # math in the given source. The technique involves using PhantomJS to
+      # hit the HTML source for each page containing math to create SVGs
+      # for every math element. Since ereader support for SVGs is spotty,
+      # they are then converted to PNGs using Inkscape. The filenames are
+      # SHAs of their contents, which arranges both for unique filenames
+      # and for automatic caching.
+      def html_with_math(chapter, images_dir, texmath_dir, pngs)
+        content = File.read("html/#{chapter.slug}.html")
+        pagejs = "#{File.dirname(__FILE__)}/utils/page.js"
+        url = "file://#{Dir.pwd}/html/#{chapter.slug}.html"
+        cmd = "#{phantomjs} #{pagejs} #{url}"
+        system cmd
+        # Sometimes in tests the phantomjs_source.html file is missing.
+        # It shouldn't ever happen, but it does no harm to skip it.
+        return nil unless File.exist?('phantomjs_source.html')
+        raw_source = File.read('phantomjs_source.html')
+        source = strip_attributes(Nokogiri::HTML(raw_source))
+        rm('phantomjs_source.html')
+        # Remove the first body div, which is the hidden MathJax SVGs
+        source.at_css('body div').remove
+        # Remove all the unneeded raw TeX displays.
+        source.css('script').each(&:remove)
+        # Remove all the MathJax preview spans.
+        source.css('MathJax_Preview').each(&:remove)
+
+        # Suck out all the SVGs
+        svgs   = source.css('div#book svg')
+        frames = source.css('span.MathJax_SVG')
+        svgs.zip(frames).each do |svg, frame|
+          # Save the SVG file.
+          svg['viewBox'] = svg['viewbox']
+          svg.remove_attribute('viewbox')
+          first_child = frame.children.first
+          first_child.replace(svg) unless svg == first_child
+          output = svg.to_xhtml
+          svg_filename = File.join(texmath_dir, "#{digest(output)}.svg")
+          File.write(svg_filename, output)
+          # Convert to PNG.
+          png_filename = svg_filename.sub('.svg', '.png')
+          pngs << png_filename
+          unless File.exist?(png_filename)
+            puts "Creating #{png_filename}"
+            svg_height = svg['style'].scan(/height: (.*?);/).flatten.first
+            scale_factor = 9   # This scale factor turns out to look good.
+            h = scale_factor * svg_height.to_f
+            cmd = "#{inkscape} -f #{svg_filename} -e #{png_filename} -h #{h}pt"
+            silence_stream(STDERR) { system cmd }
+          end
+          rm(svg_filename)
+          png = Nokogiri::XML::Node.new('img', source)
+          png['src'] = File.join('images', 'texmath',
+                                 File.basename(png_filename))
+          png['alt'] = png_filename.sub('.png', '')
+          svg.replace(png)
+        end
+        source.at_css('body').children.to_xhtml
+      end
+
+      # Returns the PhantomJS executable (if available).
+      def phantomjs
+        filename = `which phantomjs`.chomp
+        message  = "Install PhantomJS (http://phantomjs.org/)"
+        @phantomjs ||= executable(filename, message)
+      end
+
+      # Returns the Inkscape executable (if available).
+      def inkscape
+        filename = '/Applications/Inkscape.app/Contents/Resources/bin/inkscape'
+        message  = "Install Inkscape (http://inkscape.org/)"
+        @inkscape ||= executable(filename, message)
+      end
+
+      # Returns the executable if it exists, raising an error otherwise.
+      def executable(filename, message)
+        filename.tap { |f| raise message unless File.exist?(f) }
       end
 
       # Strip attributes that are invalid in EPUB documents.
@@ -152,8 +168,9 @@ module Polytexnic
       end
 
       # Returns true if a string appears to have LaTeX math.
+      # We detect opening math commands: \(, \[, and \begin{equation}
       def math?(string)
-        !!string.match(/(?:\\\(|\\\[|\\begin{equation)/)
+        !!string.match(/(?:\\\(|\\\[|\\begin{equation})/)
       end
 
       def create_style_files
