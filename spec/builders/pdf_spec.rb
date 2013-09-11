@@ -4,7 +4,7 @@ describe Polytexnic::Builders::Pdf do
   before(:all) do
     generate_book
     @builder = Polytexnic::Builders::Pdf.new
-    @builder.build!
+    silence { @builder.build! }
     chdir_to_book
   end
   after(:all) { remove_book }
