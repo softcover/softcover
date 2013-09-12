@@ -27,6 +27,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'ruby-progressbar'
   gem.add_dependency 'maruku'
   gem.add_dependency 'pygments.rb'
+  gem.add_dependency 'kramdown'
 
   gem.add_dependency 'sinatra'
   gem.add_dependency 'sinatra-respond_to'

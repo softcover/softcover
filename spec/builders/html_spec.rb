@@ -60,9 +60,17 @@ describe Polytexnic::Builders::Html do
 
       before { builder.build! }
 
-      2.times do |i|
-        its(:built_files) { should include "html/chapter#{i+1}.html" }
-        its(:built_files) { should include "html/chapter#{i+1}_fragment.html" }
+      its(:built_files) { should include "html/chapter1.html" }
+      its(:built_files) { should include "html/chapter1_fragment.html" }
+      its(:built_files) { should include "html/chapter2.html" }
+      its(:built_files) { should include "html/chapter2_fragment.html" }
+
+      describe "master LaTeX file" do
+        let(:master_file) { Dir['*.tex'].reject { |f| f =~ /\.tmp/}.first }
+        subject { File.read(master_file) }
+        it { should include '  \include{chapters/chapter1}' }
+        it { should include '  \include{chapters/chapter2}' }
+        it { should include '\end{document}' }
       end
 
       after(:all) do
