@@ -6,7 +6,7 @@ module Polytexnic
 
     def initialize
       @manifest = Polytexnic::BookManifest.new(verify_paths: true,
-                                               format: format)
+                                               source: source)
       @built_files = []
     end
 
@@ -23,12 +23,8 @@ module Polytexnic
       def setup; end
       def verify; end
 
-      def format
-        markdown? ? :markdown : :polytex
-      end
-
-      def markdown?
-        File.directory?('markdown')
+      def source
+        markdown_directory? ? :markdown : :polytex
       end
   end
 end

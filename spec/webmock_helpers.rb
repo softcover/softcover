@@ -139,7 +139,7 @@ module WebmockHelpers
   # directory with a stub file.
   def generate_book(options = {})
     name   = options[:name] || 'book'
-    source = options[:format] || :polytex
+    source = options[:source] || :polytex
     remove_book
     Dir.chdir File.join File.dirname(__FILE__), "fixtures/"
     silence do

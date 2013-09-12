@@ -23,7 +23,7 @@ module Polytexnic
           end
           rewrite_master_latex_file
           # Reset the manifest to use PolyTeX.
-          @manifest = Polytexnic::BookManifest.new(format: :polytex,
+          @manifest = Polytexnic::BookManifest.new(source: :polytex,
                                                    verify_paths: true)
         end
 

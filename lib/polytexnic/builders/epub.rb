@@ -4,6 +4,9 @@ module Polytexnic
 
       def build!
         build_html
+        if markdown_directory?
+          @manifest = Polytexnic::BookManifest.new(source: :polytex)
+        end
         create_directories
         write_mimetype
         write_container_xml
