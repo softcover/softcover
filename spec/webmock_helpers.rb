@@ -7,10 +7,10 @@ module WebmockHelpers
   def test_access_key; 'asdf' end
   def test_id; 1 end
 
-  HEADERS = { 'Accept'=>'application/json', 
-              'Accept-Encoding'=>'gzip, deflate', 
-              'Content-Length'=>/.+/, 
-              'Content-Type'=>'application/json', 
+  HEADERS = { 'Accept'=>'application/json',
+              'Accept-Encoding'=>'gzip, deflate',
+              'Content-Length'=>/.+/,
+              'Content-Type'=>'application/json',
               'User-Agent'=>'Ruby' }
 
   def stub_valid_login(email, pass, api_key=TEST_API_KEY)
@@ -22,7 +22,7 @@ module WebmockHelpers
 
   def stub_invalid_login(email, pass)
     stub_request(:post, "#{api_base_url}/login").
-      with(:body => { "email" => email, "password" => pass }, 
+      with(:body => { "email" => email, "password" => pass },
            :headers => HEADERS ).
       to_return(:status => 422, body: '')
   end
@@ -50,11 +50,11 @@ module WebmockHelpers
     stub_request(:post, "#{api_base_url}/books").
       with(:body => {
            id: book.id,
-           files: book.files, 
-           title: book.title, 
+           files: book.files,
+           title: book.title,
            slug: book.slug,
-           subtitle: book.subtitle, 
-           description: book.description, 
+           subtitle: book.subtitle,
+           description: book.description,
            cover: book.cover,
            chapters: book.chapter_attributes
         }.to_json,
@@ -68,14 +68,14 @@ module WebmockHelpers
     stub_request(:put, "#{api_base_url}/books/#{test_id}").
       with(:body => "{\"upload_complete\":true}",
         :headers => HEADERS).
-        to_return(:status => 200, :body => {}.to_json, :headers => {}) 
+        to_return(:status => 200, :body => {}.to_json, :headers => {})
   end
 
   def stub_notify_file_upload(file)
     notify_file_url = "#{api_base_url}/books/#{test_id}/notify_file_upload"
 
     stub_request(:post, notify_file_url).
-         with(:body => 
+         with(:body =>
             { path: file.path, checksum: file.checksum }.to_json,
               :headers => HEADERS).
          to_return(:status => 200, :body => {}.to_json, :headers => {})
@@ -91,12 +91,12 @@ module WebmockHelpers
     stub_s3_post
 
     files = book.find_screencasts
-    stub_request(:post, 
+    stub_request(:post,
                  "#{api_base_url}/books/#{book.id}/screencasts").
-                  with(:body => {files: files }.to_json, 
+                  with(:body => {files: files }.to_json,
                        :headers => HEADERS).
                   to_return(:status => 200, :body => {
-                            upload_params: files.map { |file| 
+                            upload_params: files.map { |file|
                               {
                                 :policy          => "asdf",
                                 :signature       => "asdf",
@@ -119,7 +119,7 @@ module WebmockHelpers
   end
 
   def chdir_to_fixtures
-    Dir.chdir File.join File.dirname(__FILE__), "fixtures"    
+    Dir.chdir File.join File.dirname(__FILE__), "fixtures"
   end
 
   def chdir_to_book
@@ -137,13 +137,16 @@ module WebmockHelpers
   # Generates a sample book using the same method as `poly new`.
   # It also creates test books of all standard formats and a screencasts
   # directory with a stub file.
-  def generate_book(name = 'book')
+  def generate_book(options = {})
+    name   = options[:name] || 'book'
+    source = options[:format] || :polytex
     remove_book
     Dir.chdir File.join File.dirname(__FILE__), "fixtures/"
     silence do
-      Polytexnic::Commands::Generator.generate_directory name
+      Polytexnic::Commands::Generator.generate_directory(name,
+                                                         source == :markdown)
     end
-    chdir_to_book    
+    chdir_to_book
     Polytexnic::FORMATS.each do |format|
       File.open("test-book.#{format}", 'w') { |f| f.write('test') }
     end
@@ -152,7 +155,7 @@ module WebmockHelpers
   end
 
   def remove_book
-    FileUtils.rm_rf(File.join File.dirname(__FILE__), "fixtures/book")    
+    FileUtils.rm_rf(File.join File.dirname(__FILE__), "fixtures/book")
     chdir_to_fixtures
   end
 end
