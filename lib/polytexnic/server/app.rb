@@ -19,6 +19,7 @@ class Polytexnic::App < Sinatra::Base
   get '/refresh' do
     require 'coffee_script'
     @mathjax_src    = Polytexnic::Mathjax::AMS_HTML
+    @mathjax_config = Polytexnic::Mathjax.config
     coffee erb :refresh
   end
 
