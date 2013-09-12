@@ -1,5 +1,3 @@
-require 'rest_client'
-require 'json'
 
 module Polytexnic
   class Client
@@ -17,6 +15,8 @@ module Polytexnic
     attr_accessor :host, :book
 
     def initialize(email=nil,password=nil,book=nil)
+      require 'json'
+      require 'rest_client'
       require "polytexnic/config"
       @email = email
       @password = password

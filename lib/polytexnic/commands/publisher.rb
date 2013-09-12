@@ -1,6 +1,3 @@
-require 'ruby-progressbar'
-require 'curb'
-
 module Polytexnic::Commands::Publisher
   include Polytexnic::Utils
 
@@ -10,15 +7,16 @@ module Polytexnic::Commands::Publisher
     return false unless current_book
 
     if current_book.create_or_update
+      require 'ruby-progressbar'
+      require 'curb'
       puts "Uploading #{current_book.uploader.file_count} files " \
         "(#{as_size current_book.uploader.total_size}):"
-
       current_book.upload!
     else
       puts "Errors: #{current_book.errors}"
       return false
     end
-    
+
     true
   end
 
@@ -26,7 +24,7 @@ module Polytexnic::Commands::Publisher
   def publish_screencasts!(options={})
     return false unless current_book
 
-    current_book.screencasts_dir = options[:dir] || 
+    current_book.screencasts_dir = options[:dir] ||
       Polytexnic::Book::DEFAULT_SCREENCASTS_DIR
 
     @watch = options[:watch]
@@ -61,7 +59,7 @@ module Polytexnic::Commands::Publisher
       rescue Interrupt
         puts " Interrupt Received."
         exit_with_message
-      end 
+      end
     else
       process_screencasts
       exit_with_message
@@ -69,7 +67,7 @@ module Polytexnic::Commands::Publisher
   end
 
   def process_screencasts
-    current_book.process_screencasts 
+    current_book.process_screencasts
   end
 
   def exit_with_message

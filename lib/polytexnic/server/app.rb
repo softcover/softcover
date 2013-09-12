@@ -1,7 +1,5 @@
 require 'sinatra/base'
 require 'sinatra/respond_to'
-require 'coffee_script'
-require 'json'
 
 class Polytexnic::App < Sinatra::Base
   register Sinatra::RespondTo
@@ -19,7 +17,7 @@ class Polytexnic::App < Sinatra::Base
   end
 
   get '/refresh' do
-    @mathjax_config = Polytexnic::Mathjax::config
+    require 'coffee_script'
     @mathjax_src    = Polytexnic::Mathjax::AMS_HTML
     coffee erb :refresh
   end
@@ -66,7 +64,7 @@ class Polytexnic::App < Sinatra::Base
   end
 
   get '/:chapter_slug/wait' do
-
+    require 'json'
     $changed = false
     Signal.trap("USR2") do
       $changed = true
