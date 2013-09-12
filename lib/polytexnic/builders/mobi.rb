@@ -20,7 +20,7 @@ module Polytexnic
         def kindlegen
           filename = `which kindlegen`.chomp
           url = 'http://www.amazon.com/gp/feature.html?ie=UTF8&docId=1000765211'
-          message  = "Install LaTeX (#{url})"
+          message  = "Install kindlegen (#{url})"
           @kindlegen ||= executable(filename, message)
         end
     end

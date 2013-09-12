@@ -78,21 +78,25 @@ class Polytexnic::Book
     `open #{url}`
   end
 
-  def epubcheck
+  def validate_epub
     epub = File.join('ebooks', "#{manifest.filename}.epub")
-    java = `which java`.strip
-    if java.empty?
-      system("EPUB validation requires java to be on the path")
-      exit 1
-    end
-    epubcheck = File.join(Dir.home, 'epubcheck-3.0', 'epubcheck-3.0.jar')
-    if !File.exist?(epubcheck)
-      puts "Install EpubCheck version 3.0 to your home directory"
-      puts 'https://code.google.com/p/epubcheck/downloads/detail?name=epubcheck-3.0.zip'
-      exit 1
-    end
     puts "Validating EPUB..."
     system("#{java} -jar #{epubcheck} #{epub}")
+  end
+
+  def java
+    filename = `which java`.chomp
+    url = 'http://www.java.com/en/download/help/index_installing.xml'
+    message = "Install Java (#{url})"
+    @java ||= executable(filename, message)
+  end
+
+  def epubcheck
+    filename = File.join(Dir.home, 'epubcheck-3.0', 'epubcheck-3.0.jar')
+    url = 'https://code.google.com/p/epubcheck/downloads/' +
+          'detail?name=epubcheck-3.0.zip'
+    message = "Put EpubCheck (#{url}) in your home directory"
+    @epubcheck ||= executable(filename, message).inspect
   end
 
   def create_or_update
