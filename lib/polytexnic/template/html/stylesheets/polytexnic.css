@@ -85,15 +85,16 @@ body #book {
 #book .code {
   margin-top: 0.5em;
   width: 100%;
+  white-space: pre;
+  font-family: Courier, monospace;
 }
-
 
 #book .codelisting {
   width: 100%;
 }
 
-#book .verb {
-  font-size: 120%;
+#book .inline_verbatim {
+  font-family: Courier, monospace;
 }
 
 #book a.ref {
@@ -326,7 +327,7 @@ body #book {
 }
 
 #book .tt {
-  font-family: Courier;
+  font-family: Courier, monospace;
   font-size: 90%;
 }
 
