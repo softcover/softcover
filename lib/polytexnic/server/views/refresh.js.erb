@@ -1,10 +1,20 @@
 wait = ->
-  $.getJSON(window.location.pathname + '/wait', ->
-    $.get window.location.pathname + '.js', (html)->
-      $('#book').html html
-      initMathJax()
-      wait()
-  ).fail -> wait()
+  $.ajax
+    url: window.location.pathname + '/wait'
+    dataType: 'json'
+    timeout: 29 * 1000
+    success: ->
+      $.get window.location.pathname + '.js', (html)->
+        $('#book').html html
+        initMathJax()
+        wait()
+    error: (jqXHR, textStatus)->
+      if textStatus == 'timeout'
+        # polling end, reconnect immediately
+        wait()
+      else
+        # server down, try reconnecting again after timeout
+        setTimeout wait, 5000
 
 initMathJax = ->
   $('#mathJaxJS').remove()
