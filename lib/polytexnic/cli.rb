@@ -1,10 +1,7 @@
 require "thor"
-require "thor/group"
 
 module Polytexnic
   class CLI < Thor
-    include Thor::Actions
-    include Polytexnic::Utils
 
     # ===============================================
     # Builder

@@ -98,6 +98,7 @@ class Polytexnic::BookManifest < OpenStruct
   private
     def read_from_yml
       require 'polytexnic/config'
+      require 'yaml/store'
       YAML.load_file YAML_PATH
     end
 

@@ -1,5 +1,3 @@
-require 'yaml/store'
-
 module Polytexnic
   class BaseConfig
 
@@ -32,6 +30,7 @@ module Polytexnic
 
       protected
         def store
+          require 'yaml/store'
           @store ||= begin
              YAML::Store.new(file_path)
           end
