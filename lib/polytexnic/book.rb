@@ -55,7 +55,7 @@ class Polytexnic::Book
   def files
     # question: should we use `git ls-files` instead?
     # TODO: only use pertinent files
-    paths = %w{html/*_fragment.html images/**/* *.mobi *.epub *.pdf}
+    paths = %w{html/*_fragment.html images/**/* ebooks/*}
     Dir[*paths].reject { |path| File.directory?(path) }.map do |path|
       BookFile.new path
     end
@@ -142,7 +142,7 @@ class Polytexnic::Book
     res = @client.notify_upload_complete
 
     if res['errors'].nil?
-      puts "Published! http://#{url}"
+      puts "Published! #{url}"
     else
       puts "Couldn't verify upload: #{res['errors']}"
     end
