@@ -68,13 +68,14 @@ class Polytexnic::App < Sinatra::Base
   get '/:chapter_slug/wait' do
 
     $changed = false
-    Signal.trap("USR2") do
-      $changed = true
-    end
+    Signal.trap("HUP") { $changed = true }
+    Signal.trap("SIGINT") { exit 0 }
+
     loop do
       sleep 0.1
       break if $changed
     end
+
     { time: Time.now }.to_json
   end
 

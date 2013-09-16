@@ -55,8 +55,6 @@ module Polytexnic
             end
 
             next unless overwrite
-          else
-            puts display_path
           end
 
           if path =~ /\.erb/
