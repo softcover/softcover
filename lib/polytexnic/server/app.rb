@@ -71,7 +71,7 @@ class Polytexnic::App < Sinatra::Base
     Signal.trap("SIGINT") { exit 0 }
 
     loop do
-      sleep 0.1
+      # sleep 0.1
       break if $changed
     end
 
