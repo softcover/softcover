@@ -25,6 +25,7 @@ class Polytexnic::App < Sinatra::Base
   end
 
   get '/stylesheets/pygments.css' do
+    content_type 'text/css'
     @pygments_css ||= Pygments.send(:mentos, :css, ['html', '']).
                                gsub!(/^/, '.highlight ')
   end
