@@ -5,18 +5,14 @@ module Polytexnic::Commands::Server
 
   def listen_for_changes
     server_pid = Process.pid
-    listener_pid = fork do
-      puts 'Listening for changes...'
-      begin
-        Listen.to!('.', 'chapters', filter: /[^.tmp](\.tex|\.md)$/) do |modified|
-          rebuild modified.try(:first)
-          Process.kill("HUP", server_pid)
-        end
-      rescue Interrupt
-        puts 'Shutting down Polytexnic server and listener.'
-      end
+    listener = Listen.to('chapters')
+    listener.filter(/(\.tex|\.md)$/)
+    listener.ignore(%r{^.tmp})
+    listener.change do |modified|
+      rebuild modified.try(:first)
+      Process.kill("HUP", server_pid)
     end
-    Process.detach listener_pid if listener_pid
+    listener.start
   end
 
   def rebuild(modified=nil)
@@ -31,7 +27,6 @@ module Polytexnic::Commands::Server
     require 'polytexnic/server/app'
     rebuild
     puts "Running Polytexnic server on http://localhost:#{port}"
-    $stderr = $stdout = StringIO.new
     Polytexnic::App.set :port, port
     Polytexnic::App.run!
   end

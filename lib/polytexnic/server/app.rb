@@ -1,8 +1,10 @@
 require 'sinatra/base'
 require 'sinatra/respond_to'
+require 'sinatra/async'
 
 class Polytexnic::App < Sinatra::Base
   register Sinatra::RespondTo
+  register Sinatra::Async
 
   set :public_folder, File.join(File.dirname(__FILE__),'../template/html')
   set :bind, '0.0.0.0'
@@ -35,7 +37,8 @@ class Polytexnic::App < Sinatra::Base
     if extension == 'jpeg' && !File.exist?(image_filename(path, extension))
       extension = 'jpg'
     end
-    File.read(image_filename(path, extension))
+    file_path = image_filename(path, extension)
+    File.exists?(file_path) ? File.read(file_path) : nil
   end
 
   # Returns the image filename for the local document.
@@ -64,18 +67,12 @@ class Polytexnic::App < Sinatra::Base
     end
   end
 
-  get '/:chapter_slug/wait' do
+  aget '/:chapter_slug/wait' do
     require 'json'
-    $changed = false
-    Signal.trap("HUP") { $changed = true }
     Signal.trap("SIGINT") { exit 0 }
-
-    loop do
-      sleep 0.1
-      break if $changed
+    Signal.trap("HUP") do
+      body({ time: Time.now }.to_json)
     end
-
-    { time: Time.now }.to_json
   end
 
   not_found do
