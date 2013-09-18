@@ -3,7 +3,7 @@ class Polytexnic::Book
 
   DEFAULT_SCREENCASTS_DIR = "screencasts"
 
-  attr_accessor :errors, :files, :uploader, :signatures, :manifest,
+  attr_accessor :errors, :uploader, :signatures, :manifest,
                 :processed_screencasts, :screencasts_dir
 
   def initialize
