@@ -7,19 +7,10 @@ describe Polytexnic::Commands::Server do
   before { chdir_to_book }
 
   it '#listen_for_changes' do
-    subject.should_receive(:fork) do |&block|
-      block.call
-    end
-    Listen.should_receive(:to!) do |&block|
-      block.call
-    end
-    expect do
-      silence { subject.listen_for_changes }
-    end.to raise_error SignalException
+    subject.listen_for_changes
   end
 
   it '#run' do
-    subject.should_receive(:fork)
     Polytexnic::App.should_receive :run!
 
     port = 5000

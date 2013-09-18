@@ -1,0 +1,189 @@
+#bookMenu {
+  background-color: #f9f9f9;
+  background-image: url(/assets/bg.gif);
+  border: 1px solid #dfdfdf;
+  border-width: 1px 0;
+  color: #333333;
+  font-family: "Open Sans", sans-serif;
+  font-size: 13px;
+  font-style: inherit;
+  font-weight: normal;
+  line-height: 18px;
+  margin: 0;
+  outline: 0;
+  padding: 0;
+  height: 38px;
+}
+
+#bookMenu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#bookMenu span {
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+#bookMenu .wrapper {
+  margin: auto;
+  padding: 0 10px;
+  position: relative;
+  width: 940px;
+}
+/* line 1031, ../../app/assets/stylesheets/main.sass */
+#bookMenu.bookMenuFixed {
+  -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 101;
+}
+/* line 1037, ../../app/assets/stylesheets/main.sass */
+#bookMenu .wrapper {
+  padding: 5px 0;
+}
+/* line 1039, ../../app/assets/stylesheets/main.sass */
+#bookMenu .bookMenuArows {
+  float: left;
+  padding-top: 1px;
+}
+/* line 1042, ../../app/assets/stylesheets/main.sass */
+#bookMenu .bookMenuArows a {
+  color: #b9c6d3;
+  font-family: Arial, sans-serif;
+  font-size: 21px;
+  line-height: 24px;
+  margin-right: 24px;
+  text-decoration: none;
+}
+/* line 1049, ../../app/assets/stylesheets/main.sass */
+#bookMenu .bookMenuActions {
+  float: right;
+}
+/* line 1051, ../../app/assets/stylesheets/main.sass */
+#bookMenu .bookMenuActions a {
+  text-decoration: none;
+}
+/* line 1053, ../../app/assets/stylesheets/main.sass */
+#bookMenu .bookMenuActions button, #bookMenu .bookMenuActions input, #bookMenu .bookMenuActions .buttonStyle {
+  margin-left: 5px;
+}
+/* line 1055, ../../app/assets/stylesheets/main.sass */
+#bookMenu .bookMenuActions .greyButton {
+  padding: 7px 5px 2px;
+}
+/* line 1057, ../../app/assets/stylesheets/main.sass */
+#bookMenu .dropDown {
+  border: 1px solid #b9c6d3;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  color: #b9c6d3;
+  float: left;
+  font-family: "Open Sans Condensed", sans-serif;
+  padding: 4px 30px 4px 40px;
+}
+/* line 1064, ../../app/assets/stylesheets/main.sass */
+#bookMenu .dropDown:before {
+  background-image: url(/assets/icons.png);
+  content: "";
+  height: 18px;
+  left: 6px;
+  position: absolute;
+  top: 4px;
+  width: 20px;
+}
+/* line 1072, ../../app/assets/stylesheets/main.sass */
+#bookMenu .dropDown:after {
+  color: #b9c6d3;
+  right: 3px;
+  top: 4px;
+}
+/* line 1076, ../../app/assets/stylesheets/main.sass */
+#bookMenu .dropDown a {
+  color: #7292b0;
+  font-family: "Open Sans Condensed", sans-serif;
+}
+/* line 1079, ../../app/assets/stylesheets/main.sass */
+#bookMenu .dropDown a:hover {
+  color: #fefffe;
+}
+.dropDown {
+  cursor: pointer;
+  font-family: "Open Sans", sans-serif;
+  padding-right: 28px;
+  position: relative;
+  text-transform: uppercase;
+}
+/* line 635, ../../app/assets/stylesheets/main.sass */
+.dropDown:hover {
+  color: #666666 !important;
+}
+/* line 637, ../../app/assets/stylesheets/main.sass */
+.dropDown:hover:after {
+  color: #666666 !important;
+}
+/* line 639, ../../app/assets/stylesheets/main.sass */
+.dropDown:after {
+  color: #999999;
+  content: "▼";
+  font-size: 10px;
+  height: 15px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 15px;
+}
+/* line 648, ../../app/assets/stylesheets/main.sass */
+.dropDown ul.dropMenu {
+  display: none;
+  background-color: #f9f9f9;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+  position: absolute;
+  z-index: 100;
+}
+/* line 655, ../../app/assets/stylesheets/main.sass */
+.dropDown ul.dropMenu a {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  display: block;
+  clear: both;
+  font-family: "Open Sans", helvetica, sans-serif;
+  float: none !important;
+  padding: 5px 20px;
+  text-decoration: none;
+  text-shadow: 0 1px white;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+/* line 666, ../../app/assets/stylesheets/main.sass */
+.dropDown ul.dropMenu a:hover {
+  background-color: #7292b0;
+  color: #fefffe;
+  text-shadow: 0 1px rgba(0, 0, 0, 0.4);
+}
+/* line 671, ../../app/assets/stylesheets/main.sass */
+.dropDown:hover ul.dropMenu {
+  /*display: block;*/
+}
+/* line 673, ../../app/assets/stylesheets/main.sass */
+.dropDown:hover ul.dropMenu li {
+  margin: 0;
+  padding: 0;
+}
+/* line 677, ../../app/assets/stylesheets/main.sass */
+.dropDown:hover ul.dropMenu li:last-child a {
+  border-bottom: 0;
+}
+/* line 680, ../../app/assets/stylesheets/main.sass */
+.dropDown:hover ul.dropMenu li ~ li a {
+  border-top: 1px solid rgba(255, 255, 255, 0.8);
+}
