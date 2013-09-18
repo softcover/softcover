@@ -13,6 +13,8 @@ module Polytexnic::Utils
   end
 
   def in_book_directory?
+    Polytexnic::BookManifest::find_book_root!
+
     files = Dir['**/*']
 
     Polytexnic::FORMATS.each do |format|
