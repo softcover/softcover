@@ -3,7 +3,6 @@ require 'sinatra/respond_to'
 require 'sinatra/async'
 
 class Polytexnic::App < Sinatra::Base
-  # register Sinatra::RespondTo
   register Sinatra::Async
 
   set :public_folder, File.join(File.dirname(__FILE__),'../template/html')
