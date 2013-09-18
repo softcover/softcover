@@ -105,15 +105,26 @@ class Polytexnic::BookManifest < OpenStruct
     [YAML_PATH, MD_PATH].any? { |f| File.exist?(f) }
   end
 
+  def self.find_book_root!
+    loop do
+      return true if valid_directory?
+      fail if Dir.pwd == '/'
+      Dir.chdir '..'
+    end
+  end
+
   private
+
     def read_from_yml
       require 'polytexnic/config'
       require 'yaml/store'
-      YAML.load_file YAML_PATH
+      self.class.find_book_root!
+      YAML.load_file(YAML_PATH)
     end
 
     def read_from_md
-      return false unless f = File.open(MD_PATH)
+      self.class.find_book_root!
+      f = File.open(MD_PATH)
 
       chapters = f.readlines.each_with_index.map do |path, i|
         name = path.gsub(/\n/, '')
@@ -128,7 +139,7 @@ class Polytexnic::BookManifest < OpenStruct
 
     def fail
       # TODO: raise error with instructions on adding a chapter manifest
-      raise "No manifest file found!"
+      raise "Invalid book directory, no manifest file found!"
     end
 
     def verify_paths!
