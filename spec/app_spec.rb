@@ -46,6 +46,7 @@ describe Polytexnic::App do
   it 'GET pygments.css' do
     get '/stylesheets/pygments.css'
     expect(last_response).to be_ok
+    expect(last_response.content_type).to match 'text/css'
   end
 
   it 'GET refresh.js' do
