@@ -18,6 +18,9 @@ module Polytexnic::Commands::Publisher
     end
 
     true
+  rescue Polytexnic::BookManifest::NotFound => e
+    puts e.message
+    false
   end
 
   # TODO: refactor this flow out of file?

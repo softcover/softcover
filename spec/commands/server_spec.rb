@@ -7,7 +7,7 @@ describe Polytexnic::Commands::Server do
   before { chdir_to_book }
 
   it '#listen_for_changes' do
-    subject.listen_for_changes
+    expect { silence { subject.listen_for_changes } }.to_not raise_error(Exception)
   end
 
   it '#run' do

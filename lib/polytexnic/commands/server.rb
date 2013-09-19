@@ -21,6 +21,10 @@ module Polytexnic::Commands::Server
     t = Time.now
     Polytexnic::Builders::Html.new.build
     puts "Done. (#{(Time.now - t).round(2)}s)"
+
+  rescue Polytexnic::BookManifest::NotFound => e
+    puts e.message
+    exit 1
   end
 
   def start_server(port)
