@@ -37,7 +37,7 @@ describe Polytexnic::Commands::Build do
       build.should_receive(:builder_for).with('epub').and_return(epub_builder)
       build.should_receive(:builder_for).with('mobi').and_return(mobi_builder)
 
-      silence { build.all_formats }
+      build.all_formats
     end
   end
 end

@@ -1,6 +1,7 @@
 require 'listen'
 
 module Polytexnic::Commands::Server
+  include Polytexnic::Output
   extend self
 
   def listen_for_changes

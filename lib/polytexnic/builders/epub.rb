@@ -1,6 +1,7 @@
 module Polytexnic
   module Builders
     class Epub < Builder
+      include Polytexnic::Output
 
       def build!
         build_html

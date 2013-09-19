@@ -5,7 +5,7 @@ describe Polytexnic::Builders::Mobi do
     before(:all) do
       generate_book
       @builder = Polytexnic::Builders::Mobi.new
-      silence { @built = @builder.build! }
+      @built = @builder.build!
       chdir_to_book
     end
     after(:all) { remove_book }
@@ -30,7 +30,7 @@ describe Polytexnic::Builders::Mobi do
     before(:all) do
       generate_book(source: :markdown)
       @builder = Polytexnic::Builders::Mobi.new
-      silence { @built = @builder.build! }
+      @built = @builder.build!
       chdir_to_book
     end
     after(:all) { remove_book }

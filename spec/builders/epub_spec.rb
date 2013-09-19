@@ -4,7 +4,7 @@ describe Polytexnic::Builders::Epub do
   before(:all) do
     generate_book
     @builder = Polytexnic::Builders::Epub.new
-    silence { @builder.build! }
+    @builder.build!
     chdir_to_book
   end
   after(:all) { remove_book }
@@ -145,7 +145,7 @@ describe Polytexnic::Builders::Epub do
     before(:all) do
       generate_book(source: :markdown)
       @builder = Polytexnic::Builders::Epub.new
-      silence { @builder.build! }
+      @builder.build!
       chdir_to_book
     end
     after(:all) { remove_book }
