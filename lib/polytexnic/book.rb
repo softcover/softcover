@@ -6,6 +6,8 @@ class Polytexnic::Book
   attr_accessor :errors, :uploader, :signatures, :manifest,
                 :processed_screencasts, :screencasts_dir
 
+  class UploadError < StandardError; end
+
   def initialize
     require "polytexnic/client"
     @manifest = Polytexnic::BookManifest.new
@@ -142,9 +144,9 @@ class Polytexnic::Book
     res = @client.notify_upload_complete
 
     if res['errors'].nil?
-      puts "Published! #{url}"
+      return url
     else
-      puts "Couldn't verify upload: #{res['errors']}"
+      raise UploadError, "Couldn't verify upload: #{res['errors']}"
     end
   end
 

@@ -2,6 +2,7 @@ require 'erb'
 module Polytexnic
   module Commands
     module Generator
+      include Polytexnic::Output
       extend self
 
       def generate_directory(name, markdown = false)

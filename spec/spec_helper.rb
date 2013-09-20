@@ -13,6 +13,7 @@ require 'polytexnic/utils'
 require 'polytexnic/config'
 require 'polytexnic/server/app'
 require 'polytexnic/commands/publisher'
+Polytexnic::Output.silence!
 
 # Load support files.
 Dir.glob(File.join(File.dirname(__FILE__), "./support/**/*.rb")).each do |f|
@@ -31,6 +32,11 @@ RSpec.configure do |config|
     Polytexnic::Utils.reset_current_book!
     Polytexnic::Config.remove
     Polytexnic::BookConfig.remove
+  end
+
+  config.before(:each) do
+    Polytexnic::Output.silence!
+    Polytexnic::Commands::Server.no_listener = true
   end
 
   config.after do

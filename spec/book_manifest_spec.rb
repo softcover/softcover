@@ -39,7 +39,7 @@ describe Polytexnic::BookManifest do
 
   context "in an invalid book directory" do
     it "raises an error when manifest missing" do
-      expect{ subject }.to raise_error(RuntimeError)
+      expect{ subject }.to raise_error(Polytexnic::BookManifest::NotFound)
     end
   end
 end

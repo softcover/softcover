@@ -1,5 +1,6 @@
 module Polytexnic::Commands::Publisher
   include Polytexnic::Utils
+  include Polytexnic::Output
 
   extend self
 
@@ -11,13 +12,20 @@ module Polytexnic::Commands::Publisher
       require 'curb'
       puts "Uploading #{current_book.uploader.file_count} files " \
         "(#{as_size current_book.uploader.total_size}):"
-      current_book.upload!
+      url = current_book.upload!
+      puts "Published! #{url}"
     else
       puts "Errors: #{current_book.errors}"
       return false
     end
 
     true
+  rescue Polytexnic::BookManifest::NotFound => e
+    puts e.message
+    false
+  rescue Polytexnic::Book::UploadError => e
+    puts e.message
+    false
   end
 
   # TODO: refactor this flow out of file?

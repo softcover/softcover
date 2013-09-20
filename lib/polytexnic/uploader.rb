@@ -16,7 +16,8 @@ module Polytexnic
     def upload!
       unless @params.empty?
         bar = ProgressBar.create title: "Starting Upload...",
-          format: "%t |%B| %P%% %e", total: total_size, smoothing: 0.75
+          format: "%t |%B| %P%% %e", total: total_size, smoothing: 0.75,
+          output: Polytexnic::Output.stream
 
         upload_host = "http://#{@bucket}.s3.amazonaws.com"
 

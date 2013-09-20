@@ -46,6 +46,7 @@ describe Polytexnic::App do
   it 'GET pygments.css' do
     get '/stylesheets/pygments.css'
     expect(last_response).to be_ok
+    expect(last_response.content_type).to match 'text/css'
   end
 
   it 'GET refresh.js' do
@@ -53,4 +54,14 @@ describe Polytexnic::App do
     expect(last_response).to be_ok
   end
 
+  it 'GET css asset' do
+    get '/assets/main.css'
+    expect(last_response).to be_ok
+    expect(last_response.content_type).to match 'text/css'
+  end
+
+  it 'GET image asset' do
+    get '/assets/icons.png'
+    expect(last_response).to be_ok
+  end
 end

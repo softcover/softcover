@@ -1,6 +1,7 @@
 module Polytexnic
   module Builders
     class Pdf < Builder
+      include Polytexnic::Output
 
       def build!
         # Build the PolyTeX filename so it accepts both 'foo' and 'foo.tex'.

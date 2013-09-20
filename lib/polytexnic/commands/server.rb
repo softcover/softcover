@@ -1,22 +1,21 @@
 require 'listen'
 
 module Polytexnic::Commands::Server
+  include Polytexnic::Output
+  attr_accessor :no_listener
   extend self
 
   def listen_for_changes
+    return if defined?(@no_listener) && @no_listener
     server_pid = Process.pid
-    listener_pid = fork do
-      puts 'Listening for changes...'
-      begin
-        Listen.to!('.', 'chapters', filter: /[^.tmp](\.tex|\.md)$/) do |modified|
-          rebuild modified.try(:first)
-          Process.kill("HUP", server_pid)
-        end
-      rescue Interrupt
-        puts 'Shutting down Polytexnic server and listener.'
-      end
+    @listener = Listen.to('chapters')
+    @listener.filter(/(\.tex|\.md)$/)
+    @listener.ignore(%r{^.tmp})
+    @listener.change do |modified|
+      rebuild modified.try(:first)
+      Process.kill("HUP", server_pid)
     end
-    Process.detach listener_pid if listener_pid
+    @listener.start
   end
 
   def rebuild(modified=nil)
@@ -25,13 +24,15 @@ module Polytexnic::Commands::Server
     t = Time.now
     Polytexnic::Builders::Html.new.build
     puts "Done. (#{(Time.now - t).round(2)}s)"
+
+  rescue Polytexnic::BookManifest::NotFound => e
+    puts e.message
   end
 
   def start_server(port)
     require 'polytexnic/server/app'
     rebuild
     puts "Running Polytexnic server on http://localhost:#{port}"
-    $stderr = $stdout = StringIO.new
     Polytexnic::App.set :port, port
     Polytexnic::App.run!
   end

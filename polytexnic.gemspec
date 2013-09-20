@@ -30,8 +30,9 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'kramdown'
 
   gem.add_dependency 'sinatra'
+  gem.add_dependency 'async_sinatra'
   gem.add_dependency 'sinatra-respond_to'
   gem.add_dependency 'coffee-script'
-  gem.add_dependency 'listen'
-  gem.add_dependency 'rb-fsevent'
+  gem.add_dependency 'listen', '~> 1.3.1'
+  gem.add_dependency 'rb-fsevent', '~> 0.9.3'
 end

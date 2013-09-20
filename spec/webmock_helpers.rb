@@ -142,10 +142,8 @@ module WebmockHelpers
     source = options[:source] || :polytex
     remove_book
     Dir.chdir File.join File.dirname(__FILE__), "fixtures/"
-    silence do
       Polytexnic::Commands::Generator.generate_directory(name,
                                                          source == :markdown)
-    end
     chdir_to_book
     Polytexnic::FORMATS.each do |format|
       File.open("test-book.#{format}", 'w') { |f| f.write('test') }

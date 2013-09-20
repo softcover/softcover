@@ -1,6 +1,11 @@
 require 'ostruct'
 
 class Polytexnic::BookManifest < OpenStruct
+  class NotFound < StandardError
+    def message
+      "Invalid book directory, no manifest file found!"
+    end
+  end
 
   class Chapter < OpenStruct
     def path
@@ -32,7 +37,7 @@ class Polytexnic::BookManifest < OpenStruct
             when markdown? then read_from_md
             when polytex?  then read_from_yml
             else
-              fail
+              self.class.not_found!
             end.symbolize_keys!
 
     marshal_load attrs
@@ -91,6 +96,16 @@ class Polytexnic::BookManifest < OpenStruct
     chapters.find { |chapter| chapter.slug == slug }
   end
 
+  def find_chapter_by_number(number)
+    if number > chapters.length
+      chapters.first
+    elsif number == 0
+      chapters.last
+    else
+      chapters.find { |chapter| chapter.chapter_number == number }
+    end
+  end
+
   def self.valid_directory?
     [YAML_PATH, MD_PATH].any? { |f| File.exist?(f) }
   end
@@ -98,9 +113,13 @@ class Polytexnic::BookManifest < OpenStruct
   def self.find_book_root!
     loop do
       return true if valid_directory?
-      fail if Dir.pwd == '/'
+      return not_found! if Dir.pwd == '/'
       Dir.chdir '..'
     end
+  end
+
+  def self.not_found!
+    raise NotFound
   end
 
   private
@@ -125,11 +144,6 @@ class Polytexnic::BookManifest < OpenStruct
       f.close
 
       { chapters: chapters, filename: MD_PATH }
-    end
-
-    def fail
-      # TODO: raise error with instructions on adding a chapter manifest
-      raise "Invalid book directory, no manifest file found!"
     end
 
     def verify_paths!
