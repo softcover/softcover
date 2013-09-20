@@ -23,12 +23,6 @@ module Polytexnic::Commands::Publisher
   rescue Polytexnic::BookManifest::NotFound => e
     puts e.message
     false
-<<<<<<< HEAD
-=======
-  rescue Polytexnic::Book::UploadError => e
-    puts e.message
-    false
->>>>>>> output-module-57328852
   end
 
   # TODO: refactor this flow out of file?
