@@ -36,6 +36,7 @@ RSpec.configure do |config|
 
   config.before(:each) do
     Polytexnic::Output.silence!
+    Polytexnic::Commands::Server.no_listener = true
   end
 
   config.after do

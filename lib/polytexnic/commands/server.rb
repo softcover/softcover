@@ -2,18 +2,20 @@ require 'listen'
 
 module Polytexnic::Commands::Server
   include Polytexnic::Output
+  attr_accessor :no_listener
   extend self
 
   def listen_for_changes
+    return if defined?(@no_listener) && @no_listener
     server_pid = Process.pid
-    listener = Listen.to('chapters')
-    listener.filter(/(\.tex|\.md)$/)
-    listener.ignore(%r{^.tmp})
-    listener.change do |modified|
+    @listener = Listen.to('chapters')
+    @listener.filter(/(\.tex|\.md)$/)
+    @listener.ignore(%r{^.tmp})
+    @listener.change do |modified|
       rebuild modified.try(:first)
       Process.kill("HUP", server_pid)
     end
-    listener.start
+    @listener.start
   end
 
   def rebuild(modified=nil)
@@ -25,7 +27,6 @@ module Polytexnic::Commands::Server
 
   rescue Polytexnic::BookManifest::NotFound => e
     puts e.message
-    exit 1
   end
 
   def start_server(port)
