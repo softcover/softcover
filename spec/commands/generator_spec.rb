@@ -6,9 +6,7 @@ describe Polytexnic::Commands::Generator do
   context "generate in non-book directory" do
     before do
       chdir_to_non_book
-      silence {
-        Polytexnic::Commands::Generator.generate_directory name
-      }
+      Polytexnic::Commands::Generator.generate_directory name
     end
 
     it "should copy files" do

@@ -7,14 +7,14 @@ describe Polytexnic::Commands::Server do
   before { chdir_to_book }
 
   it '#listen_for_changes' do
-    expect { silence { subject.listen_for_changes } }.to_not raise_error(Exception)
+    expect { subject.listen_for_changes }.to_not raise_error(Exception)
   end
 
   it '#run' do
     Polytexnic::App.should_receive :run!
 
     port = 5000
-    silence { subject.run port }
+    subject.run port
 
     expect(Polytexnic::App.port).to eq port
   end

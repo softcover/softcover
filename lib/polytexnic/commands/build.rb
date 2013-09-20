@@ -1,6 +1,7 @@
 module Polytexnic
   module Commands
     module Build
+      include Polytexnic::Output
       extend self
 
       def for_format(format)

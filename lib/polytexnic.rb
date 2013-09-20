@@ -3,6 +3,7 @@ require 'active_support/core_ext/string'
 
 require_relative 'polytexnic/formats'
 require_relative 'polytexnic/utils'
+require_relative 'polytexnic/output'
 
 profile = false
 if profile

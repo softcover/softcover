@@ -12,9 +12,7 @@ describe Polytexnic::Commands::Publisher do
       end
 
       it "rejects the publish" do
-        silence do
-          expect(subject.publish!).to be_false
-        end
+        expect(subject.publish!).to be_false
       end
     end
 
@@ -25,9 +23,7 @@ describe Polytexnic::Commands::Publisher do
       end
 
       it "publishes" do
-        silence do
-          expect(subject.publish!).to be_true
-        end
+        expect(subject.publish!).to be_true
       end
     end
   end
@@ -44,11 +40,7 @@ describe Polytexnic::Commands::Publisher do
     end
 
     it "processes screencasts" do
-
-      silence do
-        subject.publish_screencasts!
-      end
-
+      subject.publish_screencasts!
       expect(book.processed_screencasts.length).to be > 0
     end
 
@@ -56,11 +48,7 @@ describe Polytexnic::Commands::Publisher do
       subject.should_receive(:fork) do |&blk|
         blk.call
       end
-
-      silence do
-        subject.publish_screencasts! daemon: true
-      end
-
+      subject.publish_screencasts! daemon: true
       expect(book.processed_screencasts.length).to be > 0
     end
 
@@ -68,11 +56,7 @@ describe Polytexnic::Commands::Publisher do
       subject.should_receive(:loop) do |&blk|
         blk.call
       end
-
-      silence do
-        subject.publish_screencasts! watch: true
-      end
-
+      subject.publish_screencasts! watch: true
       expect(book.processed_screencasts.length).to be > 0
     end
 
