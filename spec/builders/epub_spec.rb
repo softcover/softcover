@@ -151,6 +151,10 @@ describe Polytexnic::Builders::Epub do
     after(:all) { remove_book }
     subject(:builder) { @builder }
 
+    it "should be valid" do
+      expect(`poly epub:validate`).to match(/No errors or warnings/)
+    end
+
     it "should not raise an error" do
       expect { subject }.not_to raise_error
     end

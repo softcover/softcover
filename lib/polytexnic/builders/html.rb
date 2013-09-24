@@ -65,7 +65,7 @@ module Polytexnic
         # way to do this.)
         includes << '\end{document}'
         content = File.read(filename)
-        content.gsub!(/^\s*\\include.*\}/m, includes.join("\n"))
+        content.gsub!(/^\s*\\frontmatter.*\\include.*\}/m, includes.join("\n"))
         File.write(filename, content)
       end
 
