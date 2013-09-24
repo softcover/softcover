@@ -65,7 +65,7 @@ module Polytexnic
         # way to do this.)
         includes << '\end{document}'
         content = File.read(filename)
-        content.gsub!(/^\s*\\include.*\}/m, includes.join("\n"))
+        content.gsub!(/^\s*\\frontmatter.*\\include.*\}/m, includes.join("\n"))
         File.write(filename, content)
       end
 
@@ -114,6 +114,11 @@ module Polytexnic
         chapter_number = 0
         current_chapter = manifest.chapters.first
         reference_cache = {}
+
+        # Remove frontmatter.
+        # TODO: write to a file (or files)
+        frontmatter = xml.at_css('div#frontmatter')
+        frontmatter.remove if frontmatter
 
         xml.css('#book>div').each do |node|
           if node.attributes['class'].to_s == 'chapter'

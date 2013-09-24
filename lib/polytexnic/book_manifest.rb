@@ -46,6 +46,7 @@ class Polytexnic::BookManifest < OpenStruct
       tex_filename = filename + '.tex'
       self.chapters = []
       base_contents = File.read(tex_filename)
+      remove_frontmatter!(base_contents)
       self.author = base_contents.scan(/^\s*\\author\{(.*?)\}/).flatten.first
       chapter_regex = /^\s*\\include\{chapters\/(.*?)\}/
       chapter_includes = base_contents.scan(chapter_regex).flatten
@@ -64,11 +65,27 @@ class Polytexnic::BookManifest < OpenStruct
                                   chapter_number: i += 1)
       end
     end
-
     # TODO: verify all attributes
 
     verify_paths! if options[:verify_paths]
   end
+
+  # Removes frontmatter
+  # The frontmatter shouldn't be included in the chapter slugs, so we remove
+  # it. For example, in
+  #  \frontmatter
+  #  \maketitle
+  #  \tableofcontents
+  #  % List frontmatter sections here (preface, foreword, etc.).
+  #  \include{chapters/preface}
+  #  \mainmatter
+  #  % List chapters here in the order they should appear in the book.
+  #  \include{chapters/a_chapter}
+  # we don't want to include the preface.
+  def remove_frontmatter!(base_contents)
+    base_contents.gsub!(/\\frontmatter.*\\mainmatter/m, '')
+  end
+
 
   def markdown?
     @source == :markdown || @source == :md
