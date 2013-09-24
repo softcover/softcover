@@ -115,6 +115,11 @@ module Polytexnic
         current_chapter = manifest.chapters.first
         reference_cache = {}
 
+        # Remove frontmatter.
+        # TODO: write to a file (or files)
+        frontmatter = xml.at_css('div#frontmatter')
+        frontmatter.remove if frontmatter
+
         xml.css('#book>div').each do |node|
           if node.attributes['class'].to_s == 'chapter'
             current_chapter = manifest.chapters[chapter_number]
