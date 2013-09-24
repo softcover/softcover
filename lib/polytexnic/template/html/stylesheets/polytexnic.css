@@ -287,22 +287,19 @@ body #book {
 #book #table_of_contents {
   margin-top: -1em;
   margin-bottom: 3em;
+  margin-left: -1.8em;
 }
 
-#book #table_of_contents ol {
+#book #table_of_contents ul {
   list-style-type: none;
   list-style-position: outside;
-  padding-left: 0;
+  padding-left: 3.6em;
   line-height: 1.2em;
 }
 
 #book #table_of_contents li.chapter {
   font-weight: bold;
   padding-top: 1.2em;
-}
-
-#book #table_of_contents ol li {
-  padding-left: 3.1em;
 }
 
 #book #table_of_contents a {
