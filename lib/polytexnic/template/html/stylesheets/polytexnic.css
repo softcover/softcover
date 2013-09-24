@@ -293,13 +293,17 @@ body #book {
 #book #table_of_contents ul {
   list-style-type: none;
   list-style-position: outside;
-  padding-left: 3.6em;
+  padding-left: 0;
   line-height: 1.2em;
 }
 
 #book #table_of_contents li.chapter {
   font-weight: bold;
   padding-top: 1.2em;
+}
+
+#book #table_of_contents ul li {
+  padding-left: 3.6em;
 }
 
 #book #table_of_contents a {
