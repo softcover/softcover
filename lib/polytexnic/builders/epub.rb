@@ -69,7 +69,7 @@ module Polytexnic
             else
               html = inner_html
             end
-            f.write(chapter_template("Chapter #{i+1}", html))
+            f.write(chapter_template("Chapter #{i}", html))
           end
         end
         # Clean up unused PNGs.
@@ -321,26 +321,6 @@ module Polytexnic
     </body>
 </html>
 )
-      end
-
-      # This is hard-coded for now, but will eventually be dynamic.
-      def toc_html
-%(<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <title>Table of Contents</title>
-  <link rel="stylesheet" type="application/vnd.adobe-page-template+xml" href="styles/page-template.xpgt" />
-</head>
-
-<body>
-
-<h1 class="contents" id="toc">Table of Contents</h1>
-<h1 class="contents" id="sec-1">Foo Bar</h1>
-</body>
-</html>)
       end
 
       # Returns the HTML template for a chapter.

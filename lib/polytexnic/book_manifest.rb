@@ -50,6 +50,10 @@ class Polytexnic::BookManifest < OpenStruct
       self.author = base_contents.scan(/^\s*\\author\{(.*?)\}/).flatten.first
       chapter_regex = /^\s*\\include\{chapters\/(.*?)\}/
       chapter_includes = base_contents.scan(chapter_regex).flatten
+      chapters.push Chapter.new(slug: 'frontmatter',
+                                title: nil,
+                                sections: nil,
+                                chapter_number: 0)
       chapter_includes.each_with_index do |name, i|
         slug = File.basename(name, '.*')
         title_regex = /^\s*\\chapter{(.*)}/
@@ -62,7 +66,7 @@ class Polytexnic::BookManifest < OpenStruct
         chapters.push Chapter.new(slug: slug,
                                   title: title,
                                   sections: sections,
-                                  chapter_number: i += 1)
+                                  chapter_number: i + 1)
       end
     end
     # TODO: verify all attributes
@@ -115,7 +119,7 @@ class Polytexnic::BookManifest < OpenStruct
 
   def find_chapter_by_number(number)
     if number > chapters.length
-      chapters.first
+      chapters[1]
     elsif number == 0
       chapters.last
     else
@@ -164,9 +168,10 @@ class Polytexnic::BookManifest < OpenStruct
     end
 
     def verify_paths!
-      chapter_file_paths do |chapter_path|
+      chapter_file_paths do |chapter_path, i|
+        next if chapter_path =~ /frontmatter/
         unless File.exist?(chapter_path)
-          raise "Chapter file in manifest not found"
+          raise "Chapter file in manifest not found in #{chapter_path}"
         end
       end
     end

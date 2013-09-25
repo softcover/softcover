@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Polytexnic::Builders::Html do
 
-  describe "when generating from PolyTeX sourde" do
+  describe "when generating from PolyTeX source" do
     before(:all) { generate_book }
     after(:all)  { remove_book }
 
@@ -42,16 +42,22 @@ describe Polytexnic::Builders::Html do
       end
 
       describe "frontmatter output" do
-        it "should create a title page file" do
-          expect('html/title_page_fragment.html').to exist
-        end
-
-        it "should create a table of contents file" do
-          expect('html/table_of_contents_fragment.html').to exist
-        end
+        let(:filename) { 'html/frontmatter_fragment.html' }
 
         it "should create a frontmatter file" do
-          expect('html/frontmatter_fragment.html').to exist
+          expect(filename).to exist
+        end
+
+        describe "contents" do
+          subject(:html) { Nokogiri::HTML(File.open(filename)) }
+
+          it "should include the title page" do
+            expect(html.at_css('div#title_page')).not_to be_nil
+          end
+
+          it "should include the table of contents" do
+            expect(html.at_css('div#table_of_contents')).not_to be_nil
+          end
         end
       end
 
