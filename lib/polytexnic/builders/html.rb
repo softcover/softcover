@@ -115,10 +115,10 @@ module Polytexnic
         current_chapter = manifest.chapters.first
         reference_cache = {}
 
-        # Remove frontmatter.
-        # TODO: write to a file (or files)
-        frontmatter = xml.at_css('div#frontmatter')
-        frontmatter.remove if frontmatter
+        # Write the title page, toc, and other frontmatter.
+        write_frontmatter_file(xml, 'title_page')
+        write_frontmatter_file(xml, 'table_of_contents')
+        write_frontmatter_file(xml, 'frontmatter')
 
         xml.css('#book>div').each do |node|
           if node.attributes['class'].to_s == 'chapter'
@@ -135,6 +135,13 @@ module Polytexnic
           current_chapter.nodes.push node
         end
         reference_cache
+      end
+
+      def write_frontmatter_file(xml, id)
+        if element = xml.at_css("div##{id}")
+          File.write("html/#{id}_fragment.html", element.to_xhtml)
+          element.remove
+        end
       end
 
       # Builds a cache of targets for cross-references.

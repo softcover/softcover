@@ -41,6 +41,20 @@ describe Polytexnic::Builders::Html do
         it { should match('Lorem ipsum') }
       end
 
+      describe "frontmatter output" do
+        it "should create a title page file" do
+          expect('html/title_page_fragment.html').to exist
+        end
+
+        it "should create a table of contents file" do
+          expect('html/table_of_contents_fragment.html').to exist
+        end
+
+        it "should create a frontmatter file" do
+          expect('html/frontmatter_fragment.html').to exist
+        end
+      end
+
       describe "HTML MathJax output" do
         let(:output) { File.read('html/a_chapter.html') }
         subject { output }
