@@ -98,27 +98,22 @@ module Polytexnic
         manifest.chapters.each_with_index do |chapter, i|
           update_cross_references(chapter, reference_cache, target_cache)
           write_fragment_file(chapter)
-          write_complete_file(chapter, erb_file, i+1)
+          write_complete_file(chapter, erb_file, i)
         end
       end
 
-      def create_html_fragments
-        manifest.chapters.each do |chapter|
-          filename = File.join('html', chapter.slug + '_fragment.html')
-          File.unlink(filename) if File.exist?(filename)
-        end
-      end
+      # def create_html_fragments
+      #   manifest.chapters.each do |chapter|
+      #     filename = File.join('html', chapter.slug + '_fragment.html')
+      #     File.unlink(filename) if File.exist?(filename)
+      #   end
+      # end
 
       # Split the full XML document into chapters.
       def split_into_chapters(xml)
         chapter_number = 0
         current_chapter = manifest.chapters.first
         reference_cache = {}
-
-        # Write the title page, toc, and other frontmatter.
-        write_frontmatter_file(xml, 'title_page')
-        write_frontmatter_file(xml, 'table_of_contents')
-        write_frontmatter_file(xml, 'frontmatter')
 
         xml.css('#book>div').each do |node|
           if node.attributes['class'].to_s == 'chapter'
