@@ -74,7 +74,7 @@ class Polytexnic::App < Sinatra::Base
     require 'json'
     Signal.trap("SIGINT") { exit 0 }
     Signal.trap("HUP") do
-      body({ time: Time.now }.to_json)
+      Thread.new { body({ time: Time.now }.to_json) }
     end
   end
 
