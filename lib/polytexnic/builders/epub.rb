@@ -258,7 +258,8 @@ module Polytexnic
         <meta property="dcterms:modified">#{Time.now.strftime('%Y-%m-%dT%H:%M:%S')}Z</meta>
     </metadata>
     <manifest>
-        <item href="nav.html" id="nav" media-type="application/xhtml+xml" properties="nav"/>          <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+        <item href="nav.html" id="nav" media-type="application/xhtml+xml" properties="nav"/>
+        <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
         <item id="page-template.xpgt" href="styles/page-template.xpgt" media-type="application/vnd.adobe-page-template+xml"/>
         <item id="pygments.css" href="styles/pygments.css" media-type="text/css"/>
         <item id="polytexnic.css" href="styles/polytexnic.css" media-type="text/css"/>
