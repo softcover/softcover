@@ -14,7 +14,7 @@ class Polytexnic::App < Sinatra::Base
 
   get '/' do
     # redirect to first chapter
-    redirect @manifest.chapters.first.slug
+    redirect @manifest.chapters[1].slug
   end
 
   get '/refresh.js' do

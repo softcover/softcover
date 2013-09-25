@@ -102,21 +102,15 @@ module Polytexnic
         end
       end
 
-      # def create_html_fragments
-      #   manifest.chapters.each do |chapter|
-      #     filename = File.join('html', chapter.slug + '_fragment.html')
-      #     File.unlink(filename) if File.exist?(filename)
-      #   end
-      # end
-
       # Split the full XML document into chapters.
       def split_into_chapters(xml)
         chapter_number = 0
         current_chapter = manifest.chapters.first
         reference_cache = {}
-
         xml.css('#book>div').each do |node|
-          if node.attributes['class'].to_s == 'chapter'
+          klass = node.attributes['class'].to_s
+          id = node.attributes['id'].to_s
+          if klass == 'chapter' || id == 'frontmatter'
             current_chapter = manifest.chapters[chapter_number]
             node['data-chapter'] = current_chapter.slug
             chapter_number += 1

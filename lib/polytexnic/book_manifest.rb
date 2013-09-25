@@ -51,7 +51,7 @@ class Polytexnic::BookManifest < OpenStruct
       chapter_regex = /^\s*\\include\{chapters\/(.*?)\}/
       chapter_includes = base_contents.scan(chapter_regex).flatten
       chapters.push Chapter.new(slug: 'frontmatter',
-                                title: nil,
+                                title: 'Frontmatter',
                                 sections: nil,
                                 chapter_number: 0)
       chapter_includes.each_with_index do |name, i|
@@ -118,14 +118,17 @@ class Polytexnic::BookManifest < OpenStruct
   end
 
   def find_chapter_by_number(number)
-    if number > chapters.length
-      chapters[1]
-    elsif number == 0
-      chapters.last
+    chapters.find { |chapter| chapter.chapter_number == number }
+  end
+
+  def url(chapter_number)
+    if chapter = find_chapter_by_number(chapter_number)
+      chapter.slug
     else
-      chapters.find { |chapter| chapter.chapter_number == number }
+      '#'
     end
   end
+
 
   def self.valid_directory?
     [YAML_PATH, MD_PATH].any? { |f| File.exist?(f) }
