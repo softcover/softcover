@@ -32,18 +32,25 @@ class Polytexnic::App < Sinatra::Base
 
   # Gets the image specified by the path and content type.
   get '/images/*' do |path|
-    extension  = path.split(/\./).last
+    split_path = path.split(/\./)
+    extension = split_path.pop
+    path = split_path * ''
     # Arrange to handle both '.jpeg' and '.jpg' extensions.
     if extension == 'jpeg' && !File.exist?(image_filename(path, extension))
       extension = 'jpg'
     end
     file_path = image_filename(path, extension)
-    File.exists?(file_path) ? File.read(file_path) : nil
+    if File.exists?(file_path)
+      content_type extension
+      File.read(file_path)
+    else
+      raise Sinatra::NotFound
+    end
   end
 
   get '/assets/:path' do
-    ext = params[:path].split('.').last
-    content_type ext
+    extension = params[:path].split('.').last
+    content_type extension
     File.read(File.join(File.dirname(__FILE__),'assets', params[:path]))
   end
 
@@ -74,7 +81,7 @@ class Polytexnic::App < Sinatra::Base
     require 'json'
     Signal.trap("SIGINT") { exit 0 }
     Signal.trap("HUP") do
-      body({ time: Time.now }.to_json)
+      Thread.new { body({ time: Time.now }.to_json) }
     end
   end
 
