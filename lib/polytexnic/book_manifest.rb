@@ -101,7 +101,7 @@ class Polytexnic::BookManifest < OpenStruct
   end
 
   def chapter_file_paths
-    chapters.map do |chapter|
+    pdf_chapters.map do |chapter|
       file_path = case
       when markdown? then File.join("markdown", "#{chapter.slug}.md")
       when polytex?  then File.join("chapters", "#{chapter.slug}.tex")
@@ -111,6 +111,12 @@ class Polytexnic::BookManifest < OpenStruct
 
       file_path
     end
+  end
+
+  # Return chapters for the PDF.
+  # We reject the frontmatter because LaTeX handles it automatically.
+  def pdf_chapters
+    chapters.reject { |chapter| chapter.slug.match(/frontmatter/) }
   end
 
   def find_chapter_by_slug(slug)
