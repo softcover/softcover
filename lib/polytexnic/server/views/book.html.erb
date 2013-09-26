@@ -27,9 +27,9 @@
     <div id='bookMenu' class='bookMenuFixed'>
       <div class='wrapper'>
         <div class='bookMenuArows'>
-          <a href="<%= @manifest.find_chapter_by_number(@chapter.chapter_number - 1).slug %>" class="leftArrow">◄</a>
+          <a href="<%= @manifest.url(@chapter.chapter_number - 1) %>" class="leftArrow">◄</a>
           <a href="#top" class="upArrow">▲</a>
-          <a href="<%= @manifest.find_chapter_by_number(@chapter.chapter_number + 1).slug %>" class="rightArrow">►</a>
+          <a href="<%= @manifest.url(@chapter.chapter_number + 1) %>" class="rightArrow">►</a>
         </div>
         <div class='dropDown' id='j_chapterDropDown' onclick="$('.dropMenu').toggle()">
           <span>Chapter <%= @chapter.chapter_number %>: <%= @chapter.title %></span>
