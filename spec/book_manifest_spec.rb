@@ -4,6 +4,7 @@ describe Polytexnic::BookManifest do
   context "with book generation" do
     before(:all) { generate_book }
     after(:all)  { remove_book }
+    subject(:manifest) { Polytexnic::BookManifest.new }
 
     context "in valid book directory" do
       describe "basic information" do
@@ -15,17 +16,21 @@ describe Polytexnic::BookManifest do
       end
 
       describe "chapter information" do
-        its("chapters.first") { should be_a Polytexnic::BookManifest::Chapter }
-        its("chapters.first.title") { should eq "Lorem ipsum" }
-        its("chapters.first.slug") { should eq "a_chapter" }
-        its("chapters.first.chapter_number") { should eq 1 }
-        its("chapters.first.sections.first.name") do
+        subject(:chapter) { manifest.chapters[1] }
+        it { should be_a Polytexnic::BookManifest::Chapter }
+        its(:title) { should eq "Lorem ipsum" }
+        its(:slug) { should eq "a_chapter" }
+        its(:chapter_number) { should eq 1 }
+        its("sections.first.name") do
           should eq '\emph{Bacon} ipsum'
         end
 
-        its("chapters.last.title") { should eq 'Foo \emph{bar}' }
-        its("chapters.last.slug") { should eq "another_chapter" }
-        its("chapters.last.chapter_number") { should eq 2 }
+        describe "for last chapter" do
+          subject(:chapter) { manifest.chapters.last }
+          its(:title) { should eq 'Foo \emph{bar}' }
+          its(:slug) { should eq "another_chapter" }
+          its(:chapter_number) { should eq 2 }
+        end
       end
     end
 
