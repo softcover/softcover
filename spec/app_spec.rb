@@ -13,7 +13,7 @@ describe Polytexnic::App do
   before { chdir_to_book }
 
   let(:manifest) { Polytexnic::BookManifest.new }
-  let(:chapter) { manifest.chapters.first }
+  let(:chapter) { manifest.chapters[1] }
 
   def app
     Polytexnic::App
@@ -22,7 +22,7 @@ describe Polytexnic::App do
   it 'redirects / to first chapter' do
     get '/'
     expect(last_response).to be_redirect
-    expect(last_response.location).to match manifest.chapters.first.slug
+    expect(last_response.location).to match manifest.chapters[1].slug
   end
 
   it 'GET chapter' do
