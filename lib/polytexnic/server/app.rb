@@ -8,6 +8,10 @@ class Polytexnic::App < Sinatra::Base
   set :public_folder, File.join(File.dirname(__FILE__),'../template/html')
   set :bind, '0.0.0.0'
 
+  configure do
+    mime_type :map, 'application/javascript'
+  end
+
   before do
     @manifest = Polytexnic::BookManifest.new
   end
@@ -17,11 +21,11 @@ class Polytexnic::App < Sinatra::Base
     redirect @manifest.chapters.first.slug
   end
 
-  get '/refresh.js' do
+  get '/main.js' do
     require 'coffee_script'
     @mathjax_src    = Polytexnic::Mathjax::AMS_HTML
     @mathjax_config = Polytexnic::Mathjax.config
-    coffee erb :'refresh.js'
+    coffee erb :'main.js'
   end
 
   get '/stylesheets/pygments.css' do
