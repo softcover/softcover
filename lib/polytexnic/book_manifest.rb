@@ -46,14 +46,16 @@ class Polytexnic::BookManifest < OpenStruct
       tex_filename = filename + '.tex'
       self.chapters = []
       base_contents = File.read(tex_filename)
+      if base_contents.match(/frontmatter/)
+        chapters.push Chapter.new(slug: 'frontmatter',
+                                  title: 'Frontmatter',
+                                  sections: nil,
+                                  chapter_number: 0)
+      end
       remove_frontmatter!(base_contents)
       self.author = base_contents.scan(/^\s*\\author\{(.*?)\}/).flatten.first
       chapter_regex = /^\s*\\include\{chapters\/(.*?)\}/
       chapter_includes = base_contents.scan(chapter_regex).flatten
-      chapters.push Chapter.new(slug: 'frontmatter',
-                                title: 'Frontmatter',
-                                sections: nil,
-                                chapter_number: 0)
       chapter_includes.each_with_index do |name, i|
         slug = File.basename(name, '.*')
         title_regex = /^\s*\\chapter{(.*)}/
