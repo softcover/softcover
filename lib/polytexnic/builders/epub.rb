@@ -278,7 +278,7 @@ module Polytexnic
         chapter_nav = []
         manifest.chapters.each_with_index do |chapter, n|
           chapter_nav << %(<navPoint id="#{chapter.slug}" playOrder="#{n+1}">)
-          chapter_nav << %(    <navLabel><text>Chapter #{n+1}</text></navLabel>)
+          chapter_nav << %(    <navLabel><text>#{chapter_name(n)}</text></navLabel>)
           chapter_nav << %(    <content src="#{chapter.fragment_name}"/>)
           chapter_nav << %(</navPoint>)
         end
@@ -297,6 +297,10 @@ module Polytexnic
       #{chapter_nav.join("\n")}
     </navMap>
 </ncx>)
+      end
+
+      def chapter_name(n)
+        n.zero? ? "Frontmatter" : "Chapter #{n}"
       end
 
       # Returns the nav HTML content.
