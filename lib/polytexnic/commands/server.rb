@@ -2,13 +2,14 @@ require 'listen'
 
 module Polytexnic::Commands::Server
   include Polytexnic::Output
+  include Polytexnic::Utils
   attr_accessor :no_listener
   extend self
 
   def listen_for_changes
     return if defined?(@no_listener) && @no_listener
     server_pid = Process.pid
-    @listener = Listen.to('chapters')
+    @listener = Listen.to(markdown_directory? ? 'markdown' : 'chapters')
     @listener.filter(/(\.tex|\.md)$/)
     @listener.ignore(%r{^.tmp})
     @listener.change do |modified|

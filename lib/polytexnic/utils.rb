@@ -63,12 +63,12 @@ module Polytexnic::Utils
   # We support both :html (outputting CSS) and :latex (outputting
   # a LaTeX style file).
   def write_pygments_file(format, path = '.')
-      extension = case format
-                  when :html
-                    'css'
-                  when :latex
-                    'sty'
-                  end
+    extension = case format
+                when :html
+                  'css'
+                when :latex
+                  'sty'
+                end
     # Here we burrow into the private 'Pygments#mentos' method.
     # Pygments exposes a 'css' method to return the CSS,
     # but we want to be able to output a LaTeX style file as well.
