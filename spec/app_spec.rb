@@ -43,25 +43,36 @@ describe Polytexnic::App do
     expect(last_response.status).to eq 404
   end
 
-  it 'GET pygments.css' do
-    get '/stylesheets/pygments.css'
-    expect(last_response).to be_ok
-    expect(last_response.content_type).to match 'text/css'
-  end
+  describe 'serving files' do
+    it 'GET pygments.css' do
+      get '/stylesheets/pygments.css'
+      expect_server_response_of_type 'text/css'
+    end
 
-  it 'GET refresh.js' do
-    get '/refresh.js'
-    expect(last_response).to be_ok
-  end
+    it 'GET refresh.js' do
+      get '/refresh.js'
+      expect_server_response_of_type 'application/javascript'
+    end
 
-  it 'GET css asset' do
-    get '/assets/main.css'
-    expect(last_response).to be_ok
-    expect(last_response.content_type).to match 'text/css'
-  end
+    it 'GET css asset' do
+      get '/assets/main.css'
+      expect_server_response_of_type 'text/css'
+    end
 
-  it 'GET image asset' do
-    get '/assets/icons.png'
-    expect(last_response).to be_ok
+    it 'GET image asset' do
+      get '/assets/icons.png'
+      expect_server_response_of_type 'image/png'
+    end
+
+    it 'GET image within book' do
+      get '/images/2011_michael_hartl.png'
+      expect_server_response_of_type 'image/png'
+    end
+
+    def expect_server_response_of_type(type)
+      expect(last_response).to be_ok
+      expect(last_response.content_type).to match type
+      expect(last_response.content_length > 0).to be_true
+    end
   end
 end
