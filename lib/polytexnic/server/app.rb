@@ -75,7 +75,7 @@ class Polytexnic::App < Sinatra::Base
       content_type :html
       @html
     else
-      @title = @chapter.title
+      @title = @chapter.menu_heading
       @local_server = true
       erb :'book.html'
     end

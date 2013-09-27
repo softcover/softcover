@@ -23,6 +23,13 @@ class Polytexnic::BookManifest < OpenStruct
     def nodes
       @nodes ||= []
     end
+
+    # Returns a chapter heading for use in the navigation menu.
+    def menu_heading
+      raw_html = Polytexnic::Core::Pipeline.new(title).to_html
+      html = Nokogiri::HTML(raw_html).at_css('p').inner_html
+      chapter_number.zero? ? html : "Chapter #{chapter_number}: #{html}"
+    end
   end
 
   class Section < OpenStruct
@@ -136,7 +143,6 @@ class Polytexnic::BookManifest < OpenStruct
       '#'
     end
   end
-
 
   def self.valid_directory?
     [YAML_PATH, MD_PATH].any? { |f| File.exist?(f) }
