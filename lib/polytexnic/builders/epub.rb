@@ -52,8 +52,8 @@ module Polytexnic
       def write_html
         images_dir  = File.join('epub', 'OEBPS', 'images')
         texmath_dir = File.join(images_dir, 'texmath')
-        mkdir(images_dir)
-        mkdir(texmath_dir)
+        mkdir images_dir
+        mkdir texmath_dir
 
         pngs = []
         manifest.chapters.each_with_index do |chapter, i|
@@ -69,7 +69,7 @@ module Polytexnic
             else
               html = inner_html
             end
-            f.write(chapter_template("Chapter #{i+1}", html))
+            f.write(chapter_template("Chapter #{i}", html))
           end
         end
         # Clean up unused PNGs.
@@ -101,7 +101,7 @@ module Polytexnic
         return nil unless File.exist?('phantomjs_source.html')
         raw_source = File.read('phantomjs_source.html')
         source = strip_attributes(Nokogiri::HTML(raw_source))
-        rm('phantomjs_source.html')
+        rm 'phantomjs_source.html'
         # Remove the first body div, which is the hidden MathJax SVGs
         source.at_css('body div').remove
         # Remove all the unneeded raw TeX displays.
@@ -132,7 +132,7 @@ module Polytexnic
             cmd = "#{inkscape} -f #{svg_filename} -e #{png_filename} -h #{h}pt"
             silence_stream(STDERR) { system cmd }
           end
-          rm(svg_filename)
+          rm svg_filename
           png = Nokogiri::XML::Node.new('img', source)
           png['src'] = File.join('images', 'texmath',
                                  File.basename(png_filename))
@@ -258,7 +258,8 @@ module Polytexnic
         <meta property="dcterms:modified">#{Time.now.strftime('%Y-%m-%dT%H:%M:%S')}Z</meta>
     </metadata>
     <manifest>
-        <item href="nav.html" id="nav" media-type="application/xhtml+xml" properties="nav"/>          <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+        <item href="nav.html" id="nav" media-type="application/xhtml+xml" properties="nav"/>
+        <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
         <item id="page-template.xpgt" href="styles/page-template.xpgt" media-type="application/vnd.adobe-page-template+xml"/>
         <item id="pygments.css" href="styles/pygments.css" media-type="text/css"/>
         <item id="polytexnic.css" href="styles/polytexnic.css" media-type="text/css"/>
@@ -277,7 +278,7 @@ module Polytexnic
         chapter_nav = []
         manifest.chapters.each_with_index do |chapter, n|
           chapter_nav << %(<navPoint id="#{chapter.slug}" playOrder="#{n+1}">)
-          chapter_nav << %(    <navLabel><text>Chapter #{n+1}</text></navLabel>)
+          chapter_nav << %(    <navLabel><text>#{chapter_name(n)}</text></navLabel>)
           chapter_nav << %(    <content src="#{chapter.fragment_name}"/>)
           chapter_nav << %(</navPoint>)
         end
@@ -296,6 +297,10 @@ module Polytexnic
       #{chapter_nav.join("\n")}
     </navMap>
 </ncx>)
+      end
+
+      def chapter_name(n)
+        n.zero? ? "Frontmatter" : "Chapter #{n}"
       end
 
       # Returns the nav HTML content.
@@ -320,26 +325,6 @@ module Polytexnic
     </body>
 </html>
 )
-      end
-
-      # This is hard-coded for now, but will eventually be dynamic.
-      def toc_html
-%(<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <title>Table of Contents</title>
-  <link rel="stylesheet" type="application/vnd.adobe-page-template+xml" href="styles/page-template.xpgt" />
-</head>
-
-<body>
-
-<h1 class="contents" id="toc">Table of Contents</h1>
-<h1 class="contents" id="sec-1">Foo Bar</h1>
-</body>
-</html>)
       end
 
       # Returns the HTML template for a chapter.

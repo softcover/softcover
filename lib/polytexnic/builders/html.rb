@@ -65,7 +65,7 @@ module Polytexnic
         # way to do this.)
         includes << '\end{document}'
         content = File.read(filename)
-        content.gsub!(/^\s*\\include.*\}/m, includes.join("\n"))
+        content.gsub!(/^\s*\\frontmatter.*\\include.*\}/m, includes.join("\n"))
         File.write(filename, content)
       end
 
@@ -98,14 +98,7 @@ module Polytexnic
         manifest.chapters.each_with_index do |chapter, i|
           update_cross_references(chapter, reference_cache, target_cache)
           write_fragment_file(chapter)
-          write_complete_file(chapter, erb_file, i+1)
-        end
-      end
-
-      def create_html_fragments
-        manifest.chapters.each do |chapter|
-          filename = File.join('html', chapter.slug + '_fragment.html')
-          File.unlink(filename) if File.exist?(filename)
+          write_complete_file(chapter, erb_file, i)
         end
       end
 
@@ -114,9 +107,10 @@ module Polytexnic
         chapter_number = 0
         current_chapter = manifest.chapters.first
         reference_cache = {}
-
         xml.css('#book>div').each do |node|
-          if node.attributes['class'].to_s == 'chapter'
+          klass = node.attributes['class'].to_s
+          id = node.attributes['id'].to_s
+          if klass == 'chapter' || id == 'frontmatter'
             current_chapter = manifest.chapters[chapter_number]
             node['data-chapter'] = current_chapter.slug
             chapter_number += 1
@@ -130,6 +124,13 @@ module Polytexnic
           current_chapter.nodes.push node
         end
         reference_cache
+      end
+
+      def write_frontmatter_file(xml, id)
+        if element = xml.at_css("div##{id}")
+          File.write("html/#{id}_fragment.html", element.to_xhtml)
+          element.remove
+        end
       end
 
       # Builds a cache of targets for cross-references.

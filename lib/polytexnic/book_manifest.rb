@@ -46,6 +46,13 @@ class Polytexnic::BookManifest < OpenStruct
       tex_filename = filename + '.tex'
       self.chapters = []
       base_contents = File.read(tex_filename)
+      if base_contents.match(/frontmatter/)
+        chapters.push Chapter.new(slug: 'frontmatter',
+                                  title: 'Frontmatter',
+                                  sections: nil,
+                                  chapter_number: 0)
+      end
+      remove_frontmatter!(base_contents)
       self.author = base_contents.scan(/^\s*\\author\{(.*?)\}/).flatten.first
       chapter_regex = /^\s*\\include\{chapters\/(.*?)\}/
       chapter_includes = base_contents.scan(chapter_regex).flatten
@@ -61,14 +68,30 @@ class Polytexnic::BookManifest < OpenStruct
         chapters.push Chapter.new(slug: slug,
                                   title: title,
                                   sections: sections,
-                                  chapter_number: i += 1)
+                                  chapter_number: i + 1)
       end
     end
-
     # TODO: verify all attributes
 
     verify_paths! if options[:verify_paths]
   end
+
+  # Removes frontmatter
+  # The frontmatter shouldn't be included in the chapter slugs, so we remove
+  # it. For example, in
+  #  \frontmatter
+  #  \maketitle
+  #  \tableofcontents
+  #  % List frontmatter sections here (preface, foreword, etc.).
+  #  \include{chapters/preface}
+  #  \mainmatter
+  #  % List chapters here in the order they should appear in the book.
+  #  \include{chapters/a_chapter}
+  # we don't want to include the preface.
+  def remove_frontmatter!(base_contents)
+    base_contents.gsub!(/\\frontmatter.*\\mainmatter/m, '')
+  end
+
 
   def markdown?
     @source == :markdown || @source == :md
@@ -80,7 +103,7 @@ class Polytexnic::BookManifest < OpenStruct
   end
 
   def chapter_file_paths
-    chapters.map do |chapter|
+    pdf_chapters.map do |chapter|
       file_path = case
       when markdown? then File.join("markdown", "#{chapter.slug}.md")
       when polytex?  then File.join("chapters", "#{chapter.slug}.tex")
@@ -92,19 +115,28 @@ class Polytexnic::BookManifest < OpenStruct
     end
   end
 
+  # Return chapters for the PDF.
+  # We reject the frontmatter because LaTeX handles it automatically.
+  def pdf_chapters
+    chapters.reject { |chapter| chapter.slug.match(/frontmatter/) }
+  end
+
   def find_chapter_by_slug(slug)
     chapters.find { |chapter| chapter.slug == slug }
   end
 
   def find_chapter_by_number(number)
-    if number > chapters.length
-      chapters.first
-    elsif number == 0
-      chapters.last
+    chapters.find { |chapter| chapter.chapter_number == number }
+  end
+
+  def url(chapter_number)
+    if chapter = find_chapter_by_number(chapter_number)
+      chapter.slug
     else
-      chapters.find { |chapter| chapter.chapter_number == number }
+      '#'
     end
   end
+
 
   def self.valid_directory?
     [YAML_PATH, MD_PATH].any? { |f| File.exist?(f) }
@@ -147,9 +179,10 @@ class Polytexnic::BookManifest < OpenStruct
     end
 
     def verify_paths!
-      chapter_file_paths do |chapter_path|
+      chapter_file_paths do |chapter_path, i|
+        next if chapter_path =~ /frontmatter/
         unless File.exist?(chapter_path)
-          raise "Chapter file in manifest not found"
+          raise "Chapter file in manifest not found in #{chapter_path}"
         end
       end
     end

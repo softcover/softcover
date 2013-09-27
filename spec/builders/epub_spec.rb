@@ -53,9 +53,9 @@ describe Polytexnic::Builders::Epub do
           expect(doc.css('item#another_chapter')).not_to be_empty
         end
 
-        it "should have the right TOC chpater refs" do
+        it "should have the right TOC chapter refs" do
           toc_refs = doc.css('itemref').map { |node| node['idref'] }
-          expect(toc_refs).to eql(%w[a_chapter another_chapter])
+          expect(toc_refs).to eql(%w[frontmatter a_chapter another_chapter])
         end
 
         it "should have the right title" do
@@ -87,7 +87,8 @@ describe Polytexnic::Builders::Epub do
       it { should exist }
 
       it "should contain the right filenames in the right order" do
-        filenames = ['a_chapter_fragment.html', 'another_chapter_fragment.html']
+        filenames = ['frontmatter_fragment.html', 'a_chapter_fragment.html',
+                     'another_chapter_fragment.html']
         source_files = doc.css('content').map { |node| node['src'] }
         expect(source_files).to eql(filenames)
       end
@@ -112,12 +113,14 @@ describe Polytexnic::Builders::Epub do
       end
 
       it "should create the HTML files" do
+        has_math = false
         builder.manifest.chapters.each_with_index do |chapter, i|
           content = File.read("html/#{chapter.slug}_fragment.html")
-          # Make sure at least one template file has math.
-          expect(builder.math?(content)).to be_true if i == 0
+          has_math ||= builder.math?(content)
           expect("epub/OEBPS/#{chapter.slug}_fragment.html").to exist
         end
+        # Make sure at least one template file has math.
+        expect(has_math).to be_true
       end
 
       it "should create math PNGs" do
@@ -150,6 +153,10 @@ describe Polytexnic::Builders::Epub do
     end
     after(:all) { remove_book }
     subject(:builder) { @builder }
+
+    it "should be valid" do
+      expect(`poly epub:validate`).to match(/No errors or warnings/)
+    end
 
     it "should not raise an error" do
       expect { subject }.not_to raise_error

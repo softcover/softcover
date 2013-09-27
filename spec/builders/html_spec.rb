@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Polytexnic::Builders::Html do
 
-  describe "when generating from PolyTeX sourde" do
+  describe "when generating from PolyTeX source" do
     before(:all) { generate_book }
     after(:all)  { remove_book }
 
@@ -39,6 +39,26 @@ describe Polytexnic::Builders::Html do
         subject { output }
 
         it { should match('Lorem ipsum') }
+      end
+
+      describe "frontmatter output" do
+        let(:filename) { 'html/frontmatter_fragment.html' }
+
+        it "should create a frontmatter file" do
+          expect(filename).to exist
+        end
+
+        describe "contents" do
+          subject(:html) { Nokogiri::HTML(File.open(filename)) }
+
+          it "should include the title page" do
+            expect(html.at_css('div#title_page')).not_to be_nil
+          end
+
+          it "should include the table of contents" do
+            expect(html.at_css('div#table_of_contents')).not_to be_nil
+          end
+        end
       end
 
       describe "HTML MathJax output" do
