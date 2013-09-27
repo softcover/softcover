@@ -49,8 +49,8 @@ describe Polytexnic::App do
       expect_server_response_of_type 'text/css'
     end
 
-    it 'GET refresh.js' do
-      get '/refresh.js'
+    it 'GET main.js' do
+      get '/main.js'
       expect_server_response_of_type 'application/javascript'
     end
 
