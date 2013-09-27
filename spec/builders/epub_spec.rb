@@ -68,7 +68,7 @@ describe Polytexnic::Builders::Epub do
         end
 
         it "should have the right copyright line" do
-          copyright = Regexp.escape("Copyright (c) 2013")
+          copyright = Regexp.escape("Copyright (c) #{Time.new.year}")
           author = Regexp.escape(builder.manifest.author)
           expect(doc.to_xml).to match(/>#{copyright} #{author}</)
         end
