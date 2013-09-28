@@ -1,12 +1,24 @@
 require 'spec_helper'
 
 describe Polytexnic::Commands::Generator do
-  let(:name) { "foo_bar" }
 
   context "generate in non-book directory" do
+
+    before(:all) do
+      chdir_to_non_book
+      @name = 'foo_bar'
+      Polytexnic::Commands::Generator.generate_directory @name
+    end
+
+    let(:name) { @name }
+
     before do
       chdir_to_non_book
-      Polytexnic::Commands::Generator.generate_directory name
+    end
+
+    after(:all) do
+      chdir_to_non_book
+      FileUtils.rm_rf name
     end
 
     it "should copy files" do
@@ -119,6 +131,7 @@ describe Polytexnic::Commands::Generator do
   end
 
   context "overwriting" do
+    let(:name) { 'bar' }
     before do
       chdir_to_non_book
       $stdin.should_receive(:gets).and_return("a")
@@ -128,13 +141,13 @@ describe Polytexnic::Commands::Generator do
       end
     end
 
+    after do
+      chdir_to_non_book
+      FileUtils.rm_rf name
+    end
+
     it "should overwrite files" do
       expect(Polytexnic::Commands::Generator.verify!).to be_true
     end
-  end
-
-  after do
-    chdir_to_non_book
-    FileUtils.rm_rf name
   end
 end
