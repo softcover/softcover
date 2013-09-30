@@ -217,9 +217,8 @@ describe Polytexnic::Commands::Generator do
 
       describe "base LaTeX file" do
         subject(:base) { 'foo_bar.tex' }
-        it { pending; should exist }
+        it { should exist }
         it "should use the 14-point extbook doctype" do
-          pending
           expect(File.read(base)).to match(/\[14pt\]\{extbook\}/)
         end
       end

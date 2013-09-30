@@ -8,7 +8,7 @@ module Polytexnic
       def generate_directory(name, options = {})
         @name = name
         @markdown = options[:markdown]
-        @simple = options[:simple]
+        @simple   = options[:simple]
 
         thor = Thor::Shell::Basic.new
 
