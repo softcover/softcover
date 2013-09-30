@@ -130,12 +130,12 @@ describe Polytexnic::Commands::Generator do
     end
   end
 
-  context "generate Markdown book in non-book directory" do
+  context "generate simple book_base in non-book directory" do
 
     before(:all) do
       chdir_to_non_book
       @name = 'foo_bar'
-      Polytexnic::Commands::Generator.generate_directory @name, true
+      Polytexnic::Commands::Generator.generate_directory @name, simple: true
     end
 
     let(:name) { @name }
@@ -163,9 +163,62 @@ describe Polytexnic::Commands::Generator do
 
       describe "base LaTeX file" do
         subject(:base) { 'foo_bar.tex' }
-        it { pending; should exist }
+        it { should exist }
+
+        describe "contents" do
+          subject(:text) { File.read(base) }
+          it { should match /\[14pt\]\{extbook\}/ }
+          it { should_not match /frontmatter/ }
+          it { should_not match /mainmatter/ }
+        end
+      end
+
+      it "should have chapter files" do
+        expect('chapters/a_chapter.tex').to exist
+        expect('chapters/another_chapter.tex').to exist
+      end
+
+      it "should not have preface file" do
+        expect('chapters/preface.tex').not_to exist
+      end
+    end
+  end
+
+  context "generate Markdown book in non-book directory" do
+
+    before(:all) do
+      chdir_to_non_book
+      @name = 'foo_bar'
+      Polytexnic::Commands::Generator.generate_directory @name, markdown: true
+    end
+
+    let(:name) { @name }
+
+    before do
+      chdir_to_non_book
+    end
+
+    after(:all) do
+      chdir_to_non_book
+      FileUtils.rm_rf name
+    end
+
+    it "should copy files" do
+      expect(Polytexnic::Commands::Generator.verify!).to be_true
+    end
+
+    context "generated contents from template" do
+
+      before { Dir.chdir(name) }
+
+      it "should build all formats without error" do
+        expect { `poly build` }.not_to raise_error
+      end
+
+      describe "base LaTeX file" do
+        subject(:base) { 'foo_bar.tex' }
+        it { should exist }
         it "should use the 14-point extbook doctype" do
-          pending
           expect(File.read(base)).to match(/\[14pt\]\{extbook\}/)
         end
       end

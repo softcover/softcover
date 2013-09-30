@@ -28,7 +28,7 @@ describe Polytexnic::Builders::Mobi do
 
   context "for a Markdown book" do
     before(:all) do
-      generate_book(source: :markdown)
+      generate_book(markdown: true)
       @builder = Polytexnic::Builders::Mobi.new
       @built = @builder.build!
       chdir_to_book

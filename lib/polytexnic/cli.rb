@@ -98,8 +98,13 @@ module Polytexnic
                   :default => false,
                   :aliases => "-m",
                   :desc => "Generate a Markdown book."
+    method_option :simple,
+                  :type => :boolean,
+                  :default => false,
+                  :aliases => "-s",
+                  :desc => "Generate a simple book."
     def new(n)
-      Polytexnic::Commands::Generator.generate_directory(n, options.markdown?)
+      Polytexnic::Commands::Generator.generate_directory(n, options)
     end
 
     # ===============================================
