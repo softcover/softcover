@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Polytexnic::Commands::Generator do
 
-  context "generate in non-book directory" do
+  context "generate PolyTeX in non-book directory" do
 
     before(:all) do
       chdir_to_non_book
@@ -126,6 +126,53 @@ describe Polytexnic::Commands::Generator do
       describe "second chapter file" do
         subject { File.read('chapters/another_chapter.tex') }
         it_should_behave_like "a chapter"
+      end
+    end
+  end
+
+  context "generate Markdown book in non-book directory" do
+
+    before(:all) do
+      chdir_to_non_book
+      @name = 'foo_bar'
+      Polytexnic::Commands::Generator.generate_directory @name, true
+    end
+
+    let(:name) { @name }
+
+    before do
+      chdir_to_non_book
+    end
+
+    after(:all) do
+      chdir_to_non_book
+      FileUtils.rm_rf name
+    end
+
+    it "should copy files" do
+      expect(Polytexnic::Commands::Generator.verify!).to be_true
+    end
+
+    context "generated contents from template" do
+
+      before { Dir.chdir(name) }
+
+      it "should build all formats without error" do
+        expect { `poly build` }.not_to raise_error
+      end
+
+      describe "base LaTeX file" do
+        subject(:base) { 'foo_bar.tex' }
+        it { pending; should exist }
+        it "should use the 14-point extbook doctype" do
+          pending
+          expect(File.read(base)).to match(/\[14pt\]\{extbook\}/)
+        end
+      end
+
+      it "should have the markdown files" do
+        expect('markdown/a_chapter.md').to exist
+        expect('markdown/another_chapter.md').to exist
       end
     end
   end
