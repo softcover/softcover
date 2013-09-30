@@ -47,7 +47,7 @@ describe Polytexnic::Builders::Pdf do
 
   context "for a Markdown book" do
     before(:all) do
-      generate_book(source: :markdown)
+      generate_book(markdown: true)
       @builder = Polytexnic::Builders::Pdf.new
       @builder.build!
       chdir_to_book

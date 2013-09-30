@@ -135,7 +135,7 @@ describe Polytexnic::Commands::Generator do
     before(:all) do
       chdir_to_non_book
       @name = 'foo_bar'
-      Polytexnic::Commands::Generator.generate_directory @name, true
+      Polytexnic::Commands::Generator.generate_directory @name, markdown: true
     end
 
     let(:name) { @name }

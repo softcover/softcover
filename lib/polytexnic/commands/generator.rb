@@ -5,9 +5,9 @@ module Polytexnic
       include Polytexnic::Output
       extend self
 
-      def generate_directory(name, markdown = false)
+      def generate_directory(name, options = {})
         @name = name
-        @markdown = markdown
+        @markdown = options[:markdown]
 
         thor = Thor::Shell::Basic.new
 
@@ -23,6 +23,7 @@ module Polytexnic
         # file before the directory had been created, so we now create all
         # the directories first.
         directories.each do |path|
+          next if path =~ /simple_book/
           (cp_path = path.dup).slice! template_dir + "/"
           FileUtils.mkdir cp_path unless File.exist?(cp_path)
         end
@@ -33,7 +34,7 @@ module Polytexnic
 
           (cp_path = path.dup).slice! template_dir + "/"
 
-          if path =~ /book\.tex/
+          if path =~ /\/book\.tex/
             cp_path = "#{name}.tex"
           elsif path =~ /\.erb/
             cp_path = File.basename path.dup, '.erb'

@@ -146,7 +146,7 @@ end
 describe Polytexnic::Builders::Epub do
   context "for a Markdown book" do
     before(:all) do
-      generate_book(source: :markdown)
+      generate_book(markdown: true)
       @builder = Polytexnic::Builders::Epub.new
       @builder.build!
       chdir_to_book
