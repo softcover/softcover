@@ -8,6 +8,7 @@ module Polytexnic
       def generate_directory(name, options = {})
         @name = name
         @markdown = options[:markdown]
+        @simple = options[:simple]
 
         thor = Thor::Shell::Basic.new
 
@@ -34,8 +35,12 @@ module Polytexnic
 
           (cp_path = path.dup).slice! template_dir + "/"
 
-          if path =~ /\/book\.tex/
+          if path =~ /\/book\.tex/ && !@simple
             cp_path = "#{name}.tex"
+          elsif path =~ /\/simple_book\.tex/ && @simple
+            cp_path = "#{name}.tex"
+          elsif path =~ /\/preface\.tex/ && @simple
+            next
           elsif path =~ /\.erb/
             cp_path = File.basename path.dup, '.erb'
           elsif path =~ /gitignore/
@@ -50,7 +55,7 @@ module Polytexnic
 
             overwrite = case res
             when /y|yes/ then true
-            when /n|no/ then false
+            when /n|no/  then false
             when /a|all/ then
               overwrite_all = true
               true
@@ -113,6 +118,7 @@ module Polytexnic
         end
 
         Polytexnic::Commands::Generator.all_files_and_directories.each do |file|
+          next if file =~ /\/preface\.tex/ && @simple
           path = if file =~ /book\.tex/
                    "#{@name}.tex"
                  elsif file =~ /\.erb/
