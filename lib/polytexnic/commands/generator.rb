@@ -5,9 +5,10 @@ module Polytexnic
       include Polytexnic::Output
       extend self
 
-      def generate_directory(name, markdown = false)
+      def generate_directory(name, options = {})
         @name = name
-        @markdown = markdown
+        @markdown = options[:markdown]
+        @simple   = options[:simple]
 
         thor = Thor::Shell::Basic.new
 
@@ -23,6 +24,8 @@ module Polytexnic
         # file before the directory had been created, so we now create all
         # the directories first.
         directories.each do |path|
+          next if path =~ /\/simple_book/ && !@simple
+          next if path =~ /\/book/ && @simple
           (cp_path = path.dup).slice! template_dir + "/"
           FileUtils.mkdir cp_path unless File.exist?(cp_path)
         end
@@ -49,7 +52,7 @@ module Polytexnic
 
             overwrite = case res
             when /y|yes/ then true
-            when /n|no/ then false
+            when /n|no/  then false
             when /a|all/ then
               overwrite_all = true
               true
@@ -79,8 +82,15 @@ module Polytexnic
         File.expand_path File.join File.dirname(__FILE__), "../template"
       end
 
+      # Returns true for a simple book (no frontmatter, etc.).
+      def simple?
+        @simple
+      end
+
       def all_files_and_directories
-        files_directories_maybe_markdown
+        f = files_directories_maybe_markdown
+        simple? ? f.reject { |p| p =~ /\/book\.tex/ || p =~ /preface/ }
+                : f.reject { |p| p =~ /simple/ }
       end
 
       def files_directories_maybe_markdown

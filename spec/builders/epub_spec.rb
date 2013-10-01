@@ -11,7 +11,8 @@ describe Polytexnic::Builders::Epub do
   subject(:builder) { @builder }
 
   it "should be valid" do
-    expect(`poly epub:validate`).to match(/No errors or warnings/)
+    output = `poly epub:validate`
+    expect(output).to match(/No errors or warnings/)
   end
 
   describe "mimetype file" do
@@ -68,7 +69,7 @@ describe Polytexnic::Builders::Epub do
         end
 
         it "should have the right copyright line" do
-          copyright = Regexp.escape("Copyright (c) 2013")
+          copyright = Regexp.escape("Copyright (c) #{Time.new.year}")
           author = Regexp.escape(builder.manifest.author)
           expect(doc.to_xml).to match(/>#{copyright} #{author}</)
         end
@@ -146,7 +147,7 @@ end
 describe Polytexnic::Builders::Epub do
   context "for a Markdown book" do
     before(:all) do
-      generate_book(source: :markdown)
+      generate_book(markdown: true)
       @builder = Polytexnic::Builders::Epub.new
       @builder.build!
       chdir_to_book
