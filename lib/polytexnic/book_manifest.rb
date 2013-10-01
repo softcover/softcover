@@ -54,6 +54,7 @@ class Polytexnic::BookManifest < OpenStruct
       self.chapters = []
       base_contents = File.read(tex_filename)
       if base_contents.match(/frontmatter/)
+        @frontmatter = true
         chapters.push Chapter.new(slug: 'frontmatter',
                                   title: 'Frontmatter',
                                   sections: nil,
@@ -99,6 +100,16 @@ class Polytexnic::BookManifest < OpenStruct
     base_contents.gsub!(/\\frontmatter.*\\mainmatter/m, '')
   end
 
+  # Returns true if the book has frontmatter.
+  def frontmatter?
+    @frontmatter
+  end
+
+  # Returns the first full chapter.
+  # This arranges to skip the frontmatter, if any.
+  def first_chapter
+    frontmatter? ? chapters[1] : chapters[0]
+  end
 
   def markdown?
     @source == :markdown || @source == :md

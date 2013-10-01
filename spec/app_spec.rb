@@ -4,75 +4,99 @@ require 'rack/test'
 describe Polytexnic::App do
   include Rack::Test::Methods
 
-  before(:all) do
-    generate_book
-    Polytexnic::Builders::Html.new.build!
-  end
-  after(:all)  { remove_book }
-
-  before { chdir_to_book }
-
-  let(:manifest) { Polytexnic::BookManifest.new }
-  let(:chapter) { manifest.chapters[1] }
-
   def app
     Polytexnic::App
   end
 
-  it 'redirects / to first chapter' do
-    get '/'
-    expect(last_response).to be_redirect
-    expect(last_response.location).to match manifest.chapters[1].slug
-  end
 
-  it 'GET chapter' do
-    get "/#{chapter.slug}"
-    expect(last_response).to be_ok
-    expect(last_response.body).to match Regexp.new(chapter.title)
-  end
 
-  it 'GET chapter.js' do
-    get "/#{chapter.slug}.js"
-    expect(last_response).to be_ok
-    expect(last_response.body).to match Regexp.new(chapter.title)
-    expect(last_response.body).not_to match Regexp.new('<html>')
-  end
+  context "ordinary book" do
+    before(:all) do
+      generate_book
+      Polytexnic::Builders::Html.new.build!
+    end
+    after(:all)  { remove_book }
 
-  it 'GET nonexistent chapter' do
-    get '/boom'
-    expect(last_response.status).to eq 404
-  end
+    before { chdir_to_book }
 
-  describe 'serving files' do
-    it 'GET pygments.css' do
-      get '/stylesheets/pygments.css'
-      expect_server_response_of_type 'text/css'
+    let(:manifest) { Polytexnic::BookManifest.new }
+    let(:chapter) { manifest.chapters[1] }
+
+    it 'redirects / to first chapter' do
+      get '/'
+      expect(last_response).to be_redirect
+      expect(last_response.location).to match chapter.slug
     end
 
-    it 'GET main.js' do
-      get '/main.js'
-      expect_server_response_of_type 'application/javascript'
-    end
-
-    it 'GET css asset' do
-      get '/assets/main.css'
-      expect_server_response_of_type 'text/css'
-    end
-
-    it 'GET image asset' do
-      get '/assets/icons.png'
-      expect_server_response_of_type 'image/png'
-    end
-
-    it 'GET image within book' do
-      get '/images/2011_michael_hartl.png'
-      expect_server_response_of_type 'image/png'
-    end
-
-    def expect_server_response_of_type(type)
+    it 'GET chapter' do
+      get "/#{chapter.slug}"
       expect(last_response).to be_ok
-      expect(last_response.content_type).to match type
-      expect(last_response.content_length > 0).to be_true
+      expect(last_response.body).to match Regexp.new(chapter.title)
+    end
+
+    it 'GET chapter.js' do
+      get "/#{chapter.slug}.js"
+      expect(last_response).to be_ok
+      expect(last_response.body).to match Regexp.new(chapter.title)
+      expect(last_response.body).not_to match Regexp.new('<html>')
+    end
+
+    it 'GET nonexistent chapter' do
+      get '/boom'
+      expect(last_response.status).to eq 404
+    end
+
+    describe 'serving files' do
+      it 'GET pygments.css' do
+        get '/stylesheets/pygments.css'
+        expect_server_response_of_type 'text/css'
+      end
+
+      it 'GET main.js' do
+        get '/main.js'
+        expect_server_response_of_type 'application/javascript'
+      end
+
+      it 'GET css asset' do
+        get '/assets/main.css'
+        expect_server_response_of_type 'text/css'
+      end
+
+      it 'GET image asset' do
+        get '/assets/icons.png'
+        expect_server_response_of_type 'image/png'
+      end
+
+      it 'GET image within book' do
+        get '/images/2011_michael_hartl.png'
+        expect_server_response_of_type 'image/png'
+      end
+
+      def expect_server_response_of_type(type)
+        expect(last_response).to be_ok
+        expect(last_response.content_type).to match type
+        expect(last_response.content_length > 0).to be_true
+      end
     end
   end
+
+  context "simple book" do
+    before(:all) do
+      generate_book(simple: true)
+      Polytexnic::Builders::Html.new.build!
+    end
+    after(:all)  { remove_book }
+
+    before { chdir_to_book }
+
+    let(:manifest) { Polytexnic::BookManifest.new }
+    let(:chapter) { manifest.chapters[0] }
+
+    it 'redirects / to first chapter' do
+      get '/'
+      expect(last_response).to be_redirect
+      expect(last_response.location).to match chapter.slug
+    end
+  end
+
 end

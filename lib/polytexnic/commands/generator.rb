@@ -24,7 +24,8 @@ module Polytexnic
         # file before the directory had been created, so we now create all
         # the directories first.
         directories.each do |path|
-          next if path =~ /simple_book/
+          next if path =~ /\/simple_book/ && !@simple
+          next if path =~ /\/book/ && @simple
           (cp_path = path.dup).slice! template_dir + "/"
           FileUtils.mkdir cp_path unless File.exist?(cp_path)
         end
@@ -35,12 +36,8 @@ module Polytexnic
 
           (cp_path = path.dup).slice! template_dir + "/"
 
-          if path =~ /\/book\.tex/ && !@simple
+          if path =~ /book\.tex/
             cp_path = "#{name}.tex"
-          elsif path =~ /\/simple_book\.tex/ && @simple
-            cp_path = "#{name}.tex"
-          elsif path =~ /\/preface\.tex/ && @simple
-            next
           elsif path =~ /\.erb/
             cp_path = File.basename path.dup, '.erb'
           elsif path =~ /gitignore/
@@ -85,8 +82,15 @@ module Polytexnic
         File.expand_path File.join File.dirname(__FILE__), "../template"
       end
 
+      # Returns true for a simple book (no frontmatter, etc.).
+      def simple?
+        @simple
+      end
+
       def all_files_and_directories
-        files_directories_maybe_markdown
+        f = files_directories_maybe_markdown
+        simple? ? f.reject { |p| p =~ /\/book\.tex/ || p =~ /preface/ }
+                : f.reject { |p| p =~ /simple/ }
       end
 
       def files_directories_maybe_markdown
@@ -118,7 +122,6 @@ module Polytexnic
         end
 
         Polytexnic::Commands::Generator.all_files_and_directories.each do |file|
-          next if file =~ /\/preface\.tex/ && @simple
           path = if file =~ /book\.tex/
                    "#{@name}.tex"
                  elsif file =~ /\.erb/
