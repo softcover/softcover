@@ -33,12 +33,12 @@
           <a href="<%= @manifest.url(@chapter.chapter_number + 1) %>" class="rightArrow">►</a>
         </div>
         <div class='dropDown' id='j_chapterDropDown' onclick="$('.dropMenu').toggle()">
-          <span>Chapter <%= @chapter.chapter_number %>: <%= @chapter.title %></span>
+          <span><%= @chapter.menu_heading %></span>
           <ul class='dropMenu' style='display:none'>
-            <% @manifest.chapters.each do |ch| %>
+            <% @manifest.chapters.each do |chapter| %>
               <li>
-                <a href="<%= ch.slug %>">
-                  Chapter <%= ch.chapter_number %>: <%= ch.title %>
+                <a href="<%= chapter.slug %>">
+                  <%= chapter.menu_heading %>
                 </a>
               </li>
             <% end %>
