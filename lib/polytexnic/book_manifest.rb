@@ -55,7 +55,7 @@ class Polytexnic::BookManifest < OpenStruct
       base_contents = File.read(tex_filename)
       if base_contents.match(/frontmatter/)
         @frontmatter = true
-        chapters.push Chapter.new(slug: 'frontmatter',
+        chapters.push Chapter.new(slug:  'frontmatter',
                                   title: 'Frontmatter',
                                   sections: nil,
                                   chapter_number: 0)

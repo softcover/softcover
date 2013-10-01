@@ -57,15 +57,18 @@ module Polytexnic
       # Rewrites the master LaTeX file <name>.tex to use chapters from Book.txt.
       def rewrite_master_latex_file
         filename = Dir['*.tex'].reject { |f| f =~ /\.tmp/}.first
-        includes = manifest.chapters.map do |chapter|
-          "  \\include{chapters/#{chapter.slug}}"
+        lines = File.readlines('markdown/Book.txt')
+        tex_file = []
+        lines.each do |line|
+          if line =~ /(.*)\.md$/
+            tex_file << "\\include{chapters/#{$1}}"
+          end
         end
-        # In order to capture all the includes, we match everything to the
-        # end of the document, so add it back. (There's probably a nicer
-        # way to do this.)
-        includes << '\end{document}'
+        tex_file << '\end{document}'
         content = File.read(filename)
-        content.gsub!(/^\s*\\frontmatter.*\\include.*\}/m, includes.join("\n"))
+        content.gsub!(/(\\begin{document}\n)(.*)(\n\\end{document})/m) do
+          $1 + tex_file.join("\n") + $3
+        end
         File.write(filename, content)
       end
 
