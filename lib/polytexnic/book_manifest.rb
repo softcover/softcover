@@ -42,6 +42,9 @@ class Polytexnic::BookManifest < OpenStruct
     @source = options[:source] || :polytex
     yaml_attrs = read_from_yml
     @force_polytex = yaml_attrs["force_polytex"]
+    if @force_polytex && File.directory?('markdown')
+      FileUtils.mv 'markdown', 'old_markdown_files'
+    end
     attrs = case
             when polytex?  then yaml_attrs
             when markdown? then read_from_md
@@ -114,7 +117,7 @@ class Polytexnic::BookManifest < OpenStruct
   end
 
   def markdown?
-    @source == :markdown || @source == :md && !@force_polytex
+    (@source == :markdown || @source == :md) && !@force_polytex
   end
   alias :md? :markdown?
 
