@@ -60,8 +60,10 @@ module Polytexnic
         lines = File.readlines('markdown/Book.txt')
         tex_file = []
         lines.each do |line|
-          if line =~ /(.*)\.md$/
+          if line =~ /(.*)\.md\s*$/
             tex_file << "\\include{chapters/#{$1}}"
+          elsif line =~ /(.*):\s*$/  # frontmatter or mainmatter
+            tex_file << "\\#{$1}"
           end
         end
         tex_file << '\end{document}'

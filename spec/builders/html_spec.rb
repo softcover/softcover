@@ -89,6 +89,7 @@ describe Polytexnic::Builders::Html do
       describe "master LaTeX file" do
         let(:master_file) { Dir['*.tex'].reject { |f| f =~ /\.tmp/}.first }
         subject { File.read(master_file) }
+        it { should include '\include{chapters/preface}' }
         it { should include '\include{chapters/a_chapter}' }
         it { should include '\include{chapters/another_chapter}' }
         it { should include '\include{chapters/yet_another_chapter}' }

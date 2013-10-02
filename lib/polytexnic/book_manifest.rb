@@ -182,16 +182,11 @@ class Polytexnic::BookManifest < OpenStruct
 
     def read_from_md
       self.class.find_book_root!
-      f = File.open(MD_PATH)
-
-      chapters = f.readlines.each_with_index.map do |path, i|
-        name = path.gsub(/\n/, '')
-        slug = File.basename(name, '.*')
-        # TODO: read title from chapter file
-        Chapter.new slug: slug, title: slug, chapter_number: i + 1
-      end
-      f.close
-
+      chapters = File.readlines(MD_PATH).select do |path|
+                   path =~ /(.*)\.md/
+                 end.map do |file|
+                   Chapter.new(slug: File.basename(file.strip, '.md'))
+                 end
       { chapters: chapters, filename: MD_PATH }
     end
 
