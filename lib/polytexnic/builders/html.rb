@@ -68,8 +68,8 @@ module Polytexnic
         end
         tex_file << '\end{document}'
         content = File.read(filename)
-        content.gsub!(/(\\begin{document}\n)(.*)(\n\\end{document})/m) do
-          $1 + tex_file.join("\n") + $3
+        content.gsub!(/(\\begin{document}\n)(.*)/m) do
+          $1 + tex_file.join("\n") + "\n"
         end
         File.write(filename, content)
       end

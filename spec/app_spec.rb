@@ -8,8 +8,6 @@ describe Polytexnic::App do
     Polytexnic::App
   end
 
-
-
   context "ordinary book" do
     before(:all) do
       generate_book

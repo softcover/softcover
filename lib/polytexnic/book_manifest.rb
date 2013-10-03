@@ -40,9 +40,14 @@ class Polytexnic::BookManifest < OpenStruct
 
   def initialize(options = {})
     @source = options[:source] || :polytex
+    yaml_attrs = read_from_yml
+    @force_polytex = yaml_attrs["force_polytex"]
+    if @force_polytex && File.directory?('markdown')
+      FileUtils.mv 'markdown', 'old_markdown_files'
+    end
     attrs = case
+            when polytex?  then yaml_attrs
             when markdown? then read_from_md
-            when polytex?  then read_from_yml
             else
               self.class.not_found!
             end.symbolize_keys!
@@ -112,12 +117,12 @@ class Polytexnic::BookManifest < OpenStruct
   end
 
   def markdown?
-    @source == :markdown || @source == :md
+    (@source == :markdown || @source == :md) && !@force_polytex
   end
   alias :md? :markdown?
 
   def polytex?
-    @source == :polytex
+    @source == :polytex || @force_polytex
   end
 
   def chapter_file_paths
