@@ -55,7 +55,7 @@ class Polytexnic::BookManifest < OpenStruct
       base_contents = File.read(tex_filename)
       if base_contents.match(/frontmatter/)
         @frontmatter = true
-        chapters.push Chapter.new(slug: 'frontmatter',
+        chapters.push Chapter.new(slug:  'frontmatter',
                                   title: 'Frontmatter',
                                   sections: nil,
                                   chapter_number: 0)
@@ -182,16 +182,11 @@ class Polytexnic::BookManifest < OpenStruct
 
     def read_from_md
       self.class.find_book_root!
-      f = File.open(MD_PATH)
-
-      chapters = f.readlines.each_with_index.map do |path, i|
-        name = path.gsub(/\n/, '')
-        slug = File.basename(name, '.*')
-        # TODO: read title from chapter file
-        Chapter.new slug: slug, title: slug, chapter_number: i + 1
-      end
-      f.close
-
+      chapters = File.readlines(MD_PATH).select do |path|
+                   path =~ /(.*)\.md/
+                 end.map do |file|
+                   Chapter.new(slug: File.basename(file.strip, '.md'))
+                 end
       { chapters: chapters, filename: MD_PATH }
     end
 
