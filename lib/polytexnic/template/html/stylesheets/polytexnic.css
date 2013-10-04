@@ -336,10 +336,6 @@ body #book {
   font-variant: small-caps;
 }
 
-#book blockquote.verse {
-  line-height: 0.5;
-}
-
 #book .texhtml {
   line-height: 0.5;
 }
