@@ -43,6 +43,11 @@ body #book {
   text-align: center;
 }
 
+#book h2.date {
+  margin-top: 1em;
+  text-align: center;
+}
+
 #book a {
   color: #002f72;
   text-decoration: underline;
