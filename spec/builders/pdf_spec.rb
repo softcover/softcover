@@ -26,8 +26,8 @@ describe Polytexnic::Builders::Pdf do
 
       it "should replace the main file's \\includes with tmp files" do
         contents = File.read(Polytexnic::Utils.tmpify('book.tex'))
-        builder.manifest.pdf_chapters.each do |chapter|
-          expect(contents).to match("\\include{chapters/#{chapter.slug}.tmp}")
+        builder.manifest.pdf_chapter_names.each do |name|
+          expect(contents).to match("\\include{chapters/#{name}.tmp}")
         end
       end
 

@@ -6,6 +6,7 @@
 *.tmp.*
 *.pdf
 pygments.sty
+frontmatter.tex
 
 # Generated HTML files
 html/*.html

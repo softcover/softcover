@@ -57,6 +57,7 @@ class Polytexnic::BookManifest < OpenStruct
     if polytex?
       tex_filename = filename + '.tex'
       self.chapters = []
+      self.frontmatter = []
       base_contents = File.read(tex_filename)
       if base_contents.match(/frontmatter/)
         @frontmatter = true
@@ -65,11 +66,14 @@ class Polytexnic::BookManifest < OpenStruct
                                   sections: nil,
                                   chapter_number: 0)
       end
-      remove_frontmatter!(base_contents)
+      raw_frontmatter = remove_frontmatter(base_contents, frontmatter)
+      if frontmatter?
+        self.frontmatter = chapter_includes(raw_frontmatter)
+      else
+        self.frontmatter = []
+      end
       self.author = base_contents.scan(/^\s*\\author\{(.*?)\}/).flatten.first
-      chapter_regex = /^\s*\\include\{chapters\/(.*?)\}/
-      chapter_includes = base_contents.scan(chapter_regex).flatten
-      chapter_includes.each_with_index do |name, i|
+      chapter_includes(base_contents).each_with_index do |name, i|
         slug = File.basename(name, '.*')
         title_regex = /^\s*\\chapter{(.*)}/
         content = File.read(File.join('chapters', slug + '.tex'))
@@ -89,6 +93,11 @@ class Polytexnic::BookManifest < OpenStruct
     verify_paths! if options[:verify_paths]
   end
 
+  def chapter_includes(string)
+    chapter_regex = /^\s*\\include\{chapters\/(.*?)\}/
+    string.scan(chapter_regex).flatten
+  end
+
   # Removes frontmatter
   # The frontmatter shouldn't be included in the chapter slugs, so we remove
   # it. For example, in
@@ -101,8 +110,9 @@ class Polytexnic::BookManifest < OpenStruct
   #  % List chapters here in the order they should appear in the book.
   #  \include{chapters/a_chapter}
   # we don't want to include the preface.
-  def remove_frontmatter!(base_contents)
-    base_contents.gsub!(/\\frontmatter.*\\mainmatter/m, '')
+  def remove_frontmatter(base_contents, frontmatter)
+    base_contents.gsub!(/\\frontmatter(.*)\\mainmatter/m, '')
+    $1
   end
 
   # Returns true if the book has frontmatter.
@@ -126,10 +136,10 @@ class Polytexnic::BookManifest < OpenStruct
   end
 
   def chapter_file_paths
-    pdf_chapters.map do |chapter|
+    pdf_chapter_names.map do |name|
       file_path = case
-      when markdown? then File.join("markdown", "#{chapter.slug}.md")
-      when polytex?  then File.join("chapters", "#{chapter.slug}.tex")
+      when markdown? then File.join("markdown", "#{name}.md")
+      when polytex?  then File.join("chapters", "#{name}.tex")
       end
 
       yield file_path if block_given?
@@ -139,9 +149,10 @@ class Polytexnic::BookManifest < OpenStruct
   end
 
   # Return chapters for the PDF.
-  # We reject the frontmatter because LaTeX handles it automatically.
-  def pdf_chapters
-    chapters.reject { |chapter| chapter.slug.match(/frontmatter/) }
+  def pdf_chapter_names
+    chaps = chapters.reject { |chapter| chapter.slug.match(/frontmatter/) }.
+                     collect(&:slug)
+    frontmatter? ? frontmatter + chaps : chaps
   end
 
   def find_chapter_by_slug(slug)
