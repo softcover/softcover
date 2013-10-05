@@ -12,7 +12,7 @@ module Polytexnic
         basename = File.basename(@manifest.filename, '.tex')
         book_filename = basename + '.tex'
         polytex_filenames = @manifest.chapter_file_paths << book_filename
-        polytex_filenames.delete('chapters/generated_frontmatter.tex')
+        polytex_filenames.delete('chapters/frontmatter.tex')
         polytex_filenames.each do |filename|
           puts filename
           polytex = File.open(filename) { |f| f.read }
