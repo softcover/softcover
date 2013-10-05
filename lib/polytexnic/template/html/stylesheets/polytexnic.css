@@ -344,3 +344,12 @@ body #book {
 #book .texhtml {
   line-height: 0.5;
 }
+
+#book span.break {
+  display: block;
+}
+
+#book h1 span.break {
+  display: block;
+  margin-top: 0.5em;
+}
