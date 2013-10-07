@@ -14,10 +14,13 @@ module Polytexnic
         polytex_filenames = @manifest.chapter_file_paths << book_filename
         polytex_filenames.delete('chapters/frontmatter.tex')
         polytex_filenames.each do |filename|
+          puts filename
           polytex = File.open(filename) { |f| f.read }
           latex   = Polytexnic::Core::Pipeline.new(polytex).to_latex
-          latex.gsub!(/\\include{(.*?)}/) do
-            "\\include{#{$1}.tmp}"
+          if filename == book_filename
+            latex.gsub!(/\\include{(.*?)}/) do
+              "\\include{#{$1}.tmp}"
+            end
           end
           File.open(Polytexnic::Utils.tmpify(filename), 'w') do |f|
             f.write(latex)
