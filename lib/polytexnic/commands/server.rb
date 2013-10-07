@@ -12,7 +12,7 @@ module Polytexnic::Commands::Server
     directories = markdown_directory? ? ['markdown'] : ['.', 'chapters']
     @listener = Listen.to(*directories)
     @listener.filter(/(\.tex|\.md)$/)
-    @listener.ignore(%r{^.tmp})
+    @listener.ignore(%r{\.tmp\.tex})
     @listener.change do |modified|
       rebuild modified.try(:first)
       Process.kill("HUP", server_pid)
