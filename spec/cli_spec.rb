@@ -15,6 +15,7 @@ describe Polytexnic::CLI do
       it { should match /build:#{format}/ }
       it { should match /Build #{format.upcase}/ }
     end
+    it { should match /build:all/ }
 
     it { should match /epub:validate/ }
     it { should match /epub:check/ }

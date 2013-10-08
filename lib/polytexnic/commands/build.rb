@@ -16,7 +16,7 @@ module Polytexnic
 
       def all_formats
         puts 'Building all formats...'
-        Polytexnic::FORMATS.each do |format|
+        Polytexnic::BUILD_ALL_FORMATS.each do |format|
           builder_for(format).build!
         end
       end
