@@ -170,8 +170,16 @@ module Polytexnic
       end
 
       def create_style_files
-        FileUtils.cp(File.join('html', 'stylesheets', 'pygments.css'),
-                     File.join('epub', 'OEBPS', 'styles'))
+        html_styles = File.join('html', 'stylesheets')
+        epub_styles = File.join('epub', 'OEBPS', 'styles')
+
+        FileUtils.cp(File.join(html_styles, 'pygments.css'), epub_styles)
+
+        # For some reason, EPUB books hate the #book id in the stylesheet,
+        # so remove it.
+        polytexnic_css = File.read(File.join(html_styles, 'polytexnic.css'))
+        polytexnic_css.gsub!(/^\s*#book /, '')
+        File.write(File.join(epub_styles, 'polytexnic.css'), polytexnic_css)
       end
 
       # Copies the image files from the HTML version of the document.
