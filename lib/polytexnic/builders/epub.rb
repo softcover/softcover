@@ -4,7 +4,7 @@ module Polytexnic
       include Polytexnic::Output
 
       def build!
-        build_html
+        Polytexnic::Builders::Html.new.build!
         if markdown_directory?
           @manifest = Polytexnic::BookManifest.new(source: :polytex)
         end
@@ -19,10 +19,6 @@ module Polytexnic
         create_style_files
         make_epub
         FileUtils.mv(File.join('epub', "#{manifest.filename}.epub"), 'ebooks')
-      end
-
-      def build_html
-        Polytexnic::Builders::Html.new.build!
       end
 
       def create_directories
