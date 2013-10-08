@@ -217,13 +217,23 @@ body #book {
   line-height: 0;
 }
 
-#book ol.footnotes a.arrow {
+#book sup.footnote a {
   text-decoration: none;
+  font-weight: bold;
 }
 
 #book sup.footnote a:visited {
   color: #002f72;
 }
+
+#book ol.footnotes a.arrow {
+  text-decoration: none;
+}
+
+#book ol.footnotes.nonumbers li {
+  list-style-type: none;
+}
+
 
 #book .footnotes .header {
   padding-top: 1em;
