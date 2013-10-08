@@ -8,10 +8,11 @@ module Polytexnic
     # Builder
     # ===============================================
 
-    desc 'build', 'Build all formats'
+    desc 'build, build:all', 'Build all formats'
     def build
       Polytexnic::Commands::Build.all_formats
     end
+    map "build:all" => "build"
 
     Polytexnic::FORMATS.each do |format|
       desc "build:#{format}", "Build #{format.upcase}"
