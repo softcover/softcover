@@ -99,6 +99,7 @@ body #book {
 }
 
 #book .codelisting .heading {
+  width: 100%;
   background: #ccc;
   padding-top: 0.1em;
   padding-right: -0.2em;
