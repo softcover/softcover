@@ -28,7 +28,7 @@
 \hypersetup{hyperfootnotes=false}
 
 \usepackage{caption}
-\DeclareCaptionFormat{listing}{\colorbox[gray]{.90}{\parbox{0.987\textwidth}{\hspace{10pt}#1#2#3}}}
+\DeclareCaptionFormat{listing}{\colorbox[gray]{.85}{\parbox{0.987\textwidth}{\hspace{0pt}#1#2#3}}}
 \captionsetup[listing]{format=listing,labelfont=bf,skip=20pt}
 \DeclareCaptionType{listing}[Listing][List of listing]
 \newcommand{\codecaption}[1]{\captionof{listing}{#1}}
@@ -48,7 +48,7 @@
 
 % Code environments
 \DefineVerbatimEnvironment%
-  {code}{Verbatim}{fontsize=\relsize{-1.5},fontseries=b}
+  {code}{Verbatim}{fontsize=\relsize{-2.5},fontseries=b}
 % The metacode environment exists solely to allow meta-discussion of the code
 % environment, as in
 %   %= lang:latex
@@ -61,11 +61,14 @@
 %   \end{code}
 %   \end{metacode}
 \DefineVerbatimEnvironment%
-  {metacode}{Verbatim}{fontsize=\relsize{-1.5},fontseries=b}
+  {metacode}{Verbatim}{fontsize=\relsize{-2.5},fontseries=b}
 % Use a nice font in code environments.
 \usepackage[scaled=0.92]{helvet}
 % Fix quotes in code environments
 \usepackage{upquote}
+
+% Filesystem paths
+\newcommand{\fpath}[1]{\texttt{\small #1}}
 
 % Size-constrained images
 \newcommand{\image}[1]{\fbox{\includegraphics[width=0.95\textwidth]{#1}}}
@@ -82,11 +85,16 @@
     \@setminipage}%
  }{\vspace{-0.5\baselineskip}\par\unskip\@minipagefalse\endMakeFramed}
 
+\newenvironment{full_framed_shaded}{%
+  \def\FrameCommand{\fboxsep=\FrameSep\fcolorbox{boxcolor}{shadecolor}}%
+  \MakeFramed {\advance\hsize\width \FrameRestore}}%
+ {\endMakeFramed}
+
 % Aside boxes
 \usepackage{framed}
 \definecolor{shadecolor}{gray}{0.97}
 \definecolor{boxcolor}{gray}{0.10}
-\newenvironment{shaded_aside}[2]{\begin{framed_shaded}\begin{aside}\label{#2} \textbf{#1}\end{aside}}{\bigskip\end{framed_shaded}}
+\newenvironment{shaded_aside}[2]{\begin{full_framed_shaded}\begin{aside}\label{#2} \textbf{#1}\end{aside}}{\bigskip\end{full_framed_shaded}}
 
 % Additional commands
 \newcommand{\heading}[1]{\textbf{#1}}
