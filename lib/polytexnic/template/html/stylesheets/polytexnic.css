@@ -99,7 +99,6 @@ body #book {
 }
 
 #book .codelisting .heading {
-  width: 100%;
   background: #ccc;
   padding-top: 0.1em;
   padding-right: -0.2em;
@@ -110,7 +109,6 @@ body #book {
 #book .codelisting .heading .number {
   margin-right: 0.1em;
 }
-
 
 #book .codelisting span.break {
   margin-top: -0.4em;
@@ -309,7 +307,6 @@ body #book {
 #book .highlight .go {
   color: darkgreen;
 }
-
 
 #book pre {
   line-height: 1.2em;
