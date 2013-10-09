@@ -71,7 +71,7 @@
 \newcommand{\image}[1]{\fbox{\includegraphics[width=0.95\textwidth]{#1}}}
 
 
-\newenvironment{snug_framed_shaded}{%
+\newenvironment{framed_shaded}{%
   \def\FrameCommand##1{\hskip\@totalleftmargin
   \fcolorbox{boxcolor}{shadecolor}{##1}%
       % There is no \@totalrightmargin, so:
@@ -81,17 +81,6 @@
     \vspace{0.3\baselineskip}\advance\labelsep\fboxsep
     \@setminipage}%
  }{\vspace{-0.5\baselineskip}\par\unskip\@minipagefalse\endMakeFramed}
-
-\newenvironment{framed_shaded}{%
-  \def\FrameCommand{\fcolorbox{boxcolor}{shadecolor}}%
-  \MakeFramed {\advance\hsize-\width \FrameRestore}}%
- {\endMakeFramed}
-
-\newenvironment{framed_shadddded}{%
-  \def\FrameCommand{\fcolorbox{boxcolor}{shadecolor}}%
-  \MakeFramed {\FrameRestore}}%
- {\endMakeFramed}
-
 
 % Aside boxes
 \usepackage{framed}
