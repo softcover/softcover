@@ -163,6 +163,11 @@ body #book {
   margin-top: 1em;
 }
 
+#book .equation {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
 #book .equation_number {
   float: right;
 }
