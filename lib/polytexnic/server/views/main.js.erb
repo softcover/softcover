@@ -31,13 +31,15 @@ initMathJax = ->
 
   $('head').append script
 
+delay = 1500
 initNavOffset = ->
   loading = true
   finish = _.debounce ->
     loading = false
-  , 500
+  , delay
 
-  navHeight = $('#bookMenu').height() + 10
+  offset = 20
+  navHeight = $('#bookMenu').height() + offset
   $(window).scroll ->
     if loading
       offset = $(window.location.hash).offset().top - navHeight

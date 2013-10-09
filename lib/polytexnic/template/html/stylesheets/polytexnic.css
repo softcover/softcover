@@ -102,7 +102,7 @@ body #book {
   width: 100%;
   background: #ccc;
   padding-top: 0.1em;
-  padding-right: -0.2em;
+  padding-right: 0em;
   padding-bottom: 0.1em;
   padding-left: 0.2em;
 }
@@ -302,6 +302,7 @@ body #book {
 #book .highlight {
   border: 1px solid #999;
   width: 100%;
+  padding-right: 0.5px;
   background: #eee;
 }
 
