@@ -1,5 +1,9 @@
 /* Styles specific to EPUB books */
 
-body {
-  color: purple;
+.highlight pre {
+  font-size: 82%;
+}
+
+code {
+  font-size: 100%;
 }
