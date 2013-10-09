@@ -27,6 +27,7 @@ module Polytexnic
           end
         end
         write_pygments_file(:latex)
+        copy_polytexnic_sty
         write_polytexnic_commands_file
         cmd = "#{xelatex} #{Polytexnic::Utils.tmpify(book_filename)}"
         # Run the command twice to guarantee up-to-date cross-references.
@@ -50,6 +51,14 @@ module Polytexnic
           pdf     = basename + '.pdf'
           mkdir('ebooks')
           FileUtils.mv(tmp_pdf, File.join('ebooks', pdf))
+        end
+
+        # Copies the PolyTeXnic style file to ensure it's always fresh.
+        def copy_polytexnic_sty
+          polytexnic_sty = 'polytexnic.sty'
+          source_sty     = File.join(File.dirname(__FILE__),
+                                     "../template/#{polytexnic_sty}")
+          FileUtils.cp source_sty, polytexnic_sty
         end
 
         # Writes out the PolyTeXnic commands from polytexnic-core.
