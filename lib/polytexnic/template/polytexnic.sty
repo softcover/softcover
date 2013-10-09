@@ -28,7 +28,7 @@
 \hypersetup{hyperfootnotes=false}
 
 \usepackage{caption}
-\DeclareCaptionFormat{listing}{\colorbox[gray]{.85}{\parbox{0.987\textwidth}{\hspace{0pt}#1#2#3}}}
+\DeclareCaptionFormat{listing}{\colorbox[gray]{.85}{\parbox{0.987\textwidth}{\hspace{0pt}#1#2#3}}\vspace{-0.7\baselineskip}}
 \captionsetup[listing]{format=listing,labelfont=bf,skip=20pt}
 \DeclareCaptionType{listing}[Listing][List of listing]
 \newcommand{\codecaption}[1]{\captionof{listing}{#1}}
@@ -73,7 +73,6 @@
 % Size-constrained images
 \newcommand{\image}[1]{\fbox{\includegraphics[width=0.95\textwidth]{#1}}}
 
-
 \newenvironment{framed_shaded}{%
   \def\FrameCommand##1{\hskip\@totalleftmargin
   \fcolorbox{boxcolor}{shadecolor}{##1}%
@@ -83,7 +82,7 @@
     \@totalleftmargin\z@ \linewidth\hsize
     \vspace{0.3\baselineskip}\advance\labelsep\fboxsep
     \@setminipage}%
- }{\par\unskip\@minipagefalse\endMakeFramed}
+ }{\vspace{-0.5\baselineskip}\par\unskip\@minipagefalse\endMakeFramed}
 
 \newenvironment{full_framed_shaded}{%
   \def\FrameCommand{\fboxsep=\FrameSep\fcolorbox{boxcolor}{shadecolor}}%
