@@ -7,6 +7,7 @@ wait = ->
       $.get window.location.pathname + '.js', (html)->
         $('#book').html html
         initMathJax()
+        initNavOffset()
         wait()
     error: (jqXHR, textStatus)->
       if textStatus == 'timeout'
@@ -31,7 +32,7 @@ initMathJax = ->
 
   $('head').append script
 
-delay = 1500
+delay = 1000
 initNavOffset = ->
   loading = true
   finish = _.debounce ->
