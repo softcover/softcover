@@ -322,7 +322,8 @@ body #book {
 
 #book .highlight pre {
   margin: 1em 0 1em 0.3em;
-  font-size: 100%;
+  font-size: 110%;
+  font-weight: bold;
 }
 
 #book #table_of_contents {
