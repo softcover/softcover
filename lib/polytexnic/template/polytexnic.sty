@@ -27,12 +27,6 @@
 \usepackage[hyperfootnotes=false]{hyperref}
 \hypersetup{hyperfootnotes=false}
 
-\usepackage{caption}
-\DeclareCaptionFormat{listing}{\hspace{-0.2em}\colorbox[gray]{.85}{\hspace{0.1em}\parbox{0.997\textwidth}{#1#2#3}}\vspace{-1.3\baselineskip}}
-\captionsetup[listing]{format=listing,labelfont=bf,skip=16pt}
-\DeclareCaptionType{listing}[Listing][List of listing]
-\newcommand{\codecaption}[1]{\captionof{listing}{#1}}
-
 % Support strikethrough (via \sout{text})
 \usepackage[normalem]{ulem}
 
@@ -100,10 +94,17 @@
  }{\par\unskip\@minipagefalse\endMakeFramed}
 
 % Codelistings
-\newcounter{listing_count}
-\setcounter{listing_count}{0}
-\newenvironment{codelisting}{\begin{framed_shaded}\vspace{-0.5em}\stepcounter{listing_count}}%
+\newcounter{codelisting}
+\numberwithin{codelisting}{chapter}
+%\setcounter{listing_count}{0}
+\newenvironment{codelisting}{\refstepcounter{codelisting}\begin{framed_shaded}\vspace{-0.5em}}%
 {\end{framed_shaded}}
+% Codelisting captions
+\usepackage{caption}
+\DeclareCaptionFormat{listing}{\hspace{-0.2em}\colorbox[gray]{.85}{\hspace{0.1em}\parbox{0.997\textwidth}{#1#2#3}}\vspace{-1.3\baselineskip}}
+\captionsetup[listing]{format=listing,labelfont=bf,skip=16pt}
+\DeclareCaptionType{listing}
+\newcommand{\codecaption}[1]{\captionof{listing}{#1}}
 
 % Aside boxes
 \usepackage{framed}
