@@ -2,8 +2,9 @@
 
 body #book {
   width: 41em;
+  font-size: 18px;
   font-family: Georgia, serif;
-  line-height: 1.5em;
+  line-height: 1.5;
   margin-left: 5em;
   color: #070707;
   margin-bottom: 20em;
@@ -323,7 +324,7 @@ body #book {
 
 #book .highlight pre {
   margin: 1em 0 1em 0.3em;
-  font-size: 110%;
+  font-size: 85%;
   font-weight: bold;
 }
 
