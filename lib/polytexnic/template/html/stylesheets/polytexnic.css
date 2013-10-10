@@ -101,16 +101,13 @@ body #book {
 }
 
 #book .codelisting .heading {
-  width: 95%;
+  width: 100%;
   background: #ccc;
-  margin-left: 0.2em;
-  margin-top: 0.2em;
-  padding-right: 1.4em;
-  padding-left: 0.2em;
 }
 
 #book .codelisting .heading .number {
   margin-right: 0.1em;
+  margin-left: 0.3em;
 }
 
 #book .codelisting span.break {
