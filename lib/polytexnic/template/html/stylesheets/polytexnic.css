@@ -243,14 +243,13 @@ body #book {
 }
 
 #book sup.footnote {
-  font-size: 75%;
+  font-size: 90%;
   margin-right: 1px;
   line-height: 0;
 }
 
 #book sup.footnote a {
   text-decoration: none;
-  font-weight: bold;
 }
 
 #book sup.footnote a:visited {
