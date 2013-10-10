@@ -110,11 +110,20 @@ body #book {
   margin-left: 0.3em;
 }
 
+#book .codelisting .heading span.filepath {
+  margin-left: 0.4em;
+}
+
+#book .codelisting .heading code {
+  margin-left: 0.3em;
+}
+
+
 #book .codelisting span.break {
   margin-top: -0.4em;
 }
 
-#book .fpath {
+#book .filepath {
   font-family: Courier, monospace;
   font-size: 80%;
 }
