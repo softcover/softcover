@@ -283,7 +283,8 @@ module Polytexnic
       <itemref idref="cover" linear="no" />
       #{toc_ch.join("\n")}
     </spine>
-  </package>)
+  </package>
+)
       end
 
       # Returns the cover page.
@@ -295,11 +296,12 @@ module Polytexnic
   <title>Cover</title>
 </head>
 <body>
-  <div id="cover">
+  <div id="cover" style="width:100px;">
     <img src="images/#{cover}" alt="cover image" />
   </div>
 </body>
-</html>)
+</html>
+)
       end
 
       # Returns the Table of Contents for the spine.
@@ -326,7 +328,8 @@ module Polytexnic
     <navMap>
       #{chapter_nav.join("\n")}
     </navMap>
-</ncx>)
+</ncx>
+)
       end
 
       def chapter_name(n)
