@@ -267,6 +267,7 @@ module Polytexnic
         <dc:publisher>Softcover</dc:publisher>
         <dc:identifier id="BookID">urn:uuid:#{uuid}</dc:identifier>
         <meta property="dcterms:modified">#{Time.now.strftime('%Y-%m-%dT%H:%M:%S')}Z</meta>
+        <meta name="cover" content="img-cover-png"/>
     </metadata>
     <manifest>
         <item href="nav.html" id="nav" media-type="application/xhtml+xml" properties="nav"/>
@@ -287,8 +288,8 @@ module Polytexnic
 )
       end
 
-      # Returns the cover page.
-      def cover_page(cover='cover.png')
+      # Returns the cover page, cover.html.
+      def cover_page
 %(<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -297,7 +298,7 @@ module Polytexnic
 </head>
 <body>
   <div id="cover">
-    <img src="images/#{cover}" alt="cover image" />
+     <img width="573" height="800" src="images/cover.png" alt="cover image" />
   </div>
 </body>
 </html>
