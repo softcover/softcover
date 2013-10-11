@@ -51,6 +51,8 @@ module Polytexnic
         mkdir images_dir
         mkdir texmath_dir
 
+        File.write(File.join('epub', 'OEBPS', 'cover.html'), cover_page)
+
         pngs = []
         manifest.chapters.each_with_index do |chapter, i|
           source_filename = File.join('epub', 'OEBPS', chapter.fragment_name)
@@ -280,6 +282,22 @@ module Polytexnic
       #{toc_ch.join("\n")}
     </spine>
   </package>)
+      end
+
+      # Returns the cover page.
+      def cover_page(cover='cover.png')
+%(<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Cover</title>
+</head>
+<body>
+  <div id="cover">
+    <img src="images/#{cover}" alt="cover image" />
+  </div>
+</body>
+</html>)
       end
 
       # Returns the Table of Contents for the spine.
