@@ -275,10 +275,12 @@ module Polytexnic
         <item id="pygments.css" href="styles/pygments.css" media-type="text/css"/>
         <item id="polytexnic.css" href="styles/polytexnic.css" media-type="text/css"/>
         <item id="epub.css" href="styles/epub.css" media-type="text/css"/>
+        <item id="cover" href="cover.html" media-type="application/xhtml+xml"/>
         #{man_ch.join("\n")}
         #{images.join("\n")}
     </manifest>
     <spine toc="ncx">
+      <itemref idref="cover" linear="no" />
       #{toc_ch.join("\n")}
     </spine>
   </package>)
