@@ -56,7 +56,7 @@ describe Polytexnic::Builders::Epub do
 
         it "should have the right TOC chapter refs" do
           toc_refs = doc.css('itemref').map { |node| node['idref'] }
-          expect(toc_refs).to eql(%w[frontmatter a_chapter another_chapter])
+          expect(toc_refs).to eq %w[cover frontmatter a_chapter another_chapter]
         end
 
         it "should have the right title" do
