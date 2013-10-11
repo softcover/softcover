@@ -133,6 +133,7 @@ describe Polytexnic::Builders::Epub do
 
       it "should create the HTML files" do
         has_math = false
+        expect('epub/OEBPS/cover.html').to exist
         builder.manifest.chapters.each_with_index do |chapter, i|
           content = File.read("html/#{chapter.slug}_fragment.html")
           has_math ||= builder.math?(content)
