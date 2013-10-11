@@ -296,7 +296,7 @@ module Polytexnic
   <title>Cover</title>
 </head>
 <body>
-  <div id="cover" style="width:100px;">
+  <div id="cover">
     <img src="images/#{cover}" alt="cover image" />
   </div>
 </body>
