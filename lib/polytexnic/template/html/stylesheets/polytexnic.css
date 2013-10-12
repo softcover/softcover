@@ -93,12 +93,18 @@ body #book {
   width: 100%;
   white-space: pre;
   font-family: Courier, monospace;
+  border: 1px solid #999;
+  background: #eee;
 }
 
 #book .codelisting {
   width: 100%;
   border: 1px solid #999;
   background: #eee;
+}
+
+#book .codelisting .code {
+  border: 0;
 }
 
 #book .codelisting .heading {
