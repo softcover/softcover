@@ -3,6 +3,7 @@ module Polytexnic
     class Preview < Builder
 
       def build!
+        raise 'dfjakldj'
         Polytexnic::Builders::Mobi.new.build!    # Builds EPUB as a side-effect
         Polytexnic::Builders::Pdf.new.build!
         pdf_split
@@ -13,7 +14,7 @@ module Polytexnic
         def pdf_split
           input  = File.join('ebooks', manifest.filename + '.pdf')
           output = input.sub('.pdf', '-preview.pdf')
-          range  = manifest.pdf_preview_pages.split('..').map(&:to_i)
+          range  = manifest.pdf_preview_page_range.split('..').map(&:to_i)
           cmd  = %(yes | gs -dBATCH -sOutputFile="#{output}")
           cmd += %( -dFirstPage=#{range.first} -dLastPage=#{range.last})
           cmd += %( -sDEVICE=pdfwrite "#{input}" >& /dev/null)

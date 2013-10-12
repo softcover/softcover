@@ -22,8 +22,8 @@ module Polytexnic
       end
 
       def preview
-        puts 'Build preview...'
-        Polytexnic::Builders::Preview.new.build!
+        puts 'Building preview...'
+        builder_for('preview').build!
       end
 
       def builder_for(format)
