@@ -21,6 +21,11 @@ module Polytexnic
         end
       end
 
+      def preview
+        puts 'Build preview...'
+        Polytexnic::Builders::Preview.new.build!
+      end
+
       def builder_for(format)
         "Polytexnic::Builders::#{format.titleize}".constantize.new
       end
