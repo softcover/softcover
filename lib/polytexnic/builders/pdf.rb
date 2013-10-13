@@ -3,7 +3,7 @@ module Polytexnic
     class Pdf < Builder
       include Polytexnic::Output
 
-      def build!
+      def build!(options={})
         if markdown_directory?
           # Build the HTML to produce PolyTeX as a side-effect,
           # and then update the manifest so to reduce PDF generation
@@ -32,10 +32,10 @@ module Polytexnic
         write_pygments_file(:latex)
         copy_polytexnic_sty
         write_polytexnic_commands_file
-        cmd = "#{xelatex} #{Polytexnic::Utils.tmpify(book_filename)}"
+        build_pdf = "#{xelatex} #{Polytexnic::Utils.tmpify(book_filename)}"
         # Run the command twice to guarantee up-to-date cross-references.
-        system("#{cmd} && #{cmd}")
-        rename_pdf(basename)
+        cmd = "#{build_pdf} && #{build_pdf} && #{rename_pdf_cmd(basename)}"
+        options[:preview] ? system(cmd) : execute(cmd)
       end
 
       private
@@ -46,14 +46,15 @@ module Polytexnic
           @xelatex ||= executable(filename, message)
         end
 
-        # Renames the temp PDF so that it matches the original filename.
+        # Returns the command to rename the temp PDF.
+        # The purpose is to matche the original filename.
         # For example, foo_bar.tex should produce foo_bar.pdf.
         # While we're at it, we move it to the standard ebooks/ directory.
-        def rename_pdf(basename)
+        def rename_pdf_cmd(basename)
           tmp_pdf = basename + '.tmp.pdf'
           pdf     = basename + '.pdf'
           mkdir('ebooks')
-          FileUtils.mv(tmp_pdf, File.join('ebooks', pdf))
+          "mv #{tmp_pdf} #{File.join('ebooks', pdf)}"
         end
 
         # Copies the PolyTeXnic style file to ensure it's always fresh.
