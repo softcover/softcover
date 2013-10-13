@@ -50,6 +50,11 @@ module Polytexnic
         File.write('epub/OEBPS/content.opf', content_opf)
       end
 
+      # Returns the chapters to write (to account for previews).
+      def chapters
+        preview? ? manifest.preview_chapters : manifest.chapters
+      end
+
       def write_html
         images_dir  = File.join('epub', 'OEBPS', 'images')
         texmath_dir = File.join(images_dir, 'texmath')
@@ -59,8 +64,6 @@ module Polytexnic
         File.write(File.join('epub', 'OEBPS', 'cover.html'), cover_page)
 
         pngs = []
-        chapters = preview? ? manifest.preview_chapters
-                            : manifest.chapters
         chapters.each_with_index do |chapter, i|
           source_filename = File.join('epub', 'OEBPS', chapter.fragment_name)
           File.open(source_filename, 'w') do |f|
@@ -253,10 +256,10 @@ module Polytexnic
         author = manifest.author
         copyright = manifest.copyright
         uuid = manifest.uuid
-        man_ch = manifest.chapters.map do |chapter|
+        man_ch = chapters.map do |chapter|
                    %(<item id="#{chapter.slug}" href="#{chapter.fragment_name}" media-type="application/xhtml+xml"/>)
                  end
-        toc_ch = manifest.chapters.map do |chapter|
+        toc_ch = chapters.map do |chapter|
                    %(<itemref idref="#{chapter.slug}"/>)
                  end
         image_files = Dir['epub/OEBPS/images/**/*'].select { |f| File.file?(f) }
@@ -325,7 +328,9 @@ module Polytexnic
       def toc_ncx
         title = manifest.title
         chapter_nav = []
-        manifest.chapters.each_with_index do |chapter, n|
+        offset = preview? ? manifest.preview_chapter_range.first : 0
+        chapters.each_with_index do |chapter, i|
+          n = i + offset
           chapter_nav << %(<navPoint id="#{chapter.slug}" playOrder="#{n+1}">)
           chapter_nav << %(    <navLabel><text>#{chapter_name(n)}</text></navLabel>)
           chapter_nav << %(    <content src="#{chapter.fragment_name}"/>)
@@ -350,7 +355,7 @@ module Polytexnic
       end
 
       def chapter_name(n)
-        n.zero? ? "Frontmatter" : "Chapter #{n}"
+        n == 0 ? "Frontmatter" : "Chapter #{n}"
       end
 
       # Returns the nav HTML content.

@@ -17,10 +17,14 @@ describe Polytexnic::Builders::Preview do
         expect('ebooks/book-preview.pdf').to exist
       end
 
-      context "EPUB books" do
+      context "EPUB & MOBI books" do
         it "should build an EPUB" do
           expect('ebooks/book-preview.epub').to exist
         end
+
+        #
+        # We don't test for MOBI because kindlegen doesn't work in tests.
+        #
 
         it "should include the right chapters" do
           @builder.manifest.preview_chapters.each do |ch|
