@@ -4,11 +4,14 @@ module Polytexnic
       include Polytexnic::Output
 
       def build!
-        # Build the PolyTeX filename so it accepts both 'foo' and 'foo.tex'.
         if markdown_directory?
+          # Build the HTML to produce PolyTeX as a side-effect,
+          # and then update the manifest so to reduce PDF generation
+          # to a previously solved problem.
           Polytexnic::Builders::Html.new.build!
           @manifest = Polytexnic::BookManifest.new(source: :polytex)
         end
+        # Build the PolyTeX filename so it accepts both 'foo' and 'foo.tex'.
         basename = File.basename(@manifest.filename, '.tex')
         book_filename = basename + '.tex'
         polytex_filenames = @manifest.chapter_file_paths << book_filename

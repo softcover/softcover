@@ -47,7 +47,7 @@ class Polytexnic::BookManifest < OpenStruct
     end
     attrs = case
             when polytex?  then yaml_attrs
-            when markdown? then read_from_md
+            when markdown? then yaml_attrs.merge(read_from_md)
             else
               self.class.not_found!
             end.symbolize_keys!

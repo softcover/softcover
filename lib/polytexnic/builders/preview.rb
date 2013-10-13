@@ -3,8 +3,7 @@ module Polytexnic
     class Preview < Builder
 
       def build!
-        raise 'dfjakldj'
-        Polytexnic::Builders::Mobi.new.build!    # Builds EPUB as a side-effect
+        # Polytexnic::Builders::Mobi.new.build!    # Builds EPUB as a side-effect
         Polytexnic::Builders::Pdf.new.build!
         pdf_split
       end
@@ -18,7 +17,7 @@ module Polytexnic
           cmd  = %(yes | gs -dBATCH -sOutputFile="#{output}")
           cmd += %( -dFirstPage=#{range.first} -dLastPage=#{range.last})
           cmd += %( -sDEVICE=pdfwrite "#{input}" >& /dev/null)
-          exec cmd
+          execute cmd
         end
     end
   end
