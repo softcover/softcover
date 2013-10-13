@@ -34,7 +34,13 @@ module Polytexnic
         write_polytexnic_commands_file
         build_pdf = "#{xelatex} #{Polytexnic::Utils.tmpify(book_filename)}"
         # Run the command twice to guarantee up-to-date cross-references.
-        cmd = "#{build_pdf} && #{build_pdf} && #{rename_pdf_cmd(basename)}"
+        # Including the `mv` in the command is necessary because `execute`
+        # below uses `exec` (except in tests, where it breaks). Since `exec`
+        # causes the Ruby process to end, any commands executed after `exec`
+        # would be ignored. The reason for using `exec`
+        # is so that LaTeX errors get emitted to the screen rather than just
+        # hanging the process.
+        cmd = "#{build_pdf} && #{build_pdf} ; #{rename_pdf(basename)}"
         options[:preview] ? system(cmd) : execute(cmd)
       end
 
@@ -50,11 +56,11 @@ module Polytexnic
         # The purpose is to matche the original filename.
         # For example, foo_bar.tex should produce foo_bar.pdf.
         # While we're at it, we move it to the standard ebooks/ directory.
-        def rename_pdf_cmd(basename)
+        def rename_pdf(basename)
           tmp_pdf = basename + '.tmp.pdf'
           pdf     = basename + '.pdf'
           mkdir('ebooks')
-          "mv #{tmp_pdf} #{File.join('ebooks', pdf)}"
+          "mv -f #{tmp_pdf} #{File.join('ebooks', pdf)}"
         end
 
         # Copies the PolyTeXnic style file to ensure it's always fresh.
