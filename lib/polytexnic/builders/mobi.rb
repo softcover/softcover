@@ -8,11 +8,7 @@ module Polytexnic
           @manifest = Polytexnic::BookManifest.new(source: :polytex)
         end
         command = "#{kindlegen} ebooks/#{manifest.filename}.epub"
-        if Polytexnic.test?
-          command
-        else
-          system(command)
-        end
+        Polytexnic.test? ? command : system(command)
       end
 
       private

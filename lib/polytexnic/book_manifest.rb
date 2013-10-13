@@ -164,11 +164,25 @@ class Polytexnic::BookManifest < OpenStruct
   end
 
   def url(chapter_number)
-    if chapter = find_chapter_by_number(chapter_number)
+    if (chapter = find_chapter_by_number(chapter_number))
       chapter.slug
     else
       '#'
     end
+  end
+
+  # Returns the chapter range for book previews.
+  # We could `eval` the range, but that would allow users to execute arbitrary
+  # code (maybe not a problem on their system, but it would be a Bad Thing
+  # on a server).
+  def preview_chapter_range
+    first, last = epub_mobi_preview_chapter_range.split('..').map(&:to_i)
+    first..last
+  end
+
+  # Returns the chapters to use in the preview as a range.
+  def preview_chapters
+    chapters[preview_chapter_range]
   end
 
   def self.valid_directory?

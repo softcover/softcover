@@ -3,7 +3,7 @@ module Polytexnic
     class Preview < Builder
 
       def build!
-        # Polytexnic::Builders::Mobi.new.build!    # Builds EPUB as a side-effect
+        Polytexnic::Builders::Epub.new.build!(preview: true)    # Builds EPUB as a side-effect
         Polytexnic::Builders::Pdf.new.build!
         extract_pdf_pages
       end

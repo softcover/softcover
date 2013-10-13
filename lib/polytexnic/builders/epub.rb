@@ -3,7 +3,8 @@ module Polytexnic
     class Epub < Builder
       include Polytexnic::Output
 
-      def build!
+      def build!(options={})
+        @preview = options[:preview]
         Polytexnic::Builders::Html.new.build!
         if markdown_directory?
           @manifest = Polytexnic::BookManifest.new(source: :polytex)
@@ -18,7 +19,11 @@ module Polytexnic
         write_contents
         create_style_files
         make_epub
-        FileUtils.mv(File.join('epub', "#{manifest.filename}.epub"), 'ebooks')
+        move_epub
+      end
+
+      def preview?
+        !!@preview
       end
 
       def create_directories
@@ -54,10 +59,12 @@ module Polytexnic
         File.write(File.join('epub', 'OEBPS', 'cover.html'), cover_page)
 
         pngs = []
-        manifest.chapters.each_with_index do |chapter, i|
+        chapters = preview? ? manifest.preview_chapters
+                            : manifest.chapters
+        chapters.each_with_index do |chapter, i|
           source_filename = File.join('epub', 'OEBPS', chapter.fragment_name)
           File.open(source_filename, 'w') do |f|
-            content = File.read("html/#{chapter.fragment_name}")
+            content = File.read(File.join("html", chapter.fragment_name))
 
             doc = strip_attributes(Nokogiri::HTML(content))
             inner_html = doc.at_css('body').children.to_xhtml
@@ -212,6 +219,15 @@ module Polytexnic
         Dir.chdir('epub') do
           system(commands.join(' && '))
         end
+      end
+
+      # Move the EPUB to the ebooks directory.
+      # Note that we handle the case of a preview book as well.
+      def move_epub
+        origin = manifest.filename
+        target = preview? ? origin + '-preview' : origin
+        FileUtils.mv(File.join('epub',   "#{origin}.epub"),
+                     File.join('ebooks', "#{target}.epub"))
       end
 
       def write_toc
