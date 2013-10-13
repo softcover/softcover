@@ -40,7 +40,7 @@ module Polytexnic
         # would be ignored. The reason for using `exec`
         # is so that LaTeX errors get emitted to the screen rather than just
         # hanging the process.
-        cmd = "#{build_pdf} && #{build_pdf} ; #{rename_pdf(basename)}"
+        cmd = "#{build_pdf} ; #{build_pdf} ; #{rename_pdf(basename)}"
         options[:preview] ? system(cmd) : execute(cmd)
       end
 
