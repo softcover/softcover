@@ -5,7 +5,7 @@ module Polytexnic
       def build!
         # Recall that MOBI generation makes an EPUB as a side-effect.
         Polytexnic::Builders::Mobi.new.build!(preview: true)
-        Polytexnic::Builders::Pdf.new.build!
+        Polytexnic::Builders::Pdf.new.build!(preview: true)
         extract_pdf_pages
       end
 
