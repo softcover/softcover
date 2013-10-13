@@ -34,4 +34,17 @@ describe Polytexnic::Commands::Build do
       build.all_formats
     end
   end
+
+  context 'building previews' do
+    subject(:build) { Polytexnic::Commands::Build }
+
+    it { should respond_to(:preview) }
+    it "should build previews" do
+      preview_builder = build.builder_for('preview')
+      preview_builder.should_receive(:build!)
+      build.should_receive(:builder_for).with('preview').
+                                         and_return(preview_builder)
+      build.preview
+    end
+  end
 end

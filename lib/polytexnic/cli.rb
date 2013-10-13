@@ -22,6 +22,14 @@ module Polytexnic
     end
 
     # ===============================================
+    # Preview
+    # ===============================================
+    desc "build:preview", "Build book preview in all formats"
+    define_method "build:preview" do
+      Polytexnic::Commands::Build.preview
+    end
+
+    # ===============================================
     # Server
     # ===============================================
 

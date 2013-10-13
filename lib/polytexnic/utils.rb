@@ -108,5 +108,12 @@ module Polytexnic::Utils
   def rm(file)
     FileUtils.rm(file) if File.exist?(file)
   end
+
+  # Execute a command.
+  # The issue here is that `exec` is awful in tests, since it exits the process.
+  # This command arranges to use `system` in tests instead.
+  def execute(command)
+    Polytexnic.test? ? system(command) : exec(command)
+  end
 end
 
