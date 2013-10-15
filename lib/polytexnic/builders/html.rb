@@ -29,7 +29,7 @@ module Polytexnic
 
         if manifest.polytex?
           basename = File.basename(manifest.filename, '.tex')
-          @html = converted_html(basename)
+          @html  = converted_html(basename)
           @title = basename
           erb_file = File.read(File.join(File.dirname(__FILE__),
                                          '../server/views/book.html.erb'))
@@ -56,7 +56,7 @@ module Polytexnic
 
       # Rewrites the master LaTeX file <name>.tex to use chapters from Book.txt.
       def rewrite_master_latex_file
-        filename = Dir['*.tex'].reject { |f| f =~ /\.tmp/}.first
+        master_filename = Dir['*.tex'].reject { |f| f =~ /\.tmp/}.first
         lines = File.readlines('markdown/Book.txt')
         tex_file = []
         lines.each do |line|
@@ -64,14 +64,18 @@ module Polytexnic
             tex_file << "\\include{chapters/#{$1}}"
           elsif line =~ /(.*):\s*$/  # frontmatter or mainmatter
             tex_file << "\\#{$1}"
+          elsif line.strip == 'cover'
+            tex_file << '\\includepdf{images/cover.pdf}'
+          else # raw command, like 'maketitle' or 'tableofcontents'
+            tex_file << "\\#{line.strip}"
           end
         end
         tex_file << '\end{document}'
-        content = File.read(filename)
+        content = File.read(master_filename)
         content.gsub!(/(\\begin{document}\n)(.*)/m) do
           $1 + tex_file.join("\n") + "\n"
         end
-        File.write(filename, content)
+        File.write(master_filename, content)
       end
 
       # Returns the converted HTML.
