@@ -8,9 +8,18 @@ describe Polytexnic::Builders::Html do
 
     describe "#build!" do
       subject(:builder) { Polytexnic::Builders::Html.new }
-      before { builder.build! }
+      let(:file_to_be_removed) { 'html/should_be_removed.html' }
+      before do
+        # Create an empty file that should be removed automatically.
+        File.write(file_to_be_removed, '')
+        builder.build!
+      end
 
       its(:built_files) { should include "html/book.html" }
+
+      it "should remove the HTML file without a corresponding LaTeX file" do
+        expect(file_to_be_removed).not_to exist
+      end
 
       describe "HTML output" do
         let(:output) { File.read("html/book.html") }

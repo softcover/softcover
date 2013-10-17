@@ -9,6 +9,11 @@ module Polytexnic
         unless File.directory?(File.join("html", "stylesheets"))
           Dir.mkdir File.join("html", "stylesheets")
         end
+        # It's safe to remove HTML files in the html/ directory,
+        # as they are always generated. This also arranges to clear
+        # out unused HTML files, as happens when, e.g., the name of a
+        # LaTeX chapter file changes.
+        FileUtils.rm(Dir.glob(File.join('html', '*.html')))
       end
 
       def build(options = {})
