@@ -3,6 +3,8 @@ require 'spec_helper'
 describe Polytexnic::Builders::Epub do
   before(:all) do
     generate_book
+    @file_to_be_removed = path('html/should_be_removed.html')
+    File.write(@file_to_be_removed, '')
     @builder = Polytexnic::Builders::Epub.new
     @builder.build!
     chdir_to_book
@@ -17,7 +19,7 @@ describe Polytexnic::Builders::Epub do
 
   describe "mimetype file" do
     it "should exist in the right directory" do
-      expect('epub/mimetype').to exist
+      expect(path('epub/mimetype')).to exist
     end
 
     it "should have the right contents" do
@@ -131,35 +133,39 @@ describe Polytexnic::Builders::Epub do
         end
       end
 
+      it "should remove the HTML files" do
+        expect(@file_to_be_removed).not_to exist
+      end
+
       it "should create the HTML files" do
         has_math = false
-        expect('epub/OEBPS/cover.html').to exist
+        expect(path('epub/OEBPS/cover.html')).to exist
         builder.manifest.chapters.each_with_index do |chapter, i|
-          content = File.read("html/#{chapter.slug}_fragment.html")
+          content = File.read(path("html/#{chapter.slug}_fragment.html"))
           has_math ||= builder.math?(content)
-          expect("epub/OEBPS/#{chapter.slug}_fragment.html").to exist
+          expect(path("epub/OEBPS/#{chapter.slug}_fragment.html")).to exist
         end
         # Make sure at least one template file has math.
         expect(has_math).to be_true
       end
 
       it "should create math PNGs" do
-        expect("epub/OEBPS/images/texmath").to exist
-        expect(Dir["epub/OEBPS/images/texmath/*.png"]).not_to be_empty
+        expect(path("epub/OEBPS/images/texmath")).to exist
+        expect(Dir[path("epub/OEBPS/images/texmath/*.png")]).not_to be_empty
       end
     end
 
     it "should create the style files" do
-      expect('epub/OEBPS/styles/page-template.xpgt').to exist
-      expect('epub/OEBPS/styles/pygments.css').to exist
-      expect('epub/OEBPS/styles/polytexnic.css').to exist
+      expect(path('epub/OEBPS/styles/page-template.xpgt')).to exist
+      expect(path('epub/OEBPS/styles/pygments.css')).to exist
+      expect(path('epub/OEBPS/styles/polytexnic.css')).to exist
     end
   end
 
   it "should generate the EPUB" do
-    expect('ebooks/book.epub').to exist
-    expect('epub/book.epub').not_to exist
-    expect('epub/book.zip').not_to exist
+    expect(path('ebooks/book.epub')).to exist
+    expect(path('epub/book.epub')).not_to exist
+    expect(path('epub/book.zip')).not_to exist
   end
 end
 

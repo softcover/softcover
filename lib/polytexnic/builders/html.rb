@@ -6,14 +6,14 @@ module Polytexnic
 
       def setup
         Dir.mkdir "html" unless File.directory?("html")
-        unless File.directory?(File.join("html", "stylesheets"))
-          Dir.mkdir File.join("html", "stylesheets")
+        unless File.directory?(path('html/stylesheets'))
+          Dir.mkdir path('html/stylesheets')
         end
         # It's safe to remove HTML files in the html/ directory,
         # as they are always generated. This also arranges to clear
         # out unused HTML files, as happens when, e.g., the name of a
         # LaTeX chapter file changes.
-        FileUtils.rm(Dir.glob(File.join('html', '*.html')))
+        FileUtils.rm(Dir.glob(path('html/*.html')))
       end
 
       def build(options = {})
