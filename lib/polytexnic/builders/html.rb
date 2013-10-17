@@ -23,6 +23,7 @@ module Polytexnic
         end
 
         if manifest.markdown?
+          FileUtils.rm(Dir.glob(path('chapters/*.tex')))
           manifest.chapters.each do |chapter|
             write_latex_files(chapter)
           end

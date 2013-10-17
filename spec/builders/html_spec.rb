@@ -71,7 +71,7 @@ describe Polytexnic::Builders::Html do
       end
 
       describe "HTML MathJax output" do
-        let(:output) { File.read('html/a_chapter.html') }
+        let(:output) { File.read(path('html/a_chapter.html')) }
         subject { output }
 
         it { should match 'MathJax.Hub.Config' }
@@ -82,7 +82,11 @@ describe Polytexnic::Builders::Html do
   end
 
   describe "when generating from Markdown source" do
-    before(:all) { generate_book(markdown: true) }
+    before(:all) do
+      generate_book(markdown: true)
+      @file_to_be_removed = path('chapters/should_be_removed.tex')
+      File.write(@file_to_be_removed, '')
+    end
     after(:all)  { remove_book }
 
     describe "#build!" do
@@ -94,6 +98,10 @@ describe Polytexnic::Builders::Html do
       its(:built_files) { should include "html/a_chapter_fragment.html" }
       its(:built_files) { should include "html/another_chapter.html" }
       its(:built_files) { should include "html/another_chapter_fragment.html" }
+
+      it "should remove an unneeded LaTeX file" do
+        expect(@file_to_be_removed).not_to exist
+      end
 
       describe "master LaTeX file" do
         let(:master_file) { Dir['*.tex'].reject { |f| f =~ /\.tmp/}.first }
