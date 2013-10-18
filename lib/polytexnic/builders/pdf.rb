@@ -73,9 +73,7 @@ module Polytexnic
 
         # Writes out the PolyTeXnic commands from polytexnic-core.
         def write_polytexnic_commands_file
-          File.open('polytexnic_commands.sty', 'w') do |f|
-            f.write(Polytexnic::Core::Utils.latex_commands)
-          end
+          Polytexnic::Core.write_polytexnic_style_file(Dir.pwd)
         end
     end
   end
