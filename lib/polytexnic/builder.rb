@@ -11,6 +11,7 @@ module Polytexnic
     end
 
     def build!
+      write_polytexnic_commands_file
       setup
       build
       verify
@@ -25,6 +26,11 @@ module Polytexnic
 
       def source
         markdown_directory? ? :markdown : :polytex
+      end
+
+      # Writes out the PolyTeXnic commands from polytexnic-core.
+      def write_polytexnic_commands_file
+        Polytexnic::Core.write_polytexnic_style_file(Dir.pwd)
       end
   end
 end

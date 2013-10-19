@@ -31,7 +31,6 @@ module Polytexnic
         end
         write_pygments_file(:latex)
         copy_polytexnic_sty
-        write_polytexnic_commands_file
         build_pdf = "#{xelatex} #{Polytexnic::Utils.tmpify(book_filename)}"
         # Run the command twice to guarantee up-to-date cross-references.
         # Including the `mv` in the command is necessary because `execute`
@@ -69,11 +68,6 @@ module Polytexnic
           source_sty     = File.join(File.dirname(__FILE__),
                                      "../template/#{polytexnic_sty}")
           FileUtils.cp source_sty, polytexnic_sty
-        end
-
-        # Writes out the PolyTeXnic commands from polytexnic-core.
-        def write_polytexnic_commands_file
-          Polytexnic::Core.write_polytexnic_style_file(Dir.pwd)
         end
     end
   end
