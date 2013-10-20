@@ -3,55 +3,59 @@ require 'spec_helper'
 describe Polytexnic::Mathjax do
 
   subject(:mathjax) { Polytexnic::Mathjax }
+
   let(:custom_sty) do
 %(\\newcommand{\\foo}{\\ensuremath{x}}
 \\newcommand{\\bar}[1]{\\textbf{#1}}
+% \\newcommand{\\baz}{quux}
 )
   end
+  let(:baz) { 'quux' }
 
+  shared_examples "config" do
+
+    it "should include the default macros" do
+      expect(config).to include polytex
+      expect(config).to include polytexnic
+    end
+
+    context "with a custom.sty" do
+
+      before { File.stub(:read).and_return(custom_sty) }
+
+      it "should include the custom macros" do
+        expect(config).to include foo
+        expect(config).to include bar
+      end
+
+      it "should not include a commented-out macro" do
+        expect(config).not_to include baz
+      end
+    end
+  end
 
   context '#config' do
 
     let(:polytex)    { 'PolyTeX:    "Poly{\\\\TeX}"' }
     let(:polytexnic) { 'PolyTeXnic: "Poly{\\\\TeX}nic"' }
+    let(:foo)        { 'foo: "{x}"' }
+    let(:bar)        { 'bar: ["\\\\textbf{#1}", 1]' }
+    let(:config)     { mathjax.config }
 
     it "should not raise an error" do
-      expect { mathjax.config }.not_to raise_error
+      expect { config }.not_to raise_error
     end
 
-    it "should include the default macros" do
-      expect(mathjax.config).to include polytex
-      expect(mathjax.config).to include polytexnic
-    end
-
-    context "with a custom.sty" do
-
-      before { File.stub(:read).and_return(custom_sty) }
-
-      it "should include the custom macros" do
-        expect(mathjax.config).to include 'foo: "{x}"'
-        expect(mathjax.config).to include 'bar: ["\\\\textbf{#1}", 1]'
-      end
-    end
+    it_should_behave_like "config"
   end
 
   context '#escaped_config' do
     let(:polytex)    { 'PolyTeX:    "Poly{\\\\\\\\TeX}"' }
     let(:polytexnic) { 'PolyTeXnic: "Poly{\\\\\\\\TeX}nic"' }
+    let(:foo)        { 'foo: "{x}"' }
+    let(:bar)        { 'bar: ["\\\\\\\\textbf{#1}", 1]' }
+    let(:config)     { mathjax.escaped_config }
 
-    it "should include the default macros" do
-      expect(mathjax.escaped_config).to include polytex
-      expect(mathjax.escaped_config).to include polytexnic
-    end
-
-    context "with a custom.sty" do
-
-      before { File.stub(:read).and_return(custom_sty) }
-
-      it "should include the custom macros" do
-        expect(mathjax.escaped_config).to include 'foo: "{x}"'
-        expect(mathjax.escaped_config).to include 'bar: ["\\\\\\\\textbf{#1}", 1]'
-      end
-    end
+    it_should_behave_like "config"
   end
 end

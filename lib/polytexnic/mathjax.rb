@@ -46,6 +46,7 @@ module Polytexnic
 
     private
 
+      # Returns the custom macros as defined in the custom style file.
       def self.custom_macros
         extract_macros(File.read('custom.sty')) rescue ''
       end
@@ -57,13 +58,13 @@ module Polytexnic
         # For some reason, \ensuremath doesn't work in MathJax, so remove it.
         styles.gsub!('\ensuremath', '')
         # First extract commands with no arguments.
-        cmd_no_args = /\\newcommand\{\\(.*?)\}\{(.*)\}/
+        cmd_no_args = /^\s*\\newcommand\{\\(.*?)\}\{(.*)\}/
         cna = styles.scan(cmd_no_args).map do |name, definition|
           escaped_definition = definition.gsub('\\', '\\\\\\\\')
           %(#{name}: "#{escaped_definition}")
         end
         # Then grab the commands with arguments.
-        cmd_with_args = /\\newcommand\{\\(.*?)\}\[(\d+)\]\{(.*)\}/
+        cmd_with_args = /^\s*\\newcommand\{\\(.*?)\}\[(\d+)\]\{(.*)\}/
         cwa = styles.scan(cmd_with_args).map do |name, number, definition|
           escaped_definition = definition.gsub('\\', '\\\\\\\\')
           %(#{name}: ["#{escaped_definition}", #{number}])
