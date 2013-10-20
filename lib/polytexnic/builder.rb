@@ -8,10 +8,10 @@ module Polytexnic
       @manifest = Polytexnic::BookManifest.new(verify_paths: true,
                                                source: source)
       @built_files = []
+      write_polytexnic_commands_file
     end
 
     def build!
-      write_polytexnic_commands_file
       setup
       build
       verify
