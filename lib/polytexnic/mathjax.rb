@@ -20,7 +20,7 @@ module Polytexnic
             formatNumber: function (n) { return #{chapter_number} + '.' + n }
           },
           Macros: {
-            PolyTeX: "Poly{\\\\TeX}",
+            PolyTeX:    "Poly{\\\\TeX}",
             PolyTeXnic: "Poly{\\\\TeX}nic",
             #{custom_macros}
           }
@@ -47,7 +47,7 @@ module Polytexnic
     private
 
       def self.custom_macros
-        extract_macros(File.read('custom.sty'))
+        extract_macros(File.read('custom.sty')) rescue ''
       end
 
       # Extracts and formats the macros from the given string of style commands.
