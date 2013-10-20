@@ -48,7 +48,7 @@ module Polytexnic
 
       # Returns the custom macros as defined in the custom style file.
       def self.custom_macros
-        extract_macros(File.read('custom.sty')) rescue ''
+        extract_macros(Polytexnic.custom_styles)
       end
 
       # Extracts and formats the macros from the given string of style commands.

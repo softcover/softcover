@@ -21,7 +21,7 @@ describe Polytexnic::Mathjax do
 
     context "with a custom.sty" do
 
-      before { File.stub(:read).and_return(custom_sty) }
+      before { Polytexnic.stub(:custom_styles).and_return(custom_sty) }
 
       it "should include the custom macros" do
         expect(config).to include foo
