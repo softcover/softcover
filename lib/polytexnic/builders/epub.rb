@@ -110,7 +110,7 @@ module Polytexnic
         pagejs = "#{File.dirname(__FILE__)}/utils/page.js"
         url = "file://#{Dir.pwd}/html/#{chapter.slug}.html"
         cmd = "#{phantomjs} #{pagejs} #{url}"
-        system cmd
+        silence_stream(STDERR) { system cmd }
         # Sometimes in tests the phantomjs_source.html file is missing.
         # It shouldn't ever happen, but it does no harm to skip it.
         return nil unless File.exist?('phantomjs_source.html')
