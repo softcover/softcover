@@ -4,10 +4,10 @@ module Polytexnic
       include Polytexnic::Output
       extend self
 
-      def for_format(format)
+      def for_format(format, options={})
         raise 'Invalid format' unless Polytexnic::FORMATS.include?(format)
         puts "Building #{format.upcase}..."
-        builder_for(format).build!
+        builder_for(format).build!(options)
         puts "Done."
         if format == 'html'
           puts "Tralics debug information ouput to log/tralics.log"

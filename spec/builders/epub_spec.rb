@@ -5,9 +5,9 @@ describe Polytexnic::Builders::Epub do
     generate_book
     @file_to_be_removed = path('html/should_be_removed.html')
     File.write(@file_to_be_removed, '')
+    silence { `poly build:epub` }
     @builder = Polytexnic::Builders::Epub.new
     @builder.build!
-    chdir_to_book
   end
   after(:all) { remove_book }
   subject(:builder) { @builder }
