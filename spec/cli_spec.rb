@@ -59,6 +59,17 @@ describe Polytexnic::CLI do
       end
     end
 
+    context "html" do
+
+      context "without options" do
+        before { silence { `poly build:html` } }
+
+        it "should generate the html" do
+          expect(path('html/book.html')).to exist
+        end
+      end
+    end
+
     context "epub & mobi" do
 
       context "without options" do
