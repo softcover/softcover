@@ -254,6 +254,10 @@ body #book {
   line-height: 0;
 }
 
+#book sup.footnote.intersentence {
+  margin-right: 0px;
+}
+
 #book sup.footnote a {
   text-decoration: none;
 }
