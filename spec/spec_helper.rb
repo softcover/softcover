@@ -50,10 +50,3 @@ end
 
 TEST_API_KEY = 'asdfasdfasdfasdfasdf'
 
-def silence
-  return yield if ENV['silence'] == 'false'
-
-  silence_stream(STDOUT) do
-    yield
-  end
-end
