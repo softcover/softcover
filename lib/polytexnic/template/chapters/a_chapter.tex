@@ -24,8 +24,8 @@ end
 Make a code listing as in Listing~\ref{code:hello}.
 
 \begin{codelisting}
-\heading{A hello program in Ruby.}
 \label{code:hello}
+\codecaption{A hello program in Ruby.}
 %= lang:ruby
 \begin{code}
 def hello
@@ -38,6 +38,22 @@ Typeset inline code using the \verb+\kode+ environment: \kode{foobar}.
 
 \section{\emph{Bacon} ipsum}
 \label{sec:bacon_ipsum}
+
+\begin{table}
+\begin{tabular}{llll}
+\textbf{HTTP request} & \textbf{URL} & \textbf{Action} & \textbf{Purpose} \\ \hline
+
+\texttt{GET} & /users & \texttt{index} & page to list all users \\
+\texttt{GET} & /users/1 & \texttt{show} & page to show user with id \texttt{1}\\
+\texttt{GET} & /users/new & \texttt{new} & page to make a new user \\
+\texttt{POST} & /users & \texttt{create} & create a new user \\
+\texttt{GET} & /users/1/edit & \texttt{edit} & page to edit user with id \texttt{1} \\
+\texttt{PATCH} & /users/1 & \texttt{update} & update user with id \texttt{1}  \\
+\texttt{DELETE} & /users/1 & \texttt{destroy} & delete user with id \texttt{1}
+\end{tabular}
+\caption{HTTP stuff\label{table:foo}}
+\end{table}
+
 
 Bacon ipsum dolor sit amet salami doner shoulder, brisket pork chop beef cow bacon strip steak filet mignon jerky bresaola turducken venison ham. Biltong meatloaf chuck rump pork loin. Pancetta fatback prosciutto shankle corned beef flank beef ribs tail tri-tip kielbasa drumstick. Andouille bacon pork drumstick meatball pig t-bone hamburger, ball tip meatloaf sausage.
 
