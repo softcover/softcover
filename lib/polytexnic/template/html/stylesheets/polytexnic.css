@@ -138,15 +138,18 @@ body #book {
   color: #002f72;
 }
 
-/*#book .figure {
+#book .graphics.image {
   text-align: center;
+}
+
+#book .graphics.image img {
   margin-top: 2em;
 }
 
-#book .figure img {
+#book .graphics.image.box img {
   border: 1px solid #666;
 }
-*/
+
 #book .table {
   text-align: center;
   margin-top: 2em;
