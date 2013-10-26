@@ -11,8 +11,8 @@ module Polytexnic
         filename += '-preview' if options[:preview]
         command = "#{kindlegen} ebooks/#{filename}.epub"
         # Because of the way kindlegen uses tempfiles, testing for the
-        # actual generation of the MOBI causes an error, so we just
-        # check the command.
+        # actual generation of the MOBI causes an error, so in tests
+        # we just return the command.
         if options[:quiet] || options[:silent]
           silence { Polytexnic.test? ? command : system(command) }
         else

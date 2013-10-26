@@ -16,6 +16,11 @@ module Polytexnic
       def all_formats(options={})
         building_message('all formats', options)
         Polytexnic::BUILD_ALL_FORMATS.each do |format|
+          if format == 'mobi'
+            building_message('EPUB & MOBI', options)
+          else
+            building_message(format.upcase, options)
+          end
           builder_for(format).build!(options)
         end
       end
