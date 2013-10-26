@@ -146,7 +146,7 @@ module WebmockHelpers
     flags << '-m' if options[:markdown]
     flags << '-s' if options[:simple]
     silence { system "poly new #{name} #{flags.join(' ')}" }
-    # Polytexnic::Commands::Generator.generate_directory(name, options)
+    # Polytexnic::Commands::Generator.generate_file_tree(name, options)
     chdir_to_book
     Polytexnic::FORMATS.each do |format|
       File.open("test-book.#{format}", 'w') { |f| f.write('test') }

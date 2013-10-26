@@ -130,7 +130,7 @@ module Polytexnic
                   :aliases => "-s",
                   :desc => "Generate a simple book."
     def new(n)
-      Polytexnic::Commands::Generator.generate_directory(n, options)
+      Polytexnic::Commands::Generator.generate_file_tree(n, options)
     end
 
     # ===============================================
