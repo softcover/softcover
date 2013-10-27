@@ -1,19 +1,21 @@
 \chapter{A chapter}
 \label{cha:a_chapter}
 
-This is the first paragraph of the \PolyTeXnic\ template. For more information, see \emph{The \PolyTeXnic\ Book}}, available online at \href{http://polytexnic.org/book}{http://polytexnic.org/book}.
+This is the first paragraph of the \PolyTeXnic\ template. It shows how to write a document in \PolyTeX, a subset of the \LaTeX\ typesetting language optimized for ebooks. For more information, see \emph{The \PolyTeXnic\ Book}, available online at \href{http://polytexnic.org/book}{http://polytexnic.org/book}, and the \PolyTeX\ source of the book, available at \href{http://polytexnic.org/source}{http://polytexnic.org/source}.
 
 This is the \emph{second} paragraph, showing how to emphasize text.\footnote{\emph{This} is a footnote. It is numbered automatically.} You can also make text \textbf{bold} or \textit{italicized} (which looks the same as emphasized text).
+
+\emph{Note}: ``\PolyTeXnic'' is pronounced exactly like the English word \emph{polytechnic}, and ``\LaTeX'' is pronounced \emph{lay}-tech.
 
 \section{A section}
 \label{sec:a_section}
 
-This is a section. Because it has a label, we can refer to it as Section~\ref{sec:a_section}; the cross-reference will be automatically numbered and linked.
+This is a section. Because it has a label, we can refer to it as Section~\ref{sec:a_section}. The cross-reference will be automatically numbered and linked.
 
 \subsection{Source code}
 \label{sec:source_code}
 
-This is a subsection. As usual, it can be referenced by label (Section~\ref{sec:source_code}). Note that the label starts with \texttt{sec:}, not \texttt{ssec:} or \texttt{subsec:}. Any of these would work, but I find that sections often become subsections (and vice versa) when figuring out the structure of a book, and using \texttt{sec:} to prefix them both saves having to change the labels.
+This is a subsection. As usual, it can be referenced by label (Section~\ref{sec:source_code}). Note that the label starts with \kode{sec:}, not \kode{ssec:} or \kode{subsec:}. Any of these would work, but I find that sections often become subsections (and vice versa) when figuring out the structure of a book, and using \kode{sec:} to prefix them both saves having to change labels.
 
 \PolyTeXnic\ comes with full support for syntax-highlighted source code:
 %= lang:ruby
@@ -22,7 +24,7 @@ def hello
   puts "hello, world!"
 end
 \end{code}
-\PolyTeXnic\ can highlight any language supported by \href{http://pygments.org/languages/}{Pygments}.
+\noindent \PolyTeXnic\ can highlight any language supported by \href{http://pygments.org/languages/}{Pygments}.
 
 You can also define code \emph{listings}, as seen in Listing~\ref{code:hello_world}. Such code listings are automatically numbered and linked.
 
@@ -37,14 +39,14 @@ end
 \end{code}
 \end{codelisting}
 
-You can also typeset inline code, as in \kode{current\_\-user}. If you prefer a plainer version of the same thing, you can use ``typewriter text'', as in \texttt{current\_\-user}.
+Inline code can be indicated using the \verb+\kode+ command, as in \kode{current\_\-user}. If you prefer a plainer version of the same thing, you can use ``typewriter text'', as in \texttt{current\_\-user}.
 
 For words whose hypenation isn't built in, you can indicate an optional hyphen using \verb+\-+, which will only be used if necessary to make a clean line break (and even then only when producing PDFs):
 %= lang:latex
 \begin{code}
 current\_\-user
 \end{code}
-This also shows how to escape the underscore character using a backslash. This is because plain underscores are reserved for math environments (Section~\ref{sec:mathematics}).
+This also shows how to escape the underscore character using a backslash. This is necessary because plain underscores are reserved for math environments (Section~\ref{sec:mathematics}).
 
 \subsection{Mathematics}
 \label{sec:mathematics}
@@ -62,6 +64,8 @@ It also support cross-referenced equations, as in Eq.~\eqref{eq:golden_ratio} an
 \label{eq:stokes_theorem}
 \int_\Omega d\omega = \int_{\partial\Omega} \omega \qquad{\text{Stokes's Theorem}}
 \end{equation}
+
+As with all \PolyTeXnic\ features, mathematical typesetting is fully supported in all output formats (HTML, EPUB, MOBI, and PDF). The only caveat is that, due to technical restrictions imposed by ereaders, math typesetting is a little uglier in EPUB \& MOBI.
 
 \PolyTeXnic\
 

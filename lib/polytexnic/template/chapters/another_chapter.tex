@@ -1,6 +1,59 @@
 \chapter{Foo \emph{bar}}
 \label{cha:foo_bar}
 
-Laborum sausage drumstick, sint esse dolor fugiat shoulder mollit id cillum minim aute. Boudin meatball doner anim. Jowl ham pork, venison cillum shank pastrami qui fugiat meatloaf anim ex in laborum adipisicing. Jowl chuck tenderloin qui tongue chicken salami turducken fatback sed nisi. Jowl eu turkey, capicola sausage turducken mollit chuck jerky. Chuck pork belly spare ribs rump pastrami nisi incididunt tenderloin hamburger, turkey duis labore proident short loin. Turkey pork strip steak ut spare ribs veniam leberkas jowl fugiat est shankle drumstick laborum proident shank.
+This is an equation environment:
+\[
+\int_\Omega d\omega = \int_{\partial\Omega} \omega \qquad\mbox{Stokes's Theorem}
+\]
+This should be a centered equation with no numbering.
 
-This is Chapter~\ref{cha:foo_bar}. See also Section~\ref{sec:pig_fatback}.
+We also want to support equation environments:
+\begin{equation}
+\int_\Omega d\omega = \int_{\partial\Omega} \omega \qquad\mbox{Stokes's Theorem}
+\end{equation}
+We'll probably have to handle numbering and cross-references in a post-processing step.
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+Of course, inline math like $\Omega > 0$ and \( x^2 - 2 \equiv 0 \) should also work fine.
+
+\begin{align}
+x^2 + y^2 &= 1
+\\ y &= \sqrt{1 - x^2}.
+\end{align}
+
+Maxwell's Equations:
+\begin{equation}
+\begin{aligned}
+\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} & = \frac{4\pi}{c}\vec{\mathbf{j}} \\   \nabla \cdot \vec{\mathbf{E}} & = 4 \pi \rho \\
+\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} & = \vec{\mathbf{0}} \\
+\nabla \cdot \vec{\mathbf{B}} & = 0
+\end{aligned}
+\end{equation}
+
+\begin{equation*}
+\left.\begin{aligned}
+dE  &= \rho \\
+d*E &= -\dot{B} \\
+dB &= 0 \\
+d*B &= J + \dot{E}
+\end{aligned}
+\right\}
+\qquad \text{Maxwell's equations}
+\end{equation*}
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\begin{multline}
+a+b+c+d+e+f\\
++i+j+k+l+m+n
+\end{multline}
