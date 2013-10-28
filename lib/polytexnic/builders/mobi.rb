@@ -13,7 +13,11 @@ module Polytexnic
         # Because of the way kindlegen uses tempfiles, testing for the
         # actual generation of the MOBI causes an error, so we just
         # check the command.
-        Polytexnic.test? ? command : system(command)
+        if options[:quiet] || options[:silent]
+          silence { Polytexnic.test? ? command : system(command) }
+        else
+          Polytexnic.test? ? command : system(command)
+        end
       end
 
       private

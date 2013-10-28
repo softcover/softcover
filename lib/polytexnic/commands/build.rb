@@ -6,29 +6,34 @@ module Polytexnic
 
       def for_format(format, options={})
         raise 'Invalid format' unless Polytexnic::FORMATS.include?(format)
-        puts "Building #{format.upcase}..."
+        building_message(format.upcase, options)
         builder_for(format).build!(options)
-        puts "Done."
-        if format == 'html'
-          puts "Tralics debug information ouput to log/tralics.log"
+        if format == 'html' && !(options[:silent] || options[:quiet])
+          puts "LaTeX-to-XML debug information output to log/tralics.log"
         end
       end
 
-      def all_formats
-        puts 'Building all formats...'
+      def all_formats(options={})
+        building_message('all formats', options)
         Polytexnic::BUILD_ALL_FORMATS.each do |format|
-          builder_for(format).build!
+          builder_for(format).build!(options)
         end
       end
 
-      def preview
-        puts 'Building preview...'
+      def preview(options={})
+        building_message('preview', options)
         builder_for('preview').build!
       end
 
       def builder_for(format)
         "Polytexnic::Builders::#{format.titleize}".constantize.new
       end
+
+      private
+
+        def building_message(content, options={})
+          puts "Building #{content}..." unless options[:silent]
+        end
     end
   end
 end

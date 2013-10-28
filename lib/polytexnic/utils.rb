@@ -122,5 +122,13 @@ module Polytexnic::Utils
   def execute(command)
     Polytexnic.test? ? system(command) : exec(command)
   end
+
+  def silence
+    return yield if ENV['silence'] == 'false'
+
+    silence_stream(STDOUT) do
+      yield
+    end
+  end
 end
 
