@@ -138,9 +138,16 @@ body #book {
   color: #002f72;
 }
 
-#book .figure {
+#book .graphics.image {
   text-align: center;
+}
+
+#book .graphics.image img {
   margin-top: 2em;
+}
+
+#book .graphics.image.box img {
+  border: 1px solid #666;
 }
 
 #book .table {
@@ -155,10 +162,6 @@ body #book {
 
 #book .center {
   text-align: center;
-}
-
-#book .figure img {
-  border: 1px solid #666;
 }
 
 #book .displaymath {
