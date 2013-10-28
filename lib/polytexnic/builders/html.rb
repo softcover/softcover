@@ -86,8 +86,10 @@ module Polytexnic
       def converted_html(basename)
         polytex_filename = basename + '.tex'
         polytex = File.read(polytex_filename)
+        # Replace the includes with the file contents, padding with a trailing
+        # newline for safety.
         polytex.gsub!(/(^\s*\\include{(.*?)})/) do
-          File.read($2 + '.tex')
+          File.read($2 + '.tex') + "\n"
         end
         cc = Polytexnic.custom_styles
         Polytexnic::Core::Pipeline.new(polytex, custom_commands: cc).to_html

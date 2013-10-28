@@ -58,7 +58,8 @@ describe Polytexnic::Builders::Epub do
 
         it "should have the right TOC chapter refs" do
           toc_refs = doc.css('itemref').map { |node| node['idref'] }
-          expect(toc_refs).to eq %w[cover frontmatter a_chapter another_chapter]
+          expect(toc_refs).to eq %w[cover frontmatter a_chapter another_chapter
+                                    yet_another_chapter]
         end
 
         it "should have the right title" do
@@ -108,8 +109,9 @@ describe Polytexnic::Builders::Epub do
       it { should exist }
 
       it "should contain the right filenames in the right order" do
-        filenames = ['frontmatter_fragment.html', 'a_chapter_fragment.html',
-                     'another_chapter_fragment.html']
+        filenames = %w[frontmatter_fragment.html a_chapter_fragment.html
+                       another_chapter_fragment.html
+                       yet_another_chapter_fragment.html]
         source_files = doc.css('content').map { |node| node['src'] }
         expect(source_files).to eql(filenames)
       end
