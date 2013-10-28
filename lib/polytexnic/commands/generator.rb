@@ -5,7 +5,8 @@ module Polytexnic
       include Polytexnic::Output
       extend self
 
-      def generate_directory(name, options = {})
+      # Generates the default book file tree.
+      def generate_file_tree(name, options = {})
         @name = name
         @markdown = options[:markdown]
         @simple   = options[:simple]
@@ -87,12 +88,14 @@ module Polytexnic
         @simple
       end
 
+      # Returns a list of all the files and directories used to build the book.
       def all_files_and_directories
         f = files_directories_maybe_markdown
         simple? ? f.reject { |p| p =~ /\/book\.tex/ || p =~ /preface/ }
                 : f.reject { |p| p =~ /simple/ }
       end
 
+      # Returns the files and directories based on the input format.
       def files_directories_maybe_markdown
         fds = Dir.glob(File.join(template_dir, "**/*"), File::FNM_DOTMATCH)
         if markdown?
@@ -104,10 +107,12 @@ module Polytexnic
         end
       end
 
+      # Returns just the directories used for building the book.
       def directories
         all_files_and_directories.select { |path| File.directory?(path) }
       end
 
+      # Returns just the files (not directories) used for building the book.
       def files
         all_files_and_directories.reject { |path| File.directory?(path) }
       end

@@ -23,6 +23,7 @@ module Polytexnic
         move_epub
       end
 
+      # Returns true if generating a book preview.
       def preview?
         !!@preview
       end
@@ -53,15 +54,20 @@ module Polytexnic
         File.write(path('epub/META-INF/container.xml'), container_xml)
       end
 
+      # Writes the content.opf file.
+      # This is required by the EPUB standard.
       def write_contents
         File.write(path('epub/OEBPS/content.opf'), content_opf)
       end
 
-      # Returns the chapters to write (to account for previews).
+      # Returns the chapters to write (accounting for previews).
       def chapters
         preview? ? manifest.preview_chapters : manifest.chapters
       end
 
+      # Writes the HTML for the EPUB.
+      # Included is a math detector that processes the page with MathJax
+      # (via page.js) so that math can be included in EPUB (and thence MOBI).
       def write_html(options={})
         images_dir  = File.join('epub', 'OEBPS', 'images')
         texmath_dir = File.join(images_dir, 'texmath')
@@ -98,24 +104,20 @@ module Polytexnic
         end
       end
 
-      # Returns HTML for source with math.
+      # Returns HTML for HTMLT source that includes math.
       # As a side-effect, html_with_math creates PNGs corresponding to any
       # math in the given source. The technique involves using PhantomJS to
       # hit the HTML source for each page containing math to create SVGs
       # for every math element. Since ereader support for SVGs is spotty,
       # they are then converted to PNGs using Inkscape. The filenames are
       # SHAs of their contents, which arranges both for unique filenames
-      # and for automatic caching.
+      # and for automatic disk caching.
       def html_with_math(chapter, images_dir, texmath_dir, pngs, options={})
         content = File.read(File.join("html", "#{chapter.slug}.html"))
         pagejs = "#{File.dirname(__FILE__)}/utils/page.js"
         url = "file://#{Dir.pwd}/html/#{chapter.slug}.html"
         cmd = "#{phantomjs} #{pagejs} #{url}"
-        if options[:quiet] || options[:silent]
-          silence { silence_stream(STDERR) { system cmd } }
-        else
-          silence_stream(STDERR) { system cmd }
-        end
+        silence { silence_stream(STDERR) { system cmd } }
         # Sometimes in tests the phantomjs_source.html file is missing.
         # It shouldn't ever happen, but it does no harm to skip it.
         return nil unless File.exist?('phantomjs_source.html')
@@ -188,7 +190,10 @@ module Polytexnic
       end
 
       # Returns true if a string appears to have LaTeX math.
-      # We detect opening math commands: \(, \[, and \begin{equation}
+      # We detect math via opening math commands: \(, \[, and \begin{equation}
+      # This gives a false positive when math is included in verbatim
+      # environments and nowhere else, but it does little harm (requiring only
+      # an unnecessary call to page.js).
       def math?(string)
         !!string.match(/(?:\\\(|\\\[|\\begin{equation})/)
       end
@@ -239,7 +244,7 @@ module Polytexnic
         end
       end
 
-      # Move the EPUB to the ebooks directory.
+      # Move the completed EPUB book to the `ebooks` directory.
       # Note that we handle the case of a preview book as well.
       def move_epub
         origin = manifest.filename
@@ -248,10 +253,14 @@ module Polytexnic
                      File.join('ebooks', "#{target}.epub"))
       end
 
+      # Writes the Table of Contents.
+      # This is required by the EPUB standard.
       def write_toc
         File.write('epub/OEBPS/toc.ncx', toc_ncx)
       end
 
+      # Writes the navigation file.
+      # This is required by the EPUB standard.
       def write_nav
         File.write('epub/OEBPS/nav.html', nav_html)
       end
@@ -322,7 +331,7 @@ module Polytexnic
 )
       end
 
-      # Returns the cover page, cover.html.
+      # Returns the cover page via cover.html.
       def cover_page
 %(<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html>

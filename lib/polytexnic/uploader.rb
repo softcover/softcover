@@ -2,7 +2,7 @@ module Polytexnic
   class Uploader
     include Polytexnic::Utils
 
-    # takes response from S3 upload signature generation API endpoint
+    # Takes response from S3 upload signature generation API endpoint.
     def initialize(res)
       @params = res['upload_params']
       @bucket = res['bucket']

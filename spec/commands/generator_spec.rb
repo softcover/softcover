@@ -7,7 +7,7 @@ describe Polytexnic::Commands::Generator do
     before(:all) do
       chdir_to_non_book
       @name = 'foo_bar'
-      Polytexnic::Commands::Generator.generate_directory @name
+      Polytexnic::Commands::Generator.generate_file_tree @name
     end
 
     let(:name) { @name }
@@ -135,7 +135,7 @@ describe Polytexnic::Commands::Generator do
     before(:all) do
       chdir_to_non_book
       @name = 'foo_bar'
-      Polytexnic::Commands::Generator.generate_directory @name, simple: true
+      Polytexnic::Commands::Generator.generate_file_tree @name, simple: true
     end
 
     let(:name) { @name }
@@ -189,7 +189,7 @@ describe Polytexnic::Commands::Generator do
     before(:all) do
       chdir_to_non_book
       @name = 'foo_bar'
-      Polytexnic::Commands::Generator.generate_directory @name, markdown: true
+      Polytexnic::Commands::Generator.generate_file_tree @name, markdown: true
     end
 
     let(:name) { @name }
@@ -237,7 +237,7 @@ describe Polytexnic::Commands::Generator do
       $stdin.should_receive(:gets).and_return("a")
 
       silence do
-        2.times { Polytexnic::Commands::Generator.generate_directory name }
+        2.times { Polytexnic::Commands::Generator.generate_file_tree name }
       end
     end
 

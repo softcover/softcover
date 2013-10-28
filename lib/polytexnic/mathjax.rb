@@ -52,7 +52,7 @@ module Polytexnic
       end
 
       # Extracts and formats the macros from the given string of style commands.
-      # The output format is compatible with the macros configuration described
+      # The output format is compatible with the macro configuration described
       # at http://docs.mathjax.org/en/latest/tex.html.
       def self.extract_macros(styles)
         # For some reason, \ensuremath doesn't work in MathJax, so remove it.
