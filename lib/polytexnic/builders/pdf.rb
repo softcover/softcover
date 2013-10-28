@@ -14,6 +14,13 @@ module Polytexnic
         # Build the PolyTeX filename so it accepts both 'foo' and 'foo.tex'.
         basename = File.basename(@manifest.filename, '.tex')
         book_filename = basename + '.tex'
+
+        # In debug mode, execute the raw xelatex and exit.
+        if options[:debug]
+          execute "#{xelatex} #{book_filename}"
+          return    # only gets called in test env
+        end
+
         polytex_filenames = @manifest.chapter_file_paths << book_filename
         polytex_filenames.delete('chapters/frontmatter.tex')
         polytex_filenames.each do |filename|

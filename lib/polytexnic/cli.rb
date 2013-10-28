@@ -16,8 +16,12 @@ module Polytexnic
 
     Polytexnic::FORMATS.each do |format|
       desc "build:#{format}", "Build #{format.upcase}"
+      if format == 'pdf'
+        method_option :debug, aliases: '-d',
+          desc: "Run raw xelatex for debugging purposes", type: :boolean
+      end
       define_method "build:#{format}" do
-        Polytexnic::Commands::Build.for_format format
+        Polytexnic::Commands::Build.for_format format, options
       end
     end
 
