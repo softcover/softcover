@@ -9,6 +9,7 @@ module Polytexnic
         if markdown_directory?
           @manifest = Polytexnic::BookManifest.new(source: :polytex)
         end
+        remove_html
         create_directories
         write_mimetype
         write_container_xml
@@ -26,28 +27,34 @@ module Polytexnic
         !!@preview
       end
 
+      # Removes HTML.
+      # All the HTML is generated, so this clears out any unused files.
+      def remove_html
+        FileUtils.rm(Dir.glob(path('epub/OEBPS/html/*.html')))
+      end
+
       def create_directories
         mkdir('epub')
-        mkdir('epub/OEBPS')
-        mkdir('epub/OEBPS/styles')
-        mkdir('epub/META-INF')
+        mkdir(path('epub/OEBPS'))
+        mkdir(path('epub/OEBPS/styles'))
+        mkdir(path('epub/META-INF'))
         mkdir('ebooks')
       end
 
       # Writes the mimetype file.
       # This is required by the EPUB standard.
       def write_mimetype
-        File.write('epub/mimetype', 'application/epub+zip')
+        File.write(path('epub/mimetype'), 'application/epub+zip')
       end
 
       # Writes the container XML file.
       # This is required by the EPUB standard.
       def write_container_xml
-        File.write('epub/META-INF/container.xml', container_xml)
+        File.write(path('epub/META-INF/container.xml'), container_xml)
       end
 
       def write_contents
-        File.write('epub/OEBPS/content.opf', content_opf)
+        File.write(path('epub/OEBPS/content.opf'), content_opf)
       end
 
       # Returns the chapters to write (to account for previews).
@@ -61,13 +68,13 @@ module Polytexnic
         mkdir images_dir
         mkdir texmath_dir
 
-        File.write(File.join('epub', 'OEBPS', 'cover.html'), cover_page)
+        File.write(path('epub/OEBPS/cover.html'), cover_page)
 
         pngs = []
         chapters.each_with_index do |chapter, i|
-          source_filename = File.join('epub', 'OEBPS', chapter.fragment_name)
-          File.open(source_filename, 'w') do |f|
-            content = File.read(File.join("html", chapter.fragment_name))
+          target_filename = path("epub/OEBPS/#{chapter.fragment_name}")
+          File.open(target_filename, 'w') do |f|
+            content = File.read(path("html/#{chapter.fragment_name}"))
 
             doc = strip_attributes(Nokogiri::HTML(content))
             inner_html = doc.at_css('body').children.to_xhtml
@@ -81,7 +88,7 @@ module Polytexnic
           end
         end
         # Clean up unused PNGs.
-        png_files = Dir[File.join(texmath_dir, '*.png')]
+        png_files = Dir[path("#{texmath_dir}/*.png")]
         (png_files - pngs).each do |f|
           if File.exist?(f)
             puts "Removing unused PNG #{f}"
