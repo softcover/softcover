@@ -15,7 +15,7 @@ module Polytexnic
         basename = File.basename(@manifest.filename, '.tex')
         book_filename = basename + '.tex'
 
-        # In debug mode, execute the raw xelatex and exit.
+        # In debug mode, execute `xelatex` and exit.
         if options[:debug]
           execute "#{xelatex} #{book_filename}"
           return    # only gets called in test env
@@ -40,12 +40,12 @@ module Polytexnic
         copy_polytexnic_sty
         build_pdf = "#{xelatex} #{Polytexnic::Utils.tmpify(book_filename)}"
         # Run the command twice to guarantee up-to-date cross-references.
-        # Including the `mv` in the command is necessary because `execute`
+        # Renaming the PDF in the command is necessary because `execute`
         # below uses `exec` (except in tests, where it breaks). Since `exec`
-        # causes the Ruby process to end, any commands executed after `exec`
-        # would be ignored. The reason for using `exec`
-        # is so that LaTeX errors get emitted to the screen rather than just
-        # hanging the process.
+        # causes the Ruby process to end, any Ruby code after `exec`
+        # is ignored.
+        # (The reason for using `exec` is so that LaTeX errors get emitted to
+        # the screen rather than just hanging the process.
         cmd = "#{build_pdf} ; #{build_pdf} ; #{rename_pdf(basename)}"
         # Here we use `system` when making a preview because the preview command
         # needs to run after the main PDF build.
@@ -58,6 +58,9 @@ module Polytexnic
 
       private
 
+        # Returns the `xelatex` executable.
+        # The `xelatex` program is roughly equivalent to the more standard
+        # `pdflatex`, but has better support for Unicode.
         def xelatex
           filename = `which xelatex`.chomp
           message  = "Install LaTeX (http://latex-project.org/ftp.html)"
@@ -65,7 +68,7 @@ module Polytexnic
         end
 
         # Returns the command to rename the temp PDF.
-        # The purpose is to matche the original filename.
+        # The purpose is to match the original filename.
         # For example, foo_bar.tex should produce foo_bar.pdf.
         # While we're at it, we move it to the standard ebooks/ directory.
         def rename_pdf(basename)

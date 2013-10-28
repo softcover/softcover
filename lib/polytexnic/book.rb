@@ -76,6 +76,7 @@ class Polytexnic::Book
     "#{@client.host}/books/#{slug}"
   end
 
+  # Opens the book in the browser (OS X–only).
   def open_in_browser
     `open #{url}`
   end

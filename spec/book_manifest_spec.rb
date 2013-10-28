@@ -7,6 +7,7 @@ describe Polytexnic::BookManifest do
     subject(:manifest) { Polytexnic::BookManifest.new }
 
     context "in valid book directory" do
+
       describe "basic information" do
         its(:title) { should eq "book" }
         its(:subtitle) { should eq "Change-me" }

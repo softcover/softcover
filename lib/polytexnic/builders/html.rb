@@ -9,11 +9,7 @@ module Polytexnic
         unless File.directory?(path('html/stylesheets'))
           Dir.mkdir path('html/stylesheets')
         end
-        # It's safe to remove HTML files in the html/ directory,
-        # as they are always generated. This also arranges to clear
-        # out unused HTML files, as happens when, e.g., the name of a
-        # LaTeX chapter file changes.
-        FileUtils.rm(Dir.glob(path('html/*.html')))
+        clean!
       end
 
       def build(options = {})
@@ -97,6 +93,9 @@ module Polytexnic
         Polytexnic::Core::Pipeline.new(polytex, custom_commands: cc).to_html
       end
 
+      # Writes the full HTML file for the book.
+      # The resulting file is a self-contained HTML document suitable
+      # for viewing in isolation.
       def write_full_html_file(basename, file_content)
         html_filename = File.join('html', basename + '.html')
         File.open(html_filename, 'w') do |f|
@@ -110,6 +109,9 @@ module Polytexnic
         built_files.push html_filename
       end
 
+      # Writes the full HTML file for each chapter.
+      # The resulting files are self-contained HTML documents suitable
+      # for viewing in isolation.
       def write_chapter_html_files(html, erb_file)
         reference_cache = split_into_chapters(html)
         target_cache = build_target_cache(html)
@@ -120,7 +122,7 @@ module Polytexnic
         end
       end
 
-      # Split the full XML document into chapters.
+      # Splits the full XML document into chapters.
       def split_into_chapters(xml)
         chapter_number = 0
         current_chapter = manifest.chapters.first
@@ -144,6 +146,7 @@ module Polytexnic
         reference_cache
       end
 
+      # Writes the frontmatter pseudo-chapter.
       def write_frontmatter_file(xml, id)
         if element = xml.at_css("div##{id}")
           File.write("html/#{id}_fragment.html", element.to_xhtml)
@@ -160,6 +163,7 @@ module Polytexnic
         end
       end
 
+      # Updates the book's cross-references.
       def update_cross_references(chapter, ref_map, target_cache)
         chapter.nodes.each do |node|
           node.css('a.hyperref').each do |ref_node|
@@ -199,7 +203,11 @@ module Polytexnic
       end
 
       def clean!
-        FileUtils.rm_rf "html"
+        # It's safe to remove HTML files in the html/ directory,
+        # as they are regenerated every time the book gets built.
+        # This also arranges to clear out unused HTML files, as happens when,
+        # e.g., the name of a LaTeX chapter file changes.
+        FileUtils.rm(Dir.glob(path('html/*.html')))
       end
     end
   end

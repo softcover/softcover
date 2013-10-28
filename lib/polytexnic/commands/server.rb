@@ -6,6 +6,7 @@ module Polytexnic::Commands::Server
   attr_accessor :no_listener
   extend self
 
+  # Listens for changes to the book's source files.
   def listen_for_changes
     return if defined?(@no_listener) && @no_listener
     server_pid = Process.pid

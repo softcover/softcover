@@ -4,6 +4,7 @@ module Polytexnic
       include Polytexnic::Output
       extend self
 
+      # Builds the book for the given format.
       def for_format(format, options={})
         raise 'Invalid format' unless Polytexnic::FORMATS.include?(format)
         building_message(format.upcase, options)
@@ -13,26 +14,35 @@ module Polytexnic
         end
       end
 
+      # Builds the book for all formats.
       def all_formats(options={})
         building_message('all formats', options)
         Polytexnic::BUILD_ALL_FORMATS.each do |format|
+          if format == 'mobi'
+            building_message('EPUB & MOBI', options)
+          else
+            building_message(format.upcase, options)
+          end
           builder_for(format).build!(options)
         end
       end
 
+      # Builds the book preview.
       def preview(options={})
         building_message('preview', options)
         builder_for('preview').build!
       end
 
+      # Returns the builder for the given format.
       def builder_for(format)
         "Polytexnic::Builders::#{format.titleize}".constantize.new
       end
 
       private
 
-        def building_message(content, options={})
-          puts "Building #{content}..." unless options[:silent]
+        # Shows a message when building a particular format.
+        def building_message(format, options={})
+          puts "Building #{format}..." unless options[:silent]
         end
     end
   end

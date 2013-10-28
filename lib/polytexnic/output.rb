@@ -19,7 +19,8 @@ module Polytexnic::Output
     end
 
     def should_output?(level)
-      !silent? || !(level && defined?(@verbosity_level) && level < @verbosity_level)
+      !silent? ||
+      !(level && defined?(@verbosity_level) && level < @verbosity_level)
     end
   end
 
