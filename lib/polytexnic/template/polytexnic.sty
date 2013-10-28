@@ -27,12 +27,6 @@
 \usepackage[hyperfootnotes=false]{hyperref}
 \hypersetup{hyperfootnotes=false}
 
-\usepackage{caption}
-\DeclareCaptionFormat{listing}{\colorbox[gray]{.85}{\parbox{0.987\textwidth}{#1#2#3}}\vspace{-1.3\baselineskip}}
-\captionsetup[listing]{format=listing,labelfont=bf,skip=20pt}
-\DeclareCaptionType{listing}[Listing][List of listing]
-\newcommand{\codecaption}[1]{\captionof{listing}{#1}}
-
 % Support strikethrough (via \sout{text})
 \usepackage[normalem]{ulem}
 
@@ -68,7 +62,7 @@
 \usepackage{upquote}
 
 % Filesystem paths
-\newcommand{\fpath}[1]{\texttt{\small #1}}
+\newcommand{\filepath}[1]{\texttt{\small #1}}
 
 % Size-constrained images
 \newcommand{\image}[1]{\fbox{\includegraphics[width=0.95\textwidth]{#1}}}
@@ -81,8 +75,8 @@
   \MakeFramed {\advance\hsize-\width
     \@totalleftmargin\z@ \linewidth\hsize
     \advance\labelsep\fboxsep
-    \@setminipage}%
- }{\par\unskip\@minipagefalse\endMakeFramed}
+    \@setminipage\vspace{0.3em}}%
+ }{\vspace{-0.6em}\par\unskip\@minipagefalse\endMakeFramed}
 
 \newenvironment{full_framed_shaded}{%
   \def\FrameCommand{\fboxsep=\FrameSep\fcolorbox{boxcolor}{shadecolor}}%
@@ -98,6 +92,19 @@
     \@totalleftmargin\z@ \linewidth\hsize
     \@setminipage}%
  }{\par\unskip\@minipagefalse\endMakeFramed}
+
+% Codelistings
+\newcounter{codelisting}
+\numberwithin{codelisting}{chapter}
+%\setcounter{listing_count}{0}
+\newenvironment{codelisting}{\refstepcounter{codelisting}\begin{framed_shaded}\vspace{-0.5em}}%
+{\end{framed_shaded}}
+% Codelisting captions
+\usepackage{caption}
+\DeclareCaptionFormat{listing}{\hspace{-0.2em}\colorbox[gray]{.85}{\hspace{0.1em}\parbox{0.997\textwidth}{#1#2#3}}\vspace{-1.3\baselineskip}}
+\captionsetup[listing]{format=listing,labelfont=bf,skip=16pt}
+\DeclareCaptionType{listing}
+\newcommand{\codecaption}[1]{\captionof{listing}{#1}}
 
 % Aside boxes
 \usepackage{framed}
