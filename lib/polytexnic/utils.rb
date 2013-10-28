@@ -109,6 +109,13 @@ module Polytexnic::Utils
     FileUtils.rm(file) if File.exist?(file)
   end
 
+  # Returns the system-independent file path.
+  # It's nicer to write `path('foo/bar/baz')` than
+  # `File.join('foo', 'bar', 'baz')`.
+  def path(path_string)
+    File.join(*path_string.split('/'))
+  end
+
   # Execute a command.
   # The issue here is that `exec` is awful in tests, since it exits the process.
   # This command arranges to use `system` in tests instead.
