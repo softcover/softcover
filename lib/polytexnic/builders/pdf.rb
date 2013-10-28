@@ -24,7 +24,7 @@ module Polytexnic
         polytex_filenames = @manifest.chapter_file_paths << book_filename
         polytex_filenames.delete('chapters/frontmatter.tex')
         polytex_filenames.each do |filename|
-          puts filename
+          puts filename unless options[:quiet] || options[:silent]
           polytex = File.open(filename) { |f| f.read }
           latex   = Polytexnic::Core::Pipeline.new(polytex).to_latex
           if filename == book_filename
@@ -47,7 +47,13 @@ module Polytexnic
         # is so that LaTeX errors get emitted to the screen rather than just
         # hanging the process.
         cmd = "#{build_pdf} ; #{build_pdf} ; #{rename_pdf(basename)}"
-        options[:preview] ? system(cmd) : execute(cmd)
+        # Here we use `system` when making a preview because the preview command
+        # needs to run after the main PDF build.
+        if options[:quiet] || options[:silent]
+          silence { options[:preview] ? system(cmd) : execute(cmd) }
+        else
+          options[:preview] ? system(cmd) : execute(cmd)
+        end
       end
 
       private

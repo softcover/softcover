@@ -9,8 +9,12 @@ module Polytexnic
     # ===============================================
 
     desc 'build, build:all', 'Build all formats'
+    method_option :quiet, aliases: '-q',
+                          desc: "Quiet output", type: :boolean
+    method_option :silent, aliases: '-s',
+                           desc: "Silent output", type: :boolean
     def build
-      Polytexnic::Commands::Build.all_formats
+      Polytexnic::Commands::Build.all_formats(options)
     end
     map "build:all" => "build"
 
@@ -18,8 +22,13 @@ module Polytexnic
       desc "build:#{format}", "Build #{format.upcase}"
       if format == 'pdf'
         method_option :debug, aliases: '-d',
-          desc: "Run raw xelatex for debugging purposes", type: :boolean
+                              desc: "Run raw xelatex for debugging purposes",
+                              type: :boolean
       end
+      method_option :quiet, aliases: '-q',
+                            desc: "Quiet output", type: :boolean
+      method_option :silent, aliases: '-s',
+                             desc: "Silent output", type: :boolean
       define_method "build:#{format}" do
         Polytexnic::Commands::Build.for_format format, options
       end
@@ -29,8 +38,12 @@ module Polytexnic
     # Preview
     # ===============================================
     desc "build:preview", "Build book preview in all formats"
+    method_option :quiet, aliases: '-q',
+                          desc: "Quiet output", type: :boolean
+    method_option :silent, aliases: '-s',
+                           desc: "Silent output", type: :boolean
     define_method "build:preview" do
-      Polytexnic::Commands::Build.preview
+      Polytexnic::Commands::Build.preview(options)
     end
 
     # ===============================================

@@ -16,10 +16,10 @@ module Polytexnic
         write_toc
         write_nav
         copy_image_files
-        write_html
+        write_html(options)
         write_contents
         create_style_files
-        make_epub
+        make_epub(options)
         move_epub
       end
 
@@ -62,7 +62,7 @@ module Polytexnic
         preview? ? manifest.preview_chapters : manifest.chapters
       end
 
-      def write_html
+      def write_html(options={})
         images_dir  = File.join('epub', 'OEBPS', 'images')
         texmath_dir = File.join(images_dir, 'texmath')
         mkdir images_dir
@@ -79,7 +79,8 @@ module Polytexnic
             doc = strip_attributes(Nokogiri::HTML(content))
             inner_html = doc.at_css('body').children.to_xhtml
             if math?(inner_html)
-              html = html_with_math(chapter, images_dir, texmath_dir, pngs)
+              html = html_with_math(chapter, images_dir, texmath_dir, pngs,
+                                    options)
               next if html.nil?
             else
               html = inner_html
@@ -91,7 +92,7 @@ module Polytexnic
         png_files = Dir[path("#{texmath_dir}/*.png")]
         (png_files - pngs).each do |f|
           if File.exist?(f)
-            puts "Removing unused PNG #{f}"
+            puts "Removing unused PNG #{f}" unless options[:silent]
             FileUtils.rm(f)
           end
         end
@@ -105,12 +106,16 @@ module Polytexnic
       # they are then converted to PNGs using Inkscape. The filenames are
       # SHAs of their contents, which arranges both for unique filenames
       # and for automatic caching.
-      def html_with_math(chapter, images_dir, texmath_dir, pngs)
+      def html_with_math(chapter, images_dir, texmath_dir, pngs, options={})
         content = File.read(File.join("html", "#{chapter.slug}.html"))
         pagejs = "#{File.dirname(__FILE__)}/utils/page.js"
         url = "file://#{Dir.pwd}/html/#{chapter.slug}.html"
         cmd = "#{phantomjs} #{pagejs} #{url}"
-        silence_stream(STDERR) { system cmd }
+        if options[:quiet] || options[:silent]
+          silence { silence_stream(STDERR) { system cmd } }
+        else
+          silence_stream(STDERR) { system cmd }
+        end
         # Sometimes in tests the phantomjs_source.html file is missing.
         # It shouldn't ever happen, but it does no harm to skip it.
         return nil unless File.exist?('phantomjs_source.html')
@@ -140,7 +145,7 @@ module Polytexnic
           png_filename = svg_filename.sub('.svg', '.png')
           pngs << png_filename
           unless File.exist?(png_filename)
-            puts "Creating #{png_filename}"
+            puts "Creating #{png_filename}" unless options[:silent]
             svg_height = svg['style'].scan(/height: (.*?);/).flatten.first
             scale_factor = 9   # This scale factor turns out to look good.
             h = scale_factor * svg_height.to_f
@@ -215,7 +220,7 @@ module Polytexnic
       end
 
       # Make the EPUB, which is basically just a zipped HTML file.
-      def make_epub
+      def make_epub(options={})
         filename = manifest.filename
         zip_filename = filename + '.zip'
         base_file = "zip -X0    #{zip_filename} mimetype"
@@ -224,10 +229,13 @@ module Polytexnic
         main_info = "#{zip} #{zip_filename} OEBPS    -x \*.DS_Store \*.gitkeep"
         rename = "mv #{zip_filename} #{filename}.epub"
         commands = [base_file, meta_info, main_info, rename]
-        commands.map! { |c| c += ' > /dev/null' } if Polytexnic.test?
-
+        command = commands.join(' && ')
         Dir.chdir('epub') do
-          system(commands.join(' && '))
+          if Polytexnic.test? || options[:quiet] || options[:silent]
+            silence { system(command) }
+          else
+            system(command)
+          end
         end
       end
 
