@@ -331,11 +331,6 @@ module Polytexnic
 )
       end
 
-<<<<<<< HEAD
-      # Returns the cover page via cover.html.
-=======
-      # Returns the cover page, cover.html.
->>>>>>> epub-mobi-covers-58727638
       def cover_page
 %(<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html>
