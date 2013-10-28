@@ -35,7 +35,7 @@ describe Polytexnic::BookManifest do
 
         describe "for third chapter" do
           subject(:chapter) { manifest.chapters[3] }
-          its(:title) { should eq 'Yet another' }
+          its(:title) { should eq 'Yet \emph{another} chapter' }
           its(:slug) { should eq "yet_another_chapter" }
           its(:chapter_number) { should eq 3 }
         end
