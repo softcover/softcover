@@ -3,7 +3,8 @@ module Polytexnic
     class Epub < Builder
       include Polytexnic::Output
 
-      def build!
+      def build!(options={})
+        @preview = options[:preview]
         Polytexnic::Builders::Html.new.build!
         if markdown_directory?
           @manifest = Polytexnic::BookManifest.new(source: :polytex)
@@ -18,7 +19,11 @@ module Polytexnic
         write_contents
         create_style_files
         make_epub
-        FileUtils.mv(File.join('epub', "#{manifest.filename}.epub"), 'ebooks')
+        move_epub
+      end
+
+      def preview?
+        !!@preview
       end
 
       def create_directories
@@ -45,6 +50,11 @@ module Polytexnic
         File.write('epub/OEBPS/content.opf', content_opf)
       end
 
+      # Returns the chapters to write (to account for previews).
+      def chapters
+        preview? ? manifest.preview_chapters : manifest.chapters
+      end
+
       def write_html
         images_dir  = File.join('epub', 'OEBPS', 'images')
         texmath_dir = File.join(images_dir, 'texmath')
@@ -54,10 +64,10 @@ module Polytexnic
         File.write(File.join('epub', 'OEBPS', 'cover.html'), cover_page)
 
         pngs = []
-        manifest.chapters.each_with_index do |chapter, i|
+        chapters.each_with_index do |chapter, i|
           source_filename = File.join('epub', 'OEBPS', chapter.fragment_name)
           File.open(source_filename, 'w') do |f|
-            content = File.read("html/#{chapter.fragment_name}")
+            content = File.read(File.join("html", chapter.fragment_name))
 
             doc = strip_attributes(Nokogiri::HTML(content))
             inner_html = doc.at_css('body').children.to_xhtml
@@ -214,6 +224,15 @@ module Polytexnic
         end
       end
 
+      # Move the EPUB to the ebooks directory.
+      # Note that we handle the case of a preview book as well.
+      def move_epub
+        origin = manifest.filename
+        target = preview? ? origin + '-preview' : origin
+        FileUtils.mv(File.join('epub',   "#{origin}.epub"),
+                     File.join('ebooks', "#{target}.epub"))
+      end
+
       def write_toc
         File.write('epub/OEBPS/toc.ncx', toc_ncx)
       end
@@ -237,10 +256,10 @@ module Polytexnic
         author = manifest.author
         copyright = manifest.copyright
         uuid = manifest.uuid
-        man_ch = manifest.chapters.map do |chapter|
+        man_ch = chapters.map do |chapter|
                    %(<item id="#{chapter.slug}" href="#{chapter.fragment_name}" media-type="application/xhtml+xml"/>)
                  end
-        toc_ch = manifest.chapters.map do |chapter|
+        toc_ch = chapters.map do |chapter|
                    %(<itemref idref="#{chapter.slug}"/>)
                  end
         image_files = Dir['epub/OEBPS/images/**/*'].select { |f| File.file?(f) }
@@ -309,7 +328,9 @@ module Polytexnic
       def toc_ncx
         title = manifest.title
         chapter_nav = []
-        manifest.chapters.each_with_index do |chapter, n|
+        offset = preview? ? manifest.preview_chapter_range.first : 0
+        chapters.each_with_index do |chapter, i|
+          n = i + offset
           chapter_nav << %(<navPoint id="#{chapter.slug}" playOrder="#{n+1}">)
           chapter_nav << %(    <navLabel><text>#{chapter_name(n)}</text></navLabel>)
           chapter_nav << %(    <content src="#{chapter.fragment_name}"/>)
@@ -334,7 +355,7 @@ module Polytexnic
       end
 
       def chapter_name(n)
-        n.zero? ? "Frontmatter" : "Chapter #{n}"
+        n == 0 ? "Frontmatter" : "Chapter #{n}"
       end
 
       # Returns the nav HTML content.

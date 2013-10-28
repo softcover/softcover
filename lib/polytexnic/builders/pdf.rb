@@ -3,12 +3,15 @@ module Polytexnic
     class Pdf < Builder
       include Polytexnic::Output
 
-      def build!
-        # Build the PolyTeX filename so it accepts both 'foo' and 'foo.tex'.
+      def build!(options={})
         if markdown_directory?
+          # Build the HTML to produce PolyTeX as a side-effect,
+          # and then update the manifest so to reduce PDF generation
+          # to a previously solved problem.
           Polytexnic::Builders::Html.new.build!
           @manifest = Polytexnic::BookManifest.new(source: :polytex)
         end
+        # Build the PolyTeX filename so it accepts both 'foo' and 'foo.tex'.
         basename = File.basename(@manifest.filename, '.tex')
         book_filename = basename + '.tex'
         polytex_filenames = @manifest.chapter_file_paths << book_filename
@@ -29,10 +32,16 @@ module Polytexnic
         write_pygments_file(:latex)
         copy_polytexnic_sty
         write_polytexnic_commands_file
-        cmd = "#{xelatex} #{Polytexnic::Utils.tmpify(book_filename)}"
+        build_pdf = "#{xelatex} #{Polytexnic::Utils.tmpify(book_filename)}"
         # Run the command twice to guarantee up-to-date cross-references.
-        system("#{cmd} && #{cmd}")
-        rename_pdf(basename)
+        # Including the `mv` in the command is necessary because `execute`
+        # below uses `exec` (except in tests, where it breaks). Since `exec`
+        # causes the Ruby process to end, any commands executed after `exec`
+        # would be ignored. The reason for using `exec`
+        # is so that LaTeX errors get emitted to the screen rather than just
+        # hanging the process.
+        cmd = "#{build_pdf} ; #{build_pdf} ; #{rename_pdf(basename)}"
+        options[:preview] ? system(cmd) : execute(cmd)
       end
 
       private
@@ -43,14 +52,15 @@ module Polytexnic
           @xelatex ||= executable(filename, message)
         end
 
-        # Renames the temp PDF so that it matches the original filename.
+        # Returns the command to rename the temp PDF.
+        # The purpose is to matche the original filename.
         # For example, foo_bar.tex should produce foo_bar.pdf.
         # While we're at it, we move it to the standard ebooks/ directory.
         def rename_pdf(basename)
           tmp_pdf = basename + '.tmp.pdf'
           pdf     = basename + '.pdf'
           mkdir('ebooks')
-          FileUtils.mv(tmp_pdf, File.join('ebooks', pdf))
+          "mv -f #{tmp_pdf} #{File.join('ebooks', pdf)}"
         end
 
         # Copies the PolyTeXnic style file to ensure it's always fresh.
