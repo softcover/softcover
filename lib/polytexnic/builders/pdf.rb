@@ -6,7 +6,7 @@ module Polytexnic
       def build!(options={})
         if markdown_directory?
           # Build the HTML to produce PolyTeX as a side-effect,
-          # and then update the manifest so to reduce PDF generation
+          # then update the manifest to reduce PDF generation
           # to a previously solved problem.
           Polytexnic::Builders::Html.new.build!
           @manifest = Polytexnic::BookManifest.new(source: :polytex)

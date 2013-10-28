@@ -60,6 +60,15 @@ describe Polytexnic::Builders::Pdf do
       it "should create a tmp LaTeX file" do
         expect(Polytexnic::Utils.tmpify('book.tex')).to exist
       end
+
+      describe "LaTeX file" do
+        subject(:content) { File.read(Polytexnic::Utils.tmpify('book.tex')) }
+        it { should_not be_empty }
+        it { should include '\includepdf{images/cover.pdf}' }
+        it { should include '\maketitle' }
+        it { should include '\tableofcontents' }
+        it { should include '\include{chapters/a_chapter.tmp}' }
+      end
     end
   end
 end
