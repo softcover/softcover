@@ -55,7 +55,7 @@ body #book {
 }
 
 #book code {
-  font-size: 130%;
+  font-size: 100%;
   color: darkgreen;
   font-weight: bold;
 }

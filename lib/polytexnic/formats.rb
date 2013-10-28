@@ -1,4 +1,4 @@
 module Polytexnic
-  FORMATS = %w{html pdf epub mobi}
-  BUILD_ALL_FORMATS = %w{pdf mobi}  # mobi calls epub, which calls html
+  FORMATS = %w{html epub mobi pdf}
+  BUILD_ALL_FORMATS = %w{mobi pdf}  # mobi calls epub, which calls html
 end
