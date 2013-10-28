@@ -1,6 +1,8 @@
+% This is a generated file. Do not edit.
+
 % Page size
-% These settings are optimized ebooks. Remove or comment out these lines
-% for a more print-friendly version.
+% These settings are optimized for ebooks.
+% If you want different settings, override them in custom.sty.
 \setlength{\oddsidemargin}{.25in}
 \setlength{\evensidemargin}{.25in}
 \setlength{\textheight}{8in}
@@ -15,6 +17,7 @@
 \usepackage{xcolor}
 % Include graphics
 \usepackage{graphicx}
+\def\maxwidth#1{\ifdim\Gin@nat@width>#1 #1\else\Gin@nat@width\fi}
 % Commands included by PolyTeXnic
 \usepackage{polytexnic_commands}
 % Syntax highlighting
@@ -67,7 +70,8 @@
 \newcommand{\filepath}[1]{\texttt{\small #1}}
 
 % Size-constrained images
-\newcommand{\image}[1]{\fbox{\includegraphics[width=0.95\textwidth]{#1}}}
+\newcommand{\image}[1]{\begin{center}\includegraphics[width=\maxwidth{0.95\textwidth}]{#1}\end{center}}
+\newcommand{\imagebox}[1]{\begin{center}\fbox{\includegraphics[width=\maxwidth{0.95\textwidth}]{#1}}\end{center}}
 
 \newenvironment{framed_shaded}{%
   \def\FrameCommand##1{\hskip\@totalleftmargin
