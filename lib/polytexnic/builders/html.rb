@@ -56,7 +56,7 @@ module Polytexnic
       # Writes the LaTeX files for a given Markdown chapter.
       def write_latex_files(chapter)
         path = File.join('markdown', chapter.slug + '.md')
-        cc = File.read('custom.sty')
+        cc = Polytexnic.custom_styles
         md = Polytexnic::Core::Pipeline.new(File.read(path), source: :md,
                                             custom_commands: cc)
         File.write(File.join("chapters", "#{chapter.slug}.tex"), md.polytex)
@@ -93,7 +93,7 @@ module Polytexnic
         polytex.gsub!(/(^\s*\\include{(.*?)})/) do
           File.read($2 + '.tex')
         end
-        cc = File.read('custom.sty')
+        cc = Polytexnic.custom_styles
         Polytexnic::Core::Pipeline.new(polytex, custom_commands: cc).to_html
       end
 

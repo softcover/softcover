@@ -38,6 +38,12 @@ module Polytexnic
 
   include Polytexnic::Utils
 
+  # Return the custom styles, if any.
+  def custom_styles
+    custom_file = 'custom.sty'
+    File.exist?(custom_file) ? File.read(custom_file) : ''
+  end
+
   def set_test_mode!
     @test_mode = true
   end

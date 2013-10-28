@@ -23,7 +23,7 @@ class Polytexnic::App < Sinatra::Base
   get '/main.js' do
     require 'coffee_script'
     @mathjax_src    = Polytexnic::Mathjax::AMS_HTML
-    @mathjax_config = Polytexnic::Mathjax.config
+    @mathjax_config = Polytexnic::Mathjax.escaped_config
     coffee erb :'main.js'
   end
 
