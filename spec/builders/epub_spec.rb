@@ -79,6 +79,20 @@ describe Polytexnic::Builders::Epub do
           expect(doc.to_xml).to match(/#{uuid}</)
         end
       end
+
+      context "stylesheets directory" do
+        it "should have a Pygments CSS file" do
+          expect('epub/OEBPS/styles/pygments.css').to exist
+        end
+
+        it "should have a page template file" do
+          expect('epub/OEBPS/styles/page-template.xpgt').to exist
+        end
+
+        it "should have a PolyTeXnic CSS file" do
+          expect('epub/OEBPS/styles/polytexnic.css').to exist
+        end
+      end
     end
 
     describe "spine toc" do

@@ -25,12 +25,12 @@ body #book {
 
 /* Title and subtitle */
 
-#book h1.title {
+#book .title {
   text-align: center;
   font-size: 250%;
 }
 
-#book h1.subtitle {
+#book .subtitle {
   border-top: none;
   padding-top: 0;
   margin: 0;
@@ -38,12 +38,12 @@ body #book {
   font-size: 140%;
 }
 
-#book h2.author {
+#book .author {
   margin-top: 1em;
   text-align: center;
 }
 
-#book h2.date {
+#book .date {
   margin-top: 1em;
   text-align: center;
 }
