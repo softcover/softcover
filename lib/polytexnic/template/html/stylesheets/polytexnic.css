@@ -96,14 +96,16 @@ body #book {
 
 #book .codelisting {
   width: 100%;
+  border: 1px solid #999;
+  background: #eee;
 }
 
 #book .codelisting .heading {
-  width: 100%;
+  width: 95%;
   background: #ccc;
-  padding-top: 0.1em;
-  padding-right: 0em;
-  padding-bottom: 0.1em;
+  margin-left: 0.2em;
+  margin-top: 0.2em;
+  padding-right: 1.4em;
   padding-left: 0.2em;
 }
 
@@ -305,10 +307,8 @@ body #book {
 }
 
 #book .highlight {
-  border: 1px solid #999;
   width: 100%;
   padding-right: 0.5px;
-  background: #eee;
 }
 
 #book .highlight .go {
