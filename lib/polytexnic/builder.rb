@@ -11,9 +11,9 @@ module Polytexnic
       write_polytexnic_commands_file
     end
 
-    def build!
+    def build!(options={})
       setup
-      build
+      build(options)
       verify
       self
     end
