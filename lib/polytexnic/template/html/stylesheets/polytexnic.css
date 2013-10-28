@@ -396,3 +396,7 @@ body #book {
   display: block;
   margin-top: 0.5em;
 }
+
+#book span.intersentencespace {
+  margin-right: 0.2em;
+}
