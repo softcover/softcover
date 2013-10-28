@@ -51,6 +51,8 @@ module Polytexnic
         mkdir images_dir
         mkdir texmath_dir
 
+        File.write(File.join('epub', 'OEBPS', 'cover.html'), cover_page)
+
         pngs = []
         manifest.chapters.each_with_index do |chapter, i|
           source_filename = File.join('epub', 'OEBPS', chapter.fragment_name)
@@ -265,6 +267,7 @@ module Polytexnic
         <dc:publisher>Softcover</dc:publisher>
         <dc:identifier id="BookID">urn:uuid:#{uuid}</dc:identifier>
         <meta property="dcterms:modified">#{Time.now.strftime('%Y-%m-%dT%H:%M:%S')}Z</meta>
+        <meta name="cover" content="img-cover-png"/>
     </metadata>
     <manifest>
         <item href="nav.html" id="nav" media-type="application/xhtml+xml" properties="nav"/>
@@ -273,13 +276,33 @@ module Polytexnic
         <item id="pygments.css" href="styles/pygments.css" media-type="text/css"/>
         <item id="polytexnic.css" href="styles/polytexnic.css" media-type="text/css"/>
         <item id="epub.css" href="styles/epub.css" media-type="text/css"/>
+        <item id="cover" href="cover.html" media-type="application/xhtml+xml"/>
         #{man_ch.join("\n")}
         #{images.join("\n")}
     </manifest>
     <spine toc="ncx">
+      <itemref idref="cover" linear="no" />
       #{toc_ch.join("\n")}
     </spine>
-  </package>)
+  </package>
+)
+      end
+
+      # Returns the cover page, cover.html.
+      def cover_page
+%(<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Cover</title>
+</head>
+<body>
+  <div id="cover">
+     <img width="573" height="800" src="images/cover.png" alt="cover image" />
+  </div>
+</body>
+</html>
+)
       end
 
       # Returns the Table of Contents for the spine.
@@ -306,7 +329,8 @@ module Polytexnic
     <navMap>
       #{chapter_nav.join("\n")}
     </navMap>
-</ncx>)
+</ncx>
+)
       end
 
       def chapter_name(n)
