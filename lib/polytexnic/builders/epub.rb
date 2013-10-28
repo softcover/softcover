@@ -175,6 +175,11 @@ module Polytexnic
 
         FileUtils.cp(File.join(html_styles, 'pygments.css'), epub_styles)
 
+        # Copy over the EPUB-specific CSS.
+        template_dir = File.join(File.dirname(__FILE__), '..', 'template')
+        epub_css = File.join(template_dir, epub_styles, 'epub.css')
+        FileUtils.cp(epub_css, epub_styles)
+
         # For some reason, EPUB books hate the #book id in the stylesheet,
         # so remove it.
         polytexnic_css = File.read(File.join(html_styles, 'polytexnic.css'))
@@ -267,6 +272,7 @@ module Polytexnic
         <item id="page-template.xpgt" href="styles/page-template.xpgt" media-type="application/vnd.adobe-page-template+xml"/>
         <item id="pygments.css" href="styles/pygments.css" media-type="text/css"/>
         <item id="polytexnic.css" href="styles/polytexnic.css" media-type="text/css"/>
+        <item id="epub.css" href="styles/epub.css" media-type="text/css"/>
         #{man_ch.join("\n")}
         #{images.join("\n")}
     </manifest>
@@ -341,6 +347,7 @@ module Polytexnic
           <title>#{title}</title>
           <link rel="stylesheet" href="styles/pygments.css" type="text/css" />
           <link rel="stylesheet" href="styles/polytexnic.css" type="text/css" />
+          <link rel="stylesheet" href="styles/epub.css" type="text/css" />
           <link rel="stylesheet" type="application/vnd.adobe-page-template+xml" href="styles/page-template.xpgt" />
         </head>
 

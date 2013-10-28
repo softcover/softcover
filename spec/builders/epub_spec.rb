@@ -92,6 +92,10 @@ describe Polytexnic::Builders::Epub do
         it "should have a PolyTeXnic CSS file" do
           expect('epub/OEBPS/styles/polytexnic.css').to exist
         end
+
+        it "should have an EPUB CSS file" do
+          expect('epub/OEBPS/styles/epub.css').to exist
+        end
       end
     end
 
