@@ -5,7 +5,7 @@ This is the first paragraph of the \PolyTeXnic\ template. It shows how to write 
 
 This is the \emph{second} paragraph, showing how to emphasize text.\footnote{\emph{This} is a footnote. It is numbered automatically.} You can also make text \textbf{bold} or \textit{italicized} (which looks the same as emphasized text).
 
-\emph{Note}: ``\PolyTeXnic'' is pronounced exactly like the English word \emph{polytechnic}, and ``\LaTeX'' is pronounced \emph{lay}-tech.
+\emph{Note}: ``\PolyTeXnic'' is pronounced exactly like the English word \emph{polytechnic}, and ``\LaTeX'' is pronounced \emph{lay}-tech (with ``tech'' as in ``technology'').\footnote{Pronunciations of ``\LaTeX'' differ, but \emph{lay}-tech is the one I prefer.}
 
 \section{A section}
 \label{sec:a_section}
@@ -39,7 +39,7 @@ end
 \end{code}
 \end{codelisting}
 
-Inline code can be indicated using the \verb+\kode+ command, as in \kode{current\_\-user}. If you prefer a plainer version of the same thing, you can use ``typewriter text'', as in \texttt{current\_\-user}.
+You can indicate inline code using the \verb+\kode+ command, as in \kode{current\_\-user}. If you prefer a plainer version of the same thing, you can use ``typewriter text'', as in \texttt{current\_\-user}.
 
 For words whose hypenation isn't built in, you can indicate an optional hyphen using \verb+\-+, which will only be used if necessary to make a clean line break (and even then only when producing PDFs):
 %= lang:latex
@@ -53,7 +53,7 @@ This also shows how to escape the underscore character using a backslash. This i
 
 \PolyTeXnic\ supports full mathematical typesetting, including inline math, such as $\phi^2 - \phi - 1 = 0$, and centered math, such as
 \[ \phi = \frac{1+\sqrt{5}}{2}. \]
-It also support cross-referenced equations, as in Eq.~\eqref{eq:golden_ratio} and Eq.~\eqref{eq:stokes_theorem}.
+It also supports cross-referenced equations, as in Eq.~\eqref{eq:golden_ratio} and Eq.~\eqref{eq:stokes_theorem}. HTML, EPUB, and MOBI math support comes via the amazing \href{http://www.mathjax.org/}{MathJax} JavaScript library, which includes the American Mathematical Society extensions (AMS-\LaTeX) as well as all the default \LaTeX\ math commands.
 
 \begin{equation}
 \label{eq:golden_ratio}
@@ -62,45 +62,56 @@ It also support cross-referenced equations, as in Eq.~\eqref{eq:golden_ratio} an
 
 \begin{equation}
 \label{eq:stokes_theorem}
-\int_\Omega d\omega = \int_{\partial\Omega} \omega \qquad{\text{Stokes's Theorem}}
+\int_\Omega d\omega = \int_{\partial\Omega} \omega \qquad{\text{Generalized Stokes's Theorem}}
 \end{equation}
 
 As with all \PolyTeXnic\ features, mathematical typesetting is fully supported in all output formats (HTML, EPUB, MOBI, and PDF). The only caveat is that, due to technical restrictions imposed by ereaders, math typesetting is a little uglier in EPUB \& MOBI.
 
-\PolyTeXnic\
+\section{Floats}
+\label{sec:floats}
 
-Include graphics like this:
+\PolyTeXnic\ supports \href{http://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions}{\emph{floats}} such as figures and tables, including numbered captions and linked cross-references. The defining quality of a float is that its placement isn't guaranteed, so you shouldn't in general assume it will be placed immediately after the text that precedes it. This \emph{will} be the case with HTML and related output, but \emph{not} in PDFs, where \TeX's state-of-the-art float placement algorithm is in charge.
+
+\subsection{Graphics and figures}
+\label{sec:graphics_and_figures}
+
+You can include raw graphics like this:
 
 \includegraphics{images/2011_michael_hartl.png}
 
+\noindent You can also include centered images like this:
+
 \image{images/2011_michael_hartl.png}
 
-Include code like this:
+\noindent Or put a box around it like so:
 
-%= lang:ruby
-\begin{code}
-def hello
-  "hello, world!"
-end
-\end{code}
+\imagebox{images/2011_michael_hartl.png}
 
-Make a code listing as in Listing~\ref{code:hello}.
+To turn it into a figure, use the \kode{figure} environment (Figure~\ref{fig:the_dude}).
 
-\begin{codelisting}
-\label{code:hello}
-\codecaption{A hello program in Ruby.}
-%= lang:ruby
-\begin{code}
-def hello
-  "hello, world!"
-end
-\end{code}
-\end{codelisting}
+\begin{figure}
+\imagebox{images/2011_michael_hartl.png}
+\caption{Some \href{http://michaelhartl.com/}{dude}.\label{fig:the_dude}}
+\end{figure}
 
-Typeset inline code using the \verb+\kode+ environment: \kode{foobar}.
+\subsection{Tables and tabular environments}
+\label{tables_and_tabular}
 
-\section{\emph{Bacon} ipsum}
-\label{sec:bacon_ipsum}
+\PolyTeXnic\ supports raw tables via the \kode{tabular} environment.
+
+\begin{tabular}{llll}
+\textbf{HTTP request} & \textbf{URL} & \textbf{Action} & \textbf{Purpose} \\ \hline
+
+\texttt{GET} & /users & \texttt{index} & page to list all users \\
+\texttt{GET} & /users/1 & \texttt{show} & page to show user with id \texttt{1}\\
+\texttt{GET} & /users/new & \texttt{new} & page to make a new user \\
+\texttt{POST} & /users & \texttt{create} & create a new user \\
+\texttt{GET} & /users/1/edit & \texttt{edit} & page to edit user with id \texttt{1} \\
+\texttt{PATCH} & /users/1 & \texttt{update} & update user with id \texttt{1}  \\
+\texttt{DELETE} & /users/1 & \texttt{destroy} & delete user with id \texttt{1}
+\end{tabular}
+
+To make a tabular environment into a full-blown table, with a number and a caption, you use the \kode{table} environment (Table~\ref{table:rails_actions}).
 
 \begin{table}
 \begin{tabular}{llll}
@@ -114,17 +125,9 @@ Typeset inline code using the \verb+\kode+ environment: \kode{foobar}.
 \texttt{PATCH} & /users/1 & \texttt{update} & update user with id \texttt{1}  \\
 \texttt{DELETE} & /users/1 & \texttt{destroy} & delete user with id \texttt{1}
 \end{tabular}
-\caption{HTTP stuff\label{table:foo}}
+\caption{The default \href{http://rubyonrails.org/}{Rails} actions.\label{table:rails_actions}}
 \end{table}
 
+\section{Miscellanea}
 
-Bacon ipsum dolor sit amet salami doner shoulder, brisket pork chop beef cow bacon strip steak filet mignon jerky bresaola turducken venison ham. Biltong meatloaf chuck rump pork loin. Pancetta fatback prosciutto shankle corned beef flank beef ribs tail tri-tip kielbasa drumstick. Andouille bacon pork drumstick meatball pig t-bone hamburger, ball tip meatloaf sausage.
-
-This is some math: $\int_a^b f'\,dx = f(b) - f(a)$.
-
-See Chapter~\ref{cha:foo_bar} and Section~\ref{sec:pig_fatback}.
-
-\subsection{Pig fatback}
-\label{sec:pig_fatback}
-
-Pig fatback beef ribs tongue ribeye bacon. Pig meatball salami, pastrami beef swine ham pork tail tongue shank bresaola turkey. Chuck cow shank short ribs pork belly short loin pastrami turkey. Pork loin doner tri-tip boudin brisket.
+Apart from two mostly empty chapters (Chapter~\ref{cha:another_chapter} and Chapter~\ref{cha:yet_another_chapter}), this is the end of the template. Visit \href{http://polytexnic.org/book}{http://polytexnic.org/book} to read more about what \PolyTeXnic\ can do.
