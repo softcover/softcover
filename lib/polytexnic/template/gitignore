@@ -6,21 +6,23 @@
 *.tmp.*
 *.pdf
 pygments.sty
+polytexnic.sty
+pygments.css
+polytexnic.css
 frontmatter.tex
+.highlight_cache
 
 # Generated HTML files
 html/*.html
+html/MathJax/
 
-# Code highlighting cache
-.highlight_cache
-
-# Generated ebook files
+# Generated EPUB/MOBI files
 epub/
-ebooks/
 
 # Screencasts (likely to be huge)
 screencasts/
 
 # Other miscellaneous files
 log/
+ebooks/
 .DS_Store
