@@ -95,16 +95,20 @@ body #book {
   font-family: Courier, monospace;
   border: 1px solid #999;
   background: #eee;
+  margin-bottom: 1em;
 }
 
 #book .codelisting {
   width: 100%;
   border: 1px solid #999;
   background: #eee;
+  margin-bottom: 1em;
+  margin-top: 1em;
 }
 
 #book .codelisting .code {
   border: 0;
+  margin-bottom: 0;
 }
 
 #book .codelisting .heading {
