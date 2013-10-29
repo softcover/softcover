@@ -41,7 +41,7 @@ end
 
 You can indicate inline code with the \verb+\kode+ command, as in \kode{current\_\-user}. If you prefer a plainer version of the same thing, you can use ``typewriter text'', as in \texttt{current\_\-user}.
 
-For words whose hypenation isn't built in, you can indicate an optional hyphen using \verb+\-+ (Listing~\ref{code:hyphenation}), which will only be used if necessary to make a clean line break (and even then only when producing PDFs). You can also define global hyphenation rules in \texttt{custom.sty}, which includes a rule for hyphenating ``JavaScript''.
+For words whose hypenation isn't built in, you can indicate an optional hyphen using \verb+\-+ (Listing~\ref{code:hyphenation}), which will only be used if necessary to make a clean line break (and even then only when producing PDFs). You can also define global hyphenation rules in \texttt{custom.sty}, which includes a rule for hyphenating ``JavaScript'' (Listing~\ref{code:custom}.
 
 \begin{codelisting}
 \label{code:hyphenation}
@@ -52,6 +52,12 @@ current\_\-user
 \end{code}
 \end{codelisting}
 
+\begin{codelisting}
+\label{code:custom}
+\codecaption{Defining custom commands. \\ \filepath{custom.sty}}
+%= << custom.sty, lang: tex
+\end{codelisting}
+
 Listing~\ref{code:hyphenation} also shows how to escape the underscore character using a backslash. This is necessary because plain underscores are reserved for math environments (Section~\ref{sec:mathematics}).
 
 \subsection{Mathematics}
@@ -59,7 +65,7 @@ Listing~\ref{code:hyphenation} also shows how to escape the underscore character
 
 \PolyTeXnic\ supports full mathematical typesetting, including inline math, such as $\phi^2 - \phi - 1 = 0$, and centered math, such as
 \[ \phi = \frac{1+\sqrt{5}}{2}. \]
-It also supports cross-referenced equations, as in Eq.~\eqref{eq:golden_ratio} and Eq.~\eqref{eq:stokes_theorem}. Math support for HTML, EPUB, and MOBI comes via the amazing \href{http://www.mathjax.org/}{MathJax} JavaScript library, which includes the American Mathematical Society extensions (AMS-\LaTeX) as well as all the default \LaTeX\ math commands.
+It also supports cross-referenced equations, as in Eq.~\eqref{eq:golden_ratio} and Eq.~\eqref{eq:stokes_theorem}.
 
 \begin{equation}
 \label{eq:golden_ratio}
@@ -70,8 +76,6 @@ It also supports cross-referenced equations, as in Eq.~\eqref{eq:golden_ratio} a
 \label{eq:stokes_theorem}
 \int_\Omega d\omega = \int_{\partial\Omega} \omega \qquad{\text{Generalized Stokes's Theorem}}
 \end{equation}
-
-As with all \PolyTeXnic\ features, mathematical typesetting is fully supported in all output formats (HTML, EPUB, MOBI, and PDF). The only caveat is that, due to technical restrictions imposed by e-readers, math typesetting is not quite as pretty in EPUB \& MOBI. Future versions of \PolyTeXnic\ will include even nicer EPUB \& MOBI math typesetting as the capabilities of those formats improve.
 
 \section{Floats}
 \label{sec:floats}
@@ -87,15 +91,15 @@ You can include raw graphics like this:
 
 \includegraphics{images/2011_michael_hartl.png}
 
-\noindent You can also include centered images like this:
+\noindent You can also include centered images:
 
 \image{images/2011_michael_hartl.png}
 
-\noindent Or put a box around it, like so:
+\noindent Or include one with a box, like so:
 
 \imagebox{images/2011_michael_hartl.png}
 
-To turn it into a figure, use the \kode{figure} environment (Figure~\ref{fig:the_dude}).
+To turn an image into a figure, use the \kode{figure} environment (Figure~\ref{fig:the_dude}).
 
 \begin{figure}
 \imagebox{images/2011_michael_hartl.png}
@@ -105,7 +109,9 @@ To turn it into a figure, use the \kode{figure} environment (Figure~\ref{fig:the
 \subsection{Tables and tabular environments}
 \label{tables_and_tabular}
 
-\PolyTeXnic\ supports raw tables via the \kode{tabular} environment.
+\PolyTeXnic\ supports raw tables via the \kode{tabular} environment. To make a tabular environment into a full-blown table, with a number and a caption, use the \kode{table} environment (Table~\ref{table:rails_actions}), which includes some special magic to make the font size nicer in PDFs.
+
+\bigskip
 
 \begin{tabular}{llll}
 \textbf{HTTP request} & \textbf{URL} & \textbf{Action} & \textbf{Purpose} \\ \hline
@@ -118,8 +124,6 @@ To turn it into a figure, use the \kode{figure} environment (Figure~\ref{fig:the
 \texttt{PATCH} & /users/1 & \texttt{update} & update user with id \texttt{1}  \\
 \texttt{DELETE} & /users/1 & \texttt{destroy} & delete user with id \texttt{1}
 \end{tabular}
-
-To make a tabular environment into a full-blown table, with a number and a caption, use the \kode{table} environment (Table~\ref{table:rails_actions}).
 
 \begin{table}
 \begin{tabular}{llll}
@@ -136,10 +140,52 @@ To make a tabular environment into a full-blown table, with a number and a capti
 \caption{The default \href{http://rubyonrails.org/}{Rails} actions.\label{table:rails_actions}}
 \end{table}
 
+\section{Command-line interface}
+
+\PolyTeXnic\ comes with a command-line interface called \kode{poly}. To get more information, just run \kode{poly help}:
+
+%= lang:console
+\begin{code}
+$ poly help
+Commands:
+  poly build, build:all           # Build all formats
+  poly build:epub                 # Build EPUB
+  poly build:html                 # Build HTML
+  poly build:mobi                 # Build MOBI
+  poly build:pdf                  # Build PDF
+  poly build:preview              # Build book preview in all formats
+  poly config                     # View local config
+  poly config:add key=value       # Add to your local config vars
+  poly epub:validate, epub:check  # Validate EPUB with epubcheck
+  poly help [COMMAND]             # Describe available commands...
+  poly login                      # Log into Softcover account
+  poly logout                     # Log out of Softcover account
+  poly new <name>                 # Generate new book directory structure.
+  poly open                       # Open book on Softcover website (OS X only)
+  poly publish                    # Publish your book on Softcover
+  poly publish:screencasts        # Publish screencasts
+  poly server                     # Run local server
+\end{code}
+
+For additional help on a given command, run \kode{poly help <command>}:
+%= lang:console
+\begin{code}
+$ poly help build
+Usage:
+  poly build, build:all
+
+Options:
+  -q, [--quiet]   # Quiet output
+  -s, [--silent]  # Silent output
+
+Build all formats
+\end{code}
+
+
 \section{Miscellanea}
 
 Apart from two mostly empty chapters (Chapter~\ref{cha:another_chapter} and Chapter~\ref{cha:yet_another_chapter}), this is the end of the template. In fact, let's include Chapter~\ref{cha:yet_another_chapter} in its entirety, just to see how mostly empty it is:
 
 %= << chapters/yet_another_chapter.tex
 
-To learn more about what \PolyTeXnic\ can do, visit \href{http://polytexnic.org/book}{http://polytexnic.org/book}.
+Visit \href{http://polytexnic.org/book}{http://polytexnic.org/book} to learn more about what \PolyTeXnic\ can do.
