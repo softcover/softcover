@@ -12,25 +12,32 @@ describe Polytexnic::BookManifest do
         its(:title) { should eq "book" }
         its(:subtitle) { should eq "Change-me" }
         its(:description) { should eq "Change me." }
-        its(:cover) { should eq "images/change-me.png" }
+        its(:cover) { should eq "images/cover.png" }
         its(:author) { should eq "Author Name" }
       end
 
       describe "chapter information" do
         subject(:chapter) { manifest.chapters[1] }
         it { should be_a Polytexnic::BookManifest::Chapter }
-        its(:title) { should eq "Lorem ipsum" }
+        its(:title) { should eq "A chapter" }
         its(:slug) { should eq "a_chapter" }
         its(:chapter_number) { should eq 1 }
         its("sections.first.name") do
-          should eq '\emph{Bacon} ipsum'
+          should eq 'A section'
         end
 
-        describe "for last chapter" do
-          subject(:chapter) { manifest.chapters.last }
-          its(:title) { should eq 'Foo \emph{bar}' }
+        describe "for second chapter" do
+          subject(:chapter) { manifest.chapters[2] }
+          its(:title) { should eq 'Another chapter' }
           its(:slug) { should eq "another_chapter" }
           its(:chapter_number) { should eq 2 }
+        end
+
+        describe "for third chapter" do
+          subject(:chapter) { manifest.chapters[3] }
+          its(:title) { should eq 'Yet \emph{another} chapter' }
+          its(:slug) { should eq "yet_another_chapter" }
+          its(:chapter_number) { should eq 3 }
         end
       end
     end
