@@ -47,7 +47,7 @@ class Polytexnic::BookManifest < OpenStruct
     end
     attrs = case
             when polytex?  then yaml_attrs
-            when markdown? then read_from_md
+            when markdown? then yaml_attrs.merge(read_from_md)
             else
               self.class.not_found!
             end.symbolize_keys!
@@ -88,17 +88,16 @@ class Polytexnic::BookManifest < OpenStruct
                                   chapter_number: i + 1)
       end
     end
-    # TODO: verify all attributes
-
     verify_paths! if options[:verify_paths]
   end
 
+  # Returns an array of the chapters to include.
   def chapter_includes(string)
     chapter_regex = /^\s*\\include\{chapters\/(.*?)\}/
     string.scan(chapter_regex).flatten
   end
 
-  # Removes frontmatter
+  # Removes frontmatter.
   # The frontmatter shouldn't be included in the chapter slugs, so we remove
   # it. For example, in
   #  \frontmatter
@@ -126,15 +125,18 @@ class Polytexnic::BookManifest < OpenStruct
     frontmatter? ? chapters[1] : chapters[0]
   end
 
+  # Returns true if converting Markdown source.
   def markdown?
     (@source == :markdown || @source == :md) && !@force_polytex
   end
   alias :md? :markdown?
 
+  # Returns true if converting PolyTeX source.
   def polytex?
     @source == :polytex || @force_polytex
   end
 
+  # Returns an iterator the chapter file paths.
   def chapter_file_paths
     pdf_chapter_names.map do |name|
       file_path = case
@@ -149,6 +151,8 @@ class Polytexnic::BookManifest < OpenStruct
   end
 
   # Return chapters for the PDF.
+  # The frontmatter pseudo-chapter exists for the sake of HTML/EPUB/MOBI, so
+  # it's not returned as part of the chapters.
   def pdf_chapter_names
     chaps = chapters.reject { |chapter| chapter.slug.match(/frontmatter/) }.
                      collect(&:slug)
@@ -163,18 +167,34 @@ class Polytexnic::BookManifest < OpenStruct
     chapters.find { |chapter| chapter.chapter_number == number }
   end
 
+  # Returns a URL for the chapter with the given number.
   def url(chapter_number)
-    if chapter = find_chapter_by_number(chapter_number)
+    if (chapter = find_chapter_by_number(chapter_number))
       chapter.slug
     else
       '#'
     end
   end
 
+  # Returns the chapter range for book previews.
+  # We could `eval` the range, but that would allow users to execute arbitrary
+  # code (maybe not a big problem on their system, but it would be a Bad Thing
+  # on a server).
+  def preview_chapter_range
+    first, last = epub_mobi_preview_chapter_range.split('..').map(&:to_i)
+    first..last
+  end
+
+  # Returns the chapters to use in the preview as a range.
+  def preview_chapters
+    chapters[preview_chapter_range]
+  end
+
   def self.valid_directory?
     [YAML_PATH, MD_PATH].any? { |f| File.exist?(f) }
   end
 
+  # Changes the directory until in the book's root directory.
   def self.find_book_root!
     loop do
       return true if valid_directory?

@@ -6,9 +6,10 @@ module Polytexnic
 
       def setup
         Dir.mkdir "html" unless File.directory?("html")
-        unless File.directory?(File.join("html", "stylesheets"))
-          Dir.mkdir File.join("html", "stylesheets")
+        unless File.directory?(path('html/stylesheets'))
+          Dir.mkdir path('html/stylesheets')
         end
+        clean!
       end
 
       def build(options = {})
@@ -18,6 +19,7 @@ module Polytexnic
         end
 
         if manifest.markdown?
+          FileUtils.rm(Dir.glob(path('chapters/*.tex')))
           manifest.chapters.each do |chapter|
             write_latex_files(chapter)
           end
@@ -29,7 +31,7 @@ module Polytexnic
 
         if manifest.polytex?
           basename = File.basename(manifest.filename, '.tex')
-          @html = converted_html(basename)
+          @html  = converted_html(basename)
           @title = basename
           erb_file = File.read(File.join(File.dirname(__FILE__),
                                          '../server/views/book.html.erb'))
@@ -50,13 +52,15 @@ module Polytexnic
       # Writes the LaTeX files for a given Markdown chapter.
       def write_latex_files(chapter)
         path = File.join('markdown', chapter.slug + '.md')
-        md = Polytexnic::Core::Pipeline.new(File.read(path), source: :md)
+        cc = Polytexnic.custom_styles
+        md = Polytexnic::Core::Pipeline.new(File.read(path), source: :md,
+                                            custom_commands: cc)
         File.write(File.join("chapters", "#{chapter.slug}.tex"), md.polytex)
       end
 
       # Rewrites the master LaTeX file <name>.tex to use chapters from Book.txt.
       def rewrite_master_latex_file
-        filename = Dir['*.tex'].reject { |f| f =~ /\.tmp/}.first
+        master_filename = Dir['*.tex'].reject { |f| f =~ /\.tmp/}.first
         lines = File.readlines('markdown/Book.txt')
         tex_file = []
         lines.each do |line|
@@ -64,26 +68,36 @@ module Polytexnic
             tex_file << "\\include{chapters/#{$1}}"
           elsif line =~ /(.*):\s*$/  # frontmatter or mainmatter
             tex_file << "\\#{$1}"
+          elsif line.strip == 'cover'
+            tex_file << '\\includepdf{images/cover.pdf}'
+          else # raw command, like 'maketitle' or 'tableofcontents'
+            tex_file << "\\#{line.strip}"
           end
         end
         tex_file << '\end{document}'
-        content = File.read(filename)
+        content = File.read(master_filename)
         content.gsub!(/(\\begin{document}\n)(.*)/m) do
           $1 + tex_file.join("\n") + "\n"
         end
-        File.write(filename, content)
+        File.write(master_filename, content)
       end
 
       # Returns the converted HTML.
       def converted_html(basename)
         polytex_filename = basename + '.tex'
         polytex = File.read(polytex_filename)
+        # Replace the includes with the file contents, padding with a trailing
+        # newline for safety.
         polytex.gsub!(/(^\s*\\include{(.*?)})/) do
-          File.read($2 + '.tex')
+          File.read($2 + '.tex') + "\n"
         end
-        Polytexnic::Core::Pipeline.new(polytex).to_html
+        cc = Polytexnic.custom_styles
+        Polytexnic::Core::Pipeline.new(polytex, custom_commands: cc).to_html
       end
 
+      # Writes the full HTML file for the book.
+      # The resulting file is a self-contained HTML document suitable
+      # for viewing in isolation.
       def write_full_html_file(basename, file_content)
         html_filename = File.join('html', basename + '.html')
         File.open(html_filename, 'w') do |f|
@@ -97,6 +111,9 @@ module Polytexnic
         built_files.push html_filename
       end
 
+      # Writes the full HTML file for each chapter.
+      # The resulting files are self-contained HTML documents suitable
+      # for viewing in isolation.
       def write_chapter_html_files(html, erb_file)
         reference_cache = split_into_chapters(html)
         target_cache = build_target_cache(html)
@@ -107,7 +124,7 @@ module Polytexnic
         end
       end
 
-      # Split the full XML document into chapters.
+      # Splits the full XML document into chapters.
       def split_into_chapters(xml)
         chapter_number = 0
         current_chapter = manifest.chapters.first
@@ -131,6 +148,7 @@ module Polytexnic
         reference_cache
       end
 
+      # Writes the frontmatter pseudo-chapter.
       def write_frontmatter_file(xml, id)
         if element = xml.at_css("div##{id}")
           File.write("html/#{id}_fragment.html", element.to_xhtml)
@@ -147,6 +165,7 @@ module Polytexnic
         end
       end
 
+      # Updates the book's cross-references.
       def update_cross_references(chapter, ref_map, target_cache)
         chapter.nodes.each do |node|
           node.css('a.hyperref').each do |ref_node|
@@ -186,7 +205,11 @@ module Polytexnic
       end
 
       def clean!
-        FileUtils.rm_rf "html"
+        # It's safe to remove HTML files in the html/ directory,
+        # as they are regenerated every time the book gets built.
+        # This also arranges to clear out unused HTML files, as happens when,
+        # e.g., the name of a LaTeX chapter file changes.
+        FileUtils.rm(Dir.glob(path('html/*.html')))
       end
     end
   end

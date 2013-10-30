@@ -6,13 +6,14 @@ module Polytexnic::Commands::Server
   attr_accessor :no_listener
   extend self
 
+  # Listens for changes to the book's source files.
   def listen_for_changes
     return if defined?(@no_listener) && @no_listener
     server_pid = Process.pid
     directories = markdown_directory? ? ['markdown'] : ['.', 'chapters']
     @listener = Listen.to(*directories)
-    @listener.filter(/(\.tex|\.md)$/)
-    @listener.ignore(%r{^.tmp})
+    @listener.filter(/(\.tex|\.md|custom\.sty)$/)
+    @listener.ignore(%r{\.tmp\.tex})
     @listener.change do |modified|
       rebuild modified.try(:first)
       Process.kill("HUP", server_pid)

@@ -8,9 +8,18 @@ describe Polytexnic::Builders::Html do
 
     describe "#build!" do
       subject(:builder) { Polytexnic::Builders::Html.new }
-      before { builder.build! }
+      let(:file_to_be_removed) { path('html/should_be_removed.html') }
+      before do
+        # Create an empty file that should be removed automatically.
+        File.write(file_to_be_removed, '')
+        builder.build!
+      end
 
-      its(:built_files) { should include "html/book.html" }
+      its(:built_files) { should include File.join('html', 'book.html') }
+
+      it "should remove the HTML file without a corresponding LaTeX file" do
+        expect(file_to_be_removed).not_to exist
+      end
 
       describe "HTML output" do
         let(:output) { File.read("html/book.html") }
@@ -18,10 +27,24 @@ describe Polytexnic::Builders::Html do
 
         it { should match('<!DOCTYPE html>') }
         it { should match('pygments.css') }
-        it { should match('<div id=\"cha-lorem_ipsum\" ' +
-                          'data-tralics-id=\"cid1\"' +
-                          ' class=\"chapter\" data-number=\"1\">') }
+        context "HTML document" do
+          subject(:doc) { Nokogiri::HTML(output) }
+          context "first chapter" do
+            subject(:chapter) { doc.at_css('#cha-a_chapter') }
+            it { should_not be_nil }
+            it "should have a chapter class" do
+              expect(chapter['class']).to eq 'chapter'
+            end
+          end
 
+          context "second chapter" do
+            subject(:chapter) { doc.at_css('#cha-another_chapter') }
+            it { should_not be_nil }
+            it "should have a chapter class" do
+              expect(chapter['class']).to eq 'chapter'
+            end
+          end
+        end
       end
 
       describe "Pygments stylesheet" do
@@ -38,7 +61,7 @@ describe Polytexnic::Builders::Html do
         let(:output) { File.read('html/a_chapter_fragment.html') }
         subject { output }
 
-        it { should match('Lorem ipsum') }
+        it { should match('A chapter') }
       end
 
       describe "frontmatter output" do
@@ -62,18 +85,22 @@ describe Polytexnic::Builders::Html do
       end
 
       describe "HTML MathJax output" do
-        let(:output) { File.read('html/a_chapter.html') }
+        let(:output) { File.read(path('html/a_chapter.html')) }
         subject { output }
 
         it { should match 'MathJax.Hub.Config' }
         it { should match 'TeX-AMS-MML_SVG' }
-        it { should match 'Lorem ipsum' }
+        it { should match 'A chapter' }
       end
     end
   end
 
   describe "when generating from Markdown source" do
-    before(:all) { generate_book(markdown: true) }
+    before(:all) do
+      generate_book(markdown: true)
+      @file_to_be_removed = path('chapters/should_be_removed.tex')
+      File.write(@file_to_be_removed, '')
+    end
     after(:all)  { remove_book }
 
     describe "#build!" do
@@ -85,6 +112,10 @@ describe Polytexnic::Builders::Html do
       its(:built_files) { should include "html/a_chapter_fragment.html" }
       its(:built_files) { should include "html/another_chapter.html" }
       its(:built_files) { should include "html/another_chapter_fragment.html" }
+
+      it "should remove an unneeded LaTeX file" do
+        expect(@file_to_be_removed).not_to exist
+      end
 
       describe "master LaTeX file" do
         let(:master_file) { Dir['*.tex'].reject { |f| f =~ /\.tmp/}.first }

@@ -123,29 +123,38 @@ module WebmockHelpers
   end
 
   def chdir_to_book
-    Dir.chdir File.join File.dirname(__FILE__), "fixtures/book"
-  end
-
-  def chdir_to_md_book
-    Dir.chdir File.join File.dirname(__FILE__), "fixtures/md-book"
+    dir = File.join File.dirname(__FILE__), "fixtures", "book"
+    File.mkdir(dir) unless File.directory?(dir)
+    Dir.chdir dir
   end
 
   def chdir_to_non_book
-    Dir.chdir File.join File.dirname(__FILE__), "fixtures/non-book"
+    dir = File.join File.dirname(__FILE__), "fixtures", "non-book"
+    File.mkdir(dir) unless File.directory?(dir)
+    Dir.chdir dir
   end
 
   # Generates a sample book using the same method as `poly new`.
   # It also creates test books of all standard formats and a screencasts
   # directory with a stub file.
   def generate_book(options = {})
-    name   = options[:name] || 'book'
+    name   = options[:name]   || 'book'
     source = options[:source] || :polytex
     remove_book
     Dir.chdir File.join File.dirname(__FILE__), "fixtures/"
-    Polytexnic::Commands::Generator.generate_directory(name, options)
+    flags = []
+    flags << '-m' if options[:markdown]
+    flags << '-s' if options[:simple]
+    silence { system "poly new #{name} #{flags.join(' ')}" }
     chdir_to_book
+    File.mkdir 'html' unless File.exist?('html')
+    File.write(File.join('html', 'chapter-1.html'),          'test')
+    File.write(File.join('html', 'chapter-1_fragment.html'), 'test')
+    File.write(File.join('html', 'test_fragment.html'),      'test')
+    File.mkdir 'ebooks' unless File.exist?('ebooks')
     Polytexnic::FORMATS.each do |format|
-      File.open("test-book.#{format}", 'w') { |f| f.write('test') }
+      dir = format == 'html' ? 'html' : 'ebooks'
+      File.write(File.join(dir, "test-book.#{format}"), 'test')
     end
     Dir.mkdir("screencasts") unless File.directory?("screencasts")
     File.open(File.join('screencasts', 'ch1.mov'), 'w') { |f| f.write('test') }

@@ -21,6 +21,7 @@ require_relative 'polytexnic/builders/epub'
 require_relative 'polytexnic/builders/html'
 require_relative 'polytexnic/builders/mobi'
 require_relative 'polytexnic/builders/pdf'
+require_relative 'polytexnic/builders/preview'
 require_relative 'polytexnic/cli'
 require_relative 'polytexnic/commands/auth'
 require_relative 'polytexnic/commands/build'
@@ -36,6 +37,12 @@ module Polytexnic
   extend self
 
   include Polytexnic::Utils
+
+  # Return the custom styles, if any.
+  def custom_styles
+    custom_file = 'custom.sty'
+    File.exist?(custom_file) ? File.read(custom_file) : ''
+  end
 
   def set_test_mode!
     @test_mode = true

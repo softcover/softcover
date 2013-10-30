@@ -23,21 +23,28 @@ describe Polytexnic::Commands::Build do
     it { should respond_to(:all_formats) }
     it "should build all formats" do
       pdf_builder  = build.builder_for('pdf')
-      html_builder = build.builder_for('html')
-      epub_builder = build.builder_for('epub')
       mobi_builder = build.builder_for('mobi')
 
       pdf_builder .should_receive(:build!)
-      html_builder.should_receive(:build!)
-      epub_builder.should_receive(:build!)
       mobi_builder.should_receive(:build!)
 
       build.should_receive(:builder_for).with('pdf') .and_return(pdf_builder)
-      build.should_receive(:builder_for).with('html').and_return(html_builder)
-      build.should_receive(:builder_for).with('epub').and_return(epub_builder)
       build.should_receive(:builder_for).with('mobi').and_return(mobi_builder)
 
       build.all_formats
+    end
+  end
+
+  context 'building previews' do
+    subject(:build) { Polytexnic::Commands::Build }
+
+    it { should respond_to(:preview) }
+    it "should build previews" do
+      preview_builder = build.builder_for('preview')
+      preview_builder.should_receive(:build!)
+      build.should_receive(:builder_for).with('preview').
+                                         and_return(preview_builder)
+      build.preview
     end
   end
 end

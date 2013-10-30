@@ -2,16 +2,21 @@ module Polytexnic
   module Builders
     class Mobi < Builder
 
-      def build!
-        Polytexnic::Builders::Epub.new.build!
+      def build!(options={})
+        Polytexnic::Builders::Epub.new.build!(options)
         if markdown_directory?
           @manifest = Polytexnic::BookManifest.new(source: :polytex)
         end
-        command = "#{kindlegen} ebooks/#{manifest.filename}.epub"
-        if Polytexnic.test?
-          command
+        filename  = manifest.filename
+        filename += '-preview' if options[:preview]
+        command = "#{kindlegen} ebooks/#{filename}.epub"
+        # Because of the way kindlegen uses tempfiles, testing for the
+        # actual generation of the MOBI causes an error, so in tests
+        # we just return the command.
+        if options[:quiet] || options[:silent]
+          silence { Polytexnic.test? ? command : system(command) }
         else
-          system(command)
+          Polytexnic.test? ? command : system(command)
         end
       end
 

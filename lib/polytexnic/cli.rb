@@ -8,16 +8,42 @@ module Polytexnic
     # Builder
     # ===============================================
 
-    desc 'build', 'Build all formats'
+    desc 'build, build:all', 'Build all formats'
+    method_option :quiet, aliases: '-q',
+                          desc: "Quiet output", type: :boolean
+    method_option :silent, aliases: '-s',
+                           desc: "Silent output", type: :boolean
     def build
-      Polytexnic::Commands::Build.all_formats
+      Polytexnic::Commands::Build.all_formats(options)
     end
+    map "build:all" => "build"
 
     Polytexnic::FORMATS.each do |format|
       desc "build:#{format}", "Build #{format.upcase}"
-      define_method "build:#{format}" do
-        Polytexnic::Commands::Build.for_format format
+      if format == 'pdf'
+        method_option :debug, aliases: '-d',
+                              desc: "Run raw xelatex for debugging purposes",
+                              type: :boolean
       end
+      method_option :quiet, aliases: '-q',
+                            desc: "Quiet output", type: :boolean
+      method_option :silent, aliases: '-s',
+                             desc: "Silent output", type: :boolean
+      define_method "build:#{format}" do
+        Polytexnic::Commands::Build.for_format format, options
+      end
+    end
+
+    # ===============================================
+    # Preview
+    # ===============================================
+    desc "build:preview", "Build book preview in all formats"
+    method_option :quiet, aliases: '-q',
+                          desc: "Quiet output", type: :boolean
+    method_option :silent, aliases: '-s',
+                           desc: "Silent output", type: :boolean
+    define_method "build:preview" do
+      Polytexnic::Commands::Build.preview(options)
     end
 
     # ===============================================
@@ -104,7 +130,7 @@ module Polytexnic
                   :aliases => "-s",
                   :desc => "Generate a simple book."
     def new(n)
-      Polytexnic::Commands::Generator.generate_directory(n, options)
+      Polytexnic::Commands::Generator.generate_file_tree(n, options)
     end
 
     # ===============================================

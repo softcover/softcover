@@ -8,11 +8,12 @@ module Polytexnic
       @manifest = Polytexnic::BookManifest.new(verify_paths: true,
                                                source: source)
       @built_files = []
+      write_polytexnic_commands_file
     end
 
-    def build!
+    def build!(options={})
       setup
-      build
+      build(options)
       verify
       self
     end
@@ -25,6 +26,11 @@ module Polytexnic
 
       def source
         markdown_directory? ? :markdown : :polytex
+      end
+
+      # Writes out the PolyTeXnic commands from polytexnic-core.
+      def write_polytexnic_commands_file
+        Polytexnic::Core.write_polytexnic_style_file(Dir.pwd)
       end
   end
 end
