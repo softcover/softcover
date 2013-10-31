@@ -249,6 +249,10 @@ body #book {
   border-bottom: 1px solid black;
 }
 
+#book .tabular tr.bottom_border {
+  border-top: 1px solid black;
+}
+
 #book .footnotes {
   border-top: 1px solid black;
   margin-top: 1em;
