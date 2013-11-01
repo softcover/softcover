@@ -1,22 +1,14 @@
-# Install Polytexnic CLI for **Development**
-- RVM users: 'rvm @global' or 'rvm <ruby-ver>@global'
-  - CLI depends on where bundle installs to
-- bundle install
-- rake install
+# PolyTeXnic
 
-- test by opening a iterm tab, then run 'polytexnic'
-- setup to point to localhost
-  - polytexnic config host='http://localhost:3000'
+## **Note:** PolyTeXnic is currently in private beta
 
-- ensure polytexnic-app setup with S3 credentials
-  - see that project's README
-- should now be able to `polytexnic login` with an email/password from the
-  localhost polytexnic app
-  - in a folder with html files, should be able to `polytexnic publish` to
-    create a book w/chapter objects on the server, upload assets to S3 and link
-    the Rails objects with their S3 locations
+It is strongly recommended that right now only members of the private beta use the `polytexnic` gem. Go to [Softcover.io](http://softcover.io/) to request an invitation to the private beta.
 
+PolyTeXnic is an ebook typesetting system for technical authors. This is the main gem, `polytexnic`, which depends on `polytexnic-core` to convert Markdown or PolyTeX input to HTML and LaTeX, and thence to EPUB, MOBI, and PDF. Authors can use PolyTeXnic to publish and optionally sell the resulting ebooks (as well as associated digital goods such as screencasts) on the [Softcover publishing platform](http://softcover.io/).
 
+For more details about PolyTeXnic, see [*The PolyTeXnic Book*](http://polytexnic.org/book) (currently in preparation).
+
+<!--
 # Polytexnic CLI
 
 Command line interface for Polytexnic.com
@@ -44,7 +36,7 @@ Command line interface for Polytexnic.com
   * use "silence=false" to unsilence spec output:
 
     $ silence=false bundle exec rspec 
-
+-->
 ## Contributing
 
 1. Fork it
