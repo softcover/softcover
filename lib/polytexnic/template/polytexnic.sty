@@ -31,7 +31,8 @@
 % Configure hyperref footnotes
 \usepackage[hyperfootnotes=false]{hyperref}
 \hypersetup{hyperfootnotes=false}
-
+% Support longtable environment.
+\usepackage{longtable}
 % Support strikethrough (via \sout{text})
 \usepackage[normalem]{ulem}
 
@@ -112,6 +113,9 @@
 \newcommand{\codecaption}[1]{\captionof{listing}{#1}}
 
 % Aside boxes
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{aside}{Box}[chapter]
 \usepackage{framed}
 \definecolor{shadecolor}{gray}{0.97}
 \definecolor{boxcolor}{gray}{0.10}

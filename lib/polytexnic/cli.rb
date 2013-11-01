@@ -24,6 +24,12 @@ module Polytexnic
         method_option :debug, aliases: '-d',
                               desc: "Run raw xelatex for debugging purposes",
                               type: :boolean
+        method_option :once, aliases: '-o',
+                             desc: "Run PDF generator once (no xref update)",
+                             type: :boolean
+        method_option :'find-overfull', aliases: '-f',
+                                        desc: "Find overfull hboxes",
+                                        type: :boolean
       end
       method_option :quiet, aliases: '-q',
                             desc: "Quiet output", type: :boolean
@@ -90,13 +96,17 @@ module Polytexnic
     # ===============================================
 
     desc "publish", "Publish your book on Softcover"
+    method_option :quiet, aliases: '-q',
+                          desc: "Quiet output", type: :boolean
+    method_option :silent, aliases: '-s',
+                           desc: "Silent output", type: :boolean
     def publish
       require 'polytexnic/commands/publisher'
 
       invoke :login unless logged_in?
 
-      puts "Publishing..."
-      Polytexnic::Commands::Publisher.publish!
+      puts "Publishing..." unless options[:silent]
+      Polytexnic::Commands::Publisher.publish!(options)
     end
 
     desc "publish:screencasts", "Publish screencasts"
@@ -112,6 +122,14 @@ module Polytexnic
       puts "Publishing screencasts in #{dir}"
       Polytexnic::Commands::Publisher.
         publish_screencasts! options.merge(dir: dir)
+    end
+
+    # ===============================================
+    # Deployment
+    # ===============================================
+    desc "deploy", "Build & publish book (configure using .poly-deploy)"
+    def deploy
+      Polytexnic::Commands::Deployment.deploy!
     end
 
     # ===============================================
