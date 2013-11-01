@@ -39,14 +39,16 @@ module Polytexnic
         write_pygments_file(:latex)
         copy_polytexnic_sty
         build_pdf = "#{xelatex} #{Polytexnic::Utils.tmpify(book_filename)}"
-        # Run the command twice to guarantee up-to-date cross-references.
+        # Run the command twice (to guarantee up-to-date cross-references)
+        # unless explicitly overriden.
         # Renaming the PDF in the command is necessary because `execute`
         # below uses `exec` (except in tests, where it breaks). Since `exec`
         # causes the Ruby process to end, any Ruby code after `exec`
         # is ignored.
         # (The reason for using `exec` is so that LaTeX errors get emitted to
-        # the screen rather than just hanging the process.
-        cmd = "#{build_pdf} ; #{build_pdf} ; #{rename_pdf(basename)}"
+        # the screen rather than just hanging the process.)
+        pdf_cmd = options[:once] ? build_pdf : "#{build_pdf} ; #{build_pdf}"
+        cmd = "#{pdf_cmd} ; #{rename_pdf(basename)}"
         # Here we use `system` when making a preview because the preview command
         # needs to run after the main PDF build.
         if options[:quiet] || options[:silent]
