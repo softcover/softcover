@@ -1,45 +1,129 @@
-\chapter{Lorem ipsum}
-\label{cha:lorem_ipsum}
+\chapter{A chapter}
+\label{cha:a_chapter}
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\footnote{\emph{This} is a footnote. It will be numbered automatically.}
+This is the first paragraph of the \PolyTeXnic\ template. It shows how to write a document in \PolyTeX, a subset of the \LaTeX\ typesetting language optimized for ebooks. For more information, see \emph{The \PolyTeXnic\ Book}, available online at \href{http://polytexnic.org/book}{http://polytexnic.org/book}, and the \PolyTeX\ source of the book, available at \href{http://polytexnic.org/source}{http://polytexnic.org/source}. To learn how to easily publish (and optionally sell) documents produced with \PolyTeXnic, visit \href{http://softcover.io/}{Softcover.io}.
 
-Include graphics like this:
+This is the \emph{second} paragraph, showing how to emphasize text.\footnote{This is a footnote. It is numbered automatically.} You can also make text \textbf{bold} or \textit{italicized} (which looks the same as emphasized text).
 
-\includegraphics{images/2011_michael_hartl.png}
+\emph{Note}: ``\PolyTeXnic'' is pronounced exactly like the English word \emph{polytechnic}, and ``\LaTeX'' is pronounced \emph{lay}-tech (with ``tech'' as in ``technology'').\footnote{Pronunciations of ``\LaTeX'' differ, but \emph{lay}-tech is the one I prefer.}
 
-\image{images/2011_michael_hartl.png}
+\section{A section}
+\label{sec:a_section}
 
-Include code like this:
+This is a section. Because it has a label, we can refer to it as Section~\ref{sec:a_section}. The cross-reference will be automatically numbered and linked. There's another reference to this section in Section~\ref{sec:floats}, as well as one in Chapter~\ref{cha:another_chapter}.
 
+\subsection{Source code}
+\label{sec:source_code}
+
+This is a subsection. As usual, it can be referenced by label (Section~\ref{sec:source_code}). Note that the label starts with \kode{sec:}, not \kode{ssec:} or \kode{subsec:}. Any of these would work, but I find that sections often become subsections (and vice versa) when figuring out the structure of a book, and using \kode{sec:} to prefix them both saves having to change labels.
+
+\PolyTeXnic\ comes with full support for syntax-highlighted source code:
 %= lang:ruby
 \begin{code}
 def hello
-  "hello, world!"
+  puts "hello, world!"
 end
 \end{code}
+\noindent \PolyTeXnic\ can highlight any language supported by \href{http://pygments.org/languages/}{Pygments} (which means most of them).
 
-Make a code listing as in Listing~\ref{code:hello}.
+You can also define \emph{code listings}, as seen in Listing~\ref{code:hello_world}. Such code listings are automatically numbered and linked.
 
 \begin{codelisting}
-\label{code:hello}
-\codecaption{A hello program in Ruby.}
+\label{code:hello_world}
+\codecaption{``Hello, world!'' in Ruby.}
 %= lang:ruby
 \begin{code}
 def hello
-  "hello, world!"
+  puts "hello, world!"
 end
 \end{code}
 \end{codelisting}
 
-Typeset inline code using the \verb+\kode+ environment: \kode{foobar}.
+You can indicate inline code with the \verb+\kode+ command, as in \kode{current\_\-user}. If you prefer a plainer version of the same thing, you can use ``typewriter text'', as in \texttt{current\_\-user}.
 
-\section{\emph{Bacon} ipsum}
-\label{sec:bacon_ipsum}
+For words whose hypenation isn't built in, you can indicate an optional hyphen using \verb+\-+ (Listing~\ref{code:hyphenation}), which will only be used if necessary to make a clean line break (and even then only when producing PDFs). You can also define global hyphenation rules in \texttt{custom.sty}, which includes a rule for hyphenating ``JavaScript'' (Listing~\ref{code:custom}.
+
+\begin{codelisting}
+\label{code:hyphenation}
+\codecaption{Adding an optional hyphen to \kode{current\_user}.}
+%= lang:latex
+\begin{code}
+current\_\-user
+\end{code}
+\end{codelisting}
+
+\begin{codelisting}
+\label{code:custom}
+\codecaption{Defining custom commands. \\ \filepath{custom.sty}}
+%= << custom.sty, lang: tex
+\end{codelisting}
+
+Listing~\ref{code:hyphenation} also shows how to escape the underscore character using a backslash. This is necessary because plain underscores are reserved for math environments (Section~\ref{sec:mathematics}).
+
+\subsection{Mathematics}
+\label{sec:mathematics}
+
+\PolyTeXnic\ supports full mathematical typesetting, including inline math, such as $\phi^2 - \phi - 1 = 0$, and centered math, such as
+\[ \phi = \frac{1+\sqrt{5}}{2}. \]
+It also supports cross-referenced equations, as in Eq.~\eqref{eq:golden_ratio} and Eq.~\eqref{eq:stokes_theorem}.
+
+\begin{equation}
+\label{eq:golden_ratio}
+\phi = \frac{1+\sqrt{5}}{2} \approx 1.618 \qquad{\text{The Golden Ratio}}
+\end{equation}
+
+\begin{equation}
+\label{eq:stokes_theorem}
+\int_\Omega d\omega = \int_{\partial\Omega} \omega \qquad{\text{Generalized Stokes's Theorem}}
+\end{equation}
+
+\section{Floats}
+\label{sec:floats}
+
+This is the second section. As we saw above above, the first section is Section~\ref{sec:a_section}.
+
+\PolyTeXnic\ supports \href{http://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions}{\emph{floats}} such as figures and tables, including numbered captions and linked cross-references. The defining quality of a float is that its placement isn't guaranteed (i.e., it ``floats'' in the document), so you shouldn't generally assume it will be placed immediately after the text that precedes it. (Such placement \emph{will} be the case with HTML-based output, but \emph{not} in PDFs, where \TeX's state-of-the-art float placement algorithm is in charge.)
+
+\subsection{Graphics and figures}
+\label{sec:graphics_and_figures}
+
+You can include raw graphics like this:
+
+\includegraphics{images/2011_michael_hartl.png}
+
+\noindent You can also include centered images:
+
+\image{images/2011_michael_hartl.png}
+
+\noindent Or include one with a box, like so:
+
+\imagebox{images/2011_michael_hartl.png}
+
+To turn an image into a figure, use the \kode{figure} environment (Figure~\ref{fig:the_dude}).
+
+\begin{figure}
+\imagebox{images/2011_michael_hartl.png}
+\caption{Some \href{http://michaelhartl.com/}{dude}.\label{fig:the_dude}}
+\end{figure}
+
+\subsection{Tables and tabular environments}
+\label{tables_and_tabular}
+
+\PolyTeXnic\ supports raw tables via the \kode{tabular} environment. To make a tabular environment into a full-blown table, with a number and a caption, use the \kode{table} environment (Table~\ref{table:rails_actions}), which includes some special magic to make the font size nicer in PDFs.
+
+\bigskip
+
+\begin{tabular}{llll}
+\textbf{HTTP request} & \textbf{URL} & \textbf{Action} & \textbf{Purpose} \\ \hline
+
+\texttt{GET} & /users & \texttt{index} & page to list all users \\
+\texttt{GET} & /users/1 & \texttt{show} & page to show user with id \texttt{1}\\
+\texttt{GET} & /users/new & \texttt{new} & page to make a new user \\
+\texttt{POST} & /users & \texttt{create} & create a new user \\
+\texttt{GET} & /users/1/edit & \texttt{edit} & page to edit user with id \texttt{1} \\
+\texttt{PATCH} & /users/1 & \texttt{update} & update user with id \texttt{1}  \\
+\texttt{DELETE} & /users/1 & \texttt{destroy} & delete user with id \texttt{1}
+\end{tabular}
 
 \begin{table}
 \begin{tabular}{llll}
@@ -53,17 +137,55 @@ Typeset inline code using the \verb+\kode+ environment: \kode{foobar}.
 \texttt{PATCH} & /users/1 & \texttt{update} & update user with id \texttt{1}  \\
 \texttt{DELETE} & /users/1 & \texttt{destroy} & delete user with id \texttt{1}
 \end{tabular}
-\caption{HTTP stuff\label{table:foo}}
+\caption{The default \href{http://rubyonrails.org/}{Rails} actions.\label{table:rails_actions}}
 \end{table}
 
+\section{Command-line interface}
 
-Bacon ipsum dolor sit amet salami doner shoulder, brisket pork chop beef cow bacon strip steak filet mignon jerky bresaola turducken venison ham. Biltong meatloaf chuck rump pork loin. Pancetta fatback prosciutto shankle corned beef flank beef ribs tail tri-tip kielbasa drumstick. Andouille bacon pork drumstick meatball pig t-bone hamburger, ball tip meatloaf sausage.
+\PolyTeXnic\ comes with a command-line interface called \kode{poly}. To get more information, just run \kode{poly help}:
 
-This is some math: $\int_a^b f'\,dx = f(b) - f(a)$.
+%= lang:console
+\begin{code}
+$ poly help
+Commands:
+  poly build, build:all           # Build all formats
+  poly build:epub                 # Build EPUB
+  poly build:html                 # Build HTML
+  poly build:mobi                 # Build MOBI
+  poly build:pdf                  # Build PDF
+  poly build:preview              # Build book preview in all formats
+  poly config                     # View local config
+  poly config:add key=value       # Add to your local config vars
+  poly epub:validate, epub:check  # Validate EPUB with epubcheck
+  poly help [COMMAND]             # Describe available commands...
+  poly login                      # Log into Softcover account
+  poly logout                     # Log out of Softcover account
+  poly new <name>                 # Generate new book directory structure.
+  poly open                       # Open book on Softcover website (OS X only)
+  poly publish                    # Publish your book on Softcover
+  poly publish:screencasts        # Publish screencasts
+  poly server                     # Run local server
+\end{code}
 
-See Chapter~\ref{cha:foo_bar} and Section~\ref{sec:pig_fatback}.
+For additional help on a given command, run \kode{poly help <command>}:
+%= lang:console
+\begin{code}
+$ poly help build
+Usage:
+  poly build, build:all
 
-\subsection{Pig fatback}
-\label{sec:pig_fatback}
+Options:
+  -q, [--quiet]   # Quiet output
+  -s, [--silent]  # Silent output
 
-Pig fatback beef ribs tongue ribeye bacon. Pig meatball salami, pastrami beef swine ham pork tail tongue shank bresaola turkey. Chuck cow shank short ribs pork belly short loin pastrami turkey. Pork loin doner tri-tip boudin brisket.
+Build all formats
+\end{code}
+
+
+\section{Miscellanea}
+
+Apart from two mostly empty chapters (Chapter~\ref{cha:another_chapter} and Chapter~\ref{cha:yet_another_chapter}), this is the end of the template. In fact, let's include Chapter~\ref{cha:yet_another_chapter} in its entirety, just to see how mostly empty it is:
+
+%= << chapters/yet_another_chapter.tex
+
+Visit \href{http://polytexnic.org/book}{http://polytexnic.org/book} to learn more about what \PolyTeXnic\ can do.

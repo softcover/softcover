@@ -27,10 +27,24 @@ describe Polytexnic::Builders::Html do
 
         it { should match('<!DOCTYPE html>') }
         it { should match('pygments.css') }
-        it { should match('<div id=\"cha-lorem_ipsum\" ' +
-                          'data-tralics-id=\"cid1\"' +
-                          ' class=\"chapter\" data-number=\"1\">') }
+        context "HTML document" do
+          subject(:doc) { Nokogiri::HTML(output) }
+          context "first chapter" do
+            subject(:chapter) { doc.at_css('#cha-a_chapter') }
+            it { should_not be_nil }
+            it "should have a chapter class" do
+              expect(chapter['class']).to eq 'chapter'
+            end
+          end
 
+          context "second chapter" do
+            subject(:chapter) { doc.at_css('#cha-another_chapter') }
+            it { should_not be_nil }
+            it "should have a chapter class" do
+              expect(chapter['class']).to eq 'chapter'
+            end
+          end
+        end
       end
 
       describe "Pygments stylesheet" do
@@ -47,7 +61,7 @@ describe Polytexnic::Builders::Html do
         let(:output) { File.read('html/a_chapter_fragment.html') }
         subject { output }
 
-        it { should match('Lorem ipsum') }
+        it { should match('A chapter') }
       end
 
       describe "frontmatter output" do
@@ -76,7 +90,7 @@ describe Polytexnic::Builders::Html do
 
         it { should match 'MathJax.Hub.Config' }
         it { should match 'TeX-AMS-MML_SVG' }
-        it { should match 'Lorem ipsum' }
+        it { should match 'A chapter' }
       end
     end
   end

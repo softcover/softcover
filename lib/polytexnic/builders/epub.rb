@@ -331,7 +331,6 @@ module Polytexnic
 )
       end
 
-      # Returns the cover page via cover.html.
       def cover_page
 %(<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html>

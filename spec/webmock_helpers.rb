@@ -123,11 +123,15 @@ module WebmockHelpers
   end
 
   def chdir_to_book
-    Dir.chdir File.join File.dirname(__FILE__), "fixtures/book"
+    dir = File.join File.dirname(__FILE__), "fixtures", "book"
+    File.mkdir(dir) unless File.directory?(dir)
+    Dir.chdir dir
   end
 
   def chdir_to_non_book
-    Dir.chdir File.join File.dirname(__FILE__), "fixtures/non-book"
+    dir = File.join File.dirname(__FILE__), "fixtures", "non-book"
+    File.mkdir(dir) unless File.directory?(dir)
+    Dir.chdir dir
   end
 
   # Generates a sample book using the same method as `poly new`.
