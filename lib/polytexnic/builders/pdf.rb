@@ -8,7 +8,7 @@ module Polytexnic
           # Build the HTML to produce PolyTeX as a side-effect,
           # then update the manifest to reduce PDF generation
           # to a previously solved problem.
-          Polytexnic::Builders::Html.new.build!
+          Polytexnic::Builders::Html.new.build!(options)
           @manifest = Polytexnic::BookManifest.new(source: :polytex)
         end
         # Build the PolyTeX filename so it accepts both 'foo' and 'foo.tex'.
@@ -19,6 +19,19 @@ module Polytexnic
         if options[:debug]
           execute "#{xelatex} #{book_filename}"
           return    # only gets called in test env
+        elsif options[:'find-overfull']
+          tmp_name = book_filename.sub('.tex', '.tmp.tex')
+          # The we do things, code listings show up as "Overfull", but they're
+          # actually fine, so filter them out.
+          filter_out_listings = "grep -v 3.22281pt"
+          # It's hard to correlate Overfull line numbers with source files,
+          # so we use grep's -A flag to provide some context instead. Authors
+          # can then use their text editors to find the corresponding place
+          # in the text.
+          show_context = 'grep -A 3 "Overfull \hbox"'
+          cmd = "xelatex #{tmp_name} | #{filter_out_listings} | #{show_context}"
+          execute cmd
+          return
         end
 
         polytex_filenames = @manifest.chapter_file_paths << book_filename

@@ -27,6 +27,9 @@ module Polytexnic
         method_option :once, aliases: '-o',
                              desc: "Run PDF generator once (no xref update)",
                              type: :boolean
+        method_option :'find-overfull', aliases: '-f',
+                                        desc: "Find overfull hboxes",
+                                        type: :boolean
       end
       method_option :quiet, aliases: '-q',
                             desc: "Quiet output", type: :boolean
