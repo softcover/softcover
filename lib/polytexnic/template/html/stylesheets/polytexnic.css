@@ -249,7 +249,7 @@ body #book {
   border-bottom: 1px solid black;
 }
 
-#book .tabular tr.bottom_border {
+#book .tabular tr.top_border {
   border-top: 1px solid black;
 }
 

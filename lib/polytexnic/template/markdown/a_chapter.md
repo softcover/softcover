@@ -1,29 +1,33 @@
-# A chapter {#cha:a_chapter}
+# A chapter
 
-This is the first paragraph of the PolyTeXnic Markdown template. It shows how to write a document in Markdown, a lightweight markup language. This is actually a little lie, because Markdown isn't really powerful enough to make longer documents, and in fact PolyTeXnic's Markdown support is built on top of the [kramdown](http://kramdown.rubyforge.org/) project, which adds a bunch of extra functionality to make Markdown more suitable for real books. Even then, it's still not all that powerful, and authors who want more control should use the alternate *PolyTeX* input format, which is a subset of the LaTeX typesetting language optimized for ebooks.
+This is the first paragraph of the PolyTeXnic Markdown template. It shows how to write a document in Markdown, a lightweight markup language, augmented with the [kramdown](http://kramdown.rubyforge.org/) converter and some custom extensions. (The other available input format is *PolyTeX*, a subset of the *LaTeX* typesetting language optimized for ebooks. PolyTeX has a more complicated syntax but is more powerful.) For more information, see *The PolyTeXnic Book*, available online at <http://polytexnic.org/book>. To learn how to easily publish (and optionally sell) documents produced with PolyTeXnic, visit [Softcover.io](http://softcover.io/).
 
-Authors can change from Markdown to PolyTeX at any time by editing `book.yml` and setting `force_polytex` to `true`. For more information about Markdown and PolyTeX support, see *The PolyTeXnic Book*, available online at <http://polytexnic.org/book>. To learn how to easily publish (and optionally sell) documents produced with PolyTeXnic, visit [Softcover.io](http://softcover.io/).
-
-This is the *third* paragraph, showing how to emphasize text.[^sample_footnote] You can also make text **bold** or *italicized* (which looks the same as emphasized text).
+This is the *secon* paragraph, showing how to emphasize text.[^sample_footnote] You can also make text **bold** or _emphasize a second way_.
 
 *Note*: "PolyTeXnic" is pronounced exactly like the English word *polytechnic*, and "\LaTeX" is pronounced *lay*-tech (with "tech" as in "technology").[^pronunciation]
 
-## A section {#sec:a_section}
+## A section
 
 This is a section.
 
-### Source code {#sec:source_code}
+### Source code
 
 This is a subsection.
 
-PolyTeXnic comes with full support for syntax-highlighted source code using kramdown's default syntax:
+You can typeset code samples and other verbatim text using four space of indentation:
+
+    def hello
+      puts "hello, world"
+    end
+
+PolyTeXnic also comes with full support for syntax-highlighted source code using kramdown's default syntax, which combines the language name with indentation:
 
 {lang="ruby"}
     def hello
       puts "hello, world"
     end
 
-PolyTeXnic's Markdown mode also extends kramdown to support GitHub-flavored Markdown's "code fencing":
+PolyTeXnic's Markdown mode also extends kramdown to support "code fencing" from GitHub-flavored Markdown:
 
 ```ruby
 def hello
@@ -31,18 +35,13 @@ def hello
 end
 ```
 
-Authors who want numbered *code listings* (numbered code environments with linked cross-references) should use the PolyTeX input format.
+### Mathematics
 
-### Mathematics {#sec:mathematics}
-
-PolyTeXnic's Markdown mode supports limited mathematical typesetting, including inline math, such as
-{$$}\phi^2 - \phi - 1 = 0{/$$}, and centered math, such as
+PolyTeXnic's Markdown mode supports limited mathematical typesetting, including inline math, such as {$$}\phi^2 - \phi - 1 = 0{/$$}, and centered math, such as
 
 {$$}
 \phi = \frac{1+\sqrt{5}}{2}.
 {/$$}
-
-Authors desring more extensive math support (including pure LaTeX syntax, numbered equations, and cross-referencing) should use the PolyTeX input format.
 
 
 ## Images and tables
@@ -55,7 +54,7 @@ PolyTeXnic supports the inclusion of images, like this:
 
 ### Tables
 
-PolyTeXnic supports raw tables via the environment. To make a tabular environment into a full-blown table (numbered with captions and linked cross-references), use PolyTeX input instead of Markdown.
+PolyTeXnic supports raw tables via a simple table syntax:
 
 |**HTTP request** | **URL** | **Action** | **Purpose** |
 | `GET` | /users | `index` | page to list all users |
@@ -64,7 +63,7 @@ PolyTeXnic supports raw tables via the environment. To make a tabular environmen
 | `POST` | /users | `create` | create a new user |
 | `GET` | /users/1/edit | `edit` | page to edit user with id `1` |
 | `PATCH` | /users/1 | `update` | update user with id `1` |
-| `DELETE` | /users/1 | `destroy` | delete user with id `1`
+| `DELETE` | /users/1 | `destroy` | delete user with id `1` |
 
 
 ## Command-line interface
@@ -109,11 +108,11 @@ Build all formats
 
 ## Miscellanea
 
-Apart from two mostly empty chapters, this is the end of the template. In fact, let’s include the last chapter in its entirety, just to see how mostly empty it is:
+This is the end of the template---apart from two mostly empty chapters. In fact, let’s include the last chapter in its entirety, just to see how mostly empty it is:
 
 <<(markdown/yet_another_chapter.md, lang: text)
 
-Visit <http://polytexnic.org/book> to learn more about what  can do.
+Visit <http://polytexnic.org/book> to learn more about what PolyTeXnic can do.
 
 
 [^sample_footnote]: This is a footnote. It is numbered automatically.
