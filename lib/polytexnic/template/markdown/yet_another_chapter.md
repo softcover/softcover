@@ -1,4 +1,3 @@
-Yet *another* chapter {#cha:yet_another_chapter}
-=====================
+# Yet *another* chapter
 
 *This chapter left intentionally blank*
