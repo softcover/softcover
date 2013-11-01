@@ -57,6 +57,12 @@ describe Polytexnic::CLI do
           expect(path('book.pdf')).to exist
         end
       end
+
+      context "with the --once option" do
+        it "should build without error" do
+          expect { silence { `poly build:pdf --once` } }.not_to raise_error
+        end
+      end
     end
 
     context "html" do

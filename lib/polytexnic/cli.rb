@@ -24,6 +24,9 @@ module Polytexnic
         method_option :debug, aliases: '-d',
                               desc: "Run raw xelatex for debugging purposes",
                               type: :boolean
+        method_option :once, aliases: '-o',
+                             desc: "Run PDF generator once (no xref update)",
+                             type: :boolean
       end
       method_option :quiet, aliases: '-q',
                             desc: "Quiet output", type: :boolean
