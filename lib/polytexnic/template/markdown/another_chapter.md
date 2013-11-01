@@ -1,3 +1,5 @@
 # Another chapter
 
-Dude. I mean, **dude**!
+This is another chapter.[^numbering]
+
+[^numbering]: Footnotes are numbered on a per-chapter basis.

@@ -24,6 +24,8 @@ describe Polytexnic::CLI do
   context "poly build:pdf options" do
     subject { `poly help build:pdf` }
     it { should include '-d, [--debug]' }
+    it { should include '-o, [--once]' }
+    it { should include 'f, [--find-overfull]' }
   end
 
   context "poly new options" do
@@ -55,6 +57,18 @@ describe Polytexnic::CLI do
         before { silence { `poly build:pdf -d` } }
         it "should generate the debug PDF" do
           expect(path('book.pdf')).to exist
+        end
+      end
+
+      context "with the --once option" do
+        it "should build without error" do
+          expect { silence { `poly build:pdf --once` } }.not_to raise_error
+        end
+      end
+
+      context "with the --find-overfull option" do
+        it "should not find any overfull lines" do
+          expect(`poly build:pdf --find-overfull`.strip).to be_empty
         end
       end
     end
@@ -98,6 +112,7 @@ describe Polytexnic::CLI do
   describe "Markdown books" do
 
     before(:all) do
+      remove_book
       chdir_to_fixtures
       silence { `poly new book -m` }
       chdir_to_book

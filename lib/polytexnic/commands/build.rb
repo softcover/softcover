@@ -42,7 +42,9 @@ module Polytexnic
 
         # Shows a message when building a particular format.
         def building_message(format, options={})
-          puts "Building #{format}..." unless options[:silent]
+          unless options[:silent] || options[:'find-overfull']
+            puts "Building #{format}..."
+          end
         end
     end
   end
