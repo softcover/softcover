@@ -100,6 +100,7 @@ describe Polytexnic::CLI do
   describe "PolyTeX books" do
 
     before(:all) do
+      remove_book
       chdir_to_fixtures
       silence { `poly new book` }
       chdir_to_book
