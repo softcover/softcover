@@ -127,7 +127,7 @@ module Polytexnic
     # ===============================================
     # Deployment
     # ===============================================
-    desc "deploy", "Build & publish book (configure using .poly-deploy file)"
+    desc "deploy", "Build & publish book (configure using .poly-deploy)"
     def deploy
       Polytexnic::Commands::Deployment.deploy!
     end
