@@ -19,7 +19,9 @@ module Polytexnic
         end
 
         if manifest.markdown?
-          FileUtils.rm(Dir.glob(path('chapters/*.tex')))
+          unless options[:'find-overfull']
+            FileUtils.rm(Dir.glob(path('chapters/*.tex')))
+          end
           manifest.chapters.each do |chapter|
             write_latex_files(chapter)
           end
