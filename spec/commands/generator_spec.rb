@@ -83,6 +83,14 @@ describe Polytexnic::Commands::Generator do
         it { should match(/\.DS_Store/) }
       end
 
+      describe "deployment configuration" do
+        subject { File.read(Polytexnic::Commands::Deployment.deploy_config) }
+
+        it { should match /^# poly build:all/ }
+        it { should match /^# poly build:preview/ }
+        it { should match /^# poly publish/ }
+      end
+
       describe "CSS" do
 
         let(:css_file) { 'html/stylesheets/polytexnic.css' }
