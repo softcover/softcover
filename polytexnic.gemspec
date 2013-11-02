@@ -6,11 +6,12 @@ require 'polytexnic/version'
 Gem::Specification.new do |gem|
   gem.name          = "polytexnic"
   gem.version       = Polytexnic::VERSION
-  gem.authors       = ["Nick Merwin", "Michael Hartl"]
-  gem.email         = ["nick@lemurheavy.com"]
+  gem.authors       = ["Michael Hartl", "Nick Merwin"]
+  gem.email         = ["micahel@softcover.io"]
   gem.description   = %q{CLI interface for softcover.io}
-  gem.summary       = %q{publish books}
-  gem.homepage      = "http://softcover.io"
+  gem.summary       = %q{A typesetting system for technical authors}
+  gem.homepage      = "http://polytexnic.org/"
+  gem.license       = "MIT"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
