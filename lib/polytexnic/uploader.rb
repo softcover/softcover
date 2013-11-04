@@ -13,7 +13,7 @@ module Polytexnic
       @after_each_blk = blk
     end
 
-    def upload!
+    def upload!(options={})
       unless @params.empty?
         bar = ProgressBar.create title: "Starting Upload...",
           format: "%t |%B| %P%% %e", total: total_size, smoothing: 0.75,
@@ -62,7 +62,7 @@ module Polytexnic
 
         bar.finish
       else
-        puts "Nothing to upload."
+        puts "Nothing to upload." unless options[:silent]
       end
 
     end

@@ -4,6 +4,17 @@ module Polytexnic
   class CLI < Thor
     include Polytexnic::Utils
 
+    map "-v" => :version
+
+    desc "version", "Returns the version number"
+    method_option :version, aliases: '-v',
+                            desc: "Print version number", type: :boolean
+    def version
+      require 'polytexnic/version'
+      puts "PolyTeXnic #{Polytexnic::VERSION}"
+      exit 0
+    end
+
     # ===============================================
     # Builder
     # ===============================================
@@ -96,13 +107,17 @@ module Polytexnic
     # ===============================================
 
     desc "publish", "Publish your book on Softcover"
+    method_option :quiet, aliases: '-q',
+                          desc: "Quiet output", type: :boolean
+    method_option :silent, aliases: '-s',
+                           desc: "Silent output", type: :boolean
     def publish
       require 'polytexnic/commands/publisher'
 
       invoke :login unless logged_in?
 
-      puts "Publishing..."
-      Polytexnic::Commands::Publisher.publish!
+      puts "Publishing..." unless options[:silent]
+      Polytexnic::Commands::Publisher.publish!(options)
     end
 
     desc "publish:screencasts", "Publish screencasts"
@@ -118,6 +133,14 @@ module Polytexnic
       puts "Publishing screencasts in #{dir}"
       Polytexnic::Commands::Publisher.
         publish_screencasts! options.merge(dir: dir)
+    end
+
+    # ===============================================
+    # Deployment
+    # ===============================================
+    desc "deploy", "Build & publish book (configure using .poly-deploy)"
+    def deploy
+      Polytexnic::Commands::Deployment.deploy!
     end
 
     # ===============================================

@@ -54,6 +54,10 @@ body #book {
   text-decoration: underline;
 }
 
+#book a.tex {
+  text-decoration: none;
+}
+
 #book code {
   font-size: 100%;
   color: darkgreen;

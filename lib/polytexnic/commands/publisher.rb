@@ -4,16 +4,20 @@ module Polytexnic::Commands::Publisher
 
   extend self
 
-  def publish!
+  def publish!(options={})
     return false unless current_book
 
     if current_book.create_or_update
       require 'ruby-progressbar'
       require 'curb'
-      puts "Uploading #{current_book.uploader.file_count} files " \
-        "(#{as_size current_book.uploader.total_size}):"
-      url = current_book.upload!
-      puts "Published! #{url}"
+      unless options[:quiet] || options[:silent]
+        puts "Uploading #{current_book.uploader.file_count} files " \
+          "(#{as_size current_book.uploader.total_size}):"
+      end
+      url = current_book.upload!(options)
+      unless options[:quiet] || options[:silent]
+        puts "Published! #{url}"
+      end
     else
       puts "Errors: #{current_book.errors}"
       return false
