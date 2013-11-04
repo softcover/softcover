@@ -135,12 +135,12 @@ class Polytexnic::Book
     false
   end
 
-  def upload!
+  def upload!(options={})
     @uploader.after_each do |params|
       notify_file_upload params['path']
     end
 
-    @uploader.upload!
+    @uploader.upload!(options)
 
     res = @client.notify_upload_complete
 
