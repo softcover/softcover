@@ -21,6 +21,11 @@ describe Polytexnic::CLI do
     it { should match /epub:check/ }
   end
 
+  context "version number" do
+    subject { `poly -v` }
+    it { should eq "PolyTeXnic #{Polytexnic::VERSION}\n" }
+  end
+
   context "poly build:pdf options" do
     subject { `poly help build:pdf` }
     it { should include '-d, [--debug]' }

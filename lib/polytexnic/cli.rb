@@ -4,6 +4,17 @@ module Polytexnic
   class CLI < Thor
     include Polytexnic::Utils
 
+    map "-v" => :version
+
+    desc "version", "Returns the version number"
+    method_option :version, aliases: '-v',
+                            desc: "Print version number", type: :boolean
+    def version
+      require 'polytexnic/version'
+      puts "PolyTeXnic #{Polytexnic::VERSION}"
+      exit 0
+    end
+
     # ===============================================
     # Builder
     # ===============================================
