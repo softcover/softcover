@@ -2,7 +2,7 @@ module Polytexnic
   class BaseConfig
 
     DEFAULTS = {
-      host: 'http://softcover.io'
+      host: 'https://softcover.io'
     }
 
     PATH = '.'
