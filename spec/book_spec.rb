@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Polytexnic::Book do
   context "#initialize" do
     context "valid book directory" do
-      before(:all) { generate_book }
+      before(:all) { generate_book(id: 1) }
       after(:all)  { remove_book }
 
       # disabling these tests for now:
@@ -17,6 +17,7 @@ describe Polytexnic::Book do
       its(:filenames) { should include "ebooks/test-book.pdf"}
 
       its(:slug) { should eq "book" }
+      its(:url) { should match /\/books\/(.*?)\/redirect/ }
     end
   end
 end
