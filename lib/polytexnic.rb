@@ -58,3 +58,5 @@ module Polytexnic
     false
   end
 end
+
+require 'polytexnic/rails/railtie' if defined?(Rails)
