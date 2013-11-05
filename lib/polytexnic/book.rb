@@ -73,7 +73,7 @@ class Polytexnic::Book
 
   def url
     # TODO: append api_token to auto-login?
-    "#{@client.host}/books/#{slug}"
+    "#{@client.host}/books/#{id}/redirect"
   end
 
   # Opens the book in the browser (OS X–only).
