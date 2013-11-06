@@ -33,13 +33,7 @@ module Polytexnic
     # ============ Auth ===========
     def login!
       require "polytexnic/config"
-      begin
-        response = post path_for(:login),
-          email: @email, password: @password
-
-      rescue RestClient::UnprocessableEntity
-        return handle_422
-      end
+      response = post path_for(:login), email: @email, password: @password
 
       json = JSON response
       Polytexnic::Config['api_key'] = @api_key = json['api_key']
@@ -48,8 +42,6 @@ module Polytexnic
     # ============ Publishing ===========
     def create_or_update_book(params)
       JSON post path_for(:books), params
-    rescue RestClient::UnprocessableEntity
-      handle_422
     rescue RestClient::ResourceNotFound
       { "errors" =>
         "Book ID #{params[:id]} not found for this account. "+
@@ -65,6 +57,10 @@ module Polytexnic
       JSON put path_for(:books, book.id), upload_complete: true
     end
 
+    def destroy
+      delete path_for(:books, book.id)
+    end
+
     # ============ Screencasts ===========
     def get_screencast_upload_params(files)
       JSON post path_for(:books, book.id, :screencasts), files: files
@@ -73,11 +69,26 @@ module Polytexnic
 
     # ============ Utils ===========
     private
-      %w{get put post}.each do |verb|
-        define_method verb do |url, params, headers={}|
-          RestClient.send verb, "#{@host}#{url}",
-            params_with_key(params).to_json,
-            formatted_headers(headers)
+      %w{put post}.each do |verb|
+        define_method verb do |url, params={}, headers={}|
+          begin
+            RestClient.send verb, @host + url,
+              params_with_key(params).to_json,
+              formatted_headers(headers)
+          rescue RestClient::UnprocessableEntity
+            handle_422
+          end
+        end
+      end
+
+      %w{get delete}.each do |verb|
+        define_method verb do |url, headers={}|
+          begin
+            path = "#{@host + url}?api_key=#{@api_key}"
+            RestClient.send verb, path, formatted_headers(headers)
+          rescue RestClient::UnprocessableEntity
+            handle_422
+          end
         end
       end
 
@@ -96,7 +107,7 @@ module Polytexnic
       def handle_422
         require "polytexnic/config"
         Polytexnic::Config['api_key'] = nil
-        return false
+        return { "errors" => "You don't have access to that resource." }
       end
   end
 end

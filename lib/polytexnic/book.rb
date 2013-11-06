@@ -159,6 +159,15 @@ class Polytexnic::Book
       checksum: book_file.checksum
   end
 
+  def destroy
+    res = @client.destroy
+    if res['errors']
+      @errors = res['errors']
+      return false
+    end
+    true
+  end
+
   # ============================================================================
   # Screencast handling
   # ============================================================================

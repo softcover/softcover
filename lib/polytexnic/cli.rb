@@ -135,6 +135,21 @@ module Polytexnic
         publish_screencasts! options.merge(dir: dir)
     end
 
+    desc "unpublish", "Removes book from Softcover"
+    def unpublish
+      require 'polytexnic/commands/publisher'
+
+      invoke :login unless logged_in?
+
+      slug = Polytexnic::BookManifest.new.slug
+      if ask("Type '#{slug}' to unpublish:") == slug
+        puts "Unpublishing..." unless options[:silent]
+        Polytexnic::Commands::Publisher.unpublish!
+      else
+        puts "Canceled."
+      end
+    end
+
     # ===============================================
     # Deployment
     # ===============================================
@@ -199,6 +214,14 @@ module Polytexnic
 
       puts 'Config var added:'
       config
+    end
+
+    desc "config:remove key", "Remove the key from your local config vars"
+    define_method "config:remove" do |key|
+      require "polytexnic/config"
+      Polytexnic::Config[key] = nil
+
+      puts 'Config var removed.'
     end
 
     protected
