@@ -19,6 +19,7 @@ tmp
 *.aux
 *.tmp.*
 spec/fixtures/book/
+spec/fixtures/non-book/
 pygments.sty
 .api_token
 .project_id
