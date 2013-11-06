@@ -73,7 +73,6 @@ describe Polytexnic::Commands::Generator do
         it { should match(/\*\.log/) }
         it { should match(/\*\.toc/) }
         it { should match(/\*\.tmp\.\*/) }
-        it { should match(/\*\.pdf/) }
         it { should match(/pygments\.sty/) }
         it { should match(/html\//) }
         it { should match(/epub\//) }
