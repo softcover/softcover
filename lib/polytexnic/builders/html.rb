@@ -150,14 +150,6 @@ module Polytexnic
         reference_cache
       end
 
-      # Writes the frontmatter pseudo-chapter.
-      def write_frontmatter_file(xml, id)
-        if element = xml.at_css("div##{id}")
-          File.write("html/#{id}_fragment.html", element.to_xhtml)
-          element.remove
-        end
-      end
-
       # Builds a cache of targets for cross-references.
       def build_target_cache(xml)
         {}.tap do |target_cache|

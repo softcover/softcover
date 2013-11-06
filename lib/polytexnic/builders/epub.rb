@@ -81,7 +81,6 @@ module Polytexnic
           target_filename = path("epub/OEBPS/#{chapter.fragment_name}")
           File.open(target_filename, 'w') do |f|
             content = File.read(path("html/#{chapter.fragment_name}"))
-
             doc = strip_attributes(Nokogiri::HTML(content))
             inner_html = doc.at_css('body').children.to_xhtml
             if math?(inner_html)
@@ -161,7 +160,7 @@ module Polytexnic
           png['alt'] = png_filename.sub('.png', '')
           svg.replace(png)
         end
-        source.at_css('body').children.to_xhtml
+        source.at_css('div#book').children.to_xhtml
       end
 
       # Returns the PhantomJS executable (if available).
@@ -209,10 +208,10 @@ module Polytexnic
         epub_css = File.join(template_dir, epub_styles, 'epub.css')
         FileUtils.cp(epub_css, epub_styles)
 
-        # For some reason, EPUB books hate the #book id in the stylesheet,
-        # so remove it.
+        # For some reason, EPUB books hate the #book ids in the stylesheet
+        # (i.e., such books fail to validate), so remove them.
         polytexnic_css = File.read(File.join(html_styles, 'polytexnic.css'))
-        polytexnic_css.gsub!(/^\s*#book /, '')
+        polytexnic_css.gsub!(/\s*#book\s+/, '')
         File.write(File.join(epub_styles, 'polytexnic.css'), polytexnic_css)
       end
 
