@@ -145,7 +145,8 @@ describe Polytexnic::Builders::Epub do
         builder.manifest.chapters.each_with_index do |chapter, i|
           content = File.read(path("html/#{chapter.slug}_fragment.html"))
           has_math ||= builder.math?(content)
-          expect(path("epub/OEBPS/#{chapter.slug}_fragment.html")).to exist
+          fragment = path("epub/OEBPS/#{chapter.slug}_fragment.html")
+          expect(fragment).to exist
         end
         # Make sure at least one template file has math.
         expect(has_math).to be_true
@@ -161,6 +162,11 @@ describe Polytexnic::Builders::Epub do
       expect(path('epub/OEBPS/styles/page-template.xpgt')).to exist
       expect(path('epub/OEBPS/styles/pygments.css')).to exist
       expect(path('epub/OEBPS/styles/polytexnic.css')).to exist
+    end
+
+    it "should scrub the CSS file of the book id" do
+      css = File.read(path('epub/OEBPS/styles/polytexnic.css'))
+      expect(css).not_to match /\#book/
     end
   end
 
