@@ -7,23 +7,27 @@ module WebmockHelpers
   def test_access_key; 'asdf' end
   def test_id; 1 end
 
-  HEADERS = { 'Accept'=>'application/json',
-              'Accept-Encoding'=>'gzip, deflate',
-              'Content-Length'=>/.+/,
-              'Content-Type'=>'application/json',
-              'User-Agent'=>'Ruby' }
+  def headers(with_content_length=true)
+    hash = { 'Accept'=>'application/json',
+      'Accept-Encoding'=>'gzip, deflate',
+      'Content-Type'=>'application/json',
+      'User-Agent'=>'Ruby'
+    }
+    hash['Content-Length'] = /.+/ if with_content_length
+    hash
+  end
 
   def stub_valid_login(email, pass, api_key=TEST_API_KEY)
     stub_request(:post, "#{api_base_url}/login").
       with(:body => { "email" => email, "password" => pass },
-           :headers => HEADERS ).
+           :headers => headers ).
       to_return(:status => 200, :body => {api_key: api_key}.to_json)
   end
 
   def stub_invalid_login(email, pass)
     stub_request(:post, "#{api_base_url}/login").
       with(:body => { "email" => email, "password" => pass },
-           :headers => HEADERS ).
+           :headers => headers ).
       to_return(:status => 422, body: '')
   end
 
@@ -58,7 +62,7 @@ module WebmockHelpers
            cover: book.cover,
            chapters: book.chapter_attributes
         }.to_json,
-           :headers => HEADERS).
+           :headers => headers).
       to_return(:status => 200, :body => return_body, :headers => {})
 
     stub_s3_post
@@ -67,8 +71,14 @@ module WebmockHelpers
 
     stub_request(:put, "#{api_base_url}/books/#{test_id}").
       with(:body => "{\"upload_complete\":true}",
-        :headers => HEADERS).
+        :headers => headers).
         to_return(:status => 200, :body => {}.to_json, :headers => {})
+  end
+
+  def stub_destroy_book(book)
+    stub_request(:delete, "#{api_base_url}/books/#{book.id}?api_key=").
+      with(:headers => headers(false)).
+      to_return(:status => 200, :body => "", :headers => {})
   end
 
   def stub_notify_file_upload(file)
@@ -77,7 +87,7 @@ module WebmockHelpers
     stub_request(:post, notify_file_url).
          with(:body =>
             { path: file.path, checksum: file.checksum }.to_json,
-              :headers => HEADERS).
+              :headers => headers).
          to_return(:status => 200, :body => {}.to_json, :headers => {})
   end
 
@@ -94,7 +104,7 @@ module WebmockHelpers
     stub_request(:post,
                  "#{api_base_url}/books/#{book.id}/screencasts").
                   with(:body => {files: files }.to_json,
-                       :headers => HEADERS).
+                       :headers => headers).
                   to_return(:status => 200, :body => {
                             upload_params: files.map { |file|
                               {

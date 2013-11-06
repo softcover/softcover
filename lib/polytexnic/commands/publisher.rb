@@ -85,4 +85,18 @@ module Polytexnic::Commands::Publisher
   def exit_with_message
     puts "Processed #{current_book.processed_screencasts.size} screencasts."
   end
+
+  def unpublish!
+    return false unless current_book
+    if current_book.destroy
+      puts "Done!"
+      return true
+    else
+      puts "Errors: #{current_book.errors}"
+      return false
+    end
+  rescue Polytexnic::BookManifest::NotFound => e
+    puts e.message
+    false
+  end
 end
