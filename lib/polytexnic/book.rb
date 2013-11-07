@@ -68,7 +68,7 @@ class Polytexnic::Book
   end
 
   def chapter_attributes
-    chapters.map(&:marshal_dump)
+    chapters.map(&:to_hash)
   end
 
   def url
