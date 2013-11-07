@@ -146,7 +146,9 @@ module Polytexnic
           png_filename = svg_filename.sub('.svg', '.png')
           pngs << png_filename
           unless File.exist?(png_filename)
-            puts "Creating #{png_filename}" unless options[:silent]
+            unless options[:silent] || options[:quiet]
+              puts "Creating #{png_filename}"
+            end
             svg_height = svg['style'].scan(/height: (.*?);/).flatten.first
             scale_factor = 9   # This scale factor turns out to look good.
             h = scale_factor * svg_height.to_f
