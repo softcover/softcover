@@ -89,12 +89,16 @@ module Polytexnic::Commands::Publisher
   def unpublish!
     return false unless current_book
     if current_book.destroy
+      Polytexnic::BookConfig.remove
       puts "Done!"
       return true
     else
       puts "Errors: #{current_book.errors}"
       return false
     end
+  rescue RestClient::ResourceNotFound
+    puts "Book with ID=#{current_book.id} not found under this account."
+    false
   rescue Polytexnic::BookManifest::NotFound => e
     puts e.message
     false

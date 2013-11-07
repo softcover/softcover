@@ -50,6 +50,25 @@ describe Polytexnic::Commands::Publisher do
       it "unpublishes" do
         expect(subject.unpublish!).to be_true
       end
+
+      it "removes book config" do
+        subject.unpublish!
+        expect(Polytexnic::BookConfig.exists?).to be_false
+      end
+    end
+
+    context "unpublishing from book directory with invalid ID" do
+      before do
+        chdir_to_book
+        stub_create_book book
+        subject.publish!
+        Polytexnic::BookConfig['id'] = 0
+        stub_destroy_book_not_found book
+      end
+
+      it "does not unpublish" do
+        expect(subject.unpublish!).to be_false
+      end
     end
   end
 

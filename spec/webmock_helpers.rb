@@ -81,6 +81,12 @@ module WebmockHelpers
       to_return(:status => 200, :body => "", :headers => {})
   end
 
+  def stub_destroy_book_not_found(book)
+    stub_request(:delete, "#{api_base_url}/books/#{book.id}?api_key=").
+      with(:headers => headers(false)).
+      to_return(:status => 404, :body => "", :headers => {})
+  end
+
   def stub_notify_file_upload(file)
     notify_file_url = "#{api_base_url}/books/#{test_id}/notify_file_upload"
 
