@@ -2,9 +2,9 @@
 
 This is the first paragraph of the PolyTeXnic Markdown template. It shows how to write a document in Markdown, a lightweight markup language, augmented with the [kramdown](http://kramdown.rubyforge.org/) converter and some custom extensions. (The other available input format is *PolyTeX*, a subset of the *LaTeX* typesetting language optimized for ebooks. PolyTeX has a more complicated syntax but is more powerful.) For more information, see *The PolyTeXnic Book*, available online at <http://polytexnic.org/book>. To learn how to easily publish (and optionally sell) documents produced with PolyTeXnic, visit [Softcover.io](http://softcover.io/).
 
-This is the *secon* paragraph, showing how to emphasize text.[^sample_footnote] You can also make text **bold** or _emphasize a second way_.
+This is the *second* paragraph, showing how to emphasize text.[^sample_footnote] You can also make text **bold** or _emphasize a second way_.
 
-*Note*: "PolyTeXnic" is pronounced exactly like the English word *polytechnic*, and "\LaTeX" is pronounced *lay*-tech (with "tech" as in "technology").[^pronunciation]
+*Note*: "PolyTeXnic" is pronounced exactly like the English word *polytechnic*, and "LaTeX" is pronounced *lay*-tech (with "tech" as in "technology").[^pronunciation]
 
 ## A section
 
