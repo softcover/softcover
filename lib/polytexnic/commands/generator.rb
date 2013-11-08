@@ -28,7 +28,10 @@ module Polytexnic
           next if path =~ /\/simple_book/ && !@simple
           next if path =~ /\/book/ && @simple
           (cp_path = path.dup).slice! template_dir + "/"
-          FileUtils.mkdir cp_path unless File.exist?(cp_path)
+          unless File.exist?(cp_path)
+            puts "Creating #{cp_path}" unless cp_path =~ /MathJax/
+            FileUtils.mkdir cp_path
+          end
         end
 
         # Create the files.
@@ -62,6 +65,7 @@ module Polytexnic
             next unless overwrite
           end
 
+          puts "Creating #{cp_path}" unless cp_path =~ /MathJax/
           if path =~ /\.erb/
             erb = ERB.new(File.read(path)).result(binding)
             File.open(cp_path, 'w') { |f| f.write erb }
