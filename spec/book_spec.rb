@@ -18,6 +18,16 @@ describe Polytexnic::Book do
 
       its(:slug) { should eq "book" }
       its(:url) { should match /\/books\/(.*?)\/redirect/ }
+
+      it "sets chapter attributes" do
+        expect(subject.chapter_attributes.first[:menu_heading]).
+          to match /Frontmatter/
+      end
+
+      it "has rendered latex in menu_heading" do
+        expect(subject.chapter_attributes.last[:menu_heading]).
+          to match /<em>/
+      end
     end
   end
 end
