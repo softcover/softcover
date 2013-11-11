@@ -42,7 +42,7 @@ module Polytexnic
           latex   = Polytexnic::Core::Pipeline.new(polytex).to_latex
           if filename == book_filename
             latex.gsub!(/\\include{(.*?)}/) do
-              "\\include{#{$1}.tmp}"
+              "\\include{#{Polytexnic::Utils.tmpify($1)}.tmp}"
             end
           end
           File.open(Polytexnic::Utils.tmpify(filename), 'w') do |f|

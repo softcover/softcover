@@ -56,7 +56,8 @@ module Polytexnic::Utils
   # Returns the tmp version of a filename.
   # E.g., tmpify('foo.tex') => 'foo.tmp.tex'
   def tmpify(filename)
-    filename.sub('.tex', '.tmp.tex')
+    sep = File::SEPARATOR
+    filename.sub('chapters' + sep, 'tmp' + sep).sub('.tex', '.tmp.tex')
   end
 
   # Writes a Pygments style file.
