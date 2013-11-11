@@ -4,6 +4,7 @@
 *.toc
 *.out
 *.tmp.*
+tmp/
 
 # Generated style, frontmatter, and cache files
 pygments.sty
