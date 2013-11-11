@@ -104,10 +104,10 @@ module Polytexnic
         fds = Dir.glob(File.join(template_dir, "**/*"), File::FNM_DOTMATCH)
         if markdown?
           # Skip the PolyTeX chapter files, which will be generated later.
-          fds.reject { |e| e =~ /\/chapters\/.*/ }
+          fds.reject { |e| e =~ /\/chapters\/.*\.tex/ }
         else
-          # Skip the markdown directory.
-          fds.reject { |e| e =~ /markdown/ }
+          # Skip the Markdown files & Book.txt.
+          fds.reject { |e| e =~ /(chapters\/.*\.md|Book\.txt)/ }
         end
       end
 
