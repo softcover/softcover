@@ -30,6 +30,10 @@ class Polytexnic::BookManifest < OpenStruct
       html = Nokogiri::HTML(raw_html).at_css('p').inner_html
       chapter_number.zero? ? html : "Chapter #{chapter_number}: #{html}"
     end
+
+    def to_hash
+      marshal_dump.merge({ menu_heading: menu_heading })
+    end
   end
 
   class Section < OpenStruct
