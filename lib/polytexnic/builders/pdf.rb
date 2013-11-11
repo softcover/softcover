@@ -4,7 +4,7 @@ module Polytexnic
       include Polytexnic::Output
 
       def build!(options={})
-        if markdown_directory?
+        if @manifest.markdown?
           # Build the HTML to produce PolyTeX as a side-effect,
           # then update the manifest to reduce PDF generation
           # to a previously solved problem.
@@ -35,7 +35,7 @@ module Polytexnic
         end
 
         polytex_filenames = @manifest.chapter_file_paths << book_filename
-        polytex_filenames.delete('chapters/frontmatter.tex')
+        polytex_filenames.delete(path('chapters/frontmatter.tex'))
         polytex_filenames.each do |filename|
           puts filename unless options[:quiet] || options[:silent]
           polytex = File.open(filename) { |f| f.read }

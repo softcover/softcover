@@ -23,7 +23,7 @@ module Polytexnic
             FileUtils.rm(Dir.glob(path('chapters/*.tex')))
           end
           manifest.chapters.each do |chapter|
-            write_latex_files(chapter)
+            write_latex_files(chapter, options)
           end
           rewrite_master_latex_file
           # Reset the manifest to use PolyTeX.
@@ -52,18 +52,19 @@ module Polytexnic
       end
 
       # Writes the LaTeX files for a given Markdown chapter.
-      def write_latex_files(chapter)
-        path = File.join('markdown', chapter.slug + '.md')
+      def write_latex_files(chapter, options = {})
+        path = File.join('chapters', chapter.slug + '.md')
         cc = Polytexnic.custom_styles
         md = Polytexnic::Core::Pipeline.new(File.read(path), source: :md,
                                             custom_commands: cc)
-        File.write(File.join("chapters", "#{chapter.slug}.tex"), md.polytex)
+        filename = path("chapters/#{chapter.slug}.tex")
+        File.write(filename, md.polytex)
       end
 
       # Rewrites the master LaTeX file <name>.tex to use chapters from Book.txt.
       def rewrite_master_latex_file
         master_filename = Dir['*.tex'].reject { |f| f =~ /\.tmp/}.first
-        lines = File.readlines('markdown/Book.txt')
+        lines = File.readlines('Book.txt')
         tex_file = []
         lines.each do |line|
           if line =~ /(.*)\.md\s*$/

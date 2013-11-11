@@ -103,7 +103,7 @@ module Polytexnic
         end
       end
 
-      # Returns HTML for HTMLT source that includes math.
+      # Returns HTML for HTML source that includes math.
       # As a side-effect, html_with_math creates PNGs corresponding to any
       # math in the given source. The technique involves using PhantomJS to
       # hit the HTML source for each page containing math to create SVGs

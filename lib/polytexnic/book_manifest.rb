@@ -39,7 +39,7 @@ class Polytexnic::BookManifest < OpenStruct
   class Section < OpenStruct
   end
 
-  MD_PATH = File.join('markdown', 'Book.txt')
+  MD_PATH = 'Book.txt'
   YAML_PATH = "book.yml"
 
   def initialize(options = {})
@@ -144,7 +144,7 @@ class Polytexnic::BookManifest < OpenStruct
   def chapter_file_paths
     pdf_chapter_names.map do |name|
       file_path = case
-      when markdown? then File.join("markdown", "#{name}.md")
+      when markdown? then File.join("chapters", "#{name}.md")
       when polytex?  then File.join("chapters", "#{name}.tex")
       end
 

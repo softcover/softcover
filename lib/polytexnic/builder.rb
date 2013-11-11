@@ -25,7 +25,7 @@ module Polytexnic
       def verify; end
 
       def source
-        markdown_directory? ? :markdown : :polytex
+        Dir.glob(path('chapters/*.md')).empty? ? :polytex : :markdown
       end
 
       # Writes out the PolyTeXnic commands from polytexnic-core.
