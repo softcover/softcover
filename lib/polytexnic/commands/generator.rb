@@ -13,7 +13,7 @@ module Polytexnic
 
         thor = Thor::Shell::Basic.new
 
-        puts "generating directory: #{name}"
+        puts "Generating directory: #{name}"
 
         overwrite_all = false
 

@@ -27,8 +27,9 @@ module Polytexnic
           end
           rewrite_master_latex_file
           # Reset the manifest to use PolyTeX.
-          @manifest = Polytexnic::BookManifest.new(source: :polytex,
-                                                   verify_paths: true)
+          self.manifest = Polytexnic::BookManifest.new(source: :polytex,
+                                                       verify_paths: true)
+          @remove_tex = true unless options[:preserve_tex]
         end
 
         if manifest.polytex?
@@ -47,6 +48,8 @@ module Polytexnic
           printer = RubyProf::GraphPrinter.new(result)
           printer.print(STDOUT, {})
         end
+
+        FileUtils.rm(Dir.glob(path('chapters/*.tex'))) if @remove_tex
 
         true
       end

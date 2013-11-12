@@ -5,9 +5,10 @@ module Polytexnic
 
       def build!(options={})
         @preview = options[:preview]
-        Polytexnic::Builders::Html.new.build!
-        if markdown_directory?
-          @manifest = Polytexnic::BookManifest.new(source: :polytex)
+        Polytexnic::Builders::Html.new.build!(preserve_tex: true)
+        if manifest.markdown?
+          self.manifest = Polytexnic::BookManifest.new(source: :polytex)
+          @remove_tex = true
         end
         remove_html
         create_directories
@@ -21,6 +22,7 @@ module Polytexnic
         create_style_files
         make_epub(options)
         move_epub
+        FileUtils.rm(Dir.glob(path('chapters/*.tex'))) if @remove_tex
       end
 
       # Returns true if generating a book preview.
@@ -153,7 +155,11 @@ module Polytexnic
             scale_factor = 9   # This scale factor turns out to look good.
             h = scale_factor * svg_height.to_f
             cmd = "#{inkscape} -f #{svg_filename} -e #{png_filename} -h #{h}pt"
-            silence_stream(STDERR) { system cmd }
+            if options[:silent]
+              silence { silence_stream(STDERR) { system cmd } }
+            else
+              silence_stream(STDERR) { system cmd }
+            end
           end
           rm svg_filename
           png = Nokogiri::XML::Node.new('img', source)
