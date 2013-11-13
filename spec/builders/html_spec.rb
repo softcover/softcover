@@ -119,6 +119,7 @@ describe Polytexnic::Builders::Html do
 
       it "should remove the generated LaTeX files" do
         expect(Dir.glob(path('chapters/*.tex'))).to be_empty
+        expect(Dir.glob(path('generated_polytex/*.tex'))).not_to be_empty
       end
 
       describe "master LaTeX file" do

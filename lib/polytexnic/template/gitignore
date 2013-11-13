@@ -5,6 +5,7 @@
 *.out
 *.tmp.*
 tmp/
+generated_polytex/
 
 # Generated style, frontmatter, and cache files
 pygments.sty

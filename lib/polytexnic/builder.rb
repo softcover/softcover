@@ -26,8 +26,11 @@ module Polytexnic
     end
 
     # Removes the generated PolyTeX.
+    # The 'removal' actually just involves moving it to an ignored storage
+    # directory. This gives users the ability to inspect it if desired.
     def remove_polytex!
-      FileUtils.rm(Dir.glob(path('chapters/*.tex')))
+      mkdir 'generated_polytex'
+      FileUtils.mv(Dir.glob(path('chapters/*.tex')), 'generated_polytex')
     end
 
     def clean!; end
