@@ -58,8 +58,8 @@ module Softcover
       def write_latex_files(chapter, options = {})
         path = File.join('chapters', chapter.slug + '.md')
         cc = Softcover.custom_styles
-        md = Polytexnic::Core::Pipeline.new(File.read(path), source: :md,
-                                            custom_commands: cc)
+        md = Polytexnic::Pipeline.new(File.read(path), source: :md,
+                                                       custom_commands: cc)
         filename = path("chapters/#{chapter.slug}.tex")
         File.write(filename, md.polytex)
       end
@@ -98,7 +98,7 @@ module Softcover
           File.read($2 + '.tex') + "\n"
         end
         cc = Softcover.custom_styles
-        Polytexnic::Core::Pipeline.new(polytex, custom_commands: cc).to_html
+        Polytexnic::Pipeline.new(polytex, custom_commands: cc).to_html
       end
 
       # Writes the full HTML file for the book.

@@ -26,7 +26,7 @@ class Softcover::BookManifest < OpenStruct
 
     # Returns a chapter heading for use in the navigation menu.
     def menu_heading
-      raw_html = Polytexnic::Core::Pipeline.new(title).to_html
+      raw_html = Polytexnic::Pipeline.new(title).to_html
       html = Nokogiri::HTML(raw_html).at_css('p').inner_html
       chapter_number.zero? ? html : "Chapter #{chapter_number}: #{html}"
     end

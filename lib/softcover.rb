@@ -1,4 +1,4 @@
-require 'polytexnic-core'
+require 'polytexnic'
 require 'active_support/core_ext/string'
 
 require_relative 'softcover/formats'

@@ -102,7 +102,7 @@ describe Softcover::CLI do
     end
   end
 
-  describe "softcoverTeX books" do
+  describe "PolyTeX books" do
 
     before(:all) do
       remove_book
