@@ -18,6 +18,18 @@ module Polytexnic
       self
     end
 
+    # Returns true if we should remove the generated PolyTeX.
+    # This is true of Markdown books, but we can't just use `markdown?` because
+    # we're re-using the PolyTeX production pipeline.
+    def remove_polytex?
+      @remove_tex
+    end
+
+    # Removes the generated PolyTeX.
+    def remove_polytex!
+      FileUtils.rm(Dir.glob(path('chapters/*.tex')))
+    end
+
     def clean!; end
 
     private

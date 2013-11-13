@@ -49,7 +49,7 @@ module Polytexnic
           printer.print(STDOUT, {})
         end
 
-        FileUtils.rm(Dir.glob(path('chapters/*.tex'))) if @remove_tex
+        remove_polytex! if remove_polytex?
 
         true
       end

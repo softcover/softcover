@@ -27,7 +27,6 @@ module Polytexnic
           message = "Put EpubCheck (#{url}) in your home directory"
           @epubcheck ||= executable(filename, message).inspect
         end
-
     end
   end
 end

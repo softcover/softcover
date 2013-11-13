@@ -53,7 +53,9 @@ module Polytexnic
         end
         write_pygments_file(:latex)
         copy_polytexnic_sty
-        FileUtils.rm(Dir.glob(path('chapters/*.tex'))) if @remove_tex
+
+        remove_polytex! if remove_polytex?
+
         build_pdf = "#{xelatex} #{Polytexnic::Utils.tmpify(book_filename)}"
         # Run the command twice (to guarantee up-to-date cross-references)
         # unless explicitly overriden.

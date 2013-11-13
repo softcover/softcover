@@ -22,7 +22,7 @@ module Polytexnic
         create_style_files
         make_epub(options)
         move_epub
-        FileUtils.rm(Dir.glob(path('chapters/*.tex'))) if @remove_tex
+        remove_polytex! if remove_polytex?
       end
 
       # Returns true if generating a book preview.
