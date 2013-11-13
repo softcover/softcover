@@ -4,16 +4,16 @@ require 'webmock/rspec'
 
 require 'webmock_helpers'
 
-require 'simplecov'
-SimpleCov.start
+# require 'simplecov'
+# SimpleCov.start
 
 require 'json'
-require 'polytexnic'
-require 'polytexnic/utils'
-require 'polytexnic/config'
-require 'polytexnic/server/app'
-require 'polytexnic/commands/publisher'
-Polytexnic::Output.silence!
+require 'softcover'
+require 'softcover/utils'
+require 'softcover/config'
+require 'softcover/server/app'
+require 'softcover/commands/publisher'
+Softcover::Output.silence!
 
 # Load support files.
 Dir.glob(File.join(File.dirname(__FILE__), "./support/**/*.rb")).each do |f|
@@ -21,28 +21,28 @@ Dir.glob(File.join(File.dirname(__FILE__), "./support/**/*.rb")).each do |f|
 end
 
 RSpec.configure do |config|
-  include Polytexnic::Utils
+  include Softcover::Utils
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
 
-  Polytexnic::set_test_mode!
+  Softcover::set_test_mode!
 
   config.before do
-    Polytexnic::set_test_mode!
-    Polytexnic::Utils.reset_current_book!
-    Polytexnic::Config.remove
-    Polytexnic::BookConfig.remove
+    Softcover::set_test_mode!
+    Softcover::Utils.reset_current_book!
+    Softcover::Config.remove
+    Softcover::BookConfig.remove
   end
 
   config.before(:each) do
-    Polytexnic::Output.silence!
-    Polytexnic::Commands::Server.no_listener = true
+    Softcover::Output.silence!
+    Softcover::Commands::Server.no_listener = true
   end
 
   config.after do
-    Polytexnic::Config.remove
-    Polytexnic::BookConfig.remove
+    Softcover::Config.remove
+    Softcover::BookConfig.remove
   end
 
   config.include WebmockHelpers

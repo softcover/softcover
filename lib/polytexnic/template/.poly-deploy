@@ -1,6 +1,0 @@
-# Edit this file to customize your deployment steps with custom command options
-# or additional commands.
-#
-# poly build:all
-# poly build:preview
-# poly publish

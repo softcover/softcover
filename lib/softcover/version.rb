@@ -1,0 +1,3 @@
+module Softcover
+  VERSION = "0.5.0"
+end

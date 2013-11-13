@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Polytexnic::Builder do
+describe Softcover::Builder do
   before(:all) { generate_book }
   after(:all)  { remove_book }
 

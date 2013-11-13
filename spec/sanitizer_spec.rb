@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'polytexnic/sanitizer'
+require 'softcover/sanitizer'
 
-describe Polytexnic::Sanitizer do
+describe Softcover::Sanitizer do
   context "malicious html" do
     let(:html) { "<div onclick='alert(document.cookie)'></div>"}
 

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Polytexnic::Commands::Publisher do
-  let(:book) { Polytexnic::Utils.current_book }
+describe Softcover::Commands::Publisher do
+  let(:book) { Softcover::Utils.current_book }
   before(:all) { generate_book }
   after(:all)  { remove_book }
 
@@ -53,7 +53,7 @@ describe Polytexnic::Commands::Publisher do
 
       it "removes book config" do
         subject.unpublish!
-        expect(Polytexnic::BookConfig.exists?).to be_false
+        expect(Softcover::BookConfig.exists?).to be_false
       end
     end
 
@@ -62,7 +62,7 @@ describe Polytexnic::Commands::Publisher do
         chdir_to_book
         stub_create_book book
         subject.publish!
-        Polytexnic::BookConfig['id'] = 0
+        Softcover::BookConfig['id'] = 0
         stub_destroy_book_not_found book
       end
 

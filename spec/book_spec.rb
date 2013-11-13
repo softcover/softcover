@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Polytexnic::Book do
+describe Softcover::Book do
   context "#initialize" do
     context "valid book directory" do
       before(:all) { generate_book(id: 1) }

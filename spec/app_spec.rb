@@ -1,23 +1,23 @@
 require 'spec_helper'
 require 'rack/test'
 
-describe Polytexnic::App do
+describe Softcover::App do
   include Rack::Test::Methods
 
   def app
-    Polytexnic::App
+    Softcover::App
   end
 
   context "ordinary book" do
     before(:all) do
       generate_book
-      Polytexnic::Builders::Html.new.build!
+      Softcover::Builders::Html.new.build!
     end
     after(:all)  { remove_book }
 
     before { chdir_to_book }
 
-    let(:manifest) { Polytexnic::BookManifest.new }
+    let(:manifest) { Softcover::BookManifest.new }
     let(:chapter) { manifest.chapters[1] }
 
     it 'redirects / to first chapter' do
@@ -81,13 +81,13 @@ describe Polytexnic::App do
   context "simple book" do
     before(:all) do
       generate_book(simple: true)
-      Polytexnic::Builders::Html.new.build!
+      Softcover::Builders::Html.new.build!
     end
     after(:all)  { remove_book }
 
     before { chdir_to_book }
 
-    let(:manifest) { Polytexnic::BookManifest.new }
+    let(:manifest) { Softcover::BookManifest.new }
     let(:chapter) { manifest.chapters[0] }
 
     it 'redirects / to first chapter' do

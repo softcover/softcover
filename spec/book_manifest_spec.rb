@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe Polytexnic::BookManifest do
+describe Softcover::BookManifest do
   context "with book generation" do
     before(:all) { generate_book }
     after(:all)  { remove_book }
-    subject(:manifest) { Polytexnic::BookManifest.new }
+    subject(:manifest) { Softcover::BookManifest.new }
 
     context "in valid book directory" do
 
@@ -18,7 +18,7 @@ describe Polytexnic::BookManifest do
 
       describe "chapter information" do
         subject(:chapter) { manifest.chapters[1] }
-        it { should be_a Polytexnic::BookManifest::Chapter }
+        it { should be_a Softcover::BookManifest::Chapter }
         its(:title) { should eq "A chapter" }
         its(:slug) { should eq "a_chapter" }
         its(:chapter_number) { should eq 1 }
@@ -52,7 +52,7 @@ describe Polytexnic::BookManifest do
 
   context "in an invalid book directory" do
     it "raises an error when manifest missing" do
-      expect{ subject }.to raise_error(Polytexnic::BookManifest::NotFound)
+      expect{ subject }.to raise_error(Softcover::BookManifest::NotFound)
     end
   end
 end
