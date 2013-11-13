@@ -31,10 +31,6 @@ module Polytexnic::Utils
     Polytexnic::Config['api_key'].present?
   end
 
-  def markdown_directory?
-    File.directory?('markdown')
-  end
-
   UNITS = %W(B KB MB GB TB).freeze
 
   def as_size(number)

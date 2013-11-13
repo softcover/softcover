@@ -195,5 +195,9 @@ describe Polytexnic::Builders::Epub do
     it "should not raise an error" do
       expect { subject }.not_to raise_error
     end
+
+    it "should remove the generated LaTeX files" do
+      expect(Dir.glob(path('chapters/*.tex'))).to be_empty
+    end
   end
 end

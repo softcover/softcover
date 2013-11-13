@@ -4,12 +4,14 @@ module Polytexnic
       include Polytexnic::Output
 
       def build!(options={})
-        if markdown_directory?
+        if manifest.markdown?
           # Build the HTML to produce PolyTeX as a side-effect,
           # then update the manifest to reduce PDF generation
           # to a previously solved problem.
-          Polytexnic::Builders::Html.new.build!(options)
-          @manifest = Polytexnic::BookManifest.new(source: :polytex)
+          Polytexnic::Builders::Html.new.build!(options.merge(preserve_tex:
+                                                              true))
+          self.manifest = Polytexnic::BookManifest.new(source: :polytex)
+          @remove_tex = true unless options[:preserve_tex]
         end
         # Build the PolyTeX filename so it accepts both 'foo' and 'foo.tex'.
         basename = File.basename(@manifest.filename, '.tex')
@@ -35,7 +37,7 @@ module Polytexnic
         end
 
         polytex_filenames = @manifest.chapter_file_paths << book_filename
-        polytex_filenames.delete('chapters/frontmatter.tex')
+        polytex_filenames.delete(path('chapters/frontmatter.tex'))
         polytex_filenames.each do |filename|
           puts filename unless options[:quiet] || options[:silent]
           polytex = File.open(filename) { |f| f.read }
@@ -51,6 +53,9 @@ module Polytexnic
         end
         write_pygments_file(:latex)
         copy_polytexnic_sty
+
+        remove_polytex! if remove_polytex?
+
         build_pdf = "#{xelatex} #{Polytexnic::Utils.tmpify(book_filename)}"
         # Run the command twice (to guarantee up-to-date cross-references)
         # unless explicitly overriden.

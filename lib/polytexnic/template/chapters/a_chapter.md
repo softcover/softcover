@@ -110,7 +110,7 @@ Build all formats
 
 This is the end of the template---apart from two mostly empty chapters. In fact, let’s include the last chapter in its entirety, just to see how mostly empty it is:
 
-<<(markdown/yet_another_chapter.md, lang: text)
+<<(chapters/yet_another_chapter.md, lang: text)
 
 Visit <http://polytexnic.org/book> to learn more about what PolyTeXnic can do.
 
