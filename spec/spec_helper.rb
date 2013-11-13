@@ -8,11 +8,11 @@ require 'simplecov'
 SimpleCov.start
 
 require 'json'
-require 'polytexnic'
-require 'polytexnic/utils'
-require 'polytexnic/config'
-require 'polytexnic/server/app'
-require 'polytexnic/commands/publisher'
+require 'softcover'
+require 'softcover/utils'
+require 'softcover/config'
+require 'softcover/server/app'
+require 'softcover/commands/publisher'
 Polytexnic::Output.silence!
 
 # Load support files.
