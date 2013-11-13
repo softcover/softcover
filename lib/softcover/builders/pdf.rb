@@ -1,16 +1,16 @@
-module Polytexnic
+module Softcover
   module Builders
     class Pdf < Builder
-      include Polytexnic::Output
+      include Softcover::Output
 
       def build!(options={})
         if manifest.markdown?
           # Build the HTML to produce PolyTeX as a side-effect,
           # then update the manifest to reduce PDF generation
           # to a previously solved problem.
-          Polytexnic::Builders::Html.new.build!(options.merge(preserve_tex:
+          Softcover::Builders::Html.new.build!(options.merge(preserve_tex:
                                                               true))
-          self.manifest = Polytexnic::BookManifest.new(source: :polytex)
+          self.manifest = Softcover::BookManifest.new(source: :polytex)
           @remove_tex = true unless options[:preserve_tex]
         end
         # Build the PolyTeX filename so it accepts both 'foo' and 'foo.tex'.
@@ -44,10 +44,10 @@ module Polytexnic
           latex   = Polytexnic::Core::Pipeline.new(polytex).to_latex
           if filename == book_filename
             latex.gsub!(/\\include{(.*?)}/) do
-              "\\include{#{Polytexnic::Utils.tmpify($1)}.tmp}"
+              "\\include{#{Softcover::Utils.tmpify($1)}.tmp}"
             end
           end
-          File.open(Polytexnic::Utils.tmpify(filename), 'w') do |f|
+          File.open(Softcover::Utils.tmpify(filename), 'w') do |f|
             f.write(latex)
           end
         end
@@ -56,7 +56,7 @@ module Polytexnic
 
         remove_polytex! if remove_polytex?
 
-        build_pdf = "#{xelatex} #{Polytexnic::Utils.tmpify(book_filename)}"
+        build_pdf = "#{xelatex} #{Softcover::Utils.tmpify(book_filename)}"
         # Run the command twice (to guarantee up-to-date cross-references)
         # unless explicitly overriden.
         # Renaming the PDF in the command is necessary because `execute`
@@ -100,7 +100,7 @@ module Polytexnic
 
         # Copies the PolyTeXnic style file to ensure it's always fresh.
         def copy_polytexnic_sty
-          polytexnic_sty = 'polytexnic.sty'
+          polytexnic_sty = 'softcover.sty'
           source_sty     = File.join(File.dirname(__FILE__),
                                      "../template/#{polytexnic_sty}")
           FileUtils.cp source_sty, polytexnic_sty

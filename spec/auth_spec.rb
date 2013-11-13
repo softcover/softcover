@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Polytexnic::Commands::Auth do
+describe Softcover::Commands::Auth do
   context 'valid login' do
     before do
       email = 'valid@lemurheavy.com'
@@ -8,11 +8,11 @@ describe Polytexnic::Commands::Auth do
 
       stub_valid_login email, pass, TEST_API_KEY
 
-      Polytexnic::Commands::Auth.login email, pass
+      Softcover::Commands::Auth.login email, pass
     end
 
     it 'should set the api key' do
-      expect(Polytexnic::Config['api_key']).to eq TEST_API_KEY
+      expect(Softcover::Config['api_key']).to eq TEST_API_KEY
     end
   end
 
@@ -23,22 +23,22 @@ describe Polytexnic::Commands::Auth do
 
       stub_invalid_login email, pass
 
-      Polytexnic::Commands::Auth.login email, pass
+      Softcover::Commands::Auth.login email, pass
     end
 
     it 'should not set the api key' do
-      expect(Polytexnic::Config['api_key']).to be_nil
+      expect(Softcover::Config['api_key']).to be_nil
     end
   end
 
   context "logging out" do
     before do
-      Polytexnic::Config['api_key'] = 'asdfasdf'
-      Polytexnic::Commands::Auth.logout
+      Softcover::Config['api_key'] = 'asdfasdf'
+      Softcover::Commands::Auth.logout
     end
 
     it "should unset the api_key" do
-      expect(Polytexnic::Config['api_key']).to be_nil
+      expect(Softcover::Config['api_key']).to be_nil
     end
   end
 end

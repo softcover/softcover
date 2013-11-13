@@ -1,9 +1,9 @@
-module Polytexnic
+module Softcover
   module Builders
     class Mobi < Builder
 
       def build!(options={})
-        Polytexnic::Builders::Epub.new.build!(options)
+        Softcover::Builders::Epub.new.build!(options)
         filename  = manifest.filename
         filename += '-preview' if options[:preview]
         command = "#{kindlegen} ebooks/#{filename}.epub"
@@ -11,9 +11,9 @@ module Polytexnic
         # actual generation of the MOBI causes an error, so in tests
         # we just return the command.
         if options[:quiet] || options[:silent]
-          silence { Polytexnic.test? ? command : system(command) }
+          silence { Softcover.test? ? command : system(command) }
         else
-          Polytexnic.test? ? command : system(command)
+          Softcover.test? ? command : system(command)
         end
       end
 

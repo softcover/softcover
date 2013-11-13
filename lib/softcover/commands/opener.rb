@@ -1,10 +1,10 @@
-module Polytexnic
+module Softcover
   module Commands
     module Opener
       extend self
 
       def open!
-        book = Polytexnic::Book.new
+        book = Softcover::Book.new
         book.open_in_browser
       end
 

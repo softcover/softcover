@@ -1,4 +1,4 @@
-module Polytexnic
+module Softcover
   module Mathjax
 
     # Returns the MathJax configuration.
@@ -48,7 +48,7 @@ module Polytexnic
 
       # Returns the custom macros as defined in the custom style file.
       def self.custom_macros
-        extract_macros(Polytexnic.custom_styles)
+        extract_macros(Softcover.custom_styles)
       end
 
       # Extracts and formats the macros from the given string of style commands.

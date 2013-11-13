@@ -1,4 +1,4 @@
-module Polytexnic
+module Softcover
   class BaseConfig
 
     DEFAULTS = {
@@ -42,17 +42,17 @@ module Polytexnic
 
         def file_path
           File.expand_path(self::PATH).tap do |path|
-            path.gsub!(/$/,"-test") if Polytexnic::test?
+            path.gsub!(/$/,"-test") if Softcover::test?
           end
         end
     end
   end
 
   class BookConfig < BaseConfig
-    PATH = ".polytexnic-book"
+    PATH = ".softcover-book"
   end
 
   class Config < BaseConfig
-    PATH = "~/.polytexnic"
+    PATH = "~/.softcover"
   end
 end

@@ -9,9 +9,9 @@ generated_polytex/
 
 # Generated style, frontmatter, and cache files
 pygments.sty
-polytexnic.sty
+softcover.sty
 pygments.css
-polytexnic.css
+softcover.css
 frontmatter.tex
 .highlight_cache
 

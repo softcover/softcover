@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe Polytexnic::Builders::Html do
+describe Softcover::Builders::Html do
 
   describe "when generating from PolyTeX source" do
     before(:all) { generate_book }
     after(:all)  { remove_book }
 
     describe "#build!" do
-      subject(:builder) { Polytexnic::Builders::Html.new }
+      subject(:builder) { Softcover::Builders::Html.new }
       let(:file_to_be_removed) { path('html/should_be_removed.html') }
       before do
         # Create an empty file that should be removed automatically.
@@ -104,7 +104,7 @@ describe Polytexnic::Builders::Html do
     after(:all)  { remove_book }
 
     describe "#build!" do
-      subject(:builder) { Polytexnic::Builders::Html.new }
+      subject(:builder) { Softcover::Builders::Html.new }
 
       before { builder.build! }
 

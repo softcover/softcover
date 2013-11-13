@@ -1,6 +1,6 @@
 module WebmockHelpers
   def api_base_url
-    "#{Polytexnic::BaseConfig::DEFAULTS[:host]}/api/v1"
+    "#{Softcover::BaseConfig::DEFAULTS[:host]}/api/v1"
   end
 
   def test_bucket; 'test-bucket' end
@@ -150,7 +150,7 @@ module WebmockHelpers
     Dir.chdir dir
   end
 
-  # Generates a sample book using the same method as `poly new`.
+  # Generates a sample book using the same method as `softcover new`.
   # It also creates test books of all standard formats and a screencasts
   # directory with a stub file.
   def generate_book(options = {})
@@ -161,14 +161,14 @@ module WebmockHelpers
     flags = []
     flags << '-m' if options[:markdown]
     flags << '-s' if options[:simple]
-    silence { system "poly new #{name} #{flags.join(' ')}" }
+    silence { system "softcover new #{name} #{flags.join(' ')}" }
     chdir_to_book
     File.mkdir 'html' unless File.exist?('html')
     File.write(File.join('html', 'chapter-1.html'),          'test')
     File.write(File.join('html', 'chapter-1_fragment.html'), 'test')
     File.write(File.join('html', 'test_fragment.html'),      'test')
     File.mkdir 'ebooks' unless File.exist?('ebooks')
-    Polytexnic::FORMATS.each do |format|
+    Softcover::FORMATS.each do |format|
       dir = format == 'html' ? 'html' : 'ebooks'
       File.write(File.join(dir, "test-book.#{format}"), 'test')
     end

@@ -1,18 +1,18 @@
 require 'spec_helper'
 
-describe Polytexnic::Commands::Deployment do
+describe Softcover::Commands::Deployment do
 
   describe "default commands" do
-    subject { Polytexnic::Commands::Deployment.default_commands }
+    subject { Softcover::Commands::Deployment.default_commands }
 
-    it { should match /poly build:all/ }
-    it { should match /poly build:preview/ }
-    it { should match /poly publish/ }
+    it { should match /softcover build:all/ }
+    it { should match /softcover build:preview/ }
+    it { should match /softcover publish/ }
   end
 
   describe "commands helper" do
     let(:lines) { ['foo', ' #  bar', 'baz'] }
-    subject { Polytexnic::Commands::Deployment.commands(lines) }
+    subject { Softcover::Commands::Deployment.commands(lines) }
 
     it { should match /foo/ }
     it { should_not match /bar/ }

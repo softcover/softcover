@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Polytexnic::Commands::Server do
+describe Softcover::Commands::Server do
   before(:all) { generate_book }
   after(:all)  { remove_book }
 
@@ -11,11 +11,11 @@ describe Polytexnic::Commands::Server do
   end
 
   it '#run' do
-    Polytexnic::App.should_receive :run!
+    Softcover::App.should_receive :run!
 
     port = 5000
     subject.run port
 
-    expect(Polytexnic::App.port).to eq port
+    expect(Softcover::App.port).to eq port
   end
 end

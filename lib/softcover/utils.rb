@@ -1,10 +1,10 @@
-module Polytexnic::Utils
+module Softcover::Utils
   extend self
 
   def current_book
     # using module level variable because it should be context independent
     @@current_book ||= begin
-      in_book_directory? ? Polytexnic::Book.new : false
+      in_book_directory? ? Softcover::Book.new : false
     end
   end
 
@@ -13,22 +13,22 @@ module Polytexnic::Utils
   end
 
   def in_book_directory?
-    Polytexnic::BookManifest::find_book_root!
+    Softcover::BookManifest::find_book_root!
 
     files = Dir['**/*']
 
-    Polytexnic::FORMATS.each do |format|
+    Softcover::FORMATS.each do |format|
       unless files.any?{ |file| File.extname(file) == ".#{format}" }
         puts "No #{format} found, skipping."
       end
     end
 
-    return Polytexnic::BookManifest::valid_directory?
+    return Softcover::BookManifest::valid_directory?
   end
 
   def logged_in?
-    require 'polytexnic/config'
-    Polytexnic::Config['api_key'].present?
+    require 'softcover/config'
+    Softcover::Config['api_key'].present?
   end
 
   UNITS = %W(B KB MB GB TB).freeze
@@ -117,7 +117,7 @@ module Polytexnic::Utils
   # The issue here is that `exec` is awful in tests, since it exits the process.
   # This command arranges to use `system` in tests instead.
   def execute(command)
-    Polytexnic.test? ? system(command) : exec(command)
+    Softcover.test? ? system(command) : exec(command)
   end
 
   def silence

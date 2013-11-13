@@ -1,13 +1,13 @@
-module Polytexnic
+module Softcover
   module Builders
     class Epub < Builder
-      include Polytexnic::Output
+      include Softcover::Output
 
       def build!(options={})
         @preview = options[:preview]
-        Polytexnic::Builders::Html.new.build!(preserve_tex: true)
+        Softcover::Builders::Html.new.build!(preserve_tex: true)
         if manifest.markdown?
-          self.manifest = Polytexnic::BookManifest.new(source: :polytex)
+          self.manifest = Softcover::BookManifest.new(source: :polytex)
           @remove_tex = true
         end
         remove_html
@@ -218,9 +218,9 @@ module Polytexnic
 
         # For some reason, EPUB books hate the #book ids in the stylesheet
         # (i.e., such books fail to validate), so remove them.
-        polytexnic_css = File.read(File.join(html_styles, 'polytexnic.css'))
+        polytexnic_css = File.read(File.join(html_styles, 'softcover.css'))
         polytexnic_css.gsub!(/\s*#book\s+/, '')
-        File.write(File.join(epub_styles, 'polytexnic.css'), polytexnic_css)
+        File.write(File.join(epub_styles, 'softcover.css'), polytexnic_css)
       end
 
       # Copies the image files from the HTML version of the document.
@@ -243,7 +243,7 @@ module Polytexnic
         commands = [base_file, meta_info, main_info, rename]
         command = commands.join(' && ')
         Dir.chdir('epub') do
-          if Polytexnic.test? || options[:quiet] || options[:silent]
+          if Softcover.test? || options[:quiet] || options[:silent]
             silence { system(command) }
           else
             system(command)
@@ -324,7 +324,7 @@ module Polytexnic
         <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
         <item id="page-template.xpgt" href="styles/page-template.xpgt" media-type="application/vnd.adobe-page-template+xml"/>
         <item id="pygments.css" href="styles/pygments.css" media-type="text/css"/>
-        <item id="polytexnic.css" href="styles/polytexnic.css" media-type="text/css"/>
+        <item id="softcover.css" href="styles/softcover.css" media-type="text/css"/>
         <item id="epub.css" href="styles/epub.css" media-type="text/css"/>
         <item id="cover" href="cover.html" media-type="application/xhtml+xml"/>
         #{man_ch.join("\n")}
@@ -421,7 +421,7 @@ module Polytexnic
         <head>
           <title>#{title}</title>
           <link rel="stylesheet" href="styles/pygments.css" type="text/css" />
-          <link rel="stylesheet" href="styles/polytexnic.css" type="text/css" />
+          <link rel="stylesheet" href="styles/softcover.css" type="text/css" />
           <link rel="stylesheet" href="styles/epub.css" type="text/css" />
           <link rel="stylesheet" type="application/vnd.adobe-page-template+xml" href="styles/page-template.xpgt" />
         </head>

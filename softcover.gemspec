@@ -1,16 +1,16 @@
 # -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'polytexnic/version'
+require 'softcover/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = "polytexnic"
-  gem.version       = Polytexnic::VERSION
+  gem.name          = "softcover"
+  gem.version       = Softcover::VERSION
   gem.authors       = ["Michael Hartl", "Nick Merwin"]
-  gem.email         = ["micahel@softcover.io"]
+  gem.email         = ["michael@softcover.io"]
   gem.description   = %q{CLI interface for softcover.io}
   gem.summary       = %q{A typesetting system for technical authors}
-  gem.homepage      = "http://polytexnic.org/"
+  gem.homepage      = "http://manual.softcover.io/"
   gem.license       = "MIT"
 
   gem.files         = `git ls-files`.split($/)

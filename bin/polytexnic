@@ -1,4 +1,0 @@
-#!/usr/bin/env ruby
-require "polytexnic"
-
-Polytexnic::CLI.start

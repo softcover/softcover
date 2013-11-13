@@ -1,8 +1,8 @@
 require 'erb'
-module Polytexnic
+module Softcover
   module Commands
     module Generator
-      include Polytexnic::Output
+      include Softcover::Output
       extend self
 
       # Generates the default book file tree.
@@ -130,7 +130,7 @@ module Polytexnic
           File.basename(f)
         end
 
-        Polytexnic::Commands::Generator.all_files_and_directories.each do |file|
+        Softcover::Commands::Generator.all_files_and_directories.each do |file|
           path = if file =~ /book\.tex/
                    "#{@name}.tex"
                  elsif file =~ /\.erb/

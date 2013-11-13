@@ -1,7 +1,7 @@
 
-module Polytexnic
+module Softcover
   class Client
-    include Polytexnic::Utils
+    include Softcover::Utils
 
     ApiVersion = 1
 
@@ -17,13 +17,13 @@ module Polytexnic
     def initialize(email=nil,password=nil,book=nil)
       require 'json'
       require 'rest_client'
-      require "polytexnic/config"
+      require "softcover/config"
       @email = email
       @password = password
       @book = book
 
-      @api_key = Polytexnic::Config['api_key']
-      @host = Polytexnic::Config['host']
+      @api_key = Softcover::Config['api_key']
+      @host = Softcover::Config['host']
     end
 
     def self.new_with_book(book)
@@ -32,11 +32,11 @@ module Polytexnic
 
     # ============ Auth ===========
     def login!
-      require "polytexnic/config"
+      require "softcover/config"
       response = post path_for(:login), email: @email, password: @password
 
       json = JSON response
-      Polytexnic::Config['api_key'] = @api_key = json['api_key']
+      Softcover::Config['api_key'] = @api_key = json['api_key']
     end
 
     # ============ Publishing ===========
@@ -45,7 +45,7 @@ module Polytexnic
     rescue RestClient::ResourceNotFound
       { "errors" =>
         "Book ID #{params[:id]} not found for this account. "+
-        "Either login again or delete this file: .polytexnic-book"
+        "Either login again or delete this file: .softcover-book"
       }
     end
 
@@ -105,8 +105,8 @@ module Polytexnic
       end
 
       def handle_422
-        require "polytexnic/config"
-        Polytexnic::Config['api_key'] = nil
+        require "softcover/config"
+        Softcover::Config['api_key'] = nil
         return { "errors" => "You don't have access to that resource." }
       end
   end

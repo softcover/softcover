@@ -2,7 +2,7 @@ require 'sinatra/base'
 require 'sinatra/respond_to'
 require 'sinatra/async'
 
-class Polytexnic::App < Sinatra::Base
+class Softcover::App < Sinatra::Base
   register Sinatra::Async
 
   set :public_folder, File.join(File.dirname(__FILE__),'../template/html')
@@ -13,7 +13,7 @@ class Polytexnic::App < Sinatra::Base
   end
 
   before do
-    @manifest = Polytexnic::BookManifest.new
+    @manifest = Softcover::BookManifest.new
   end
 
   get '/' do
@@ -22,8 +22,8 @@ class Polytexnic::App < Sinatra::Base
 
   get '/main.js' do
     require 'coffee_script'
-    @mathjax_src    = Polytexnic::Mathjax::AMS_HTML
-    @mathjax_config = Polytexnic::Mathjax.escaped_config
+    @mathjax_src    = Softcover::Mathjax::AMS_HTML
+    @mathjax_config = Softcover::Mathjax.escaped_config
     coffee erb :'main.js'
   end
 

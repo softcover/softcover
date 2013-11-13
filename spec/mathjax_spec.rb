@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Polytexnic::Mathjax do
+describe Softcover::Mathjax do
 
-  subject(:mathjax) { Polytexnic::Mathjax }
+  subject(:mathjax) { Softcover::Mathjax }
 
   let(:custom_sty) do
 %(\\newcommand{\\foo}{\\ensuremath{x}}
@@ -21,7 +21,7 @@ describe Polytexnic::Mathjax do
 
     context "with a custom.sty" do
 
-      before { Polytexnic.stub(:custom_styles).and_return(custom_sty) }
+      before { Softcover.stub(:custom_styles).and_return(custom_sty) }
 
       it "should include the custom macros" do
         expect(config).to include foo

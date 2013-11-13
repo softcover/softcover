@@ -1,6 +1,6 @@
 require 'fileutils'
 
-module Polytexnic
+module Softcover
   module Builders
     class Html < Builder
 
@@ -13,7 +13,7 @@ module Polytexnic
       end
 
       def build(options = {})
-        if Polytexnic::profiling?
+        if Softcover::profiling?
           require 'ruby-prof'
           RubyProf.start
         end
@@ -27,8 +27,8 @@ module Polytexnic
           end
           rewrite_master_latex_file
           # Reset the manifest to use PolyTeX.
-          self.manifest = Polytexnic::BookManifest.new(source: :polytex,
-                                                       verify_paths: true)
+          self.manifest = Softcover::BookManifest.new(source: :polytex,
+                                                      verify_paths: true)
           @remove_tex = true unless options[:preserve_tex]
         end
 
@@ -43,7 +43,7 @@ module Polytexnic
           write_chapter_html_files(Nokogiri::HTML(file_content), erb_file)
         end
 
-        if Polytexnic::profiling?
+        if Softcover::profiling?
           result = RubyProf.stop
           printer = RubyProf::GraphPrinter.new(result)
           printer.print(STDOUT, {})
@@ -57,7 +57,7 @@ module Polytexnic
       # Writes the LaTeX files for a given Markdown chapter.
       def write_latex_files(chapter, options = {})
         path = File.join('chapters', chapter.slug + '.md')
-        cc = Polytexnic.custom_styles
+        cc = Softcover.custom_styles
         md = Polytexnic::Core::Pipeline.new(File.read(path), source: :md,
                                             custom_commands: cc)
         filename = path("chapters/#{chapter.slug}.tex")
@@ -97,7 +97,7 @@ module Polytexnic
         polytex.gsub!(/(^\s*\\include{(.*?)})/) do
           File.read($2 + '.tex') + "\n"
         end
-        cc = Polytexnic.custom_styles
+        cc = Softcover.custom_styles
         Polytexnic::Core::Pipeline.new(polytex, custom_commands: cc).to_html
       end
 
@@ -109,7 +109,7 @@ module Polytexnic
         File.open(html_filename, 'w') do |f|
           f.write(file_content)
         end
-        polytexnic_css = File.join('html', 'stylesheets', 'polytexnic.css')
+        polytexnic_css = File.join('html', 'stylesheets', 'softcover.css')
         source_css     = File.join(File.dirname(__FILE__),
                                    "../template/#{polytexnic_css}")
         FileUtils.cp source_css, polytexnic_css
@@ -194,8 +194,8 @@ module Polytexnic
         html_filename = File.join('html', chapter.slug + '.html')
         File.open(html_filename, 'w') do |f|
           @html = chapter.nodes.map(&:to_xhtml).join("\n")
-          @mathjax = Polytexnic::Mathjax::config(chapter_number: n)
-          @src     = Polytexnic::Mathjax::AMS_SVG
+          @mathjax = Softcover::Mathjax::config(chapter_number: n)
+          @src     = Softcover::Mathjax::AMS_SVG
           file_content = ERB.new(erb_file).result(binding)
           f.write(file_content)
         end

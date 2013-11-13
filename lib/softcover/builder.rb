@@ -1,11 +1,11 @@
-module Polytexnic
+module Softcover
   class Builder
-    include Polytexnic::Utils
+    include Softcover::Utils
 
     attr_accessor :manifest, :built_files
 
     def initialize
-      @manifest = Polytexnic::BookManifest.new(verify_paths: true,
+      @manifest = Softcover::BookManifest.new(verify_paths: true,
                                                source: source)
       @built_files = []
       write_polytexnic_commands_file

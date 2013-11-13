@@ -1,7 +1,7 @@
-module Polytexnic
+module Softcover
   module Commands
     module EpubValidator
-      extend Polytexnic::Utils
+      extend Softcover::Utils
       extend self
 
       # Validates a book according to the EPUB standard.

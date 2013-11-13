@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe Polytexnic::Commands::Generator do
+describe Softcover::Commands::Generator do
 
   context "generate PolyTeX in non-book directory" do
 
     before(:all) do
       chdir_to_non_book
       @name = 'foo_bar'
-      Polytexnic::Commands::Generator.generate_file_tree @name
+      Softcover::Commands::Generator.generate_file_tree @name
     end
 
     let(:name) { @name }
@@ -22,7 +22,7 @@ describe Polytexnic::Commands::Generator do
     end
 
     it "should copy files" do
-      expect(Polytexnic::Commands::Generator.verify!).to be_true
+      expect(Softcover::Commands::Generator.verify!).to be_true
     end
 
     describe "book.yml" do
@@ -46,7 +46,7 @@ describe Polytexnic::Commands::Generator do
       before { Dir.chdir(name) }
 
       it "should build all formats without error" do
-        expect { `poly build` }.not_to raise_error
+        expect { `softcover build` }.not_to raise_error
       end
 
       describe "base LaTeX file" do
@@ -83,31 +83,31 @@ describe Polytexnic::Commands::Generator do
       end
 
       describe "deployment configuration" do
-        subject { File.read(Polytexnic::Commands::Deployment.deploy_config) }
+        subject { File.read(Softcover::Commands::Deployment.deploy_config) }
 
-        it { should match /^# poly build:all/ }
-        it { should match /^# poly build:preview/ }
-        it { should match /^# poly publish/ }
+        it { should match /^# softcover build:all/ }
+        it { should match /^# softcover build:preview/ }
+        it { should match /^# softcover publish/ }
       end
 
       describe "CSS" do
 
-        let(:css_file) { 'html/stylesheets/polytexnic.css' }
+        let(:css_file) { 'html/stylesheets/softcover.css' }
 
-        it "should have a polytexnic CSS file" do
+        it "should have the right CSS file" do
           expect(css_file).to exist
         end
       end
 
       describe "styles" do
 
-        it "should have a PolyTeXnic style file" do
-          expect('polytexnic.sty').to exist
+        it "should have a right style file" do
+          expect('softcover.sty').to exist
         end
 
-        it "should include the polytexnic style file by default" do
+        it "should include the right style file by default" do
           book_base = File.read('foo_bar.tex')
-          expect(book_base).to match(/^\\usepackage{polytexnic}/)
+          expect(book_base).to match(/^\\usepackage{softcover}/)
         end
       end
 
@@ -142,7 +142,7 @@ describe Polytexnic::Commands::Generator do
     before(:all) do
       chdir_to_non_book
       @name = 'foo_bar'
-      Polytexnic::Commands::Generator.generate_file_tree @name, simple: true
+      Softcover::Commands::Generator.generate_file_tree @name, simple: true
     end
 
     let(:name) { @name }
@@ -157,7 +157,7 @@ describe Polytexnic::Commands::Generator do
     end
 
     it "should copy files" do
-      expect(Polytexnic::Commands::Generator.verify!).to be_true
+      expect(Softcover::Commands::Generator.verify!).to be_true
     end
 
     context "generated contents from template" do
@@ -165,7 +165,7 @@ describe Polytexnic::Commands::Generator do
       before { Dir.chdir(name) }
 
       it "should build all formats without error" do
-        expect { `poly build` }.not_to raise_error
+        expect { `softcover build` }.not_to raise_error
       end
 
       describe "base LaTeX file" do
@@ -196,7 +196,7 @@ describe Polytexnic::Commands::Generator do
     before(:all) do
       chdir_to_non_book
       @name = 'foo_bar'
-      Polytexnic::Commands::Generator.generate_file_tree @name, markdown: true
+      Softcover::Commands::Generator.generate_file_tree @name, markdown: true
     end
 
     let(:name) { @name }
@@ -211,7 +211,7 @@ describe Polytexnic::Commands::Generator do
     end
 
     it "should copy files" do
-      expect(Polytexnic::Commands::Generator.verify!).to be_true
+      expect(Softcover::Commands::Generator.verify!).to be_true
     end
 
     context "generated contents from template" do
@@ -219,7 +219,7 @@ describe Polytexnic::Commands::Generator do
       before { Dir.chdir(name) }
 
       it "should build all formats without error" do
-        expect { `poly build` }.not_to raise_error
+        expect { `softcover build` }.not_to raise_error
       end
 
       describe "base LaTeX file" do
@@ -244,7 +244,7 @@ describe Polytexnic::Commands::Generator do
       $stdin.should_receive(:gets).and_return("a")
 
       silence do
-        2.times { Polytexnic::Commands::Generator.generate_file_tree name }
+        2.times { Softcover::Commands::Generator.generate_file_tree name }
       end
     end
 
@@ -254,7 +254,7 @@ describe Polytexnic::Commands::Generator do
     end
 
     it "should overwrite files" do
-      expect(Polytexnic::Commands::Generator.verify!).to be_true
+      expect(Softcover::Commands::Generator.verify!).to be_true
     end
   end
 end

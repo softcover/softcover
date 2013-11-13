@@ -1,6 +1,6 @@
-module Polytexnic::Commands::Publisher
-  include Polytexnic::Utils
-  include Polytexnic::Output
+module Softcover::Commands::Publisher
+  include Softcover::Utils
+  include Softcover::Output
 
   extend self
 
@@ -24,10 +24,10 @@ module Polytexnic::Commands::Publisher
     end
 
     true
-  rescue Polytexnic::BookManifest::NotFound => e
+  rescue Softcover::BookManifest::NotFound => e
     puts e.message
     false
-  rescue Polytexnic::Book::UploadError => e
+  rescue Softcover::Book::UploadError => e
     puts e.message
     false
   end
@@ -37,7 +37,7 @@ module Polytexnic::Commands::Publisher
     return false unless current_book
 
     current_book.screencasts_dir = options[:dir] ||
-      Polytexnic::Book::DEFAULT_SCREENCASTS_DIR
+      Softcover::Book::DEFAULT_SCREENCASTS_DIR
 
     @watch = options[:watch]
 
@@ -89,7 +89,7 @@ module Polytexnic::Commands::Publisher
   def unpublish!
     return false unless current_book
     if current_book.destroy
-      Polytexnic::BookConfig.remove
+      Softcover::BookConfig.remove
       puts "Done!"
       return true
     else
@@ -99,7 +99,7 @@ module Polytexnic::Commands::Publisher
   rescue RestClient::ResourceNotFound
     puts "Book with ID=#{current_book.id} not found under this account."
     false
-  rescue Polytexnic::BookManifest::NotFound => e
+  rescue Softcover::BookManifest::NotFound => e
     puts e.message
     false
   end

@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe Polytexnic::Builders::Preview do
+describe Softcover::Builders::Preview do
 
   context "for a PolyTeX book" do
     before(:all) do
       generate_book
-      @builder = Polytexnic::Builders::Preview.new
+      @builder = Softcover::Builders::Preview.new
       @builder.build!
       chdir_to_book
     end
@@ -43,7 +43,7 @@ describe Polytexnic::Builders::Preview do
   context "for a Markdown book" do
     before(:all) do
       generate_book(markdown: true)
-      @builder = Polytexnic::Builders::Preview.new
+      @builder = Softcover::Builders::Preview.new
       @builder.build!
       chdir_to_book
     end

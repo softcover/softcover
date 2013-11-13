@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Polytexnic::CLI do
+describe Softcover::CLI do
 
   context 'help output' do
-    subject { capture(:stdout) { Polytexnic::CLI.start commands } }
+    subject { capture(:stdout) { Softcover::CLI.start commands } }
 
     let(:commands) { ['help'] }
 
@@ -11,7 +11,7 @@ describe Polytexnic::CLI do
       it { should match /#{cmd}/ }
     end
 
-    Polytexnic::FORMATS.each do |format|
+    Softcover::FORMATS.each do |format|
       it { should match /build:#{format}/ }
       it { should match /Build #{format.upcase}/ }
     end
@@ -22,28 +22,28 @@ describe Polytexnic::CLI do
   end
 
   context "version number" do
-    subject { `poly -v` }
-    it { should eq "PolyTeXnic #{Polytexnic::VERSION}\n" }
+    subject { `softcover -v` }
+    it { should eq "Softcover #{Softcover::VERSION}\n" }
   end
 
-  context "poly build:pdf options" do
-    subject { `poly help build:pdf` }
+  context "softcover build:pdf options" do
+    subject { `softcover help build:pdf` }
     it { should include '-d, [--debug]' }
     it { should include '-o, [--once]' }
     it { should include 'f, [--find-overfull]' }
   end
 
-  context "poly new options" do
-    subject { `poly help new` }
+  context "softcover new options" do
+    subject { `softcover help new` }
     it { should include '-m, [--markdown]' }
     it { should include '-s, [--simple]' }
   end
 
-  context "poly new" do
+  context "softcover new" do
     before(:all) { chdir_to_fixtures }
     after(:all) { remove_book }
     it "should not raise error" do
-      result = `poly new book 2>&1`
+      result = `softcover new book 2>&1`
       expect($?.exitstatus).to eq 0
     end
   end
@@ -52,14 +52,14 @@ describe Polytexnic::CLI do
     context "pdf" do
 
       context "without options" do
-        before { silence { `poly build:pdf` } }
+        before { silence { `softcover build:pdf` } }
         it "should generate the PDF" do
           expect(path('ebooks/book.pdf')).to exist
         end
       end
 
       context "with the debug option" do
-        before { silence { `poly build:pdf -d` } }
+        before { silence { `softcover build:pdf -d` } }
         it "should generate the debug PDF" do
           expect(path('book.pdf')).to exist
         end
@@ -67,13 +67,13 @@ describe Polytexnic::CLI do
 
       context "with the --once option" do
         it "should build without error" do
-          expect { silence { `poly build:pdf --once` } }.not_to raise_error
+          expect { silence { `softcover build:pdf --once` } }.not_to raise_error
         end
       end
 
       context "with the --find-overfull option" do
         it "should not find any overfull lines" do
-          expect(`poly build:pdf --find-overfull`.strip).to be_empty
+          expect(`softcover build:pdf --find-overfull`.strip).to be_empty
         end
       end
     end
@@ -81,7 +81,7 @@ describe Polytexnic::CLI do
     context "html" do
 
       context "without options" do
-        before { silence { `poly build:html` } }
+        before { silence { `softcover build:html` } }
 
         it "should generate the html" do
           expect(path('html/book.html')).to exist
@@ -92,7 +92,7 @@ describe Polytexnic::CLI do
     context "epub & mobi" do
 
       context "without options" do
-        before { silence { `poly build:mobi` } }
+        before { silence { `softcover build:mobi` } }
 
         it "should generate the EPUB & MOBI" do
           expect(path('ebooks/book.epub')).to exist
@@ -102,12 +102,12 @@ describe Polytexnic::CLI do
     end
   end
 
-  describe "PolyTeX books" do
+  describe "softcoverTeX books" do
 
     before(:all) do
       remove_book
       chdir_to_fixtures
-      silence { `poly new book` }
+      silence { `softcover new book` }
       chdir_to_book
     end
     after(:all) { remove_book }
@@ -120,7 +120,7 @@ describe Polytexnic::CLI do
     before(:all) do
       remove_book
       chdir_to_fixtures
-      silence { `poly new book -m` }
+      silence { `softcover new book -m` }
       chdir_to_book
     end
     after(:all) { remove_book }

@@ -34,10 +34,10 @@ require_relative 'softcover/mathjax'
 require_relative 'softcover/uploader'
 require_relative 'softcover/version'
 
-module Polytexnic
+module Softcover
   extend self
 
-  include Polytexnic::Utils
+  include Softcover::Utils
 
   # Return the custom styles, if any.
   def custom_styles

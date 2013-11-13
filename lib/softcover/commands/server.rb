@@ -1,8 +1,8 @@
 require 'listen'
 
-module Polytexnic::Commands::Server
-  include Polytexnic::Output
-  include Polytexnic::Utils
+module Softcover::Commands::Server
+  include Softcover::Output
+  include Softcover::Utils
   attr_accessor :no_listener
   extend self
 
@@ -24,19 +24,19 @@ module Polytexnic::Commands::Server
     printf modified ? "=> #{File.basename modified} changed, rebuilding... " :
                       'Building...'
     t = Time.now
-    Polytexnic::Builders::Html.new.build
+    Softcover::Builders::Html.new.build
     puts "Done. (#{(Time.now - t).round(2)}s)"
 
-  rescue Polytexnic::BookManifest::NotFound => e
+  rescue Softcover::BookManifest::NotFound => e
     puts e.message
   end
 
   def start_server(port)
-    require 'polytexnic/server/app'
+    require 'softcover/server/app'
     rebuild
-    puts "Running Polytexnic server on http://localhost:#{port}"
-    Polytexnic::App.set :port, port
-    Polytexnic::App.run!
+    puts "Running Softcover server on http://localhost:#{port}"
+    Softcover::App.set :port, port
+    Softcover::App.run!
   end
 
   def run(port)

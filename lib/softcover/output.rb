@@ -1,4 +1,4 @@
-module Polytexnic::Output
+module Softcover::Output
   class << self
     attr_accessor :silent, :stream, :verbosity_level
 
@@ -26,8 +26,8 @@ module Polytexnic::Output
 
   %w{puts printf print}.each do |method|
     define_method method do |string, options={}|
-      if Polytexnic::Output.should_output?(options[:level])
-        Polytexnic::Output.stream.send method, string
+      if Softcover::Output.should_output?(options[:level])
+        Softcover::Output.stream.send method, string
       end
     end
   end

@@ -1,5 +1,5 @@
-class Polytexnic::Book
-  include Polytexnic::Utils
+class Softcover::Book
+  include Softcover::Utils
 
   DEFAULT_SCREENCASTS_DIR = "screencasts"
 
@@ -9,9 +9,9 @@ class Polytexnic::Book
   class UploadError < StandardError; end
 
   def initialize
-    require "polytexnic/client"
-    @manifest = Polytexnic::BookManifest.new
-    @client = Polytexnic::Client.new_with_book self
+    require "softcover/client"
+    @manifest = Softcover::BookManifest.new
+    @client = Softcover::Client.new_with_book self
 
     @screencasts_dir = DEFAULT_SCREENCASTS_DIR
 
@@ -29,7 +29,7 @@ class Polytexnic::Book
     end
 
     def ready?
-      return true if Polytexnic::test?
+      return true if Softcover::test?
       File::ctime(path).to_i < Time.now.to_i - LAST_WRITE_HORIZON
     end
 
@@ -46,11 +46,11 @@ class Polytexnic::Book
   #   has_config_for :id, :last_uploaded_at, path: ".polytex-book"
 
   def id
-    Polytexnic::BookConfig['id']
+    Softcover::BookConfig['id']
   end
 
   def id=(n)
-    Polytexnic::BookConfig['id'] = n
+    Softcover::BookConfig['id'] = n
   end
 
   # get array of paths and checksums
@@ -102,9 +102,9 @@ class Polytexnic::Book
     @attrs = res['book']
 
     self.id = @attrs['id']
-    Polytexnic::BookConfig['last_uploaded_at'] = Time.now
+    Softcover::BookConfig['last_uploaded_at'] = Time.now
 
-    @uploader = Polytexnic::Uploader.new res
+    @uploader = Softcover::Uploader.new res
 
     true
 
@@ -173,7 +173,7 @@ class Polytexnic::Book
     res = @client.get_screencast_upload_params files
 
     if res['upload_params']
-      screencast_uploader = Polytexnic::Uploader.new res
+      screencast_uploader = Softcover::Uploader.new res
       screencast_uploader.after_each do |params|
         notify_file_upload params['path']
       end

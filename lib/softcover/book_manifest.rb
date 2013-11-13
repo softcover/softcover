@@ -1,6 +1,6 @@
 require 'ostruct'
 
-class Polytexnic::BookManifest < OpenStruct
+class Softcover::BookManifest < OpenStruct
   class NotFound < StandardError
     def message
       "Invalid book directory, no manifest file found!"
@@ -210,7 +210,7 @@ class Polytexnic::BookManifest < OpenStruct
   private
 
     def read_from_yml
-      require 'polytexnic/config'
+      require 'softcover/config'
       require 'yaml/store'
       self.class.find_book_root!
       YAML.load_file(YAML_PATH)

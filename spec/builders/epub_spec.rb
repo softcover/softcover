@@ -1,19 +1,19 @@
 require 'spec_helper'
 
-describe Polytexnic::Builders::Epub do
+describe Softcover::Builders::Epub do
   before(:all) do
     generate_book
     @file_to_be_removed = path('html/should_be_removed.html')
     File.write(@file_to_be_removed, '')
-    silence { `poly build:epub` }
-    @builder = Polytexnic::Builders::Epub.new
+    silence { `softcover build:epub` }
+    @builder = Softcover::Builders::Epub.new
     @builder.build!
   end
   after(:all) { remove_book }
   subject(:builder) { @builder }
 
   it "should be valid" do
-    output = `poly epub:validate`
+    output = `softcover epub:validate`
     expect(output).to match(/No errors or warnings/)
   end
 
@@ -93,7 +93,7 @@ describe Polytexnic::Builders::Epub do
         end
 
         it "should have a PolyTeXnic CSS file" do
-          expect('epub/OEBPS/styles/polytexnic.css').to exist
+          expect('epub/OEBPS/styles/softcover.css').to exist
         end
 
         it "should have an EPUB CSS file" do
@@ -161,11 +161,11 @@ describe Polytexnic::Builders::Epub do
     it "should create the style files" do
       expect(path('epub/OEBPS/styles/page-template.xpgt')).to exist
       expect(path('epub/OEBPS/styles/pygments.css')).to exist
-      expect(path('epub/OEBPS/styles/polytexnic.css')).to exist
+      expect(path('epub/OEBPS/styles/softcover.css')).to exist
     end
 
     it "should scrub the CSS file of the book id" do
-      css = File.read(path('epub/OEBPS/styles/polytexnic.css'))
+      css = File.read(path('epub/OEBPS/styles/softcover.css'))
       expect(css).not_to match /\#book/
     end
   end
@@ -177,11 +177,11 @@ describe Polytexnic::Builders::Epub do
   end
 end
 
-describe Polytexnic::Builders::Epub do
+describe Softcover::Builders::Epub do
   context "for a Markdown book" do
     before(:all) do
       generate_book(markdown: true)
-      @builder = Polytexnic::Builders::Epub.new
+      @builder = Softcover::Builders::Epub.new
       @builder.build!
       chdir_to_book
     end
@@ -189,7 +189,7 @@ describe Polytexnic::Builders::Epub do
     subject(:builder) { @builder }
 
     it "should be valid" do
-      expect(`poly epub:validate`).to match(/No errors or warnings/)
+      expect(`softcover epub:validate`).to match(/No errors or warnings/)
     end
 
     it "should not raise an error" do

@@ -1,10 +1,8 @@
 # A chapter
 
-This is the first paragraph of the PolyTeXnic Markdown template. It shows how to write a document in Markdown, a lightweight markup language, augmented with the [kramdown](http://kramdown.rubyforge.org/) converter and some custom extensions. (The other available input format is *PolyTeX*, a subset of the *LaTeX* typesetting language optimized for ebooks. PolyTeX has a more complicated syntax but is more powerful.) For more information, see [*The PolyTeXnic Book*](http://polytexnic.org/book) (**link not live yet**). To learn how to easily publish (and optionally sell) documents produced with PolyTeXnic, visit [Softcover.io](http://softcover.io/). PolyTeXnic is currently in private beta; go to [Softcover.io](http://softcover.io/) to get an invitation.
+This is the first paragraph of the Softcover Markdown template. It shows how to write a document in Markdown, a lightweight markup language, augmented with the [kramdown](http://kramdown.rubyforge.org/) converter and some custom extensions. (The other available input format is *PolyTeX*, a subset of the *LaTeX* typesetting language optimized for ebooks. PolyTeX has a more complicated syntax but is more powerful.) For more information, see [*The Softcover Manual*](http://manual.softcover.io/) (**link not live yet**). To learn how to easily publish (and optionally sell) documents produced with Softcover, visit [Softcover.io](http://softcover.io/). Softcover is currently in private beta; go to [Softcover.io](http://softcover.io/) to get an invitation.
 
-This is the *second* paragraph, showing how to emphasize text.[^sample_footnote] You can also make text **bold** or _emphasize a second way_.
-
-*Note*: "PolyTeXnic" is pronounced exactly like the English word *polytechnic*, and "LaTeX" is pronounced *lay*-tech (with "tech" as in "technology").[^pronunciation]
+This is the *second* paragraph, showing how to emphasize text.[^sample-footnote] You can also make text **bold** or _emphasize a second way_.
 
 ## A section
 
@@ -20,14 +18,14 @@ You can typeset code samples and other verbatim text using four space of indenta
       puts "hello, world"
     end
 
-PolyTeXnic also comes with full support for syntax-highlighted source code using kramdown's default syntax, which combines the language name with indentation:
+Softcover also comes with full support for syntax-highlighted source code using kramdown's default syntax, which combines the language name with indentation:
 
 {lang="ruby"}
     def hello
       puts "hello, world"
     end
 
-PolyTeXnic's Markdown mode also extends kramdown to support "code fencing" from GitHub-flavored Markdown:
+Softcover's Markdown mode also extends kramdown to support "code fencing" from GitHub-flavored Markdown:
 
 ```ruby
 def hello
@@ -37,7 +35,7 @@ end
 
 ### Mathematics
 
-PolyTeXnic's Markdown mode supports limited mathematical typesetting, including inline math, such as {$$}\phi^2 - \phi - 1 = 0{/$$}, and centered math, such as
+Softcover's Markdown mode supports limited mathematical typesetting, including inline math, such as {$$}\phi^2 - \phi - 1 = 0{/$$}, and centered math, such as
 
 {$$}
 \phi = \frac{1+\sqrt{5}}{2}.
@@ -48,13 +46,13 @@ PolyTeXnic's Markdown mode supports limited mathematical typesetting, including 
 
 This is the second section.
 
-PolyTeXnic supports the inclusion of images, like this:
+Softcover supports the inclusion of images, like this:
 
 ![Some dude.](images/2011_michael_hartl.png)
 
 ### Tables
 
-PolyTeXnic supports raw tables via a simple table syntax:
+Softcover supports raw tables via a simple table syntax:
 
 |**HTTP request** | **URL** | **Action** | **Purpose** |
 | `GET` | /users | `index` | page to list all users |
@@ -68,36 +66,36 @@ PolyTeXnic supports raw tables via a simple table syntax:
 
 ## Command-line interface
 
-PolyTeXnic comes with a command-line interface called `poly`. To get more information, just run `poly help`:
+Softcover comes with a command-line interface called `softcover`. To get more information, just run `softcover help`:
 
 ```console
-$ poly help
+$ softcover help
 Commands:
-  poly build, build:all           # Build all formats
-  poly build:epub                 # Build EPUB
-  poly build:html                 # Build HTML
-  poly build:mobi                 # Build MOBI
-  poly build:pdf                  # Build PDF
-  poly build:preview              # Build book preview in all formats
-  poly config                     # View local config
-  poly config:add key=value       # Add to your local config vars
-  poly epub:validate, epub:check  # Validate EPUB with epubcheck
-  poly help [COMMAND]             # Describe available commands...
-  poly login                      # Log into Softcover account
-  poly logout                     # Log out of Softcover account
-  poly new <name>                 # Generate new book directory structure.
-  poly open                       # Open book on Softcover website (OS X only)
-  poly publish                    # Publish your book on Softcover
-  poly publish:screencasts        # Publish screencasts
-  poly server                     # Run local server
+  softcover build, build:all           # Build all formats
+  softcover build:epub                 # Build EPUB
+  softcover build:html                 # Build HTML
+  softcover build:mobi                 # Build MOBI
+  softcover build:pdf                  # Build PDF
+  softcover build:preview              # Build book preview in all formats
+  softcover config                     # View local config
+  softcover config:add key=value       # Add to your local config vars
+  softcover epub:validate, epub:check  # Validate EPUB with epubcheck
+  softcover help [COMMAND]             # Describe available commands...
+  softcover login                      # Log into Softcover account
+  softcover logout                     # Log out of Softcover account
+  softcover new <name>                 # Generate new book directory structure.
+  softcover open                       # Open book on Softcover website (OS X only)
+  softcover publish                    # Publish your book on Softcover
+  softcover publish:screencasts        # Publish screencasts
+  softcover server                     # Run local server
 ```
 
-For additional help on a given command, run `poly help <command>`:
+For additional help on a given command, run `softcover help <command>`:
 
 ```console
-$ poly help build
+$ softcover help build
 Usage:
-  poly build, build:all
+  softcover build, build:all
 
 Options:
   -q, [--quiet]   # Quiet output
@@ -112,9 +110,9 @@ This is the end of the template---apart from two mostly empty chapters. In fact,
 
 <<(chapters/yet_another_chapter.md, lang: text)
 
-Visit <http://polytexnic.org/book> to learn more about what PolyTeXnic can do.
+Visit <http://manual.softcover.io> to learn more about what Softcover can do.
 
 
-[^sample_footnote]: This is a footnote. It is numbered automatically.
+[^sample-footnote]: This is a footnote. It is numbered automatically.
 
 [^pronunciation]: Pronunciations of "LaTeX" differ, but *lay*-tech is the one I prefer.

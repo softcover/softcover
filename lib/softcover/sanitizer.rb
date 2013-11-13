@@ -1,6 +1,6 @@
 require 'sanitize'
 
-module Polytexnic
+module Softcover
   module Sanitizer
     extend self
 

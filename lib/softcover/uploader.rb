@@ -1,6 +1,6 @@
-module Polytexnic
+module Softcover
   class Uploader
-    include Polytexnic::Utils
+    include Softcover::Utils
 
     # Takes response from S3 upload signature generation API endpoint.
     def initialize(res)
@@ -17,7 +17,7 @@ module Polytexnic
       unless @params.empty?
         bar = ProgressBar.create title: "Starting Upload...",
           format: "%t |%B| %P%% %e", total: total_size, smoothing: 0.75,
-          output: Polytexnic::Output.stream
+          output: Softcover::Output.stream
 
         upload_host = "http://#{@bucket}.s3.amazonaws.com"
 

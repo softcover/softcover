@@ -1,16 +1,16 @@
 require 'spec_helper'
 
-describe Polytexnic::Commands::Opener do
+describe Softcover::Commands::Opener do
   before(:all) { generate_book }
   after(:all)  { remove_book }
 
   it 'opens in browser' do
     opened = false
-    Polytexnic::Book.any_instance.stub(:open_in_browser) do
+    Softcover::Book.any_instance.stub(:open_in_browser) do
       opened = true
     end
 
-    Polytexnic::Commands::Opener.open!
+    Softcover::Commands::Opener.open!
 
     expect(opened).to be_true
   end
