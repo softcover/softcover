@@ -69,6 +69,11 @@ describe Polytexnic::Builders::Pdf do
         it { should include '\tableofcontents' }
         it { should include '\include{tmp/a_chapter.tmp}' }
       end
+
+
+      it "should remove the generated LaTeX files" do
+        expect(Dir.glob(path('chapters/*.tex'))).to be_empty
+      end
     end
   end
 end

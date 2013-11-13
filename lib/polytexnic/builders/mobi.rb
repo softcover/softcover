@@ -4,9 +4,6 @@ module Polytexnic
 
       def build!(options={})
         Polytexnic::Builders::Epub.new.build!(options)
-        if markdown_directory?
-          @manifest = Polytexnic::BookManifest.new(source: :polytex)
-        end
         filename  = manifest.filename
         filename += '-preview' if options[:preview]
         command = "#{kindlegen} ebooks/#{filename}.epub"

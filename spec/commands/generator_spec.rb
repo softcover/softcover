@@ -63,7 +63,7 @@ describe Polytexnic::Commands::Generator do
       end
 
       it "should not have the markdown files" do
-        expect('markdown/a_chapter.md').not_to exist
+        expect('chapters/a_chapter.md').not_to exist
       end
 
       describe ".gitignore" do
@@ -231,8 +231,8 @@ describe Polytexnic::Commands::Generator do
       end
 
       it "should have the markdown files" do
-        expect('markdown/a_chapter.md').to exist
-        expect('markdown/another_chapter.md').to exist
+        expect('chapters/a_chapter.md').to exist
+        expect('chapters/another_chapter.md').to exist
       end
     end
   end

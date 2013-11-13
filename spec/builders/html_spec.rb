@@ -117,6 +117,11 @@ describe Polytexnic::Builders::Html do
         expect(@file_to_be_removed).not_to exist
       end
 
+      it "should remove the generated LaTeX files" do
+        expect(Dir.glob(path('chapters/*.tex'))).to be_empty
+        expect(Dir.glob(path('generated_polytex/*.tex'))).not_to be_empty
+      end
+
       describe "master LaTeX file" do
         let(:master_file) { Dir['*.tex'].reject { |f| f =~ /\.tmp/}.first }
         subject { File.read(master_file) }

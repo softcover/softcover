@@ -10,10 +10,9 @@ module Polytexnic::Commands::Server
   def listen_for_changes
     return if defined?(@no_listener) && @no_listener
     server_pid = Process.pid
-    directories = markdown_directory? ? ['markdown'] : ['.', 'chapters']
+    directories = ['.', 'chapters']
     @listener = Listen.to(*directories)
     @listener.filter(/(\.tex|\.md|custom\.sty)$/)
-    @listener.ignore(%r{\.tmp\.tex})
     @listener.change do |modified|
       rebuild modified.try(:first)
       Process.kill("HUP", server_pid)

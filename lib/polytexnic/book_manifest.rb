@@ -39,16 +39,12 @@ class Polytexnic::BookManifest < OpenStruct
   class Section < OpenStruct
   end
 
-  MD_PATH = File.join('markdown', 'Book.txt')
+  MD_PATH = 'Book.txt'
   YAML_PATH = "book.yml"
 
   def initialize(options = {})
     @source = options[:source] || :polytex
     yaml_attrs = read_from_yml
-    @force_polytex = yaml_attrs["force_polytex"]
-    if @force_polytex && File.directory?('markdown')
-      FileUtils.mv 'markdown', 'old_markdown_files'
-    end
     attrs = case
             when polytex?  then yaml_attrs
             when markdown? then yaml_attrs.merge(read_from_md)
@@ -131,20 +127,20 @@ class Polytexnic::BookManifest < OpenStruct
 
   # Returns true if converting Markdown source.
   def markdown?
-    (@source == :markdown || @source == :md) && !@force_polytex
+    @source == :markdown || @source == :md
   end
   alias :md? :markdown?
 
   # Returns true if converting PolyTeX source.
   def polytex?
-    @source == :polytex || @force_polytex
+    @source == :polytex
   end
 
   # Returns an iterator the chapter file paths.
   def chapter_file_paths
     pdf_chapter_names.map do |name|
       file_path = case
-      when markdown? then File.join("markdown", "#{name}.md")
+      when markdown? then File.join("chapters", "#{name}.md")
       when polytex?  then File.join("chapters", "#{name}.tex")
       end
 
