@@ -1,25 +1,25 @@
-# PolyTeXnic
+# Softcover
 
-## **Note:** PolyTeXnic is currently in private beta
+## **Note:** Softcover is currently in private beta
 
-It is strongly recommended that right now only members of the private beta use the `polytexnic` gem. Go to [Softcover.io](http://softcover.io/) to request an invitation to the private beta.
+It is strongly recommended that right now only members of the private beta use the `softcover` gem. Go to [Softcover.io](http://softcover.io/) to request an invitation to the private beta.
 
-PolyTeXnic is an ebook typesetting system for technical authors. This is the main gem, `polytexnic`, which depends on `polytexnic-core` to convert Markdown or PolyTeX input to HTML and LaTeX, and thence to EPUB, MOBI, and PDF. Authors can use PolyTeXnic to publish and optionally sell the resulting ebooks (as well as associated digital goods such as screencasts) on the [Softcover publishing platform](http://softcover.io/).
+Softcover is an ebook typesetting system for technical authors. This is the main gem, `softcover`, which depends on `polytexnic` to convert Markdown or PolyTeX input to HTML and LaTeX, and thence to EPUB, MOBI, and PDF. Authors can use Softcover to publish and optionally sell the resulting ebooks (as well as associated digital goods such as screencasts) on the [Softcover publishing platform](http://softcover.io/).
 
-For more details about PolyTeXnic, see [*The PolyTeXnic Book*](http://polytexnic.org/book) (currently in preparation).
+For more details about Softcover, see [*The Softcover Manual*](http://manual.softcover.io) (currently in preparation).
 
 <!--
-# Polytexnic CLI
+# Softcover CLI
 
-Command line interface for Polytexnic.com
+Command line interface for Softcover.io
 
 ## Installation
 
-    $ gem install polytexnic
+    $ gem install softcover
 
 ## Usage
 
-    $ polytexnic <command>
+    $ softcover <command>
 
 ## Commands:
 
@@ -31,11 +31,11 @@ Command line interface for Polytexnic.com
 * new
 
 ## Development Notes
-    $ polytexnic config:add host=http://localhost:3000
+    $ softcover config:add host=http://localhost:3000
 
   * use "silence=false" to unsilence spec output:
 
-    $ silence=false bundle exec rspec 
+    $ silence=false bundle exec rspec
 -->
 ## Contributing
 

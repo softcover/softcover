@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Polytexnic::Commands::Publisher do
-  let(:book) { Polytexnic::Utils.current_book }
+describe Softcover::Commands::Publisher do
+  let(:book) { Softcover::Utils.current_book }
   before(:all) { generate_book }
   after(:all)  { remove_book }
 
@@ -24,6 +24,50 @@ describe Polytexnic::Commands::Publisher do
 
       it "publishes" do
         expect(subject.publish!).to be_true
+      end
+    end
+  end
+
+  describe "#unpublish" do
+    context "unpublishing from non book directory" do
+      before do
+        chdir_to_non_book
+      end
+
+      it "rejects the unpublish" do
+        expect(subject.unpublish!).to be_false
+      end
+    end
+
+    context "unpublishing from book directory" do
+      before do
+        chdir_to_book
+        stub_create_book book
+        subject.publish!
+        stub_destroy_book book
+      end
+
+      it "unpublishes" do
+        expect(subject.unpublish!).to be_true
+      end
+
+      it "removes book config" do
+        subject.unpublish!
+        expect(Softcover::BookConfig.exists?).to be_false
+      end
+    end
+
+    context "unpublishing from book directory with invalid ID" do
+      before do
+        chdir_to_book
+        stub_create_book book
+        subject.publish!
+        Softcover::BookConfig['id'] = 0
+        stub_destroy_book_not_found book
+      end
+
+      it "does not unpublish" do
+        expect(subject.unpublish!).to be_false
       end
     end
   end

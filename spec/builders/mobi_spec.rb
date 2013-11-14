@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe Polytexnic::Builders::Mobi do
+describe Softcover::Builders::Mobi do
   context "for a PolyTeX book" do
     before(:all) do
       generate_book
-      @builder = Polytexnic::Builders::Mobi.new
+      @builder = Softcover::Builders::Mobi.new
       @built = @builder.build!
       chdir_to_book
     end
@@ -29,7 +29,7 @@ describe Polytexnic::Builders::Mobi do
   context "for a Markdown book" do
     before(:all) do
       generate_book(markdown: true)
-      @builder = Polytexnic::Builders::Mobi.new
+      @builder = Softcover::Builders::Mobi.new
       @built = @builder.build!
       chdir_to_book
     end

@@ -1,29 +1,33 @@
 module WebmockHelpers
   def api_base_url
-    "#{Polytexnic::BaseConfig::DEFAULTS[:host]}/api/v1"
+    "#{Softcover::BaseConfig::DEFAULTS[:host]}/api/v1"
   end
 
   def test_bucket; 'test-bucket' end
   def test_access_key; 'asdf' end
   def test_id; 1 end
 
-  HEADERS = { 'Accept'=>'application/json',
-              'Accept-Encoding'=>'gzip, deflate',
-              'Content-Length'=>/.+/,
-              'Content-Type'=>'application/json',
-              'User-Agent'=>'Ruby' }
+  def headers(with_content_length=true)
+    hash = { 'Accept'=>'application/json',
+      'Accept-Encoding'=>'gzip, deflate',
+      'Content-Type'=>'application/json',
+      'User-Agent'=>'Ruby'
+    }
+    hash['Content-Length'] = /.+/ if with_content_length
+    hash
+  end
 
   def stub_valid_login(email, pass, api_key=TEST_API_KEY)
     stub_request(:post, "#{api_base_url}/login").
       with(:body => { "email" => email, "password" => pass },
-           :headers => HEADERS ).
+           :headers => headers ).
       to_return(:status => 200, :body => {api_key: api_key}.to_json)
   end
 
   def stub_invalid_login(email, pass)
     stub_request(:post, "#{api_base_url}/login").
       with(:body => { "email" => email, "password" => pass },
-           :headers => HEADERS ).
+           :headers => headers ).
       to_return(:status => 422, body: '')
   end
 
@@ -58,7 +62,7 @@ module WebmockHelpers
            cover: book.cover,
            chapters: book.chapter_attributes
         }.to_json,
-           :headers => HEADERS).
+           :headers => headers).
       to_return(:status => 200, :body => return_body, :headers => {})
 
     stub_s3_post
@@ -67,8 +71,20 @@ module WebmockHelpers
 
     stub_request(:put, "#{api_base_url}/books/#{test_id}").
       with(:body => "{\"upload_complete\":true}",
-        :headers => HEADERS).
+        :headers => headers).
         to_return(:status => 200, :body => {}.to_json, :headers => {})
+  end
+
+  def stub_destroy_book(book)
+    stub_request(:delete, "#{api_base_url}/books/#{book.id}?api_key=").
+      with(:headers => headers(false)).
+      to_return(:status => 200, :body => "", :headers => {})
+  end
+
+  def stub_destroy_book_not_found(book)
+    stub_request(:delete, "#{api_base_url}/books/#{book.id}?api_key=").
+      with(:headers => headers(false)).
+      to_return(:status => 404, :body => "", :headers => {})
   end
 
   def stub_notify_file_upload(file)
@@ -77,7 +93,7 @@ module WebmockHelpers
     stub_request(:post, notify_file_url).
          with(:body =>
             { path: file.path, checksum: file.checksum }.to_json,
-              :headers => HEADERS).
+              :headers => headers).
          to_return(:status => 200, :body => {}.to_json, :headers => {})
   end
 
@@ -94,7 +110,7 @@ module WebmockHelpers
     stub_request(:post,
                  "#{api_base_url}/books/#{book.id}/screencasts").
                   with(:body => {files: files }.to_json,
-                       :headers => HEADERS).
+                       :headers => headers).
                   to_return(:status => 200, :body => {
                             upload_params: files.map { |file|
                               {
@@ -134,7 +150,7 @@ module WebmockHelpers
     Dir.chdir dir
   end
 
-  # Generates a sample book using the same method as `poly new`.
+  # Generates a sample book using the same method as `softcover new`.
   # It also creates test books of all standard formats and a screencasts
   # directory with a stub file.
   def generate_book(options = {})
@@ -143,16 +159,16 @@ module WebmockHelpers
     remove_book
     Dir.chdir File.join File.dirname(__FILE__), "fixtures/"
     flags = []
-    flags << '-m' if options[:markdown]
+    flags << '-p' unless options[:markdown]
     flags << '-s' if options[:simple]
-    silence { system "poly new #{name} #{flags.join(' ')}" }
+    silence { system "softcover new #{name} #{flags.join(' ')}" }
     chdir_to_book
     File.mkdir 'html' unless File.exist?('html')
     File.write(File.join('html', 'chapter-1.html'),          'test')
     File.write(File.join('html', 'chapter-1_fragment.html'), 'test')
     File.write(File.join('html', 'test_fragment.html'),      'test')
     File.mkdir 'ebooks' unless File.exist?('ebooks')
-    Polytexnic::FORMATS.each do |format|
+    Softcover::FORMATS.each do |format|
       dir = format == 'html' ? 'html' : 'ebooks'
       File.write(File.join(dir, "test-book.#{format}"), 'test')
     end

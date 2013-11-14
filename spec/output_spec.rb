@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module OutputTest
-  include Polytexnic::Output
+  include Softcover::Output
   extend self
 
   def puts_hello
@@ -21,11 +21,11 @@ module OutputTest
   end
 end
 
-describe Polytexnic::Output do
-  before { Polytexnic::Output.unsilence! }
+describe Softcover::Output do
+  before { Softcover::Output.unsilence! }
 
   it 'redirects output' do
-    Polytexnic::Output.stream = $stderr
+    Softcover::Output.stream = $stderr
     $stderr.should_receive(:puts).with('hello')
     $stderr.should_receive(:print).twice.with('hello')
 
@@ -35,7 +35,7 @@ describe Polytexnic::Output do
   end
 
   it 'redirects system command output' do
-    Polytexnic::Output.stream.should_receive(:puts)
+    Softcover::Output.stream.should_receive(:puts)
     OutputTest.system_cmd
   end
 end
