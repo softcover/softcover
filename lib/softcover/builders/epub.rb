@@ -7,8 +7,8 @@ module Softcover
         @preview = options[:preview]
         Softcover::Builders::Html.new.build!(preserve_tex: true)
         if manifest.markdown?
-          self.manifest = Softcover::BookManifest.new(source: :polytex)
-          @remove_tex = true
+          self.manifest = Softcover::BookManifest.new(source: :polytex,
+                                                      origin: :markdown)
         end
         remove_html
         create_directories
@@ -22,7 +22,6 @@ module Softcover
         create_style_files
         make_epub(options)
         move_epub
-        remove_polytex! if remove_polytex?
       end
 
       # Returns true if generating a book preview.

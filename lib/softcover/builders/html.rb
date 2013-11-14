@@ -20,7 +20,7 @@ module Softcover
 
         if manifest.markdown?
           unless options[:'find-overfull']
-            FileUtils.rm(Dir.glob(path('chapters/*.tex')))
+            FileUtils.rm(Dir.glob(path("#{manifest.polytex_dir}/*.tex")))
           end
           manifest.chapters.each do |chapter|
             write_latex_files(chapter, options)
@@ -28,8 +28,8 @@ module Softcover
           rewrite_master_latex_file
           # Reset the manifest to use PolyTeX.
           self.manifest = Softcover::BookManifest.new(source: :polytex,
-                                                      verify_paths: true)
-          @remove_tex = true unless options[:preserve_tex]
+                                                      verify_paths: true,
+                                                      origin: :markdown)
         end
 
         if manifest.polytex?
@@ -49,8 +49,6 @@ module Softcover
           printer.print(STDOUT, {})
         end
 
-        remove_polytex! if remove_polytex?
-
         true
       end
 
@@ -60,7 +58,7 @@ module Softcover
         cc = Softcover.custom_styles
         md = Polytexnic::Pipeline.new(File.read(path), source: :md,
                                                        custom_commands: cc)
-        filename = path("chapters/#{chapter.slug}.tex")
+        filename = path("#{manifest.polytex_dir}/#{chapter.slug}.tex")
         File.write(filename, md.polytex)
       end
 
@@ -71,7 +69,7 @@ module Softcover
         tex_file = []
         lines.each do |line|
           if line =~ /(.*)\.md\s*$/
-            tex_file << "\\include{chapters/#{$1}}"
+            tex_file << "\\include{#{manifest.polytex_dir}/#{$1}}"
           elsif line =~ /(.*):\s*$/  # frontmatter or mainmatter
             tex_file << "\\#{$1}"
           elsif line.strip == 'cover'
