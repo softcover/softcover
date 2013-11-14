@@ -163,11 +163,11 @@ module Softcover
     # ===============================================
 
     desc "new <name>", "Generate new book directory structure."
-    method_option :markdown,
+    method_option :polytex,
                   :type => :boolean,
                   :default => false,
-                  :aliases => "-m",
-                  :desc => "Generate a Markdown book."
+                  :aliases => "-p",
+                  :desc => "Generate a PolyTeX book."
     method_option :simple,
                   :type => :boolean,
                   :default => false,
@@ -181,7 +181,7 @@ module Softcover
     # Open
     # ===============================================
 
-    desc "open", "Open book on Softcover website (OS X only)"
+    desc "open", "Open book on Softcover website (OS X)"
     def open
       Softcover::Commands::Opener.open!
     end

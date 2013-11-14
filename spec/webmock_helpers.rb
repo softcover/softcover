@@ -159,7 +159,7 @@ module WebmockHelpers
     remove_book
     Dir.chdir File.join File.dirname(__FILE__), "fixtures/"
     flags = []
-    flags << '-m' if options[:markdown]
+    flags << '-p' unless options[:markdown]
     flags << '-s' if options[:simple]
     silence { system "softcover new #{name} #{flags.join(' ')}" }
     chdir_to_book

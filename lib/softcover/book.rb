@@ -76,7 +76,7 @@ class Softcover::Book
     "#{@client.host}/books/#{id}/redirect"
   end
 
-  # Opens the book in the browser (OS X–only).
+  # Opens the book in the browser (OS X only).
   def open_in_browser
     `open #{url}`
   end
