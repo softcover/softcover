@@ -14,7 +14,7 @@ This is a section. You can refer to it using the \LaTeX\ cross-reference syntax,
 
 This is a subsection.
 
-You can typeset code samples and other verbatim text using four space of indentation:
+You can typeset code samples and other verbatim text using four spaces of indentation:
 
     def hello
       puts "hello, world"
@@ -109,7 +109,7 @@ Commands:
   softcover login                      # Log into Softcover account
   softcover logout                     # Log out of Softcover account
   softcover new <name>                 # Generate new book directory structure.
-  softcover open                       # Open book on Softcover website
+  softcover open                       # Open book on Softcover website (OS X)
   softcover publish                    # Publish your book on Softcover
   softcover publish:screencasts        # Publish screencasts
   softcover server                     # Run local server

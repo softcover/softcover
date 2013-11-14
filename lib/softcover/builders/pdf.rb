@@ -8,13 +8,12 @@ module Softcover
           # Build the HTML to produce PolyTeX as a side-effect,
           # then update the manifest to reduce PDF generation
           # to a previously solved problem.
-          Softcover::Builders::Html.new.build!(options.merge(preserve_tex:
-                                                              true))
-          self.manifest = Softcover::BookManifest.new(source: :polytex)
-          @remove_tex = true unless options[:preserve_tex]
+          Softcover::Builders::Html.new.build!
+          self.manifest = Softcover::BookManifest.new(source: :polytex,
+                                                      origin: :markdown)
         end
         # Build the PolyTeX filename so it accepts both 'foo' and 'foo.tex'.
-        basename = File.basename(@manifest.filename, '.tex')
+        basename = File.basename(manifest.filename, '.tex')
         book_filename = basename + '.tex'
 
         # In debug mode, execute `xelatex` and exit.
@@ -36,27 +35,25 @@ module Softcover
           return
         end
 
-        polytex_filenames = @manifest.chapter_file_paths << book_filename
-        polytex_filenames.delete(path('chapters/frontmatter.tex'))
+        polytex_filenames = manifest.pdf_chapter_filenames << book_filename
         polytex_filenames.each do |filename|
           puts filename unless options[:quiet] || options[:silent]
           polytex = File.open(filename) { |f| f.read }
           latex   = Polytexnic::Pipeline.new(polytex).to_latex
           if filename == book_filename
             latex.gsub!(/\\include{(.*?)}/) do
-              "\\include{#{Softcover::Utils.tmpify($1)}.tmp}"
+              "\\include{#{Softcover::Utils.tmpify(manifest, $1)}.tmp}"
             end
           end
-          File.open(Softcover::Utils.tmpify(filename), 'w') do |f|
+          File.open(Softcover::Utils.tmpify(manifest, filename), 'w') do |f|
             f.write(latex)
           end
         end
         write_pygments_file(:latex)
         copy_polytexnic_sty
 
-        remove_polytex! if remove_polytex?
-
-        build_pdf = "#{xelatex} #{Softcover::Utils.tmpify(book_filename)}"
+        tmp_filename = Softcover::Utils.tmpify(manifest, book_filename)
+        build_pdf = "#{xelatex} #{tmp_filename}"
         # Run the command twice (to guarantee up-to-date cross-references)
         # unless explicitly overriden.
         # Renaming the PDF in the command is necessary because `execute`
