@@ -98,15 +98,17 @@ describe Softcover::Builders::Html do
   describe "when generating from Markdown source" do
     before(:all) do
       generate_book(markdown: true)
-      @file_to_be_removed = path("generated_polytex/should_be_removed.tex")
-      File.write(@file_to_be_removed, '')
     end
     after(:all)  { remove_book }
 
     describe "#build!" do
       subject(:builder) { Softcover::Builders::Html.new }
 
-      before { builder.build! }
+      before do
+        @file_to_be_removed = path("#{builder.manifest.polytex_dir}/remove.tex")
+        File.write(@file_to_be_removed, '')
+        builder.build!
+      end
 
       its(:built_files) { should include "html/a_chapter.html" }
       its(:built_files) { should include "html/a_chapter_fragment.html" }

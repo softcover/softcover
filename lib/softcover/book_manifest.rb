@@ -1,6 +1,8 @@
 require 'ostruct'
 
 class Softcover::BookManifest < OpenStruct
+  include Softcover::Utils
+
   class NotFound < StandardError
     def message
       "Invalid book directory, no manifest file found!"
@@ -97,7 +99,9 @@ class Softcover::BookManifest < OpenStruct
   # format when working with Markdown books. Otherwise, we use the chapters
   # directory, which is the default location when writing LaTeX/PolyTeX books.
   def polytex_dir
-    (markdown? || @origin == :markdown) ? 'generated_polytex' : 'chapters'
+    dir = (markdown? || @origin == :markdown) ? 'generated_polytex' : 'chapters'
+    mkdir dir
+    dir
   end
 
   # Returns an array of the chapters to include.
