@@ -140,37 +140,37 @@ Softcover supports raw tables via the \kode{tabular} environment. To make a tabu
 
 \section{Command-line interface}
 
-Softcover comes with a command-line interface called \kode{poly}. To get more information, just run \kode{poly help}:
+Softcover comes with a command-line interface called \kode{poly}. To get more information, just run \kode{softcoverhelp}:
 
 %= lang:console
 \begin{code}
-$ poly help
+$ softcoverhelp
 Commands:
-  poly build, build:all           # Build all formats
-  poly build:epub                 # Build EPUB
-  poly build:html                 # Build HTML
-  poly build:mobi                 # Build MOBI
-  poly build:pdf                  # Build PDF
-  poly build:preview              # Build book preview in all formats
-  poly config                     # View local config
-  poly config:add key=value       # Add to your local config vars
-  poly epub:validate, epub:check  # Validate EPUB with epubcheck
-  poly help [COMMAND]             # Describe available commands...
-  poly login                      # Log into Softcover account
-  poly logout                     # Log out of Softcover account
-  poly new <name>                 # Generate new book directory structure.
-  poly open                       # Open book on Softcover website (OS X only)
-  poly publish                    # Publish your book on Softcover
-  poly publish:screencasts        # Publish screencasts
-  poly server                     # Run local server
+  softcover build, build:all           # Build all formats
+  softcover build:epub                 # Build EPUB
+  softcover build:html                 # Build HTML
+  softcover build:mobi                 # Build MOBI
+  softcover build:pdf                  # Build PDF
+  softcover build:preview              # Build book preview in all formats
+  softcover config                     # View local config
+  softcover config:add key=value       # Add to your local config vars
+  softcover epub:validate, epub:check  # Validate EPUB with epubcheck
+  softcover help [COMMAND]             # Describe available commands...
+  softcover login                      # Log into Softcover account
+  softcover logout                     # Log out of Softcover account
+  softcover new <name>                 # Generate new book directory structure.
+  softcover open                       # Open book on Softcover website (OS X)
+  softcover publish                    # Publish your book on Softcover
+  softcover publish:screencasts        # Publish screencasts
+  softcover server                     # Run local server
 \end{code}
 
-For additional help on a given command, run \kode{poly help <command>}:
+For additional help on a given command, run \kode{softcoverhelp <command>}:
 %= lang:console
 \begin{code}
-$ poly help build
+$ softcoverhelp build
 Usage:
-  poly build, build:all
+  softcoverbuild, build:all
 
 Options:
   -q, [--quiet]   # Quiet output

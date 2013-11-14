@@ -109,7 +109,7 @@ Commands:
   softcover login                      # Log into Softcover account
   softcover logout                     # Log out of Softcover account
   softcover new <name>                 # Generate new book directory structure.
-  softcover open                       # Open book on Softcover website
+  softcover open                       # Open book on Softcover website (OS X)
   softcover publish                    # Publish your book on Softcover
   softcover publish:screencasts        # Publish screencasts
   softcover server                     # Run local server
