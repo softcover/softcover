@@ -8,7 +8,7 @@ module Softcover
       # Generates the default book file tree.
       def generate_file_tree(name, options = {})
         @name = name
-        @markdown = options[:markdown]
+        @markdown = !options[:polytex]
         @simple   = options[:simple]
 
         thor = Thor::Shell::Basic.new

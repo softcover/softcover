@@ -12,7 +12,9 @@ module Softcover::Commands::Server
     server_pid = Process.pid
     directories = ['.', 'chapters']
     @listener = Listen.to(*directories)
-    @listener.filter(/(\.tex|\.md|custom\.sty)$/)
+    file_pattern = markdown? ? '\.md' : '\.tex'
+    @listener.filter(/(#{file_pattern}|custom\.sty)$/)
+
     @listener.change do |modified|
       rebuild modified.try(:first)
       Process.kill("HUP", server_pid)
@@ -20,11 +22,16 @@ module Softcover::Commands::Server
     @listener.start
   end
 
+  def markdown?
+    !Dir.glob(path('chapters/*.md')).empty?
+  end
+
   def rebuild(modified=nil)
     printf modified ? "=> #{File.basename modified} changed, rebuilding... " :
                       'Building...'
     t = Time.now
-    Softcover::Builders::Html.new.build
+    builder = Softcover::Builders::Html.new
+    builder.build(preserve_tex: true)
     puts "Done. (#{(Time.now - t).round(2)}s)"
 
   rescue Softcover::BookManifest::NotFound => e

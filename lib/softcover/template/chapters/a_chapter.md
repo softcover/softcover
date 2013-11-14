@@ -1,12 +1,14 @@
 # A chapter
+\label{cha:a_chapter}
 
-This is the first paragraph of the Softcover Markdown template. It shows how to write a document in Markdown, a lightweight markup language, augmented with the [kramdown](http://kramdown.rubyforge.org/) converter and some custom extensions. (The other available input format is *PolyTeX*, a subset of the *LaTeX* typesetting language optimized for ebooks. PolyTeX has a more complicated syntax but is more powerful.) For more information, see [*The Softcover Manual*](http://manual.softcover.io/) (**link not live yet**). To learn how to easily publish (and optionally sell) documents produced with Softcover, visit [Softcover.io](http://softcover.io/). Softcover is currently in private beta; go to [Softcover.io](http://softcover.io/) to get an invitation.
+This is the first paragraph of the Softcover Markdown template. It shows how to write a document in Markdown, a lightweight markup language, augmented with the [kramdown](http://kramdown.rubyforge.org/) converter and some custom extensions, including support for embedded \PolyTeX, a subset of the powerful \LaTeX\ typesetting system.  For more information, see [*The Softcover Book*](http://manual.softcover.io/) (**link not live yet**). To learn how to easily publish (and optionally sell) documents produced with Softcover, visit [Softcover.io](http://softcover.io/). Softcover is currently in private beta; go to [Softcover.io](http://softcover.io/) to get an invitation.
 
 This is the *second* paragraph, showing how to emphasize text.[^sample-footnote] You can also make text **bold** or _emphasize a second way_.
 
 ## A section
+\label{sec:a_section}
 
-This is a section.
+This is a section. You can refer to it using the \LaTeX\ cross-reference syntax, like so: Section~\ref{sec:a_section}.
 
 ### Source code
 
@@ -33,14 +35,37 @@ def hello
 end
 ```
 
+The last of these can be combined with \PolyTeX's `codelisting` environment to make code listings with linked cross-references (Listing~\ref{code:hello}).
+
+\begin{codelisting}
+\codecaption{Hello, world.}
+\label{code:hello}
+```ruby
+def hello
+  puts "hello, world!"
+end
+```
+\end{codelisting}
+
+
 ### Mathematics
 
-Softcover's Markdown mode supports limited mathematical typesetting, including inline math, such as {$$}\phi^2 - \phi - 1 = 0{/$$}, and centered math, such as
+Softcover's Markdown mode supports mathematical typesetting using \LaTeX\ syntax, including inline math, such as \( \phi^2 - \phi - 1 = 0, \) and centered math, such as
+\[ \phi = \frac{1+\sqrt{5}}{2}. \]
+It also support centered equations with linked cross-reference via embedded \PolyTeX\ (Eq.~\eqref{eq:phi}).
+
+\begin{equation}
+\label{eq:phi}
+\phi = \frac{1+\sqrt{5}}{2}
+\end{equation}
+
+Softcover also supports an alternate math syntax, such as {$$}\phi^2 - \phi - 1 = 0{/$$}, and centered math, such as
 
 {$$}
 \phi = \frac{1+\sqrt{5}}{2}.
 {/$$}
 
+The \LaTeX\ syntax is strongly preferred, but the alternate syntax is included for maximum compatibility with other systems.
 
 ## Images and tables
 
@@ -84,7 +109,7 @@ Commands:
   softcover login                      # Log into Softcover account
   softcover logout                     # Log out of Softcover account
   softcover new <name>                 # Generate new book directory structure.
-  softcover open                       # Open book on Softcover website (OS X only)
+  softcover open                       # Open book on Softcover website (OS X)
   softcover publish                    # Publish your book on Softcover
   softcover publish:screencasts        # Publish screencasts
   softcover server                     # Run local server
@@ -110,7 +135,7 @@ This is the end of the template---apart from two mostly empty chapters. In fact,
 
 <<(chapters/yet_another_chapter.md, lang: text)
 
-Visit <http://manual.softcover.io> to learn more about what Softcover can do.
+Visit [*The Softcover Book*](http://manual.softcover.io) to learn more about what Softcover can do.
 
 
 [^sample-footnote]: This is a footnote. It is numbered automatically.

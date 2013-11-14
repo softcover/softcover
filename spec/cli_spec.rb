@@ -35,13 +35,13 @@ describe Softcover::CLI do
 
   context "softcover new options" do
     subject { `softcover help new` }
-    it { should include '-m, [--markdown]' }
+    it { should include '-p, [--polytex]' }
     it { should include '-s, [--simple]' }
   end
 
   context "softcover new" do
     before(:all) { chdir_to_fixtures }
-    after(:all) { remove_book }
+    after(:all)  { remove_book }
     it "should not raise error" do
       result = `softcover new book 2>&1`
       expect($?.exitstatus).to eq 0
@@ -107,7 +107,7 @@ describe Softcover::CLI do
     before(:all) do
       remove_book
       chdir_to_fixtures
-      silence { `softcover new book` }
+      silence { `softcover new book --polytex` }
       chdir_to_book
     end
     after(:all) { remove_book }
@@ -120,7 +120,7 @@ describe Softcover::CLI do
     before(:all) do
       remove_book
       chdir_to_fixtures
-      silence { `softcover new book -m` }
+      silence { `softcover new book` }
       chdir_to_book
     end
     after(:all) { remove_book }
