@@ -7,6 +7,7 @@ module Softcover
         filename  = manifest.filename
         filename += '-preview' if options[:preview]
         command = "#{kindlegen} ebooks/#{filename}.epub"
+        command = "#{calibre} ebooks/#{filename}.epub ebooks/#{filename}.azw3"
         # Because of the way kindlegen uses tempfiles, testing for the
         # actual generation of the MOBI causes an error, so in tests
         # we just return the command.
@@ -18,6 +19,12 @@ module Softcover
       end
 
       private
+
+        def calibre
+          filename = `which ebook-convert`.chomp
+          message = "Install Calibre and enable command line tools"
+          @calibre ||= executable(filename, message)
+        end
 
         def kindlegen
           filename = `which kindlegen`.chomp
