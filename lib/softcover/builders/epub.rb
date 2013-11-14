@@ -152,7 +152,7 @@ module Softcover
               puts "Creating #{png_filename}"
             end
             svg_height = svg['style'].scan(/height: (.*?);/).flatten.first
-            scale_factor = 9   # This scale factor turns out to look good.
+            scale_factor = 8   # This scale factor turns out to look good.
             h = scale_factor * svg_height.to_f
             cmd = "#{inkscape} -f #{svg_filename} -e #{png_filename} -h #{h}pt"
             if options[:silent]
