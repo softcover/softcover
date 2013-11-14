@@ -7,7 +7,7 @@ describe Softcover::Commands::Generator do
     before(:all) do
       chdir_to_non_book
       @name = 'foo_bar'
-      Softcover::Commands::Generator.generate_file_tree @name
+      Softcover::Commands::Generator.generate_file_tree @name, polytex: true
     end
 
     let(:name) { @name }
@@ -142,7 +142,8 @@ describe Softcover::Commands::Generator do
     before(:all) do
       chdir_to_non_book
       @name = 'foo_bar'
-      Softcover::Commands::Generator.generate_file_tree @name, simple: true
+      Softcover::Commands::Generator.generate_file_tree @name, simple: true,
+                                                               polytex: true
     end
 
     let(:name) { @name }
@@ -196,7 +197,7 @@ describe Softcover::Commands::Generator do
     before(:all) do
       chdir_to_non_book
       @name = 'foo_bar'
-      Softcover::Commands::Generator.generate_file_tree @name, markdown: true
+      Softcover::Commands::Generator.generate_file_tree @name
     end
 
     let(:name) { @name }
@@ -244,7 +245,9 @@ describe Softcover::Commands::Generator do
       $stdin.should_receive(:gets).and_return("a")
 
       silence do
-        2.times { Softcover::Commands::Generator.generate_file_tree name }
+        2.times do
+          Softcover::Commands::Generator.generate_file_tree name, polytex: true
+        end
       end
     end
 

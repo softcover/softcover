@@ -163,11 +163,11 @@ module Softcover
     # ===============================================
 
     desc "new <name>", "Generate new book directory structure."
-    method_option :markdown,
+    method_option :polytex,
                   :type => :boolean,
                   :default => false,
-                  :aliases => "-m",
-                  :desc => "Generate a Markdown book."
+                  :aliases => "-p",
+                  :desc => "Generate a PolyTeX book."
     method_option :simple,
                   :type => :boolean,
                   :default => false,
