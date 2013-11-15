@@ -52,7 +52,7 @@ end
 
 Softcover's Markdown mode supports mathematical typesetting using \LaTeX\ syntax, including inline math, such as \( \phi^2 - \phi - 1 = 0, \) and centered math, such as
 \[ \phi = \frac{1+\sqrt{5}}{2}. \]
-It also support centered equations with linked cross-reference via embedded \PolyTeX\ (Eq.~\eqref{eq:phi}).
+It also supports centered equations with linked cross-reference via embedded \PolyTeX\ (Eq.~\eqref{eq:phi}).
 
 \begin{equation}
 \label{eq:phi}
