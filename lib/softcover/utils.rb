@@ -51,9 +51,10 @@ module Softcover::Utils
 
   # Returns the tmp version of a filename.
   # E.g., tmpify('foo.tex') => 'foo.tmp.tex'
-  def tmpify(filename)
+  def tmpify(manifest, filename)
     sep = File::SEPARATOR
-    filename.sub('chapters' + sep, 'tmp' + sep).sub('.tex', '.tmp.tex')
+    filename.sub(manifest.polytex_dir + sep, 'tmp' + sep).
+             sub('.tex', '.tmp.tex')
   end
 
   # Writes a Pygments style file.

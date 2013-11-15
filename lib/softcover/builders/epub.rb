@@ -7,8 +7,8 @@ module Softcover
         @preview = options[:preview]
         Softcover::Builders::Html.new.build!(preserve_tex: true)
         if manifest.markdown?
-          self.manifest = Softcover::BookManifest.new(source: :polytex)
-          @remove_tex = true
+          self.manifest = Softcover::BookManifest.new(source: :polytex,
+                                                      origin: :markdown)
         end
         remove_html
         create_directories
@@ -22,7 +22,6 @@ module Softcover
         create_style_files
         make_epub(options)
         move_epub
-        remove_polytex! if remove_polytex?
       end
 
       # Returns true if generating a book preview.
@@ -152,7 +151,7 @@ module Softcover
               puts "Creating #{png_filename}"
             end
             svg_height = svg['style'].scan(/height: (.*?);/).flatten.first
-            scale_factor = 9   # This scale factor turns out to look good.
+            scale_factor = 8   # This scale factor turns out to look good.
             h = scale_factor * svg_height.to_f
             cmd = "#{inkscape} -f #{svg_filename} -e #{png_filename} -h #{h}pt"
             if options[:silent]

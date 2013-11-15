@@ -98,15 +98,17 @@ describe Softcover::Builders::Html do
   describe "when generating from Markdown source" do
     before(:all) do
       generate_book(markdown: true)
-      @file_to_be_removed = path('chapters/should_be_removed.tex')
-      File.write(@file_to_be_removed, '')
     end
     after(:all)  { remove_book }
 
     describe "#build!" do
       subject(:builder) { Softcover::Builders::Html.new }
 
-      before { builder.build! }
+      before do
+        @file_to_be_removed = path("#{builder.manifest.polytex_dir}/remove.tex")
+        File.write(@file_to_be_removed, '')
+        builder.build!
+      end
 
       its(:built_files) { should include "html/a_chapter.html" }
       its(:built_files) { should include "html/a_chapter_fragment.html" }
@@ -117,18 +119,17 @@ describe Softcover::Builders::Html do
         expect(@file_to_be_removed).not_to exist
       end
 
-      it "should remove the generated LaTeX files" do
-        expect(Dir.glob(path('chapters/*.tex'))).to be_empty
+      it "should include generated LaTeX files" do
         expect(Dir.glob(path('generated_polytex/*.tex'))).not_to be_empty
       end
 
       describe "master LaTeX file" do
         let(:master_file) { Dir['*.tex'].reject { |f| f =~ /\.tmp/}.first }
         subject { File.read(master_file) }
-        it { should include '\include{chapters/preface}' }
-        it { should include '\include{chapters/a_chapter}' }
-        it { should include '\include{chapters/another_chapter}' }
-        it { should include '\include{chapters/yet_another_chapter}' }
+        it { should include '\include{generated_polytex/preface}' }
+        it { should include '\include{generated_polytex/a_chapter}' }
+        it { should include '\include{generated_polytex/another_chapter}' }
+        it { should include '\include{generated_polytex/yet_another_chapter}' }
         it { should include '\end{document}' }
       end
     end

@@ -6,7 +6,7 @@ module Softcover
 
     def initialize
       @manifest = Softcover::BookManifest.new(verify_paths: true,
-                                               source: source)
+                                              source: source)
       @built_files = []
       write_polytexnic_commands_file
     end
@@ -16,21 +16,6 @@ module Softcover
       build(options)
       verify
       self
-    end
-
-    # Returns true if we should remove the generated PolyTeX.
-    # This is true of Markdown books, but we can't just use `markdown?` because
-    # we're re-using the PolyTeX production pipeline.
-    def remove_polytex?
-      @remove_tex
-    end
-
-    # Removes the generated PolyTeX.
-    # The 'removal' actually just involves moving it to an ignored storage
-    # directory. This gives users the ability to inspect it if desired.
-    def remove_polytex!
-      mkdir 'generated_polytex'
-      FileUtils.mv(Dir.glob(path('chapters/*.tex')), 'generated_polytex')
     end
 
     def clean!; end

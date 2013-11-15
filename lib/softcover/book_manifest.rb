@@ -1,6 +1,8 @@
 require 'ostruct'
 
 class Softcover::BookManifest < OpenStruct
+  include Softcover::Utils
+
   class NotFound < StandardError
     def message
       "Invalid book directory, no manifest file found!"
@@ -44,6 +46,7 @@ class Softcover::BookManifest < OpenStruct
 
   def initialize(options = {})
     @source = options[:source] || :polytex
+    @origin = options[:origin]
     yaml_attrs = read_from_yml
     attrs = case
             when polytex?  then yaml_attrs
@@ -76,7 +79,7 @@ class Softcover::BookManifest < OpenStruct
       chapter_includes(base_contents).each_with_index do |name, i|
         slug = File.basename(name, '.*')
         title_regex = /^\s*\\chapter{(.*)}/
-        content = File.read(File.join('chapters', slug + '.tex'))
+        content = File.read(File.join(polytex_dir, slug + '.tex'))
         title = content[title_regex, 1]
         j = 0
         sections = content.scan(/^\s*\\section{(.*)}/).flatten.map do |name|
@@ -91,9 +94,19 @@ class Softcover::BookManifest < OpenStruct
     verify_paths! if options[:verify_paths]
   end
 
+  # Returns the directory where the LaTeX files are located.
+  # We put them in the a separate directory when using them as an intermediate
+  # format when working with Markdown books. Otherwise, we use the chapters
+  # directory, which is the default location when writing LaTeX/PolyTeX books.
+  def polytex_dir
+    dir = (markdown? || @origin == :markdown) ? 'generated_polytex' : 'chapters'
+    mkdir dir
+    dir
+  end
+
   # Returns an array of the chapters to include.
   def chapter_includes(string)
-    chapter_regex = /^\s*\\include\{chapters\/(.*?)\}/
+    chapter_regex = /^\s*\\include\{#{polytex_dir}\/(.*?)\}/
     string.scan(chapter_regex).flatten
   end
 
@@ -136,12 +149,14 @@ class Softcover::BookManifest < OpenStruct
     @source == :polytex
   end
 
-  # Returns an iterator the chapter file paths.
+  # Returns an iterator for the chapter file paths.
   def chapter_file_paths
     pdf_chapter_names.map do |name|
       file_path = case
-      when markdown? then File.join("chapters", "#{name}.md")
-      when polytex?  then File.join("chapters", "#{name}.tex")
+      when markdown? || @origin == :markdown
+        File.join("chapters", "#{name}.md")
+      when polytex?
+        File.join("chapters", "#{name}.tex")
       end
 
       yield file_path if block_given?
@@ -150,13 +165,18 @@ class Softcover::BookManifest < OpenStruct
     end
   end
 
-  # Return chapters for the PDF.
+  # Returns chapters for the PDF.
   # The frontmatter pseudo-chapter exists for the sake of HTML/EPUB/MOBI, so
   # it's not returned as part of the chapters.
   def pdf_chapter_names
     chaps = chapters.reject { |chapter| chapter.slug.match(/frontmatter/) }.
                      collect(&:slug)
     frontmatter? ? frontmatter + chaps : chaps
+  end
+
+  # Returns the full chapter filenames for the PDF.
+  def pdf_chapter_filenames
+    pdf_chapter_names.map { |name| File.join(polytex_dir, "#{name}.tex") }
   end
 
   def find_chapter_by_slug(slug)

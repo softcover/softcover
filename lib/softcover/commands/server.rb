@@ -12,7 +12,7 @@ module Softcover::Commands::Server
     server_pid = Process.pid
     directories = ['.', 'chapters']
     @listener = Listen.to(*directories)
-    file_pattern = markdown? ? '\.md' : '\.tex'
+    file_pattern = markdown? ? '\.md|\.txt' : '\.tex'
     @listener.filter(/(#{file_pattern}|custom\.sty)$/)
 
     @listener.change do |modified|
