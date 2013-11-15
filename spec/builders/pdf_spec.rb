@@ -15,17 +15,18 @@ describe Softcover::Builders::Pdf do
     describe "#build!" do
 
       it "should create a tmp LaTeX file" do
-        expect(Softcover::Utils.tmpify('book.tex')).to exist
+        expect(Softcover::Utils.tmpify(builder.manifest, 'book.tex')).to exist
       end
 
       it "should create tmp files for all chapters" do
         builder.manifest.chapter_file_paths.each do |filename|
-          expect(Softcover::Utils.tmpify(filename)).to exist
+          expect(Softcover::Utils.tmpify(builder.manifest, filename)).to exist
         end
       end
 
       it "should replace the main file's \\includes with tmp files" do
-        contents = File.read(Softcover::Utils.tmpify('book.tex'))
+        contents = File.read(Softcover::Utils.tmpify(builder.manifest,
+                                                     'book.tex'))
         builder.manifest.pdf_chapter_names.each do |name|
           expect(contents).to match("\\include{tmp/#{name}.tmp}")
         end
@@ -58,21 +59,18 @@ describe Softcover::Builders::Pdf do
     describe "#build!" do
 
       it "should create a tmp LaTeX file" do
-        expect(Softcover::Utils.tmpify('book.tex')).to exist
+        expect(Softcover::Utils.tmpify(builder.manifest, 'book.tex')).to exist
       end
 
       describe "LaTeX file" do
-        subject(:content) { File.read(Softcover::Utils.tmpify('book.tex')) }
+        subject(:content) do
+          File.read(Softcover::Utils.tmpify(builder.manifest, 'book.tex'))
+        end
         it { should_not be_empty }
         it { should include '\includepdf{images/cover.pdf}' }
         it { should include '\maketitle' }
         it { should include '\tableofcontents' }
         it { should include '\include{tmp/a_chapter.tmp}' }
-      end
-
-
-      it "should remove the generated LaTeX files" do
-        expect(Dir.glob(path('chapters/*.tex'))).to be_empty
       end
     end
   end

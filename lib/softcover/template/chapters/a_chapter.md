@@ -14,7 +14,7 @@ This is a section. You can refer to it using the \LaTeX\ cross-reference syntax,
 
 This is a subsection.
 
-You can typeset code samples and other verbatim text using four space of indentation:
+You can typeset code samples and other verbatim text using four spaces of indentation:
 
     def hello
       puts "hello, world"
