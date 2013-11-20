@@ -4,8 +4,13 @@ module Softcover::Utils
   def current_book
     # using module level variable because it should be context independent
     @@current_book ||= begin
-      in_book_directory? ? Softcover::Book.new : false
+      in_book_directory? ? Softcover::Book.new(origin: source) : false
     end
+  end
+
+  # Returns the source type (PolyTeX or Markdown) of the current book.
+  def source
+    Dir.glob(path('chapters/*.md')).empty? ? :polytex : :markdown
   end
 
   def reset_current_book!
