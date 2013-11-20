@@ -14,6 +14,7 @@ pygments.css
 softcover.css
 frontmatter.tex
 .highlight_cache
+.softcover-book
 
 # Generated HTML files
 html/*.html

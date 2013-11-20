@@ -66,6 +66,10 @@ describe Softcover::Commands::Generator do
         expect('chapters/a_chapter.md').not_to exist
       end
 
+      it "should have a README" do
+        expect('README.md').to exist
+      end
+
       describe ".gitignore" do
         subject { File.read('.gitignore') }
 
