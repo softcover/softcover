@@ -45,6 +45,10 @@ class Softcover::BookManifest < OpenStruct
         :polytex
       end
     end
+
+    def full_name
+      "#{slug}#{extension}"
+    end
   end
 
   class Section < OpenStruct
@@ -162,11 +166,13 @@ class Softcover::BookManifest < OpenStruct
   def chapter_file_paths
     pdf_chapter_names.map do |name|
       file_path = case
-      when markdown? || @origin == :markdown
-        File.join("chapters", "#{name}.md")
-      when polytex?
-        File.join("chapters", "#{name}.tex")
-      end
+                  when markdown? || @origin == :markdown
+                    chapter = chapters.find { |chapter| chapter.slug == name }
+                    extension = chapter.nil? ? '.md' : chapter.extension
+                    File.join("chapters", "#{name}#{extension}")
+                  when polytex?
+                    File.join("chapters", "#{name}.tex")
+                  end
 
       yield file_path if block_given?
 
@@ -175,8 +181,6 @@ class Softcover::BookManifest < OpenStruct
   end
 
   # Returns chapters for the PDF.
-  # The frontmatter pseudo-chapter exists for the sake of HTML/EPUB/MOBI, so
-  # it's not returned as part of the chapters.
   def pdf_chapter_names
     chaps = chapters.reject { |chapter| chapter.slug.match(/frontmatter/) }.
                      collect(&:slug)
@@ -274,7 +278,7 @@ class Softcover::BookManifest < OpenStruct
 
 
     def verify_paths!
-      chapter_file_paths do |chapter_path, i|
+      chapter_file_paths do |chapter_path|
         next if chapter_path =~ /frontmatter/
         unless File.exist?(chapter_path)
           raise "Chapter file in manifest not found in #{chapter_path}"
