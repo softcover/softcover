@@ -14,7 +14,7 @@ class Softcover::App < Sinatra::Base
 
   before do
     origin = Dir.glob('chapters/*.md').empty? ? :polytex : :markdown
-    @manifest = Softcover::BookManifest.new(foo: "bar", origin: origin)
+    @manifest = Softcover::BookManifest.new(origin: origin)
   end
 
   get '/' do
