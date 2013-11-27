@@ -56,7 +56,7 @@ module Softcover
       def write_latex_files(chapter, options = {})
         path = File.join('chapters', chapter.slug + '.md')
         cc = Softcover.custom_styles
-        md = Polytexnic::Pipeline.new(File.read(path), source: :md,
+        md = Polytexnic::Pipeline.new(File.read(path), source: chapter.source,
                                                        custom_commands: cc)
         filename = path("#{manifest.polytex_dir}/#{chapter.slug}.tex")
         File.write(filename, md.polytex)

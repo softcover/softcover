@@ -36,6 +36,15 @@ class Softcover::BookManifest < OpenStruct
     def to_hash
       marshal_dump.merge({ menu_heading: menu_heading })
     end
+
+    def source
+      case extension
+      when '.md'
+        :markdown
+      when '.tex'
+        :polytex
+      end
+    end
   end
 
   class Section < OpenStruct
@@ -227,6 +236,33 @@ class Softcover::BookManifest < OpenStruct
     raise NotFound
   end
 
+  # Returns the source files specified by Book.txt.
+  # Allows a mixture of Markdown and PolyTeX files.
+  def source_files
+    self.class.find_book_root!
+    md_tex = /.*(?:\.md|\.tex)/
+    File.readlines(MD_PATH).select { |path| path =~ md_tex }.map(&:strip)
+  end
+
+  def basenames
+    source_files.map { |file| File.basename(file, '.*') }
+  end
+
+  def extensions
+    source_files.map { |file| File.extname(file) }
+  end
+
+  def chapter_objects
+    basenames.zip(extensions).map do |name, extension|
+      Chapter.new(slug: name, extension: extension)
+    end
+  end
+
+  def read_from_md
+    { chapters: chapter_objects, filename: MD_PATH }
+  end
+
+
   private
 
     def read_from_yml
@@ -236,15 +272,6 @@ class Softcover::BookManifest < OpenStruct
       YAML.load_file(YAML_PATH)
     end
 
-    def read_from_md
-      self.class.find_book_root!
-      chapters = File.readlines(MD_PATH).select do |path|
-                   path =~ /(.*)\.md/
-                 end.map do |file|
-                   Chapter.new(slug: File.basename(file.strip, '.md'))
-                 end
-      { chapters: chapters, filename: MD_PATH }
-    end
 
     def verify_paths!
       chapter_file_paths do |chapter_path, i|
