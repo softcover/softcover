@@ -10,16 +10,27 @@ module Softcover::Commands::Server
   def listen_for_changes
     return if defined?(@no_listener) && @no_listener
     server_pid = Process.pid
-    directories = ['.', 'chapters']
-    @listener = Listen.to(*directories)
-    file_pattern = markdown? ? '\.md|\.txt' : '\.tex'
-    @listener.filter(/(#{file_pattern}|custom\.sty)$/)
+    filter_regex = /(\.md|\.tex|custom\.sty|Book\.txt)$/
+    @listener = Listen.to('.')
+    @listener.filter(filter_regex)
 
     @listener.change do |modified|
-      rebuild modified.try(:first)
-      Process.kill("HUP", server_pid)
+      first_modified = modified.try(:first)
+      unless first_modified =~ ignore_regex
+        rebuild first_modified
+        Process.kill("HUP", server_pid)
+      end
     end
     @listener.start
+  end
+
+  # Returns a regex for files to be ignored by the listener.
+  def ignore_regex
+    ignores = ['generated_polytex', '\.tmp\.tex']
+    # Ignore <book>.tex, which gets overwritten each time PolyTeXnic runs,
+    # unless there's no Book.txt, which means the author is using raw LaTeX.
+    ignores << Regexp.escape(Dir.glob('*.tex').first) if File.exist?('Book.txt')
+    /(#{ignores.join('|')})/
   end
 
   def markdown?
