@@ -36,6 +36,19 @@ class Softcover::BookManifest < OpenStruct
     def to_hash
       marshal_dump.merge({ menu_heading: menu_heading })
     end
+
+    def source
+      case extension
+      when '.md'
+        :markdown
+      when '.tex'
+        :polytex
+      end
+    end
+
+    def full_name
+      "#{slug}#{extension}"
+    end
   end
 
   class Section < OpenStruct
@@ -153,11 +166,13 @@ class Softcover::BookManifest < OpenStruct
   def chapter_file_paths
     pdf_chapter_names.map do |name|
       file_path = case
-      when markdown? || @origin == :markdown
-        File.join("chapters", "#{name}.md")
-      when polytex?
-        File.join("chapters", "#{name}.tex")
-      end
+                  when markdown? || @origin == :markdown
+                    chapter = chapters.find { |chapter| chapter.slug == name }
+                    extension = chapter.nil? ? '.md' : chapter.extension
+                    File.join("chapters", "#{name}#{extension}")
+                  when polytex?
+                    File.join("chapters", "#{name}.tex")
+                  end
 
       yield file_path if block_given?
 
@@ -166,8 +181,6 @@ class Softcover::BookManifest < OpenStruct
   end
 
   # Returns chapters for the PDF.
-  # The frontmatter pseudo-chapter exists for the sake of HTML/EPUB/MOBI, so
-  # it's not returned as part of the chapters.
   def pdf_chapter_names
     chaps = chapters.reject { |chapter| chapter.slug.match(/frontmatter/) }.
                      collect(&:slug)
@@ -227,6 +240,33 @@ class Softcover::BookManifest < OpenStruct
     raise NotFound
   end
 
+  # Returns the source files specified by Book.txt.
+  # Allows a mixture of Markdown and PolyTeX files.
+  def source_files
+    self.class.find_book_root!
+    md_tex = /.*(?:\.md|\.tex)/
+    File.readlines(MD_PATH).select { |path| path =~ md_tex }.map(&:strip)
+  end
+
+  def basenames
+    source_files.map { |file| File.basename(file, '.*') }
+  end
+
+  def extensions
+    source_files.map { |file| File.extname(file) }
+  end
+
+  def chapter_objects
+    basenames.zip(extensions).map do |name, extension|
+      Chapter.new(slug: name, extension: extension)
+    end
+  end
+
+  def read_from_md
+    { chapters: chapter_objects, filename: MD_PATH }
+  end
+
+
   private
 
     def read_from_yml
@@ -236,18 +276,9 @@ class Softcover::BookManifest < OpenStruct
       YAML.load_file(YAML_PATH)
     end
 
-    def read_from_md
-      self.class.find_book_root!
-      chapters = File.readlines(MD_PATH).select do |path|
-                   path =~ /(.*)\.md/
-                 end.map do |file|
-                   Chapter.new(slug: File.basename(file.strip, '.md'))
-                 end
-      { chapters: chapters, filename: MD_PATH }
-    end
 
     def verify_paths!
-      chapter_file_paths do |chapter_path, i|
+      chapter_file_paths do |chapter_path|
         next if chapter_path =~ /frontmatter/
         unless File.exist?(chapter_path)
           raise "Chapter file in manifest not found in #{chapter_path}"

@@ -28,7 +28,7 @@ module Softcover
           rewrite_master_latex_file
           # Reset the manifest to use PolyTeX.
           self.manifest = Softcover::BookManifest.new(source: :polytex,
-                                                      verify_paths: true,
+                                                      verify_paths: false,
                                                       origin: :markdown)
         end
 
@@ -54,12 +54,16 @@ module Softcover
 
       # Writes the LaTeX files for a given Markdown chapter.
       def write_latex_files(chapter, options = {})
-        path = File.join('chapters', chapter.slug + '.md')
-        cc = Softcover.custom_styles
-        md = Polytexnic::Pipeline.new(File.read(path), source: :md,
-                                                       custom_commands: cc)
         filename = path("#{manifest.polytex_dir}/#{chapter.slug}.tex")
-        File.write(filename, md.polytex)
+        if chapter.source == :polytex
+          FileUtils.cp path("chapters/#{chapter.full_name}"), filename
+        else
+          path = File.join('chapters', chapter.full_name)
+          cc = Softcover.custom_styles
+          md = Polytexnic::Pipeline.new(File.read(path), source: :markdown,
+                                                         custom_commands: cc)
+          File.write(filename, md.polytex)
+        end
       end
 
       # Rewrites the master LaTeX file <name>.tex to use chapters from Book.txt.
@@ -68,7 +72,7 @@ module Softcover
         lines = File.readlines('Book.txt')
         tex_file = []
         lines.each do |line|
-          if line =~ /(.*)\.md\s*$/
+          if line =~ /(.*)(?:\.md|\.tex)\s*$/
             tex_file << "\\include{#{manifest.polytex_dir}/#{$1}}"
           elsif line =~ /(.*):\s*$/  # frontmatter or mainmatter
             tex_file << "\\#{$1}"
