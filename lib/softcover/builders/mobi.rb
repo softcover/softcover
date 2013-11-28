@@ -6,8 +6,11 @@ module Softcover
         Softcover::Builders::Epub.new.build!(options)
         filename  = manifest.filename
         filename += '-preview' if options[:preview]
-        command = "#{kindlegen} ebooks/#{filename}.epub"
-        command = "#{calibre} ebooks/#{filename}.epub ebooks/#{filename}.azw3"
+        if options[:kindlegen]
+          command = "#{kindlegen} ebooks/#{filename}.epub"
+        else
+          command = "#{calibre} ebooks/#{filename}.epub ebooks/#{filename}.azw3"
+        end
         # Because of the way kindlegen uses tempfiles, testing for the
         # actual generation of the MOBI causes an error, so in tests
         # we just return the command.
@@ -16,13 +19,18 @@ module Softcover
         else
           Softcover.test? ? command : system(command)
         end
+        unless Softcover.test? || options[:kindlegen]
+          FileUtils.mv("ebooks/#{filename}.azw3", "ebooks/#{filename}.mobi")
+        end
       end
 
       private
 
         def calibre
           filename = `which ebook-convert`.chomp
-          message = "Install Calibre and enable command line tools"
+          url = 'http://calibre-ebook.com/'
+          message  = "Install Calibre (#{url}) and enable command line tools"
+          message += " (http://manual.calibre-ebook.com/cli/cli-index.html)"
           @calibre ||= executable(filename, message)
         end
 
