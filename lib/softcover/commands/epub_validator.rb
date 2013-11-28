@@ -22,9 +22,8 @@ module Softcover
 
         def epubcheck
           filename = File.join(Dir.home, 'epubcheck-3.0', 'epubcheck-3.0.jar')
-          url = 'https://code.google.com/p/epubcheck/downloads/' +
-                'detail?name=epubcheck-3.0.zip'
-          message = "Put EpubCheck (#{url}) in your home directory"
+          url = 'https://github.com/IDPF/epubcheck/releases/download/v3.0/epubcheck-3.0.zip'
+          message = "Download EpubCheck 3.0 (#{url}) and unzip it in your home directory"
           @epubcheck ||= executable(filename, message).inspect
         end
     end
