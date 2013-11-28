@@ -6,7 +6,7 @@ module Softcover
 
     map "-v" => :version
 
-    desc "version", "Return the version number"
+    desc "version", "Return the version number (-v for short)"
     method_option :version, aliases: '-v',
                             desc: "Print version number", type: :boolean
     def version
