@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Softcover::Builders::Mobi do
-  context "for a PolyTeX book" do
+  describe "#build!" do
     before(:all) do
       generate_book
       @builder = Softcover::Builders::Mobi.new
@@ -10,37 +10,34 @@ describe Softcover::Builders::Mobi do
     end
     after(:all) { remove_book }
 
-    describe "#build!" do
-      it "should generate the EPUB" do
-        expect('ebooks/book.epub').to exist
+    it "should generate the MOBI" do
+      expect('ebooks/book.mobi').to exist
+    end
+
+    describe "MOBI command" do
+      context "default" do
+        let(:command) { @builder.mobi_command(@builder.filename) }
+        it "should use Calibre's ebook-convert" do
+          expect(command).to include 'ebook-convert'
+        end
       end
 
-      # Because of the way kindlegen uses tempfiles, testing for the
-      # actual generation of the MOBI causes an error, so we just
-      # check the command.
-      describe "MOBI generation" do
-        subject(:built) { @built }
-        it { should match /kindlegen/ }
-        it { should match /ebooks\/book\.epub/ }
+      context "kindlegen" do
+        let(:command) do
+          @builder.mobi_command(@builder.filename, kindlegen: true)
+        end
+        it "should use Amazon.com's kindlegen" do
+          expect(command).to include 'kindlegen'
+        end
       end
-    end
-  end
 
-  context "for a Markdown book" do
-    before(:all) do
-      generate_book(markdown: true)
-      @builder = Softcover::Builders::Mobi.new
-      @built = @builder.build!
-      chdir_to_book
-    end
-    after(:all) { remove_book }
-
-    describe "#build!" do
-      describe "MOBI generation" do
-        subject(:built) { @built }
-        it { should match /kindlegen/ }
-        it { should match /ebooks\/book\.epub/ }
-        it { should_not match /Book.txt.epub/ }
+      context "preview" do
+        let(:filename) do
+          @builder.filename(preview: true)
+        end
+        it "should use Calibre's ebook-convert" do
+          expect(filename).to include 'book-preview'
+        end
       end
     end
   end
