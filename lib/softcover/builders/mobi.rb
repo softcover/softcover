@@ -4,8 +4,9 @@ module Softcover
 
       def build!(options={})
         Softcover::Builders::Epub.new.build!(options)
-        command = mobi_command(filename(options), options)
-        silent  = options[:silent] || Softcover.test?
+        filename = mobi_filename(options)
+        command  = mobi_command(filename, options)
+        silent   = options[:silent] || Softcover.test?
         if options[:quiet] || silent
           silence { system(command) }
         else
@@ -18,7 +19,7 @@ module Softcover
       end
 
       # Returns the filename of the MOBI (preview if necessary).
-      def filename(options={})
+      def mobi_filename(options={})
         options[:preview] ? manifest.filename + '-preview' : manifest.filename
       end
 
