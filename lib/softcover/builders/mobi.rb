@@ -21,6 +21,7 @@ module Softcover
         end
         unless Softcover.test? || options[:kindlegen]
           FileUtils.mv("ebooks/#{filename}.azw3", "ebooks/#{filename}.mobi")
+          puts "MOBI saved to ebooks/#{filename}.mobi" unless options[:silent]
         end
       end
 

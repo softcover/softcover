@@ -41,6 +41,10 @@ module Softcover
         method_option :'find-overfull', aliases: '-f',
                                         desc: "Find overfull hboxes",
                                         type: :boolean
+      elsif format == 'mobi'
+        method_option :kindlegen, aliases: '-k',
+                                  desc: "Use kindlegen to build the MOBI",
+                                  type: :boolean
       end
       method_option :quiet, aliases: '-q',
                             desc: "Quiet output", type: :boolean
