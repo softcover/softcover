@@ -9,7 +9,7 @@ describe Softcover::BookManifest do
     context "in valid book directory" do
 
       describe "basic information" do
-        its(:title) { should eq "book" }
+        its(:title) { should eq "Title of the Book" }
         its(:subtitle) { should eq "Change me" }
         its(:description) { should eq "Change me." }
         its(:cover) { should eq "images/cover.png" }
@@ -45,7 +45,7 @@ describe Softcover::BookManifest do
     context "in a valid book subdirectory" do
       before { Dir.chdir 'chapters' }
       describe "finding the manifest in a higher directory" do
-        its(:title) { should eq "book" }
+        its(:slug) { should eq "book" }
       end
     end
 

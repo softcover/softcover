@@ -70,6 +70,8 @@ class Softcover::BookManifest < OpenStruct
 
     marshal_load attrs
 
+    write_master_latex_file(self)
+
     if polytex?
       tex_filename = filename + '.tex'
       self.chapters = []

@@ -124,7 +124,7 @@ describe Softcover::Builders::Html do
       end
 
       describe "master LaTeX file" do
-        let(:master_file) { builder.master_filename }
+        let(:master_file) { builder.master_filename(builder.manifest) }
         subject { File.read(master_file) }
         it { should include "\\title{#{builder.manifest.title}}" }
         it { should include "\\author{#{builder.manifest.author}}" }
@@ -139,10 +139,11 @@ describe Softcover::Builders::Html do
 
       describe "commented-out lines of Book.txt" do
         let(:lines) { ['chapters/foo.md', '# chapters/bar.md'] }
+        let(:content) { builder.master_content(builder.manifest) }
         before { builder.stub(:book_txt_lines).and_return(lines) }
         it "should be ignored" do
-          expect(builder.master_content).to     include 'chapters/foo'
-          expect(builder.master_content).not_to include 'chapters/bar'
+          expect(content).to     include 'chapters/foo'
+          expect(content).not_to include 'chapters/bar'
         end
       end
     end

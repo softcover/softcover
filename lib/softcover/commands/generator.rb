@@ -9,7 +9,6 @@ module Softcover
       def generate_file_tree(name, options = {})
         @name = name
         @markdown = !options[:polytex]
-        @simple   = options[:simple]
 
         thor = Thor::Shell::Basic.new
 
@@ -25,8 +24,6 @@ module Softcover
         # file before the directory had been created, so we now create all
         # the directories first.
         directories.each do |path|
-          next if path =~ /\/simple_book/ && !@simple
-          next if path =~ /\/book/ && @simple
           (cp_path = path.dup).slice! template_dir + "/"
           unless File.exist?(cp_path)
             puts "Creating #{cp_path}" unless cp_path =~ /MathJax/
@@ -87,16 +84,9 @@ module Softcover
         File.expand_path File.join File.dirname(__FILE__), "../template"
       end
 
-      # Returns true for a simple book (no frontmatter, etc.).
-      def simple?
-        @simple
-      end
-
       # Returns a list of all the files and directories used to build the book.
       def all_files_and_directories
-        f = files_directories_maybe_markdown
-        simple? ? f.reject { |p| p =~ /\/book\.tex/ || p =~ /preface/ }
-                : f.reject { |p| p =~ /simple/ }
+        files_directories_maybe_markdown
       end
 
       # Returns the files and directories based on the input format.
@@ -106,8 +96,8 @@ module Softcover
           # Skip the PolyTeX chapter files, which will be generated later.
           fds.reject { |e| e =~ /\/chapters\/.*\.tex/ }
         else
-          # Skip the Markdown files & Book.txt.
-          fds.reject { |e| e =~ /(chapters\/.*\.md|Book\.txt)/ }
+          # Skip the Markdown files.
+          fds.reject { |e| e =~ /chapters\/.*\.md/ }
         end
       end
 

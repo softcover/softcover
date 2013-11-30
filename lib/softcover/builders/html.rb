@@ -3,6 +3,7 @@ require 'fileutils'
 module Softcover
   module Builders
     class Html < Builder
+      include Softcover::Utils
 
       def setup
         Dir.mkdir "html" unless File.directory?("html")
@@ -25,7 +26,9 @@ module Softcover
           manifest.chapters.each do |chapter|
             write_latex_files(chapter, options)
           end
-          rewrite_master_latex_file
+
+          write_master_latex_file(manifest)
+
           # Reset the manifest to use PolyTeX.
           self.manifest = Softcover::BookManifest.new(source: :polytex,
                                                       verify_paths: false,
@@ -64,58 +67,6 @@ module Softcover
                                                          custom_commands: cc)
           File.write(filename, md.polytex)
         end
-      end
-
-      # Rewrites the master LaTeX file <name>.tex to use chapters from Book.txt.
-      def rewrite_master_latex_file
-        File.write(master_filename, master_content)
-      end
-
-      # Returns the name of the master LaTeX file.
-      def master_filename
-        "#{manifest.filename}.tex"
-      end
-
-      # Returns the lines of Book.txt as an array.
-      def book_txt_lines
-        File.readlines('Book.txt')
-      end
-
-      # Returns the content for the master LaTeX file.
-      def master_content
-        comment = /^\s*#.*$/
-        front_or_mainmatter = /(.*):\s*$/
-        source_file = /(.*)(?:\.md|\.tex)\s*$/
-
-        tex_file = [master_latex_header]
-        book_txt_lines.each do |line|
-          if    line.match(comment)   # commented-out line
-            next
-          elsif line.match(source_file)
-            tex_file << "\\include{#{manifest.polytex_dir}/#{$1}}"
-          elsif line.match(front_or_mainmatter)  # frontmatter or mainmatter
-            tex_file << "\\#{$1}"
-          elsif line.strip == 'cover'
-            tex_file << '\\includepdf{images/cover.pdf}'
-          else # raw command, like 'maketitle' or 'tableofcontents'
-            tex_file << "\\#{line.strip}"
-          end
-        end
-        tex_file << '\end{document}'
-        tex_file.join("\n")
-      end
-
-      def master_latex_header
-        <<-EOS
-\\documentclass[14pt]{extbook}
-\\usepackage{softcover}
-\\VerbatimFootnotes % Allows verbatim text in footnotes
-\\title{#{manifest.title}}
-\\author{#{manifest.author}}
-\\date{#{manifest.date}}
-
-\\begin{document}
-        EOS
       end
 
       # Returns the converted HTML.

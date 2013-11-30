@@ -77,24 +77,4 @@ describe Softcover::App do
       end
     end
   end
-
-  context "simple book" do
-    before(:all) do
-      generate_book(simple: true)
-      Softcover::Builders::Html.new.build!
-    end
-    after(:all)  { remove_book }
-
-    before { chdir_to_book }
-
-    let(:manifest) { Softcover::BookManifest.new }
-    let(:chapter) { manifest.chapters[0] }
-
-    it 'redirects / to first chapter' do
-      get '/'
-      expect(last_response).to be_redirect
-      expect(last_response.location).to match chapter.slug
-    end
-  end
-
 end

@@ -2,6 +2,7 @@ module Softcover
   module Builders
     class Pdf < Builder
       include Softcover::Output
+      include Softcover::Utils
 
       def build!(options={})
         if manifest.markdown?
@@ -12,6 +13,9 @@ module Softcover
           self.manifest = Softcover::BookManifest.new(source: :polytex,
                                                       origin: :markdown)
         end
+
+        write_master_latex_file(manifest)
+
         # Build the PolyTeX filename so it accepts both 'foo' and 'foo.tex'.
         basename = File.basename(manifest.filename, '.tex')
         book_filename = basename + '.tex'

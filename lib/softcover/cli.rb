@@ -172,11 +172,6 @@ module Softcover
                   :default => false,
                   :aliases => "-p",
                   :desc => "Generate a PolyTeX book."
-    method_option :simple,
-                  :type => :boolean,
-                  :default => false,
-                  :aliases => "-s",
-                  :desc => "Generate a simple book."
     def new(n)
       Softcover::Commands::Generator.generate_file_tree(n, options)
     end
