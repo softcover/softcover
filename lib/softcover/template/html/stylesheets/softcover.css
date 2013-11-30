@@ -18,6 +18,15 @@ body #book {
 
 #book h2 {
   font-size: 180%;
+  margin-top: 1.5em;
+}
+
+#book h3 {
+  margin-top: 1.5em;
+}
+
+#book h4 {
+  margin-top: 2em;
 }
 
 #book img.tex {
@@ -96,7 +105,7 @@ body #book {
   margin-top: 0.2em;
   width: 100%;
   white-space: pre;
-  font-family: Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   border: 1px solid #999;
   background: #eee;
   margin-bottom: 1em;
@@ -131,6 +140,11 @@ body #book {
 
 #book .codelisting span.break {
   margin-top: -0.4em;
+}
+
+#book .code .highlight .lineno {
+  color: #666;
+  font-weight: normal;
 }
 
 #book .filepath {

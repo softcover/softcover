@@ -4,20 +4,43 @@ module Softcover
 
       def build!(options={})
         Softcover::Builders::Epub.new.build!(options)
-        filename  = manifest.filename
-        filename += '-preview' if options[:preview]
-        command = "#{kindlegen} ebooks/#{filename}.epub"
-        # Because of the way kindlegen uses tempfiles, testing for the
-        # actual generation of the MOBI causes an error, so in tests
-        # we just return the command.
-        if options[:quiet] || options[:silent]
-          silence { Softcover.test? ? command : system(command) }
+        filename = mobi_filename(options)
+        command  = mobi_command(filename, options)
+        silent   = options[:silent] || Softcover.test?
+        if options[:quiet] || silent
+          silence { system(command) }
         else
-          Softcover.test? ? command : system(command)
+          system(command)
+        end
+        unless options[:kindlegen]
+          FileUtils.mv("ebooks/#{filename}.azw3", "ebooks/#{filename}.mobi")
+          puts "MOBI saved to ebooks/#{filename}.mobi" unless silent
+        end
+      end
+
+      # Returns the filename of the MOBI (preview if necessary).
+      def mobi_filename(options={})
+        options[:preview] ? manifest.filename + '-preview' : manifest.filename
+      end
+
+      # Returns the command for making a MOBI, based on the options.
+      def mobi_command(filename, options={})
+        if options[:kindlegen]
+          "#{kindlegen} ebooks/#{filename}.epub"
+        else
+          "#{calibre} ebooks/#{filename}.epub ebooks/#{filename}.azw3"
         end
       end
 
       private
+
+        def calibre
+          filename = `which ebook-convert`.chomp
+          url = 'http://calibre-ebook.com/'
+          message  = "Install Calibre (#{url}) and enable command line tools"
+          message += " (http://manual.calibre-ebook.com/cli/cli-index.html)"
+          @calibre ||= executable(filename, message)
+        end
 
         def kindlegen
           filename = `which kindlegen`.chomp

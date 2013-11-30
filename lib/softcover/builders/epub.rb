@@ -373,7 +373,7 @@ module Softcover
 %(<?xml version="1.0" encoding="UTF-8"?>
 <ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
     <head>
-        <meta name="dtb:uid" content="d430b920-e684-11e1-aff1-0800200c9a66"/>
+        <meta name="dtb:uid" content="#{manifest.uuid}"/>
         <meta name="dtb:depth" content="2"/>
         <meta name="dtb:totalPageCount" content="0"/>
         <meta name="dtb:maxPageNumber" content="0"/>
