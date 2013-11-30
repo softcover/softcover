@@ -124,13 +124,24 @@ describe Softcover::Builders::Html do
       end
 
       describe "master LaTeX file" do
-        let(:master_file) { Dir['*.tex'].reject { |f| f =~ /\.tmp/}.first }
+        let(:master_file) { builder.master_filename }
         subject { File.read(master_file) }
         it { should include '\include{generated_polytex/preface}' }
         it { should include '\include{generated_polytex/a_chapter}' }
         it { should include '\include{generated_polytex/another_chapter}' }
         it { should include '\include{generated_polytex/yet_another_chapter}' }
         it { should include '\end{document}' }
+      end
+
+      describe "commented-out lines of Book.txt" do
+        let(:lines) { ['chapters/foo.tex', '# chapters/bar.tex'] }
+        before do
+          builder.stub(:book_txt_lines).and_return(lines)
+        end
+        it "should be ignored" do
+          expect(builder.master_content).to     include 'chapters/foo'
+          expect(builder.master_content).not_to include 'chapters/bar'
+        end
       end
     end
   end
