@@ -92,13 +92,13 @@ class Softcover::BookManifest < OpenStruct
         slug = File.basename(name, '.*')
         title_regex = /^\s*\\chapter{(.*)}/
         content = File.read(File.join(polytex_dir, slug + '.tex'))
-        title = content[title_regex, 1]
+        chapter_title = content[title_regex, 1]
         j = 0
         sections = content.scan(/^\s*\\section{(.*)}/).flatten.map do |name|
           Section.new(name: name, section_number: j += 1)
         end
         chapters.push Chapter.new(slug: slug,
-                                  title: title,
+                                  title: chapter_title,
                                   sections: sections,
                                   chapter_number: i + 1)
       end

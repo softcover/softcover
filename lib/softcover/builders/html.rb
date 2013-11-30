@@ -83,13 +83,17 @@ module Softcover
 
       # Returns the content for the master LaTeX file.
       def master_content
-        tex_file = []
+        comment = /^\s*#.*$/
+        front_or_mainmatter = /(.*):\s*$/
+        source_file = /(.*)(?:\.md|\.tex)\s*$/
+
+        tex_file = [master_latex_header]
         book_txt_lines.each do |line|
-          if    line =~ /^\s*#.*$/   # commented-out line
+          if    line.match(comment)   # commented-out line
             next
-          elsif line =~ /(.*)(?:\.md|\.tex)\s*$/
+          elsif line.match(source_file)
             tex_file << "\\include{#{manifest.polytex_dir}/#{$1}}"
-          elsif line =~ /(.*):\s*$/  # frontmatter or mainmatter
+          elsif line.match(front_or_mainmatter)  # frontmatter or mainmatter
             tex_file << "\\#{$1}"
           elsif line.strip == 'cover'
             tex_file << '\\includepdf{images/cover.pdf}'
@@ -98,10 +102,20 @@ module Softcover
           end
         end
         tex_file << '\end{document}'
-        content = File.read(master_filename)
-        content.gsub(/(\\begin{document}\n)(.*)/m) do
-          $1 + tex_file.join("\n") + "\n"
-        end
+        tex_file.join("\n")
+      end
+
+      def master_latex_header
+        <<-EOS
+\\documentclass[14pt]{extbook}
+\\usepackage{softcover}
+\\VerbatimFootnotes % Allows verbatim text in footnotes
+\\title{#{manifest.title}}
+\\author{#{manifest.author}}
+\\date{#{manifest.date}}
+
+\\begin{document}
+        EOS
       end
 
       # Returns the converted HTML.

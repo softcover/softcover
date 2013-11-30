@@ -126,6 +126,10 @@ describe Softcover::Builders::Html do
       describe "master LaTeX file" do
         let(:master_file) { builder.master_filename }
         subject { File.read(master_file) }
+        it { should include "\\title{#{builder.manifest.title}}" }
+        it { should include "\\author{#{builder.manifest.author}}" }
+        it { should include '\date{}' }
+        it { should include '\begin{document}' }
         it { should include '\include{generated_polytex/preface}' }
         it { should include '\include{generated_polytex/a_chapter}' }
         it { should include '\include{generated_polytex/another_chapter}' }
