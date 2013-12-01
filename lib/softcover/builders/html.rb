@@ -19,6 +19,8 @@ module Softcover
           RubyProf.start
         end
 
+        write_master_latex_file(manifest)
+
         if manifest.markdown?
           unless options[:'find-overfull']
             FileUtils.rm(Dir.glob(path("#{manifest.polytex_dir}/*.tex")))
@@ -26,8 +28,6 @@ module Softcover
           manifest.chapters.each do |chapter|
             write_latex_files(chapter, options)
           end
-
-          write_master_latex_file(manifest)
 
           # Reset the manifest to use PolyTeX.
           self.manifest = Softcover::BookManifest.new(source: :polytex,
