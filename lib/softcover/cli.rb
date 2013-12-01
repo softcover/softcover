@@ -145,7 +145,7 @@ module Softcover
 
       invoke :login unless logged_in?
 
-      slug = Softcover::BookManifest.new.slug
+      slug = Softcover::BookManifest.new(origin: source).slug
       if ask("Type '#{slug}' to unpublish:") == slug
         puts "Unpublishing..." unless options[:silent]
         Softcover::Commands::Publisher.unpublish!
