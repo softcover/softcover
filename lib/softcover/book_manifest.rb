@@ -54,7 +54,7 @@ class Softcover::BookManifest < OpenStruct
   class Section < OpenStruct
   end
 
-  MD_PATH = 'Book.txt'
+  TXT_PATH  = 'Book.txt'
   YAML_PATH = "book.yml"
 
   def initialize(options = {})
@@ -225,7 +225,7 @@ class Softcover::BookManifest < OpenStruct
   end
 
   def self.valid_directory?
-    [YAML_PATH, MD_PATH].any? { |f| File.exist?(f) }
+    [YAML_PATH, TXT_PATH].any? { |f| File.exist?(f) }
   end
 
   # Changes the directory until in the book's root directory.
@@ -246,7 +246,7 @@ class Softcover::BookManifest < OpenStruct
   def source_files
     self.class.find_book_root!
     md_tex = /.*(?:\.md|\.tex)/
-    File.readlines(MD_PATH).select { |path| path =~ md_tex }.map(&:strip)
+    File.readlines(TXT_PATH).select { |path| path =~ md_tex }.map(&:strip)
   end
 
   def basenames
@@ -264,7 +264,7 @@ class Softcover::BookManifest < OpenStruct
   end
 
   def read_from_md
-    { chapters: chapter_objects, filename: MD_PATH }
+    { chapters: chapter_objects, filename: TXT_PATH }
   end
 
 

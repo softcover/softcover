@@ -55,7 +55,7 @@ describe Softcover::Commands::Generator do
       end
 
       it "should have Book.txt" do
-        expect('Book.txt').to exist
+        expect(Softcover::BookManifest::TXT_PATH).to exist
       end
 
       it "should not have the markdown files" do

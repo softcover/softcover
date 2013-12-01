@@ -56,8 +56,12 @@ module Softcover::Utils
 
 
   # Writes the master LaTeX file <name>.tex to use chapters from Book.txt.
+  # We skip this step if Book.txt doesn't exist, as that means the user
+  # is writing raw LaTeX.
   def write_master_latex_file(manifest)
-    File.write(master_filename(manifest), master_content(manifest))
+    if File.exist?(Softcover::BookManifest::TXT_PATH)
+      File.write(master_filename(manifest), master_content(manifest))
+    end
   end
 
   # Returns the name of the master LaTeX file.
@@ -67,7 +71,7 @@ module Softcover::Utils
 
   # Returns the lines of Book.txt as an array.
   def book_txt_lines
-    File.readlines('Book.txt')
+    File.readlines(Softcover::BookManifest::TXT_PATH)
   end
 
   # Returns the content for the master LaTeX file.
