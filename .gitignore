@@ -24,3 +24,4 @@ pygments.sty
 .api_token
 .project_id
 spec/fixtures/md-book/log/tralics.log
+.ruby-*
