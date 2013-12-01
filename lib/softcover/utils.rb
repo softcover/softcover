@@ -99,11 +99,13 @@ module Softcover::Utils
   end
 
   def master_latex_header(manifest)
+    subtitle = manifest.subtitle.nil? ? "" : "\\subtitle{#{manifest.subtitle}}"
     <<-EOS
 \\documentclass[14pt]{extbook}
 \\usepackage{softcover}
 \\VerbatimFootnotes % Allows verbatim text in footnotes
 \\title{#{manifest.title}}
+#{subtitle}
 \\author{#{manifest.author}}
 \\date{#{manifest.date}}
 

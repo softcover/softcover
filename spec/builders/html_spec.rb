@@ -127,6 +127,7 @@ describe Softcover::Builders::Html do
         let(:master_file) { builder.master_filename(builder.manifest) }
         subject { File.read(master_file) }
         it { should include "\\title{#{builder.manifest.title}}" }
+        it { should include "\\subtitle{#{builder.manifest.subtitle}}" }
         it { should include "\\author{#{builder.manifest.author}}" }
         it { should include '\date{}' }
         it { should include '\begin{document}' }
