@@ -30,4 +30,5 @@ screencasts/
 
 # Other miscellaneous files
 log/
+*.bak
 .DS_Store

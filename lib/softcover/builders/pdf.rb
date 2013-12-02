@@ -37,7 +37,6 @@ module Softcover
 
         polytex_filenames = manifest.pdf_chapter_filenames << book_filename
         polytex_filenames.each do |filename|
-          puts filename unless options[:quiet] || options[:silent]
           polytex = File.open(filename) { |f| f.read }
           latex   = Polytexnic::Pipeline.new(polytex).to_latex
           if filename == book_filename
