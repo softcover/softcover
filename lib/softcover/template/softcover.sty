@@ -130,5 +130,15 @@
 \newcommand{\heading}[1]{\textbf{#1}}
 \newcommand{\kode}[1]{\textcolor{darkgreen}{\textbf{\texttt{#1}}}}
 
+% Subtitle command
+\usepackage{titling}
+\newcommand{\subtitle}[1]{%
+  \posttitle{%
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip0.5em}%
+}
+
 % Add custom commands
 \usepackage{custom}
+

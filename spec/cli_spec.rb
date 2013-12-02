@@ -36,7 +36,6 @@ describe Softcover::CLI do
   context "softcover new options" do
     subject { `softcover help new` }
     it { should include '-p, [--polytex]' }
-    it { should include '-s, [--simple]' }
   end
 
   context "softcover new" do

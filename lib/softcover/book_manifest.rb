@@ -54,7 +54,7 @@ class Softcover::BookManifest < OpenStruct
   class Section < OpenStruct
   end
 
-  MD_PATH = 'Book.txt'
+  TXT_PATH  = 'Book.txt'
   YAML_PATH = "book.yml"
 
   def initialize(options = {})
@@ -69,6 +69,8 @@ class Softcover::BookManifest < OpenStruct
             end.symbolize_keys!
 
     marshal_load attrs
+
+    write_master_latex_file(self)
 
     if polytex?
       tex_filename = filename + '.tex'
@@ -92,13 +94,13 @@ class Softcover::BookManifest < OpenStruct
         slug = File.basename(name, '.*')
         title_regex = /^\s*\\chapter{(.*)}/
         content = File.read(File.join(polytex_dir, slug + '.tex'))
-        title = content[title_regex, 1]
+        chapter_title = content[title_regex, 1]
         j = 0
         sections = content.scan(/^\s*\\section{(.*)}/).flatten.map do |name|
           Section.new(name: name, section_number: j += 1)
         end
         chapters.push Chapter.new(slug: slug,
-                                  title: title,
+                                  title: chapter_title,
                                   sections: sections,
                                   chapter_number: i + 1)
       end
@@ -223,7 +225,7 @@ class Softcover::BookManifest < OpenStruct
   end
 
   def self.valid_directory?
-    [YAML_PATH, MD_PATH].any? { |f| File.exist?(f) }
+    [YAML_PATH, TXT_PATH].any? { |f| File.exist?(f) }
   end
 
   # Changes the directory until in the book's root directory.
@@ -244,7 +246,7 @@ class Softcover::BookManifest < OpenStruct
   def source_files
     self.class.find_book_root!
     md_tex = /.*(?:\.md|\.tex)/
-    File.readlines(MD_PATH).select { |path| path =~ md_tex }.map(&:strip)
+    File.readlines(TXT_PATH).select { |path| path =~ md_tex }.map(&:strip)
   end
 
   def basenames
@@ -262,7 +264,7 @@ class Softcover::BookManifest < OpenStruct
   end
 
   def read_from_md
-    { chapters: chapter_objects, filename: MD_PATH }
+    { chapters: chapter_objects, filename: TXT_PATH }
   end
 
 
