@@ -6,7 +6,7 @@ module Softcover
 
     map "-v" => :version
 
-    desc "version", "Returns the version number"
+    desc "version", "Return the version number"
     method_option :version, aliases: '-v',
                             desc: "Print version number", type: :boolean
     def version
@@ -135,7 +135,7 @@ module Softcover
         publish_screencasts! options.merge(dir: dir)
     end
 
-    desc "unpublish", "Removes book from Softcover"
+    desc "unpublish", "Remove book from Softcover"
     def unpublish
       require 'softcover/commands/publisher'
 
@@ -153,7 +153,7 @@ module Softcover
     # ===============================================
     # Deployment
     # ===============================================
-    desc "deploy", "Build & publish book (configure using .softcover-deploy)"
+    desc "deploy", "Build & publish book"
     def deploy
       Softcover::Commands::Deployment.deploy!
     end
@@ -162,7 +162,7 @@ module Softcover
     # Generator
     # ===============================================
 
-    desc "new <name>", "Generate new book directory structure."
+    desc "new <name>", "Generate new book directory structure"
     method_option :polytex,
                   :type => :boolean,
                   :default => false,
@@ -216,7 +216,7 @@ module Softcover
       config
     end
 
-    desc "config:remove key", "Remove the key from your local config vars"
+    desc "config:remove key", "Remove key from local config vars"
     define_method "config:remove" do |key|
       require "softcover/config"
       Softcover::Config[key] = nil

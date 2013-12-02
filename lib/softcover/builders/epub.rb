@@ -87,7 +87,7 @@ module Softcover
             if math?(inner_html)
               html = html_with_math(chapter, images_dir, texmath_dir, pngs,
                                     options)
-              next if html.nil?
+              html ||= inner_html # handle case of spurious math detection
             else
               html = inner_html
             end
@@ -124,8 +124,13 @@ module Softcover
         raw_source = File.read('phantomjs_source.html')
         source = strip_attributes(Nokogiri::HTML(raw_source))
         rm 'phantomjs_source.html'
-        # Remove the first body div, which is the hidden MathJax SVGs
-        source.at_css('body div').remove
+        # Remove the first body div, which is the hidden MathJax SVGs.
+        if (mathjax_svgs = source.at_css('body div'))
+          mathjax_svgs.remove
+        else
+          # There's not actually any math, so return nil.
+          return nil
+        end
         # Remove all the unneeded raw TeX displays.
         source.css('script').each(&:remove)
         # Remove all the MathJax preview spans.
