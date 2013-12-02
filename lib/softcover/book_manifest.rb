@@ -88,7 +88,6 @@ class Softcover::BookManifest < OpenStruct
       else
         self.frontmatter = []
       end
-      self.author = base_contents.scan(/^\s*\\author\{(.*?)\}/).flatten.first
       chapter_includes(base_contents).each_with_index do |name, i|
         slug = File.basename(name, '.*')
         title_regex = /^\s*\\chapter{(.*)}/
