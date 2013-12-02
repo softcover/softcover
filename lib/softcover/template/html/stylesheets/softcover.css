@@ -18,6 +18,15 @@ body #book {
 
 #book h2 {
   font-size: 180%;
+  margin-top: 1.5em;
+}
+
+#book h3 {
+  margin-top: 1.5em;
+}
+
+#book h4 {
+  margin-top: 2em;
 }
 
 #book img.tex {
