@@ -43,6 +43,14 @@ describe Softcover::Builders::Pdf do
       it "should write the correct PolyTeXnic commands file" do
         expect(File.read('polytexnic_commands.sty')).to match /newcommand/
       end
+
+      context "after removing Book.txt" do
+        before { FileUtils.rm Softcover::BookManifest::TXT_PATH }
+        it "should still build the book" do
+          expect(Softcover::BookManifest::TXT_PATH).not_to exist
+          expect { @builder.build! }.not_to raise_error
+        end
+      end
     end
   end
 

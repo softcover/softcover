@@ -160,7 +160,6 @@ module WebmockHelpers
     Dir.chdir File.join File.dirname(__FILE__), "fixtures/"
     flags = []
     flags << '-p' unless options[:markdown]
-    flags << '-s' if options[:simple]
     silence { system "softcover new #{name} #{flags.join(' ')}" }
     chdir_to_book
     File.mkdir 'html' unless File.exist?('html')

@@ -29,7 +29,9 @@ module Softcover::Commands::Server
     ignores = ['generated_polytex', '\.tmp\.tex']
     # Ignore <book>.tex, which gets overwritten each time PolyTeXnic runs,
     # unless there's no Book.txt, which means the author is using raw LaTeX.
-    ignores << Regexp.escape(Dir.glob('*.tex').first) if File.exist?('Book.txt')
+    if File.exist?(Softcover::BookManifest::TXT_PATH)
+      ignores << Regexp.escape(Dir.glob('*.tex').first)
+    end
     /(#{ignores.join('|')})/
   end
 
