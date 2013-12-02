@@ -24,10 +24,6 @@ module Softcover
       def setup; end
       def verify; end
 
-      def source
-        Dir.glob(path('chapters/*.md')).empty? ? :polytex : :markdown
-      end
-
       # Writes out the PolyTeXnic commands from polytexnic.
       def write_polytexnic_commands_file
         Polytexnic.write_polytexnic_style_file(Dir.pwd)

@@ -8,9 +8,9 @@ class Softcover::Book
 
   class UploadError < StandardError; end
 
-  def initialize
+  def initialize(options={})
     require "softcover/client"
-    @manifest = Softcover::BookManifest.new
+    @manifest = Softcover::BookManifest.new(options)
     @client = Softcover::Client.new_with_book self
 
     @screencasts_dir = DEFAULT_SCREENCASTS_DIR
