@@ -68,11 +68,26 @@ module Softcover
 
       # Rewrites the master LaTeX file <name>.tex to use chapters from Book.txt.
       def rewrite_master_latex_file
-        master_filename = Dir['*.tex'].reject { |f| f =~ /\.tmp/}.first
-        lines = File.readlines('Book.txt')
+        File.write(master_filename, master_content)
+      end
+
+      # Returns the name of the master LaTeX file.
+      def master_filename
+        "#{manifest.filename}.tex"
+      end
+
+      # Returns the lines of Book.txt as an array.
+      def book_txt_lines
+        File.readlines('Book.txt')
+      end
+
+      # Returns the content for the master LaTeX file.
+      def master_content
         tex_file = []
-        lines.each do |line|
-          if line =~ /(.*)(?:\.md|\.tex)\s*$/
+        book_txt_lines.each do |line|
+          if    line =~ /^\s*#.*$/   # commented-out line
+            next
+          elsif line =~ /(.*)(?:\.md|\.tex)\s*$/
             tex_file << "\\include{#{manifest.polytex_dir}/#{$1}}"
           elsif line =~ /(.*):\s*$/  # frontmatter or mainmatter
             tex_file << "\\#{$1}"
@@ -84,10 +99,9 @@ module Softcover
         end
         tex_file << '\end{document}'
         content = File.read(master_filename)
-        content.gsub!(/(\\begin{document}\n)(.*)/m) do
+        content.gsub(/(\\begin{document}\n)(.*)/m) do
           $1 + tex_file.join("\n") + "\n"
         end
-        File.write(master_filename, content)
       end
 
       # Returns the converted HTML.
