@@ -13,6 +13,11 @@ module Softcover::Utils
     Dir.glob(path('chapters/*.md')).empty? ? :polytex : :markdown
   end
 
+  # Returns the slug to be unpublished.
+  def unpublish_slug
+    Softcover::BookManifest.new(origin: source).slug
+  end
+
   def reset_current_book!
     @@current_book = nil
   end
