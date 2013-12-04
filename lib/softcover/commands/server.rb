@@ -53,13 +53,13 @@ module Softcover::Commands::Server
 
   def start_server(port)
     require 'softcover/server/app'
-    rebuild
     puts "Running Softcover server on http://localhost:#{port}"
     Softcover::App.set :port, port
     Softcover::App.run!
   end
 
   def run(port)
+    rebuild
     listen_for_changes
     start_server port
   end
