@@ -11,7 +11,7 @@ describe Softcover::Sanitizer do
   end
 
   context "safe html" do
-    let(:html) do <<-EOS
+    let(:html) do Nokogiri::HTML.fragment(<<-EOS
         <div id="a" class="b"></div>
         <div data-tralics-id="c" data-number="d" data-chapter="e"></div>
         <a id="a" class="b" href="c"></a>
@@ -26,6 +26,7 @@ describe Softcover::Sanitizer do
         <img id="a" class="b" src="c" alt="d" />
         <em id="a" class="b"></em>
       EOS
+      ).to_xhtml
     end
 
     it "allows class and id" do
