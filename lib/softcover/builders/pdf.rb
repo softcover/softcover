@@ -36,7 +36,7 @@ module Softcover
           # corresponding place in the text.
           show_context = 'grep -A 3 "Overfull \hbox"'
           cmd = "xelatex #{tmp_name} | #{filter_out_listings} | #{show_context}"
-          execute cmd
+          silence_stream(STDERR) { execute cmd }
           return
         end
 
@@ -71,7 +71,9 @@ module Softcover
         # Here we use `system` when making a preview because the preview command
         # needs to run after the main PDF build.
         if options[:quiet] || options[:silent]
-          silence { options[:preview] ? system(cmd) : execute(cmd) }
+          silence_stream(STDERR) do
+            silence { options[:preview] ? system(cmd) : execute(cmd) }
+          end
         else
           options[:preview] ? system(cmd) : execute(cmd)
         end
