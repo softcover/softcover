@@ -4,8 +4,12 @@ module Softcover
       extend self
 
       def open!
-        book = Softcover::Book.new
         book.open_in_browser
+      end
+
+      # Returns the book to be opened.
+      def book
+        Softcover::Book.new(origin: Softcover::Utils::source)
       end
 
     end

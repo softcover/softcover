@@ -126,4 +126,25 @@ describe Softcover::CLI do
 
     it_should_behave_like "book"
   end
+
+  describe "stubbed commands" do
+
+    context "unpublish" do
+      before { Softcover::Utils.stub(:source).and_return(:markdown) }
+      it "should have the right slug" do
+        Softcover::BookManifest.should_receive(:new).with(origin: :markdown)
+                               .and_return(OpenStruct.new(slug: ""))
+        Softcover::Utils.unpublish_slug
+      end
+    end
+
+
+    context "open" do
+      before { Softcover::Utils.stub(:source).and_return(:markdown) }
+      it "should have the right book" do
+        Softcover::Book.should_receive(:new).with(origin: :markdown)
+        Softcover::Commands::Opener::book
+      end
+    end
+  end
 end
