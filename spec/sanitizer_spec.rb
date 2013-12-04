@@ -23,6 +23,7 @@ describe Softcover::Sanitizer do
         <h1 id="a" class="b"></h1>
         <h2 id="a" class="b"></h2>
         <h3 id="a" class="b"></h3>
+        <h4 id="a" class="b"></h4>
         <img id="a" class="b" src="c" alt="d" />
         <em id="a" class="b"></em>
       EOS

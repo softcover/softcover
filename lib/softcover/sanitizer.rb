@@ -11,7 +11,7 @@ module Softcover
       return unless html
 
       sanitize_options = {
-        elements: %w{div span p a ul ol li h1 h2 h3
+        elements: %w{div span p a ul ol li h1 h2 h3 h4
           pre em sup table tbody thead tr td img},
         remove_contents: %w{script},
         attributes: {
@@ -25,6 +25,7 @@ module Softcover
           'h1'  => %w{id class},
           'h2'  => %w{id class},
           'h3'  => %w{id class},
+          'h4'  => %w{id class},
           'img' => %w{id class src alt},
           'em'  => %w{id class}
         },
