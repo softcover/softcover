@@ -34,7 +34,7 @@ module Softcover
           # so we use grep's -A flag to provide some context instead. Authors
           # can then use their text editors' search function to find the
           # corresponding place in the text.
-          show_context = 'grep -A 3 "Overfull \hbox"'
+          show_context = 'grep -A 3 "Overfull \\\\\\\\hbox"'
           cmd = "xelatex #{tmp_name} | #{filter_out_listings} | #{show_context}"
           silence_stream(STDERR) { execute cmd }
           return
