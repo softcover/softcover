@@ -193,6 +193,8 @@ body #book {
 }
 
 #book .caption {
+  font-size: 0.85em;
+  font-style: italic;
   text-align: center;
   margin-bottom: 3em;
   margin-top: 1em;
@@ -273,7 +275,7 @@ body #book {
 
 #book .footnotes {
   border-top: 1px solid black;
-  margin-top: 1em;
+  margin-top: 5em;
   font-size: 90%;
 }
 
