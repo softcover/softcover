@@ -139,12 +139,12 @@ describe Softcover::Builders::Html do
       end
 
       describe "commented-out lines of Book.txt" do
-        let(:lines) { ['chapters/foo.md', '# chapters/bar.md'] }
+        let(:lines) { ['foo.md', '# bar.md'] }
         let(:content) { builder.master_content(builder.manifest) }
         before { builder.stub(:book_txt_lines).and_return(lines) }
         it "should be ignored" do
-          expect(content).to     include 'chapters/foo'
-          expect(content).not_to include 'chapters/bar'
+          expect(content).to     include 'generated_polytex/foo'
+          expect(content).not_to include 'generated_polytex/bar'
         end
       end
     end
