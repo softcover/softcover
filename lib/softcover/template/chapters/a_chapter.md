@@ -115,7 +115,7 @@ Commands:
   softcover server                     # Run local server
 ```
 
-For additional help on a given command, run `softcover help <command>`:
+\noindent You can run `softcover help <command>` to get additional help on a given command:
 
 ```console
 $ softcover help build
