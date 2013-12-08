@@ -24,20 +24,6 @@ module Softcover
         if options[:debug]
           execute "#{xelatex} #{book_filename}"
           return    # only gets called in test env
-        elsif options[:'find-overfull']
-          tmp_name = book_filename.sub('.tex', '.tmp.tex')
-          # The way we do things, code listings show up as "Overfull", but
-          # they're actually fine, so filter them out.
-          filter_out_listings = "grep -v 3.22281pt"
-          # Because each chapter typically lives in a separate file, it's
-          # hard to correlate Overfull line numbers with lines in the source,
-          # so we use grep's -A flag to provide some context instead. Authors
-          # can then use their text editors' search function to find the
-          # corresponding place in the text.
-          show_context = 'grep -A 3 "Overfull \\\\\\\\hbox"'
-          cmd = "xelatex #{tmp_name} | #{filter_out_listings} | #{show_context}"
-          silence_stream(STDERR) { execute cmd }
-          return
         end
 
         polytex_filenames = manifest.pdf_chapter_filenames << book_filename
@@ -55,6 +41,22 @@ module Softcover
         end
         write_pygments_file(:latex)
         copy_polytexnic_sty
+
+        if options[:'find-overfull']
+          tmp_name = book_filename.sub('.tex', '.tmp.tex')
+          # The way we do things, code listings show up as "Overfull", but
+          # they're actually fine, so filter them out.
+          filter_out_listings = "grep -v 3.22281pt"
+          # Because each chapter typically lives in a separate file, it's
+          # hard to correlate Overfull line numbers with lines in the source,
+          # so we use grep's -A flag to provide some context instead. Authors
+          # can then use their text editors' search function to find the
+          # corresponding place in the text.
+          show_context = 'grep -A 3 "Overfull \\\\\\\\hbox"'
+          cmd = "xelatex #{tmp_name} | #{filter_out_listings} | #{show_context}"
+          silence_stream(STDERR) { execute cmd }
+          return
+        end
 
         tmp_filename = Softcover::Utils.tmpify(manifest, book_filename)
         build_pdf = "#{xelatex} #{tmp_filename}"

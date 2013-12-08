@@ -74,22 +74,25 @@ module Softcover::Utils
     "#{manifest.filename}.tex"
   end
 
-  # Returns the lines of Book.txt as an array.
+  # Returns the lines of Book.txt as an array, removing any commented-out lines.
   def book_txt_lines
+    comment = /^\s*#.*$/
+    raw_lines.reject { |line| line.match(comment) }
+  end
+
+  # Returns all the lines in Book.txt.
+  def raw_lines
     File.readlines(Softcover::BookManifest::TXT_PATH)
   end
 
   # Returns the content for the master LaTeX file.
   def master_content(manifest)
-    comment = /^\s*#.*$/
     front_or_mainmatter = /(.*):\s*$/
     source_file = /(.*)(?:\.md|\.tex)\s*$/
 
     tex_file = [master_latex_header(manifest)]
     book_txt_lines.each do |line|
-      if    line.match(comment)   # commented-out line
-        next
-      elsif line.match(source_file)
+      if line.match(source_file)
         tex_file << "\\include{#{manifest.polytex_dir}/#{$1}}"
       elsif line.match(front_or_mainmatter)  # frontmatter or mainmatter
         tex_file << "\\#{$1}"

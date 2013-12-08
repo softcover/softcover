@@ -246,7 +246,7 @@ class Softcover::BookManifest < OpenStruct
   def source_files
     self.class.find_book_root!
     md_tex = /.*(?:\.md|\.tex)/
-    File.readlines(TXT_PATH).select { |path| path =~ md_tex }.map(&:strip)
+    book_txt_lines.select { |path| path =~ md_tex }.map(&:strip)
   end
 
   def basenames
