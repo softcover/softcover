@@ -49,7 +49,6 @@ describe Softcover::BookManifest do
       end
     end
 
-
     context "with mixed Markdown & PolyTeX files" do
       before do
         manifest.stub(:source_files).and_return(['foo.md', 'bar.tex'])

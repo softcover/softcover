@@ -4,6 +4,8 @@ module Softcover
     # Returns the MathJax configuration.
     def self.config(options = {})
       chapter_number = if options[:chapter_number]
+                         # Call .inspect.inspect to escape the chapter number
+                         # code for interpolation.
                          options[:chapter_number].inspect.inspect
                        else
                          '#{chapter_number}'
