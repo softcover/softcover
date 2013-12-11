@@ -167,6 +167,7 @@ module Softcover::Utils
   def executable(filename, message)
     filename.tap do |f|
       unless File.exist?(f)
+        $stderr.puts "Document not built due to missing dependency"
         $stderr.puts message
         exit 1
       end
