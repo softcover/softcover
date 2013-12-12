@@ -203,5 +203,15 @@ module Softcover::Utils
       yield
     end
   end
+
+  # Returns true if platform is OS X.
+  def os_x?
+    RUBY_PLATFORM.match(/darwin/)
+  end
+
+  # Returns true if platform is Linux.
+  def linux?
+    RUBY_PLATFORM.match(/linux/)
+  end
 end
 
