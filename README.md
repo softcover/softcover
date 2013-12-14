@@ -6,7 +6,7 @@ It is strongly recommended that right now only members of the private beta use t
 
 Softcover is an ebook typesetting system for technical authors. This is the main gem, `softcover`, which depends on `polytexnic` to convert Markdown or PolyTeX input to HTML and LaTeX, and thence to EPUB, MOBI, and PDF. Authors can use Softcover to publish and optionally sell the resulting ebooks (as well as associated digital goods such as screencasts) on the [Softcover publishing platform](http://softcover.io/).
 
-For more details about Softcover, see [*The Softcover Manual*](http://manual.softcover.io) (currently in preparation).
+For more details about Softcover, see [*The Softcover Book*](http://manual.softcover.io/book).
 
 <!--
 # Softcover CLI
