@@ -178,7 +178,7 @@ module Softcover
     # Open
     # ===============================================
 
-    desc "open", "Open book on Softcover website (OS X)"
+    desc "open", "Open book on Softcover website"
     def open
       Softcover::Commands::Opener.open!
     end

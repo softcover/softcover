@@ -167,6 +167,7 @@ module Softcover::Utils
   def executable(filename, message)
     filename.tap do |f|
       unless File.exist?(f)
+        $stderr.puts "Document not built due to missing dependency"
         $stderr.puts message
         exit 1
       end
@@ -201,6 +202,16 @@ module Softcover::Utils
     silence_stream(STDOUT) do
       yield
     end
+  end
+
+  # Returns true if platform is OS X.
+  def os_x?
+    RUBY_PLATFORM.match(/darwin/)
+  end
+
+  # Returns true if platform is Linux.
+  def linux?
+    RUBY_PLATFORM.match(/linux/)
   end
 end
 

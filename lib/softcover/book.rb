@@ -78,9 +78,20 @@ class Softcover::Book
     "#{@client.host}/books/#{id}/redirect"
   end
 
-  # Opens the book in the browser (OS X only).
+  # Opens the book in the browser (OS X & Linux).
   def open_in_browser
-    `open #{url}`
+    `#{open} #{url}`
+  end
+
+  # Returns the system-dependent `open` command.
+  def open
+    if os_x?
+      'open'
+    elsif linux?
+      'xdg-open'
+    else
+      raise "Platform #{RUBY_PLATFORM} not supported"
+    end
   end
 
   def create_or_update
