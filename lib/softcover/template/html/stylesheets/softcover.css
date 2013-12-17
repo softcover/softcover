@@ -127,6 +127,9 @@ body #book {
 #book .codelisting .heading {
   width: 100%;
   background: #ccc;
+  line-height: 1.2;
+  padding-top: 0.1em;
+  padding-bottom: 0.3em;
 }
 
 #book .codelisting .heading .number {
@@ -135,7 +138,10 @@ body #book {
 }
 
 #book .codelisting .heading span.filepath {
+  display: block;
   margin-left: 0.4em;
+  margin-top: 0.2em;
+  margin-bottom: 0.1em;
 }
 
 #book .codelisting span.break {
