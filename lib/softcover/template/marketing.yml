@@ -9,6 +9,7 @@ prices:
         Almost 9000 pages of content
         Includes a free copy of 1st Edition PDF
     media:
+      - html
       - pdf
       - epub
       - mobi
@@ -24,6 +25,7 @@ prices:
         (QuickTime and Ogg Vorbis)
         Includes first edition screencasts
     media:
+      - html
       - screencasts
     price: 12500
 
@@ -36,6 +38,7 @@ prices:
         eBook formats for Kindle, Nook, and PDF
         Read online.
     media:
+      - html
       - pdf
       - epub
       - mobi
@@ -62,5 +65,7 @@ testimonials:
   -
     name: "Person 2"
     title: "Person 2 Title"
-    image: /images/testimonial_2.png
+    gravatar_email: "info@softcover.io"
     text: "Testimonial 2 text"
+
+content: ''
