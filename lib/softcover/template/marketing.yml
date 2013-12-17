@@ -1,0 +1,66 @@
+---
+prices:
+  -
+    code: option_1
+    name: "HTML & Ebook"
+    description:
+      |
+        Optimized for Kindle* and iPad
+        Almost 9000 pages of content
+        Includes a free copy of 1st Edition PDF
+    media:
+      - pdf
+      - epub
+      - mobi
+    price: 3500
+
+  -
+    code: option_2
+    name: "HTML & Screencasts"
+    description:
+      |
+        Full updated for the 2nd edition
+        100% DRM-free digital downloads
+        (QuickTime and Ogg Vorbis)
+        Includes first edition screencasts
+    media:
+      - screencasts
+    price: 12500
+
+  -
+    code: option_3
+    name: "HTML, Ebook, and Screencasts"
+    description:
+      |
+        Includes all 50 screencasts
+        eBook formats for Kindle, Nook, and PDF
+        Read online.
+    media:
+      - pdf
+      - epub
+      - mobi
+      - screencasts
+    price: 12500
+    regular_price: 19900
+
+faq:
+  -
+    question: "Question 1 text"
+    answer: "Answer 1 text"
+
+  -
+    question: "Question 2 text"
+    answer: "Answer 2 text"
+
+testimonials:
+  -
+    name: "Person 1"
+    title: "Person 1 Title"
+    image: /images/testimonial_1.png
+    text: "Testimonial 1 text"
+
+  -
+    name: "Person 2"
+    title: "Person 2 Title"
+    image: /images/testimonial_2.png
+    text: "Testimonial 2 text"

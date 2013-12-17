@@ -3,6 +3,13 @@ require 'ostruct'
 class Softcover::BookManifest < OpenStruct
   include Softcover::Utils
 
+  class Softcover::MarketingManifest < Softcover::BookManifest
+    YAML_PATH = "marketing.yml"
+    def initialize
+      marshal_load read_from_yml.symbolize_keys!
+    end
+  end
+
   class NotFound < StandardError
     def message
       "Invalid book directory, no manifest file found!"
@@ -274,7 +281,7 @@ class Softcover::BookManifest < OpenStruct
       require 'softcover/config'
       require 'yaml/store'
       self.class.find_book_root!
-      YAML.load_file(YAML_PATH)
+      YAML.load_file(self.class::YAML_PATH)
     end
 
 

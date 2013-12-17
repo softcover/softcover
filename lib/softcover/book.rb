@@ -11,6 +11,8 @@ class Softcover::Book
   def initialize(options={})
     require "softcover/client"
     @manifest = Softcover::BookManifest.new(options)
+    @marketing = Softcover::MarketingManifest.new
+
     @client = Softcover::Client.new_with_book self
 
     @screencasts_dir = DEFAULT_SCREENCASTS_DIR
@@ -91,7 +93,10 @@ class Softcover::Book
                                         subtitle: subtitle,
                                         description: description,
                                         cover: cover,
-                                        chapters: chapter_attributes
+                                        chapters: chapter_attributes,
+                                        prices: prices,
+                                        faq: faq,
+                                        testimonials: testimonials
 
     if res['errors']
       @errors = res['errors']
@@ -185,6 +190,6 @@ class Softcover::Book
 
   private
     def method_missing(name, *args, &block)
-      @manifest.send(name) || super
+      @manifest.send(name) || @marketing.send(name) || super
     end
 end
