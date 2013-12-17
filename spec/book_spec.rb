@@ -34,7 +34,7 @@ describe Softcover::Book do
         its(:prices) { should_not be_empty }
         its(:faq) { should_not be_empty }
         its(:testimonials) { should_not be_empty }
-        its(:content) { should be_empty }
+        its(:marketing_content) { should be_empty }
       end
 
     end

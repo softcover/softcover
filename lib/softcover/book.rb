@@ -107,7 +107,8 @@ class Softcover::Book
                                         chapters: chapter_attributes,
                                         prices: prices,
                                         faq: faq,
-                                        testimonials: testimonials
+                                        testimonials: testimonials,
+                                        marketing_content: marketing_content
 
     if res['errors']
       @errors = res['errors']
