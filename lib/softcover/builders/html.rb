@@ -67,21 +67,31 @@ module Softcover
 
       # Writes the LaTeX files for a given Markdown chapter.
       def write_latex_files(chapter, options = {})
-        filename = path("#{manifest.polytex_dir}/#{chapter.slug}.tex")
+        polytex_filename = path("#{manifest.polytex_dir}/#{chapter.slug}.tex")
         if chapter.source == :polytex
-          FileUtils.cp path("chapters/#{chapter.full_name}"), filename
+          FileUtils.cp path("chapters/#{chapter.full_name}"), polytex_filename
         else
-          path = File.join('chapters', chapter.full_name)
-          markdown = File.read(path)
-          File.write(filename, polytex(markdown))
+          mkdir 'cache'
+          markdown = File.read(path("chapters/#{chapter.full_name}"))
+          # Only write if the Markdown file hasn't changed since the last time
+          # it was converted, as then the current PolyTeX file is up-to-date.
+          # The call to File.exist?(filename) is just in case the PolyTeX file
+          # corresponding to the Markdown file was removed by hand in the
+          # interim.
+          unless (File.exist?(chapter.cache_filename) &&
+                  File.read(chapter.cache_filename) == digest(markdown) &&
+                  File.exist?(polytex_filename))
+            File.write(polytex_filename, polytex(chapter, markdown))
+          end
         end
       end
 
-      def polytex(markdown, options={})
-        md = Polytexnic::Pipeline.new(markdown,
-                                 source: :markdown,
-                                 custom_commands: Softcover.custom_styles)
-        md.polytex
+      def polytex(chapter, markdown)
+        File.write(chapter.cache_filename, digest(markdown))
+        p = Polytexnic::Pipeline.new(markdown,
+                                     source: :markdown,
+                                     custom_commands: Softcover.custom_styles)
+        p.polytex
       end
 
       # Returns the converted HTML.

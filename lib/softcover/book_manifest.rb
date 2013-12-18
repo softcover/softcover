@@ -10,9 +10,9 @@ class Softcover::BookManifest < OpenStruct
   end
 
   class Chapter < OpenStruct
-    def path
-      File.join('chapters', slug + '.tex')
-    end
+    # def path
+    #   File.join('chapters', slug + '.tex')
+    # end
 
     def fragment_name
       "#{slug}_fragment.html"
@@ -48,6 +48,13 @@ class Softcover::BookManifest < OpenStruct
 
     def full_name
       "#{slug}#{extension}"
+    end
+
+    # Returns the name for the cached version of the chapters.
+    # This is used when processing Markdown to avoid unnecessary calls to
+    # kramdown's to_latex method, which can get expensive.
+    def cache_filename
+      Softcover::Utils.path("cache/#{full_name}.cache")
     end
   end
 
