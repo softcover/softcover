@@ -124,7 +124,7 @@ describe Softcover::Builders::Html do
       end
 
       it "should write cache files" do
-        expect(Dir.glob(path('cache/*.cache'))).not_to be_empty
+        expect(Dir.glob(path('tmp/*.cache'))).not_to be_empty
       end
 
       describe "master LaTeX file" do

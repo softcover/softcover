@@ -71,7 +71,7 @@ module Softcover
         if chapter.source == :polytex
           FileUtils.cp path("chapters/#{chapter.full_name}"), polytex_filename
         else
-          mkdir 'cache'
+          mkdir 'tmp'
           markdown = File.read(path("chapters/#{chapter.full_name}"))
           # Only write if the Markdown file hasn't changed since the last time
           # it was converted, as then the current PolyTeX file is up-to-date.

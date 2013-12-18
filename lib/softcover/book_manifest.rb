@@ -54,7 +54,7 @@ class Softcover::BookManifest < OpenStruct
     # This is used when processing Markdown to avoid unnecessary calls to
     # kramdown's to_latex method, which can get expensive.
     def cache_filename
-      Softcover::Utils.path("cache/#{full_name}.cache")
+      Softcover::Utils.path("tmp/#{full_name}.cache")
     end
   end
 
