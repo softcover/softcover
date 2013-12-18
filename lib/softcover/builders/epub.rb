@@ -184,7 +184,11 @@ module Softcover
 
       # Returns the Inkscape executable (if available).
       def inkscape
-        filename = '/Applications/Inkscape.app/Contents/Resources/bin/inkscape'
+        filename = `which inkscape`.chomp
+        if filename.empty?
+          filename = '/Applications/Inkscape.app/Contents/Resources/bin/' +
+                     'inkscape'
+        end
         message  = "Install Inkscape (http://inkscape.org/)"
         @inkscape ||= executable(filename, message)
       end

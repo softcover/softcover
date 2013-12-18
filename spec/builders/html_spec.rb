@@ -123,6 +123,10 @@ describe Softcover::Builders::Html do
         expect(Dir.glob(path('generated_polytex/*.tex'))).not_to be_empty
       end
 
+      it "should write cache files" do
+        expect(Dir.glob(path('tmp/*.cache'))).not_to be_empty
+      end
+
       describe "master LaTeX file" do
         let(:master_file) { builder.master_filename(builder.manifest) }
         subject { File.read(master_file) }

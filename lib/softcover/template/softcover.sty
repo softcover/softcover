@@ -20,8 +20,21 @@
 \def\maxwidth#1{\ifdim\Gin@nat@width>#1 #1\else\Gin@nat@width\fi}
 % Commands included by PolyTeXnic
 \usepackage{polytexnic_commands}
+% Links
+\definecolor{darkblue}{rgb}{0,0.18,0.45}
+\definecolor{darkgreen}{rgb}{0,0.39,0}
+% Bizarrely, we need to define the ALL CAPS version of DARKGREEN to account
+% for some edge cases, whose nature remains mysterious.
+\definecolor{DARKGREEN}{rgb}{0,0.39,0}
+\definecolor{hilightyellow}{rgb}{1.0,1.0,0.8}
+% Configure hyperref footnotes
+\usepackage[hyperfootnotes=false]{hyperref}
+\hypersetup{hyperfootnotes=false}
+\hypersetup{colorlinks,linkcolor=darkblue,urlcolor=blue}
 % Syntax highlighting
 \usepackage{pygments}
+% Change color of '@go', "general output", from gray to dark green.
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor{darkgreen}{##1}}}
 % American Mathematical Society extensions
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -29,9 +42,6 @@
 \usepackage{fancyvrb}
 % Be able to resize text relative to other text
 \usepackage{relsize}
-% Configure hyperref footnotes
-\usepackage[hyperfootnotes=false]{hyperref}
-\hypersetup{hyperfootnotes=false}
 % Support longtable environment.
 \usepackage{longtable}
 % Support strikethrough (via \sout{text})
@@ -41,15 +51,6 @@
 \renewcommand{\rmdefault}{ptm}
 \usepackage{courier}
 \normalfont % in case the EC fonts aren't available
-
-% Links
-\definecolor{darkblue}{rgb}{0,0.18,0.45}
-\definecolor{darkgreen}{rgb}{0,0.39,0}
-% Bizarrely, we need to define the ALL CAPS version of DARKGREEN to account
-% for some edge cases, whose nature remains mysterious.
-\definecolor{DARKGREEN}{rgb}{0,0.39,0}
-\definecolor{hilightyellow}{rgb}{1.0,1.0,0.8}
-\hypersetup{colorlinks,linkcolor=darkblue,urlcolor=blue}
 
 % Code environments
 \DefineVerbatimEnvironment%
