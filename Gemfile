@@ -8,6 +8,7 @@ group :test do
   gem 'webmock',   require: false
   gem 'simplecov', require: false
   gem 'rack-test'
+  gem 'ruby-prof'
 end
 
 group :development do

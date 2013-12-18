@@ -55,7 +55,7 @@ module Softcover
 
   def profiling?
     return false if test?
-    false
+    true
   end
 end
 

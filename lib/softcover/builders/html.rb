@@ -23,7 +23,7 @@ module Softcover
 
         if manifest.markdown?
           unless options[:'find-overfull']
-            FileUtils.rm(Dir.glob(path("#{manifest.polytex_dir}/*.tex")))
+            remove_unneeded_polytex_files
           end
           manifest.chapters.each do |chapter|
             write_latex_files(chapter, options)
@@ -55,6 +55,16 @@ module Softcover
         true
       end
 
+      # Removes any PolyTeX files not corresponding to current MD chapters.
+      def remove_unneeded_polytex_files
+        files_to_keep = manifest.chapters.map do |chapter|
+                          path("#{manifest.polytex_dir}/#{chapter.slug}.tex")
+                        end
+        all_files = Dir.glob(path("#{manifest.polytex_dir}/*.tex"))
+        files_to_remove = all_files - files_to_keep
+        FileUtils.rm(files_to_remove)
+      end
+
       # Writes the LaTeX files for a given Markdown chapter.
       def write_latex_files(chapter, options = {})
         filename = path("#{manifest.polytex_dir}/#{chapter.slug}.tex")
@@ -62,11 +72,16 @@ module Softcover
           FileUtils.cp path("chapters/#{chapter.full_name}"), filename
         else
           path = File.join('chapters', chapter.full_name)
-          cc = Softcover.custom_styles
-          md = Polytexnic::Pipeline.new(File.read(path), source: :markdown,
-                                                         custom_commands: cc)
-          File.write(filename, md.polytex)
+          markdown = File.read(path)
+          File.write(filename, polytex(markdown))
         end
+      end
+
+      def polytex(markdown, options={})
+        md = Polytexnic::Pipeline.new(markdown,
+                                 source: :markdown,
+                                 custom_commands: Softcover.custom_styles)
+        md.polytex
       end
 
       # Returns the converted HTML.
