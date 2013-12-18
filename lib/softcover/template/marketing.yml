@@ -1,7 +1,7 @@
 ---
 prices:
   -
-    code: option_1
+    code: ebooks
     name: "HTML & Ebook"
     description:
       |
@@ -16,7 +16,7 @@ prices:
     price: 3500
 
   -
-    code: option_2
+    code: screencasts
     name: "HTML & Screencasts"
     description:
       |
@@ -30,7 +30,7 @@ prices:
     price: 12500
 
   -
-    code: option_3
+    code: all
     name: "HTML, Ebook, and Screencasts"
     description:
       |
