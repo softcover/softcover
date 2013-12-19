@@ -5,7 +5,7 @@ require 'sinatra/async'
 class Softcover::App < Sinatra::Base
   register Sinatra::Async
 
-  set :public_folder, File.join(File.dirname(__FILE__),'../template/html')
+  set :public_folder, 'html'
   set :bind, '0.0.0.0'
 
   configure do
@@ -26,30 +26,6 @@ class Softcover::App < Sinatra::Base
     @mathjax_src    = Softcover::Mathjax::AMS_HTML
     @mathjax_config = Softcover::Mathjax.escaped_config
     coffee erb :'main.js'
-  end
-
-  get '/stylesheets/pygments.css' do
-    content_type 'text/css'
-    @pygments_css ||= Pygments.send(:mentos, :css, ['html', '']).
-                               gsub!(/^/, '.highlight ')
-  end
-
-  # Gets the image specified by the path and content type.
-  get '/images/*' do |path|
-    split_path = path.split(/\./)
-    extension = split_path.pop
-    path = split_path * ''
-    # Arrange to handle both '.jpeg' and '.jpg' extensions.
-    if extension == 'jpeg' && !File.exist?(image_filename(path, extension))
-      extension = 'jpg'
-    end
-    file_path = image_filename(path, extension)
-    if File.exists?(file_path)
-      content_type extension
-      File.read(file_path)
-    else
-      raise Sinatra::NotFound
-    end
   end
 
   get '/assets/:path' do
