@@ -93,9 +93,14 @@ describe Softcover::Commands::Generator do
       describe "CSS" do
 
         let(:css_file) { 'html/stylesheets/softcover.css' }
+        let(:custom_css) { 'html/stylesheets/custom.css' }
 
         it "should have the right CSS file" do
           expect(css_file).to exist
+        end
+
+        it "should have a custom CSS file" do
+          expect(custom_css).to exist
         end
       end
 
