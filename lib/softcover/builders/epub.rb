@@ -5,7 +5,7 @@ module Softcover
 
       def build!(options={})
         @preview = options[:preview]
-        Softcover::Builders::Html.new.build!(preserve_tex: true)
+        Softcover::Builders::Html.new.build!
         if manifest.markdown?
           self.manifest = Softcover::BookManifest.new(source: :polytex,
                                                       origin: :markdown)
