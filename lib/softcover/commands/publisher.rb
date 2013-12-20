@@ -12,7 +12,7 @@ module Softcover::Commands::Publisher
       require 'curb'
       unless options[:quiet] || options[:silent]
         puts "Uploading #{current_book.uploader.file_count} files " \
-          "(#{as_size current_book.uploader.total_size}):"
+             "(#{as_size current_book.uploader.total_size}):"
       end
       url = current_book.upload!(options)
       unless options[:quiet] || options[:silent]
@@ -36,8 +36,11 @@ module Softcover::Commands::Publisher
   def publish_screencasts!(options={})
     return false unless current_book
 
+    require 'ruby-progressbar'
+    require 'curb'
+
     current_book.screencasts_dir = options[:dir] ||
-      Softcover::Book::DEFAULT_SCREENCASTS_DIR
+                                   Softcover::Book::DEFAULT_SCREENCASTS_DIR
 
     @watch = options[:watch]
 

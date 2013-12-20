@@ -172,7 +172,7 @@ class Softcover::Book
     files_to_upload = find_screencasts.select do |file|
       next false if @processed_screencasts.include?(file)
 
-      file.ready?# && upload_screencast!(file)
+      file.ready?
     end
 
     upload_screencasts! files_to_upload
@@ -180,8 +180,13 @@ class Softcover::Book
     @processed_screencasts += files_to_upload
   end
 
+  SCREENCAST_FORMATS = %w{mov ogv mp4 webm}
+
   def find_screencasts
-    Dir["#{@screencasts_dir}/**/*.mov"].map{ |path| BookFile.new path }
+    formats = SCREENCAST_FORMATS * ','
+    Dir["#{@screencasts_dir}/**/*.{#{formats},zip}"].map do |path|
+      BookFile.new path
+    end
   end
 
   def upload_screencasts!(files)

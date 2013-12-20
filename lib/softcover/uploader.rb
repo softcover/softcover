@@ -15,9 +15,11 @@ module Softcover
 
     def upload!(options={})
       unless @params.empty?
-        bar = ProgressBar.create title: "Starting Upload...",
-          format: "%t |%B| %P%% %e", total: total_size, smoothing: 0.75,
-          output: Softcover::Output.stream
+        bar = ProgressBar.create title:     "Starting Upload...",
+                                 format:    "%t |%B| %P%% %e",
+                                 total:     total_size,
+                                 smoothing: 0.75,
+                                 output:    Softcover::Output.stream
 
         upload_host = "http://#{@bucket}.s3.amazonaws.com"
 
@@ -34,7 +36,7 @@ module Softcover
           c.on_progress do |_, _, ul_total, ul_now|
             uploaded = ul_now > size ? size : ul_now
 
-            bar.title = "#{path} (#{as_size uploaded} / #{as_size size})"
+            bar.send(:title=, "#{path} (#{as_size uploaded} / #{as_size size})")
             bar.progress += ul_now - last_chunk rescue nil
             last_chunk = ul_now
             true
