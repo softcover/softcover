@@ -133,6 +133,7 @@ module Softcover
     # TODO: make screencasts dir .book configurable
     define_method "publish:screencasts" do |dir=
       Softcover::Book::DEFAULT_SCREENCASTS_DIR|
+      require 'softcover/commands/publisher'
 
       puts "Publishing screencasts in #{dir}"
       Softcover::Commands::Publisher.
