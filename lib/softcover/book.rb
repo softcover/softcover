@@ -101,7 +101,6 @@ class Softcover::Book
                                         slug: slug,
                                         subtitle: subtitle,
                                         description: description,
-                                        cover: cover,
                                         chapters: chapter_attributes
 
     if res['errors']

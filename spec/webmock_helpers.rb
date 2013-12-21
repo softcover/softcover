@@ -59,7 +59,6 @@ module WebmockHelpers
            slug: book.slug,
            subtitle: book.subtitle,
            description: book.description,
-           cover: book.cover,
            chapters: book.chapter_attributes
         }.to_json,
            :headers => headers).
