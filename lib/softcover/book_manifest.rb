@@ -4,7 +4,8 @@ class Softcover::BookManifest < OpenStruct
   include Softcover::Utils
 
   class Softcover::MarketingManifest < Softcover::BookManifest
-    YAML_PATH = "marketing.yml"
+
+    YAML_PATH = Softcover::Utils.path('config/marketing.yml')
     def initialize
       ensure_marketing_file
       marshal_load read_from_yml.symbolize_keys!
@@ -13,9 +14,8 @@ class Softcover::BookManifest < OpenStruct
     # Ensures the existence of 'marketing.yml'.
     # We copy from the template if necessary.
     def ensure_marketing_file
-      marketing = 'marketing.yml'
-      template = File.join(File.dirname(__FILE__), 'template', marketing)
-      FileUtils.cp(template, marketing) unless File.exist?(marketing)
+      template = File.join(File.dirname(__FILE__), 'template', YAML_PATH)
+      FileUtils.cp(template, YAML_PATH) unless File.exist?(YAML_PATH)
     end
   end
 
@@ -27,9 +27,7 @@ class Softcover::BookManifest < OpenStruct
   end
 
   class Chapter < OpenStruct
-    # def path
-    #   File.join('chapters', slug + '.tex')
-    # end
+    include Softcover::Utils
 
     def fragment_name
       "#{slug}_fragment.html"
@@ -79,7 +77,7 @@ class Softcover::BookManifest < OpenStruct
   end
 
   TXT_PATH  = 'Book.txt'
-  YAML_PATH = "book.yml"
+  YAML_PATH = Softcover::Utils.path('config/book.yml')
 
   def initialize(options = {})
     @source = options[:source] || :polytex
@@ -248,7 +246,20 @@ class Softcover::BookManifest < OpenStruct
     chapters[preview_chapter_range]
   end
 
+  def self.ensure_book_yml
+    unless File.exist?(YAML_PATH)
+      mkdir 'config'
+      git = `which git`
+      if git.empty?
+        mv YAML_PATH, 'config'
+      else
+        system "git mv #{YAML_PATH} config"
+      end
+    end
+  end
+
   def self.valid_directory?
+    ensure_book_yml
     [YAML_PATH, TXT_PATH].any? { |f| File.exist?(f) }
   end
 
