@@ -19,7 +19,7 @@
 \usepackage{graphicx}
 \def\maxwidth#1{\ifdim\Gin@nat@width>#1 #1\else\Gin@nat@width\fi}
 % Commands included by PolyTeXnic
-\usepackage{polytexnic_commands}
+\usepackage{latex_styles/polytexnic_commands}
 % Links
 \definecolor{darkblue}{rgb}{0,0.18,0.45}
 \definecolor{darkgreen}{rgb}{0,0.39,0}
@@ -32,7 +32,7 @@
 \hypersetup{hyperfootnotes=false}
 \hypersetup{colorlinks,linkcolor=darkblue,urlcolor=blue}
 % Syntax highlighting
-\usepackage{pygments}
+\usepackage{latex_styles/pygments}
 % Change color of '@go', "general output", from gray to dark green.
 \expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor{darkgreen}{##1}}}
 % American Mathematical Society extensions
@@ -71,7 +71,7 @@
 % Use a nice font in code environments.
 \usepackage[scaled=0.92]{helvet}
 % Fix quotes in code environments
-\usepackage{upquote}
+\usepackage{latex_styles/upquote}
 
 % Filesystem paths
 \newcommand{\filepath}[1]{\texttt{\small #1}}
@@ -125,7 +125,7 @@
 \usepackage{amsthm}
 \theoremstyle{definition}
 \newtheorem{aside}{Box}[chapter]
-\usepackage{framed}
+\usepackage{latex_styles/framed}
 \definecolor{shadecolor}{gray}{0.97}
 \definecolor{boxcolor}{gray}{0.10}
 \newenvironment{shaded_aside}[2]{\begin{full_framed_shaded}\begin{aside}\label{#2} \textbf{#1}\end{aside}}{\bigskip\end{full_framed_shaded}}
@@ -143,6 +143,6 @@
     \vskip0.5em}%
 }
 
-% Add custom commands
-\usepackage{custom}
+% Add custom commands.
+\usepackage{latex_styles/custom}
 

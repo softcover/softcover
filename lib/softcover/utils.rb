@@ -110,7 +110,7 @@ module Softcover::Utils
     subtitle = manifest.subtitle.nil? ? "" : "\\subtitle{#{manifest.subtitle}}"
     <<-EOS
 \\documentclass[14pt]{extbook}
-\\usepackage{softcover}
+\\usepackage{#{Softcover::Directories::STYLES}/softcover}
 \\VerbatimFootnotes % Allows verbatim text in footnotes
 \\title{#{manifest.title}}
 #{subtitle}

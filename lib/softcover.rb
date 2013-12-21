@@ -42,7 +42,7 @@ module Softcover
 
   # Return the custom styles, if any.
   def custom_styles
-    custom_file = 'custom.sty'
+    custom_file = File.join(Softcover::Directories::STYLES, 'custom.sty')
     File.exist?(custom_file) ? File.read(custom_file) : ''
   end
 

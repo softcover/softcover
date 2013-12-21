@@ -307,12 +307,7 @@ class Softcover::BookManifest < OpenStruct
       unless File.exist?(path)
         base = File.basename(path)
         Softcover::Utils.mkdir Softcover::Directories::CONFIG
-        git = `which git`
-        if git.empty?
-          Softcover::Utils.mv base, Softcover::Directories::CONFIG
-        else
-          system "git mv #{base} #{Softcover::Directories::CONFIG}"
-        end
+        Softcover::Utils.mv base, Softcover::Directories::CONFIG
       end
     end
 
