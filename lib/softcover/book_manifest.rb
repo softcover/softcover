@@ -6,9 +6,19 @@ class Softcover::BookManifest < OpenStruct
   class Softcover::MarketingManifest < Softcover::BookManifest
     YAML_PATH = "marketing.yml"
     def initialize
+      ensure_marketing_file
       marshal_load read_from_yml.symbolize_keys!
     end
+
+    # Ensures the existence of 'marketing.yml'.
+    # We copy from the template if necessary.
+    def ensure_marketing_file
+      marketing = 'marketing.yml'
+      template = File.join(File.dirname(__FILE__), 'template', marketing)
+      FileUtils.cp(template, marketing) unless File.exist?(marketing)
+    end
   end
+
 
   class NotFound < StandardError
     def message

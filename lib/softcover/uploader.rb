@@ -35,8 +35,10 @@ module Softcover
           last_chunk = 0
           c.on_progress do |_, _, ul_total, ul_now|
             uploaded = ul_now > size ? size : ul_now
-
-            bar.send(:title=, "#{path} (#{as_size uploaded} / #{as_size size})")
+            x = as_size(uploaded)
+            y = as_size(size)
+            x = y if x > y
+            bar.send(:title=, "#{path} (#{x} / #{y})")
             bar.progress += ul_now - last_chunk rescue nil
             last_chunk = ul_now
             true
