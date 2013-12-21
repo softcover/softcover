@@ -103,7 +103,6 @@ class Softcover::Book
                                         slug: slug,
                                         subtitle: subtitle,
                                         description: description,
-                                        cover: cover,
                                         chapters: chapter_attributes,
                                         prices: prices,
                                         faq: faq,
