@@ -4,6 +4,7 @@ require 'active_support/core_ext/string'
 require_relative 'softcover/formats'
 require_relative 'softcover/utils'
 require_relative 'softcover/output'
+require_relative 'softcover/directories'
 
 profile = false
 if profile

@@ -5,7 +5,7 @@ class Softcover::BookManifest < OpenStruct
 
   class Softcover::MarketingManifest < Softcover::BookManifest
 
-    YAML_PATH = Softcover::Utils.path('config/marketing.yml')
+    YAML_PATH = File.join(Softcover::Directories::CONFIG, 'marketing.yml')
     def initialize
       ensure_marketing_file
       marshal_load read_from_yml.symbolize_keys!
@@ -77,7 +77,7 @@ class Softcover::BookManifest < OpenStruct
   end
 
   TXT_PATH  = 'Book.txt'
-  YAML_PATH = Softcover::Utils.path('config/book.yml')
+  YAML_PATH = File.join(Softcover::Directories::CONFIG, 'book.yml')
 
   def initialize(options = {})
     @source = options[:source] || :polytex
@@ -300,14 +300,18 @@ class Softcover::BookManifest < OpenStruct
       YAML.load_file(self.class::YAML_PATH)
     end
 
+    # Ensures that the book.yml file is in the right directory.
+    # This is for backwards compatibility.
     def ensure_book_yml
-      unless File.exist?(YAML_PATH)
-        Softcover::Utils.mkdir 'config'
+      path = self.class::YAML_PATH
+      unless File.exist?(path)
+        base = File.basename(path)
+        Softcover::Utils.mkdir Softcover::Directories::CONFIG
         git = `which git`
         if git.empty?
-          Softcover::Utils.mv YAML_PATH, 'config'
+          Softcover::Utils.mv base, Softcover::Directories::CONFIG
         else
-          system "git mv #{YAML_PATH} config"
+          system "git mv #{base} #{Softcover::Directories::CONFIG}"
         end
       end
     end

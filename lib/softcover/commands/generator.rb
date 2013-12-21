@@ -78,7 +78,8 @@ module Softcover
         File.symlink("../images", "images")
 
         Dir.chdir "../.."
-        puts "Done. Please update config/book.yml"
+        book_yml = File.join(Softcover::Directories::CONFIG, 'book')
+        puts "Done. Please update #{book_yml}"
       end
 
       def template_dir
