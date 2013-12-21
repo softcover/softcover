@@ -307,7 +307,7 @@ class Softcover::BookManifest < OpenStruct
       unless File.exist?(path)
         base = File.basename(path)
         Softcover::Utils.mkdir Softcover::Directories::CONFIG
-        Softcover::Utils.mv base, Softcover::Directories::CONFIG
+        FileUtils.mv base, Softcover::Directories::CONFIG
       end
     end
 

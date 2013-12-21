@@ -102,7 +102,8 @@ describe Softcover::Commands::Generator do
       describe "styles" do
 
         it "should have a right style file" do
-          expect('softcover.sty').to exist
+          style = File.join(Softcover::Directories::STYLES, 'softcover.sty')
+          expect(style).to exist
         end
       end
 
