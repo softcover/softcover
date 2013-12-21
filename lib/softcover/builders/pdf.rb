@@ -35,9 +35,7 @@ module Softcover
               "\\include{#{Softcover::Utils.tmpify(manifest, $1)}.tmp}"
             end
           end
-          File.open(Softcover::Utils.tmpify(manifest, filename), 'w') do |f|
-            f.write(latex)
-          end
+          File.write(Softcover::Utils.tmpify(manifest, filename), latex)
         end
         write_pygments_file(:latex)
         copy_polytexnic_sty
@@ -113,12 +111,12 @@ module Softcover
           "mv -f #{tmp_pdf} #{File.join('ebooks', pdf)}"
         end
 
-        # Copies the PolyTeXnic style file to ensure it's always fresh.
+        # Copies the style file to ensure it's always fresh.
         def copy_polytexnic_sty
-          polytexnic_sty = 'softcover.sty'
+          softcover_sty  = 'softcover.sty'
           source_sty     = File.join(File.dirname(__FILE__),
-                                     "../template/#{polytexnic_sty}")
-          FileUtils.cp source_sty, polytexnic_sty
+                                     '..', 'template', softcover_sty)
+          FileUtils.cp source_sty, softcover_sty
         end
     end
   end

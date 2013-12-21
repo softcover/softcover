@@ -246,20 +246,7 @@ class Softcover::BookManifest < OpenStruct
     chapters[preview_chapter_range]
   end
 
-  def self.ensure_book_yml
-    unless File.exist?(YAML_PATH)
-      mkdir 'config'
-      git = `which git`
-      if git.empty?
-        mv YAML_PATH, 'config'
-      else
-        system "git mv #{YAML_PATH} config"
-      end
-    end
-  end
-
   def self.valid_directory?
-    ensure_book_yml
     [YAML_PATH, TXT_PATH].any? { |f| File.exist?(f) }
   end
 
@@ -309,7 +296,20 @@ class Softcover::BookManifest < OpenStruct
       require 'softcover/config'
       require 'yaml/store'
       self.class.find_book_root!
+      ensure_book_yml
       YAML.load_file(self.class::YAML_PATH)
+    end
+
+    def ensure_book_yml
+      unless File.exist?(YAML_PATH)
+        Softcover::Utils.mkdir 'config'
+        git = `which git`
+        if git.empty?
+          Softcover::Utils.mv YAML_PATH, 'config'
+        else
+          system "git mv #{YAML_PATH} config"
+        end
+      end
     end
 
 
