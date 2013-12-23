@@ -26,7 +26,7 @@ describe Softcover::Commands::Generator do
     end
 
     describe "book.yml" do
-      subject(:yml) { YAML.load_file(File.join name, 'book.yml') }
+      subject(:yml) { YAML.load_file(File.join name, 'config', 'book.yml') }
 
       it "should have the right title" do
         expect(yml['title']).to eq "Title of the Book"
@@ -107,7 +107,8 @@ describe Softcover::Commands::Generator do
       describe "styles" do
 
         it "should have a right style file" do
-          expect('softcover.sty').to exist
+          style = File.join(Softcover::Directories::STYLES, 'softcover.sty')
+          expect(style).to exist
         end
       end
 

@@ -11,6 +11,8 @@ class Softcover::Book
   def initialize(options={})
     require "softcover/client"
     @manifest = Softcover::BookManifest.new(options)
+    @marketing = Softcover::MarketingManifest.new
+
     @client = Softcover::Client.new_with_book self
 
     @screencasts_dir = DEFAULT_SCREENCASTS_DIR
@@ -101,8 +103,11 @@ class Softcover::Book
                                         slug: slug,
                                         subtitle: subtitle,
                                         description: description,
-                                        cover: cover,
-                                        chapters: chapter_attributes
+                                        chapters: chapter_attributes,
+                                        prices: prices,
+                                        faq: faq,
+                                        testimonials: testimonials,
+                                        marketing_content: marketing_content
 
     if res['errors']
       @errors = res['errors']
@@ -166,7 +171,7 @@ class Softcover::Book
     files_to_upload = find_screencasts.select do |file|
       next false if @processed_screencasts.include?(file)
 
-      file.ready?# && upload_screencast!(file)
+      file.ready?
     end
 
     upload_screencasts! files_to_upload
@@ -174,8 +179,13 @@ class Softcover::Book
     @processed_screencasts += files_to_upload
   end
 
+  SCREENCAST_FORMATS = %w{mov ogv mp4 webm}
+
   def find_screencasts
-    Dir["#{@screencasts_dir}/**/*.mov"].map{ |path| BookFile.new path }
+    formats = SCREENCAST_FORMATS * ','
+    Dir["#{@screencasts_dir}/**/*.{#{formats},zip}"].map do |path|
+      BookFile.new path
+    end
   end
 
   def upload_screencasts!(files)
@@ -196,6 +206,6 @@ class Softcover::Book
 
   private
     def method_missing(name, *args, &block)
-      @manifest.send(name) || super
+      @manifest.send(name) || @marketing.send(name) || super
     end
 end

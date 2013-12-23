@@ -4,6 +4,7 @@ require 'active_support/core_ext/string'
 require_relative 'softcover/formats'
 require_relative 'softcover/utils'
 require_relative 'softcover/output'
+require_relative 'softcover/directories'
 
 profile = false
 if profile
@@ -41,7 +42,7 @@ module Softcover
 
   # Return the custom styles, if any.
   def custom_styles
-    custom_file = 'custom.sty'
+    custom_file = File.join(Softcover::Directories::STYLES, 'custom.sty')
     File.exist?(custom_file) ? File.read(custom_file) : ''
   end
 

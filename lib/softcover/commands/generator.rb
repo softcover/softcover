@@ -40,7 +40,8 @@ module Softcover
           if path =~ /book\.tex/
             cp_path = "#{name}.tex"
           elsif path =~ /\.erb/
-            cp_path = File.basename path.dup, '.erb'
+            cp_path = File.join(File.dirname(cp_path),
+                                File.basename(path.dup, '.erb'))
           elsif path =~ /gitignore/
             cp_path = '.gitignore'
           end
@@ -77,11 +78,12 @@ module Softcover
         File.symlink("../images", "images")
 
         Dir.chdir "../.."
-        puts "Done. Please update book.yml"
+        book_yml = File.join(Softcover::Directories::CONFIG, 'book')
+        puts "Done. Please update #{book_yml}"
       end
 
       def template_dir
-        File.expand_path File.join File.dirname(__FILE__), "../template"
+        File.expand_path File.join File.dirname(__FILE__), "..", "template"
       end
 
       # Returns a list of all the files and directories used to build the book.

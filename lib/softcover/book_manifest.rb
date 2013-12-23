@@ -3,6 +3,23 @@ require 'ostruct'
 class Softcover::BookManifest < OpenStruct
   include Softcover::Utils
 
+  class Softcover::MarketingManifest < Softcover::BookManifest
+
+    YAML_PATH = File.join(Softcover::Directories::CONFIG, 'marketing.yml')
+    def initialize
+      ensure_marketing_file
+      marshal_load read_from_yml.symbolize_keys!
+    end
+
+    # Ensures the existence of 'marketing.yml'.
+    # We copy from the template if necessary.
+    def ensure_marketing_file
+      template = File.join(File.dirname(__FILE__), 'template', YAML_PATH)
+      FileUtils.cp(template, YAML_PATH) unless File.exist?(YAML_PATH)
+    end
+  end
+
+
   class NotFound < StandardError
     def message
       "Invalid book directory, no manifest file found!"
@@ -10,9 +27,7 @@ class Softcover::BookManifest < OpenStruct
   end
 
   class Chapter < OpenStruct
-    # def path
-    #   File.join('chapters', slug + '.tex')
-    # end
+    include Softcover::Utils
 
     def fragment_name
       "#{slug}_fragment.html"
@@ -62,7 +77,7 @@ class Softcover::BookManifest < OpenStruct
   end
 
   TXT_PATH  = 'Book.txt'
-  YAML_PATH = "book.yml"
+  YAML_PATH = File.join(Softcover::Directories::CONFIG, 'book.yml')
 
   def initialize(options = {})
     @source = options[:source] || :polytex
@@ -281,7 +296,19 @@ class Softcover::BookManifest < OpenStruct
       require 'softcover/config'
       require 'yaml/store'
       self.class.find_book_root!
-      YAML.load_file(YAML_PATH)
+      ensure_book_yml
+      YAML.load_file(self.class::YAML_PATH)
+    end
+
+    # Ensures that the book.yml file is in the right directory.
+    # This is for backwards compatibility.
+    def ensure_book_yml
+      path = self.class::YAML_PATH
+      unless File.exist?(path)
+        base = File.basename(path)
+        Softcover::Utils.mkdir Softcover::Directories::CONFIG
+        FileUtils.mv base, Softcover::Directories::CONFIG
+      end
     end
 
 

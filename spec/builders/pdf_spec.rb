@@ -37,11 +37,14 @@ describe Softcover::Builders::Pdf do
       end
 
       it "should create a Pygments style file" do
-        expect('pygments.sty').to exist
+        pygments = File.join(Softcover::Directories::STYLES, 'pygments.sty')
+        expect(pygments).to exist
       end
 
       it "should write the correct PolyTeXnic commands file" do
-        expect(File.read('polytexnic_commands.sty')).to match /newcommand/
+        styles = File.join(Softcover::Directories::STYLES,
+                           'polytexnic_commands.sty')
+        expect(File.read(styles)).to match /newcommand/
       end
 
       context "after removing Book.txt" do
