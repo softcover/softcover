@@ -7,9 +7,14 @@ module Softcover
 
       def setup
         Dir.mkdir "html" unless File.directory?("html")
-        unless File.directory?(path('html/stylesheets'))
-          Dir.mkdir path('html/stylesheets')
+        html_styles = path('html/stylesheets')
+        unless File.directory?(html_styles)
+          Dir.mkdir html_styles
         end
+        template_dir = path("#{File.dirname(__FILE__)}/../template")
+        custom_css = path("#{template_dir}/html/stylesheets/custom.css")
+        target = path("#{html_styles}/custom.css")
+        FileUtils.cp(custom_css, target) unless File.exist?(target)
         clean!
       end
 
