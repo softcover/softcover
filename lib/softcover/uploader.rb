@@ -38,8 +38,12 @@ module Softcover
             x = as_size(uploaded)
             y = as_size(size)
             x = y if x > y
-            bar.send(:title=, "#{path} (#{x} / #{y})")
-            bar.progress += ul_now - last_chunk rescue nil
+            begin
+              bar.send(:title=, "#{path} (#{x} / #{y})")
+              bar.progress += ul_now - last_chunk
+            rescue
+              nil
+            end
             last_chunk = ul_now
             true
           end

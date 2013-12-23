@@ -134,7 +134,7 @@ module Softcover::Utils
   # Writes a Pygments style file.
   # We support both :html (outputting CSS) and :latex (outputting
   # a LaTeX style file).
-  def write_pygments_file(format)
+  def write_pygments_file(format, path)
     require 'pygments'
     extension = case format
                 when :html
