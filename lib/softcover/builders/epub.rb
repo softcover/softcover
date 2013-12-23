@@ -439,7 +439,7 @@ module Softcover
           <link rel="stylesheet" href="styles/pygments.css" type="text/css" />
           <link rel="stylesheet" href="styles/softcover.css" type="text/css" />
           <link rel="stylesheet" href="styles/epub.css" type="text/css" />
-          <link rel="stylesheet" href="styles/custom.css" media-type="text/css"/>
+          <link rel="stylesheet" href="styles/custom.css" type="text/css"/>
           <link rel="stylesheet" type="application/vnd.adobe-page-template+xml" href="styles/page-template.xpgt" />
         </head>
 
