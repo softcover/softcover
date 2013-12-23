@@ -59,7 +59,11 @@ module WebmockHelpers
            slug: book.slug,
            subtitle: book.subtitle,
            description: book.description,
-           chapters: book.chapter_attributes
+           chapters: book.chapter_attributes,
+           prices: book.prices,
+           faq: book.faq,
+           testimonials: book.testimonials,
+           marketing_content: ''
         }.to_json,
            :headers => headers).
       to_return(:status => 200, :body => return_body, :headers => {})

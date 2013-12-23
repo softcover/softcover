@@ -40,7 +40,8 @@ module Softcover
           @html  = converted_html(basename)
           @title = basename
           erb_file = File.read(File.join(File.dirname(__FILE__),
-                                         '../server/views/book.html.erb'))
+                                         '..', 'server', 'views',
+                                         'book.html.erb'))
           file_content = ERB.new(erb_file).result(binding)
           write_full_html_file(basename, file_content)
           write_chapter_html_files(Nokogiri::HTML(file_content), erb_file)
@@ -71,7 +72,7 @@ module Softcover
         if chapter.source == :polytex
           FileUtils.cp path("chapters/#{chapter.full_name}"), polytex_filename
         else
-          mkdir 'tmp'
+          mkdir Softcover::Directories::TMP
           markdown = File.read(path("chapters/#{chapter.full_name}"))
           # Only write if the Markdown file hasn't changed since the last time
           # it was converted, as then the current PolyTeX file is up-to-date.
