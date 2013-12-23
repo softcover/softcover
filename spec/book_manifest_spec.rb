@@ -12,7 +12,6 @@ describe Softcover::BookManifest do
         its(:title) { should eq "Title of the Book" }
         its(:subtitle) { should eq "Change me" }
         its(:description) { should eq "Change me." }
-        its(:cover) { should eq "images/cover.png" }
         its(:author) { should eq "Author Name" }
       end
 

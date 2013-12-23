@@ -44,7 +44,7 @@ module Softcover::Commands::Server
                       'Building...'
     t = Time.now
     builder = Softcover::Builders::Html.new
-    builder.build(preserve_tex: true)
+    builder.build
     puts "Done. (#{(Time.now - t).round(2)}s)"
 
   rescue Softcover::BookManifest::NotFound => e
