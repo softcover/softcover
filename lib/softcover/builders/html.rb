@@ -183,7 +183,12 @@ module Softcover
             target = target_cache[ref_id]
             unless target.nil?
               id = target['id']
-              ref_chapter = ref_map[target['data-tralics-id']]
+              ref_chapter = if target['data-tralics-id'].nil?
+                              # This branch is true for chapter-star.
+                              chapter
+                            else
+                              ref_map[target['data-tralics-id']]
+                            end
               ref_node['href'] = "#{ref_chapter.fragment_name}##{id}"
             end
           end
