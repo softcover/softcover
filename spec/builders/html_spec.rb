@@ -29,6 +29,16 @@ describe Softcover::Builders::Html do
         it { should match('pygments.css') }
         context "HTML document" do
           subject(:doc) { Nokogiri::HTML(output) }
+
+          context "frontmatter" do
+            subject(:frontmatter) { doc.at_css('#frontmatter') }
+            it { should_not be_nil }
+            it "should link the preface to the frontmatter page" do
+              link = '<a href="#preface"'
+              expect(frontmatter.to_xhtml).to match /#{link}/
+            end
+          end
+
           context "first chapter" do
             subject(:chapter) { doc.at_css('#cha-a_chapter') }
             it { should_not be_nil }
@@ -72,14 +82,14 @@ describe Softcover::Builders::Html do
         end
 
         describe "contents" do
-          subject(:html) { Nokogiri::HTML(File.open(filename)) }
+          subject(:doc) { Nokogiri::HTML(File.open(filename)) }
 
           it "should include the title page" do
-            expect(html.at_css('div#title_page')).not_to be_nil
+            expect(doc.at_css('div#title_page')).not_to be_nil
           end
 
           it "should include the table of contents" do
-            expect(html.at_css('div#table_of_contents')).not_to be_nil
+            expect(doc.at_css('div#table_of_contents')).not_to be_nil
           end
         end
       end
