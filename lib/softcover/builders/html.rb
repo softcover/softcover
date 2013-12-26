@@ -92,6 +92,9 @@ module Softcover
         end
       end
 
+      # Returns the PolyTeX for the chapter.
+      # As a side-effect, we cache a digest of the Markdown to prevent
+      # unnecessary conversions.
       def polytex(chapter, markdown)
         File.write(chapter.cache_filename, digest(markdown))
         p = Polytexnic::Pipeline.new(markdown,
