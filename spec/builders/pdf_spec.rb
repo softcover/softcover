@@ -24,6 +24,11 @@ describe Softcover::Builders::Pdf do
         end
       end
 
+      it "should prepend the fontsize verbatim declaration for source code" do
+        fontsize = '\begin{Verbatim}[fontsize=\relsize'
+        expect(File.read(Dir.glob('tmp/*.tmp.tex').first)).to include fontsize
+      end
+
       it "should replace the main file's \\includes with tmp files" do
         contents = File.read(Softcover::Utils.tmpify(builder.manifest,
                                                      'book.tex'))
