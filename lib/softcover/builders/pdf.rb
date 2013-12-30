@@ -35,11 +35,9 @@ module Softcover
               "\\include{#{Softcover::Utils.tmpify(manifest, $1)}.tmp}"
             end
           end
-          File.open(Softcover::Utils.tmpify(manifest, filename), 'w') do |f|
-            f.write(latex)
-          end
+          File.write(Softcover::Utils.tmpify(manifest, filename), latex)
         end
-        write_pygments_file(:latex)
+        write_pygments_file(:latex, Softcover::Directories::STYLES)
         copy_polytexnic_sty
 
         # Renaming the PDF in the command is necessary because `execute`
@@ -48,7 +46,8 @@ module Softcover
         # is ignored.
         # (The reason for using `exec` is so that LaTeX errors get emitted to
         # the screen rather than just hanging the process.)
-        cmd = "#{pdf_cmd(book_filename, options)} ; #{rename_pdf(basename)}"
+        cmd = "#{pdf_cmd(book_filename, options)} " +
+              "; #{rename_pdf(basename, options)}"
         # Here we use `system` when making a preview because the preview command
         # needs to run after the main PDF build.
         if options[:quiet] || options[:silent]
@@ -106,19 +105,22 @@ module Softcover
         # The purpose is to match the original filename.
         # For example, foo_bar.tex should produce foo_bar.pdf.
         # While we're at it, we move it to the standard ebooks/ directory.
-        def rename_pdf(basename)
+        def rename_pdf(basename, options={})
           tmp_pdf = basename + '.tmp.pdf'
           pdf     = basename + '.pdf'
           mkdir('ebooks')
-          "mv -f #{tmp_pdf} #{File.join('ebooks', pdf)}"
+          # Remove the intermediate tmp files unless only running once.
+          rm_tmp = options[:once] || Softcover.test? ? "" : "&& rm -f *.tmp.*"
+          "mv -f #{tmp_pdf} #{File.join('ebooks', pdf)} #{rm_tmp}"
         end
 
-        # Copies the PolyTeXnic style file to ensure it's always fresh.
+        # Copies the style file to ensure it's always fresh.
         def copy_polytexnic_sty
-          polytexnic_sty = 'softcover.sty'
+          softcover_sty  = File.join(Softcover::Directories::STYLES,
+                                     'softcover.sty')
           source_sty     = File.join(File.dirname(__FILE__),
-                                     "../template/#{polytexnic_sty}")
-          FileUtils.cp source_sty, polytexnic_sty
+                                     '..', 'template', softcover_sty)
+          FileUtils.cp source_sty, softcover_sty
         end
     end
   end

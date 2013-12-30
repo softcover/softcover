@@ -36,6 +36,9 @@ module Softcover::Commands::Publisher
   def publish_screencasts!(options={})
     return false unless current_book
 
+    require 'ruby-progressbar'
+    require 'curb'
+
     current_book.screencasts_dir = options[:dir] ||
                                    Softcover::Book::DEFAULT_SCREENCASTS_DIR
 

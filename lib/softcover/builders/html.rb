@@ -7,9 +7,14 @@ module Softcover
 
       def setup
         Dir.mkdir "html" unless File.directory?("html")
-        unless File.directory?(path('html/stylesheets'))
-          Dir.mkdir path('html/stylesheets')
+        html_styles = path('html/stylesheets')
+        unless File.directory?(html_styles)
+          Dir.mkdir html_styles
         end
+        template_dir = path("#{File.dirname(__FILE__)}/../template")
+        custom_css = path("#{template_dir}/html/stylesheets/custom.css")
+        target = path("#{html_styles}/custom.css")
+        FileUtils.cp(custom_css, target) unless File.exist?(target)
         clean!
       end
 
@@ -40,7 +45,8 @@ module Softcover
           @html  = converted_html(basename)
           @title = basename
           erb_file = File.read(File.join(File.dirname(__FILE__),
-                                         '../server/views/book.html.erb'))
+                                         '..', 'server', 'views',
+                                         'book.html.erb'))
           file_content = ERB.new(erb_file).result(binding)
           write_full_html_file(basename, file_content)
           write_chapter_html_files(Nokogiri::HTML(file_content), erb_file)
@@ -71,7 +77,7 @@ module Softcover
         if chapter.source == :polytex
           FileUtils.cp path("chapters/#{chapter.full_name}"), polytex_filename
         else
-          mkdir 'tmp'
+          mkdir Softcover::Directories::TMP
           markdown = File.read(path("chapters/#{chapter.full_name}"))
           # Only write if the Markdown file hasn't changed since the last time
           # it was converted, as then the current PolyTeX file is up-to-date.
@@ -86,6 +92,9 @@ module Softcover
         end
       end
 
+      # Returns the PolyTeX for the chapter.
+      # As a side-effect, we cache a digest of the Markdown to prevent
+      # unnecessary conversions.
       def polytex(chapter, markdown)
         File.write(chapter.cache_filename, digest(markdown))
         p = Polytexnic::Pipeline.new(markdown,
@@ -177,7 +186,12 @@ module Softcover
             target = target_cache[ref_id]
             unless target.nil?
               id = target['id']
-              ref_chapter = ref_map[target['data-tralics-id']]
+              ref_chapter = if target['data-tralics-id'].nil?
+                              # This branch is true for chapter-star.
+                              chapter
+                            else
+                              ref_map[target['data-tralics-id']]
+                            end
               ref_node['href'] = "#{ref_chapter.fragment_name}##{id}"
             end
           end
