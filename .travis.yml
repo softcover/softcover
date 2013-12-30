@@ -4,6 +4,6 @@ rvm:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq texlive texlive-xetex texlive-latex-extra inkscape calibre
-  - export PATH=$PATH:`~`
+  - export PATH=$PATH:`echo ~`
   - curl -O -L https://github.com/IDPF/epubcheck/releases/download/v3.0/epubcheck-3.0.zip && unzip epubcheck-3.0.zip -d ~ && mv ~/epubcheck-3.0/* ~
   - curl -o ~/kindlegen http://softcover-binaries.s3.amazonaws.com/kindlegen && chmod +x ~/kindlegen
