@@ -20,7 +20,7 @@ module Softcover
           range  = manifest.pdf_preview_page_range.split('..').map(&:to_i)
           cmd  = %(yes | #{ghostscript} -dBATCH -sOutputFile="#{output}")
           cmd += %( -dFirstPage=#{range.first} -dLastPage=#{range.last})
-          cmd += %( -sDEVICE=pdfwrite "#{input}" &> /dev/null)
+          cmd += %( -sDEVICE=pdfwrite "#{input}" > /dev/null)
           execute cmd
         end
 
