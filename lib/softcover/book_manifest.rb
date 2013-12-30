@@ -247,6 +247,11 @@ class Softcover::BookManifest < OpenStruct
   end
 
   def self.valid_directory?
+    # Needed for backwards compatibility
+    if File.exist?('book.yml') && !Dir.pwd.include?('config')
+      Softcover::Utils.mkdir('config')
+      FileUtils.mv('book.yml', 'config')
+    end
     [YAML_PATH, TXT_PATH].any? { |f| File.exist?(f) }
   end
 
