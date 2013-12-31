@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/softcover/softcover.png?branch=master)](https://travis-ci.org/softcover/softcover)
 
+[![Coverage Status](https://coveralls.io/repos/softcover/softcover/badge.png)](https://coveralls.io/r/softcover/softcover)
+
 ## **Note:** Softcover is currently in private beta
 
 It is strongly recommended that right now only members of the private beta use the `softcover` gem. Go to [Softcover.io](http://softcover.io/) to request an invitation to the private beta.

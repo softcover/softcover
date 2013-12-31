@@ -6,7 +6,7 @@ group :test do
   gem 'rspec'
   gem 'debugger2' unless ENV['CI']
   gem 'webmock',   require: false
-  gem 'simplecov', require: false
+  gem 'coveralls', require: false
   gem 'rack-test'
   gem 'ruby-prof'
 end
