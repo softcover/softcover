@@ -42,7 +42,7 @@ describe Softcover::CLI do
     before(:all) { chdir_to_fixtures }
     after(:all)  { remove_book }
     it "should not raise error" do
-      result = `softcover new book 2>&1`
+      result = `softcover new book &> /dev/null`
       expect($?.exitstatus).to eq 0
     end
   end

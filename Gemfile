@@ -4,7 +4,7 @@ gemspec
 
 group :test do
   gem 'rspec'
-  gem 'debugger2'
+  gem 'debugger2' unless ENV['CI']
   gem 'webmock',   require: false
   gem 'simplecov', require: false
   gem 'rack-test'
