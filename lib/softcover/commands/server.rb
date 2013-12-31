@@ -10,7 +10,7 @@ module Softcover::Commands::Server
   def listen_for_changes
     return if defined?(@no_listener) && @no_listener
     server_pid = Process.pid
-    filter_regex = /(\.md|\.tex|custom\.sty|Book\.txt|book\.yml)$/
+    filter_regex = /(\.md|\.tex|custom\.sty|custom\.css|Book\.txt|book\.yml)$/
     @listener = Listen.to('.')
     @listener.filter(filter_regex)
 
@@ -44,7 +44,7 @@ module Softcover::Commands::Server
                       'Building...'
     t = Time.now
     builder = Softcover::Builders::Html.new
-    builder.build(preserve_tex: true)
+    builder.build
     puts "Done. (#{(Time.now - t).round(2)}s)"
 
   rescue Softcover::BookManifest::NotFound => e

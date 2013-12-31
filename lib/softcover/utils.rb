@@ -110,7 +110,7 @@ module Softcover::Utils
     subtitle = manifest.subtitle.nil? ? "" : "\\subtitle{#{manifest.subtitle}}"
     <<-EOS
 \\documentclass[14pt]{extbook}
-\\usepackage{softcover}
+\\usepackage{#{Softcover::Directories::STYLES}/softcover}
 \\VerbatimFootnotes % Allows verbatim text in footnotes
 \\title{#{manifest.title}}
 #{subtitle}
@@ -124,16 +124,17 @@ module Softcover::Utils
   # Returns the tmp version of a filename.
   # E.g., tmpify('foo.tex') => 'foo.tmp.tex'
   def tmpify(manifest, filename)
-    mkdir 'tmp'
+    tmp = Softcover::Directories::TMP
+    mkdir tmp
     sep = File::SEPARATOR
-    filename.sub(manifest.polytex_dir + sep, 'tmp' + sep).
+    filename.sub(manifest.polytex_dir + sep, tmp + sep).
              sub('.tex', '.tmp.tex')
   end
 
   # Writes a Pygments style file.
   # We support both :html (outputting CSS) and :latex (outputting
   # a LaTeX style file).
-  def write_pygments_file(format, path = '.')
+  def write_pygments_file(format, path)
     require 'pygments'
     extension = case format
                 when :html

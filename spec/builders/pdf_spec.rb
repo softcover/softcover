@@ -24,6 +24,11 @@ describe Softcover::Builders::Pdf do
         end
       end
 
+      it "should prepend the fontsize verbatim declaration for source code" do
+        fontsize = '\begin{Verbatim}[fontsize=\relsize'
+        expect(File.read(Dir.glob('tmp/*.tmp.tex').first)).to include fontsize
+      end
+
       it "should replace the main file's \\includes with tmp files" do
         contents = File.read(Softcover::Utils.tmpify(builder.manifest,
                                                      'book.tex'))
@@ -37,11 +42,14 @@ describe Softcover::Builders::Pdf do
       end
 
       it "should create a Pygments style file" do
-        expect('pygments.sty').to exist
+        pygments = File.join(Softcover::Directories::STYLES, 'pygments.sty')
+        expect(pygments).to exist
       end
 
       it "should write the correct PolyTeXnic commands file" do
-        expect(File.read('polytexnic_commands.sty')).to match /newcommand/
+        styles = File.join(Softcover::Directories::STYLES,
+                           'polytexnic_commands.sty')
+        expect(File.read(styles)).to match /newcommand/
       end
 
       context "after removing Book.txt" do

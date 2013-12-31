@@ -5,7 +5,7 @@ module Softcover
 
       def build!(options={})
         @preview = options[:preview]
-        Softcover::Builders::Html.new.build!(preserve_tex: true)
+        Softcover::Builders::Html.new.build!
         if manifest.markdown?
           self.manifest = Softcover::BookManifest.new(source: :polytex,
                                                       origin: :markdown)
@@ -32,7 +32,7 @@ module Softcover
       # Removes HTML.
       # All the HTML is generated, so this clears out any unused files.
       def remove_html
-        FileUtils.rm(Dir.glob(path('epub/OEBPS/html/*.html')))
+        FileUtils.rm(Dir.glob(path('epub/OEBPS/*.html')))
       end
 
       def create_directories
@@ -218,17 +218,24 @@ module Softcover
         epub_styles = File.join('epub', 'OEBPS', 'styles')
 
         FileUtils.cp(File.join(html_styles, 'pygments.css'), epub_styles)
+        File.write(File.join(epub_styles, 'softcover.css'),
+                   clean_book_id(path("#{html_styles}/softcover.css")))
 
         # Copy over the EPUB-specific CSS.
         template_dir = File.join(File.dirname(__FILE__), '..', 'template')
-        epub_css = File.join(template_dir, epub_styles, 'epub.css')
+        epub_css     = File.join(template_dir, epub_styles, 'epub.css')
         FileUtils.cp(epub_css, epub_styles)
 
-        # For some reason, EPUB books hate the #book ids in the stylesheet
-        # (i.e., such books fail to validate), so remove them.
-        polytexnic_css = File.read(File.join(html_styles, 'softcover.css'))
-        polytexnic_css.gsub!(/\s*#book\s+/, '')
-        File.write(File.join(epub_styles, 'softcover.css'), polytexnic_css)
+        # Copy over custom CSS.
+        File.write(File.join(epub_styles, 'custom.css'),
+                   clean_book_id(path("#{html_styles}/custom.css")))
+      end
+
+      # Removes the '#book' CSS id.
+      # For some reason, EPUB books hate the #book ids in the stylesheet
+      # (i.e., such books fail to validate), so remove them.
+      def clean_book_id(filename)
+        File.read(filename).gsub(/#book/, '')
       end
 
       # Copies the image files from the HTML version of the document.
@@ -334,6 +341,7 @@ module Softcover
         <item id="pygments.css" href="styles/pygments.css" media-type="text/css"/>
         <item id="softcover.css" href="styles/softcover.css" media-type="text/css"/>
         <item id="epub.css" href="styles/epub.css" media-type="text/css"/>
+        <item id="custom.css" href="styles/custom.css" media-type="text/css"/>
         <item id="cover" href="cover.html" media-type="application/xhtml+xml"/>
         #{man_ch.join("\n")}
         #{images.join("\n")}
@@ -431,6 +439,7 @@ module Softcover
           <link rel="stylesheet" href="styles/pygments.css" type="text/css" />
           <link rel="stylesheet" href="styles/softcover.css" type="text/css" />
           <link rel="stylesheet" href="styles/epub.css" type="text/css" />
+          <link rel="stylesheet" href="styles/custom.css" type="text/css"/>
           <link rel="stylesheet" type="application/vnd.adobe-page-template+xml" href="styles/page-template.xpgt" />
         </head>
 
