@@ -28,7 +28,7 @@ module Softcover
 
         polytex_filenames = manifest.pdf_chapter_filenames << book_filename
         polytex_filenames.each do |filename|
-          polytex = File.open(filename) { |f| f.read }
+          polytex = File.read(filename)
           latex   = Polytexnic::Pipeline.new(polytex).to_latex
           if filename == book_filename
             latex.gsub!(/\\include{(.*?)}/) do
