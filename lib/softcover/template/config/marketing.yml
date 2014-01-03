@@ -69,3 +69,6 @@ testimonials:
     text: "Testimonial 2 text"
 
 marketing_content: ''
+
+contact_email: ''
+hide_custom_domain_footer: false

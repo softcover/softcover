@@ -63,7 +63,9 @@ module WebmockHelpers
            prices: book.prices,
            faq: book.faq,
            testimonials: book.testimonials,
-           marketing_content: ''
+           marketing_content: '',
+           contact_email: book.contact_email,
+           hide_custom_domain_footer: book.hide_custom_domain_footer
         }.to_json,
            :headers => headers).
       to_return(:status => 200, :body => return_body, :headers => {})
@@ -108,6 +110,7 @@ module WebmockHelpers
 
   def stub_screencasts_upload(book)
     stub_s3_post
+    stub_create_book(book)
 
     files = book.find_screencasts
     stub_request(:post,
