@@ -1,11 +1,12 @@
+require 'coveralls'
+Coveralls::Output.silent = !ENV['CI']
+Coveralls.wear!
+
 require 'rubygems'
 require 'bundler/setup'
 require 'webmock/rspec'
 require 'webmock_helpers'
 require 'ostruct'
-
-# require 'simplecov'
-# SimpleCov.start
 
 require 'json'
 require 'softcover'
