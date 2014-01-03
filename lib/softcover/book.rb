@@ -26,7 +26,7 @@ class Softcover::Book
     attr_accessor :checksum
     def initialize(*args)
       super
-      @checksum = Digest::MD5.hexdigest File.read path
+      @checksum = Digest::MD5.file(path).hexdigest
       (@@lookup ||= {})[path] = self
     end
 
