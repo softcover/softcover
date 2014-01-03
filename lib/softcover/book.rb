@@ -107,7 +107,10 @@ class Softcover::Book
                                         prices: prices,
                                         faq: faq,
                                         testimonials: testimonials,
-                                        marketing_content: marketing_content
+                                        marketing_content: marketing_content,
+                                        contact_email: contact_email,
+                                        hide_custom_domain_footer:
+                                          hide_custom_domain_footer
 
     if res['errors']
       @errors = res['errors']
@@ -136,7 +139,10 @@ class Softcover::Book
     end
 
     @uploader.upload!(options)
+    notify_upload_complete
+  end
 
+  def notify_upload_complete
     res = @client.notify_upload_complete
 
     if res['errors'].nil?
@@ -199,6 +205,7 @@ class Softcover::Book
         notify_file_upload params['path']
       end
       screencast_uploader.upload!
+      notify_upload_complete
     else
       raise 'server error'
     end
@@ -206,6 +213,6 @@ class Softcover::Book
 
   private
     def method_missing(name, *args, &block)
-      @manifest.send(name) || @marketing.send(name) || super
+      @manifest.send(name) || @marketing.send(name) || nil
     end
 end

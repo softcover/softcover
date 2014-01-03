@@ -72,7 +72,7 @@ module Softcover
       else
         puts "Nothing to upload." unless options[:silent]
       end
-
+      @params.size > 0
     end
 
     def total_size

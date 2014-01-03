@@ -82,6 +82,13 @@ class Softcover::BookManifest < OpenStruct
   def initialize(options = {})
     @source = options[:source] || :polytex
     @origin = options[:origin]
+
+    if ungenerated_markdown?
+      puts "Error: No book to publish"
+      puts "Run `softcover build:<format>` for at least one format"
+      exit 1
+    end
+
     yaml_attrs = read_from_yml
     attrs = case
             when polytex?  then yaml_attrs
@@ -128,6 +135,13 @@ class Softcover::BookManifest < OpenStruct
       end
     end
     verify_paths! if options[:verify_paths]
+  end
+
+  # Handles case of Markdown books without running `softcover build`.
+  def ungenerated_markdown?
+    dir = 'generated_polytex'
+    @origin == :markdown && (!File.directory?(dir) ||
+                             Dir.glob(path("#{dir}/*")).empty?)
   end
 
   # Returns the directory where the LaTeX files are located.
