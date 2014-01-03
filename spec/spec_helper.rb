@@ -1,4 +1,5 @@
 require 'coveralls'
+Coveralls::Output.silent = !ENV['CI']
 Coveralls.wear!
 
 require 'rubygems'
