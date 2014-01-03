@@ -110,7 +110,8 @@ class Softcover::Book
                                         marketing_content: marketing_content,
                                         contact_email: contact_email,
                                         hide_custom_domain_footer:
-                                          hide_custom_domain_footer
+                                          hide_custom_domain_footer,
+                                        authors: authors
 
     if res['errors']
       @errors = res['errors']

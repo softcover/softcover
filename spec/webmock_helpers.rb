@@ -65,7 +65,8 @@ module WebmockHelpers
            testimonials: book.testimonials,
            marketing_content: '',
            contact_email: book.contact_email,
-           hide_custom_domain_footer: book.hide_custom_domain_footer
+           hide_custom_domain_footer: book.hide_custom_domain_footer,
+           authors: book.authors
         }.to_json,
            :headers => headers).
       to_return(:status => 200, :body => return_body, :headers => {})
