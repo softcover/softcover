@@ -5,6 +5,7 @@ class Softcover::BookManifest < OpenStruct
 
   class Softcover::MarketingManifest < Softcover::BookManifest
 
+    YAML_PATH = File.join(Softcover::Directories::CONFIG, 'marketing.yml')
     def initialize
       marshal_load read_from_yml.symbolize_keys!
     end
@@ -134,6 +135,7 @@ class Softcover::BookManifest < OpenStruct
   # We copy from the template if necessary.
   # Needed for backwards compatibility.
   def ensure_template_files
+    self.class.find_book_root!
     template_dir = File.join(File.dirname(__FILE__), 'template')
     files = [File.join(Softcover::Directories::CONFIG, 'marketing.yml'),
              path('images/cover-web.png'),
