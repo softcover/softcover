@@ -7,15 +7,21 @@ class Softcover::BookManifest < OpenStruct
 
     YAML_PATH = File.join(Softcover::Directories::CONFIG, 'marketing.yml')
     def initialize
-      ensure_marketing_file
+      ensure_template_files
       marshal_load read_from_yml.symbolize_keys!
     end
 
-    # Ensures the existence of 'marketing.yml'.
+    # Ensures the existence of needed template files like 'marketing.yml'.
     # We copy from the template if necessary.
-    def ensure_marketing_file
-      template = File.join(File.dirname(__FILE__), 'template', YAML_PATH)
-      FileUtils.cp(template, YAML_PATH) unless File.exist?(YAML_PATH)
+    # Needed for backwards compatibility.
+    def ensure_template_files
+      template_dir = File.join(File.dirname(__FILE__), 'template')
+
+      files = [YAML_PATH, path('images/cover-web.png'),
+               path('latex_styles/custom_pdf.sty')]
+      files.each do |file|
+        FileUtils.cp(template, file) unless File.exist?(file)
+      end
     end
   end
 
