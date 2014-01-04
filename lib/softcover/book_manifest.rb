@@ -7,15 +7,7 @@ class Softcover::BookManifest < OpenStruct
 
     YAML_PATH = File.join(Softcover::Directories::CONFIG, 'marketing.yml')
     def initialize
-      ensure_marketing_file
       marshal_load read_from_yml.symbolize_keys!
-    end
-
-    # Ensures the existence of 'marketing.yml'.
-    # We copy from the template if necessary.
-    def ensure_marketing_file
-      template = File.join(File.dirname(__FILE__), 'template', YAML_PATH)
-      FileUtils.cp(template, YAML_PATH) unless File.exist?(YAML_PATH)
     end
   end
 
@@ -83,6 +75,8 @@ class Softcover::BookManifest < OpenStruct
     @source = options[:source] || :polytex
     @origin = options[:origin]
 
+    ensure_template_files
+
     if ungenerated_markdown?
       puts "Error: No book to publish"
       puts "Run `softcover build:<format>` for at least one format"
@@ -135,6 +129,23 @@ class Softcover::BookManifest < OpenStruct
       end
     end
     verify_paths! if options[:verify_paths]
+  end
+
+  # Ensures the existence of needed template files like 'marketing.yml'.
+  # We copy from the template if necessary.
+  # Needed for backwards compatibility.
+  def ensure_template_files
+    self.class.find_book_root!
+    template_dir = File.join(File.dirname(__FILE__), 'template')
+    files = [File.join(Softcover::Directories::CONFIG, 'marketing.yml'),
+             path('images/cover-web.png'),
+             path('latex_styles/custom_pdf.sty')]
+    files.each do |file|
+      unless File.exist?(file)
+        puts "Copying missing file '#{file}' from template"
+        FileUtils.cp(File.join(template_dir, file), file)
+      end
+    end
   end
 
   # Handles case of Markdown books without running `softcover build`.
