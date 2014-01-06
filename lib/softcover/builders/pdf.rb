@@ -110,8 +110,15 @@ module Softcover
           pdf     = basename + '.pdf'
           mkdir('ebooks')
           # Remove the intermediate tmp files unless only running once.
-          rm_tmp = options[:once] || Softcover.test? ? "" : "&& rm -f *.tmp.*"
+          rm_tmp = keep_tmp_files?(options) ? "" : "&& rm -f *.tmp.*"
           "mv -f #{tmp_pdf} #{File.join('ebooks', pdf)} #{rm_tmp}"
+        end
+
+        # Keeps tmp files when running once, including when finding overfull.
+        # The main purpose is to keep the *.aux files around for the ToC, xrefs,
+        # etc.
+        def keep_tmp_files?(options)
+          options[:once] || options[:'find-overfull'] || Softcover.test?
         end
 
         # Copies the style file to ensure it's always fresh.
