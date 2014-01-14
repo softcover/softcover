@@ -109,9 +109,10 @@ class Softcover::Book
                                         testimonials: testimonials,
                                         marketing_content: marketing_content,
                                         contact_email: contact_email,
-                                        hide_custom_domain_footer:
-                                          hide_custom_domain_footer,
-                                        authors: authors
+                                        hide_softcover_footer:
+                                          hide_softcover_footer,
+                                        authors: authors,
+                                        ga_account: ga_account
 
     if res['errors']
       @errors = res['errors']
