@@ -78,7 +78,7 @@ module Softcover
         File.symlink("../images", "images")
 
         Dir.chdir "../.."
-        book_yml = File.join(Softcover::Directories::CONFIG, 'book')
+        book_yml = File.join(Softcover::Directories::CONFIG, 'book.yml')
         puts "Done. Please update #{book_yml}"
       end
 
