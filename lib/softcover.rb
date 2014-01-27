@@ -1,18 +1,22 @@
 require 'polytexnic'
 require 'active_support/core_ext/string'
 
+@profiling = true
+
 require_relative 'softcover/formats'
 require_relative 'softcover/utils'
 require_relative 'softcover/output'
 require_relative 'softcover/directories'
 
-profile = false
-if profile
+if @profiling
+  times = []
   Dir[File.join(File.dirname(__FILE__), '/softcover/**/*.rb')].each do |file|
     t1 = Time.now
+    next if file =~ /railtie/ && !defined?(Rails)
     require file.chomp(File.extname(file))
-    $stderr.puts "#{Time.now - t1} #{File.basename(file)}"
+    times << "#{Time.now - t1} #{File.basename(file)}"
   end
+  $stderr.puts times.sort.reverse
 end
 
 require_relative 'softcover/book'
@@ -56,7 +60,7 @@ module Softcover
 
   def profiling?
     return false if test?
-    false
+    @profiling
   end
 end
 
