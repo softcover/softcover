@@ -367,7 +367,6 @@ body #book {
   margin: 1em;
   font-size: 85%;
   font-weight: bold;
-  word-wrap: break-word;
 }
 
 #book #table_of_contents {
