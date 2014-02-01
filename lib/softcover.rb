@@ -1,7 +1,7 @@
 require 'polytexnic'
 require 'active_support/core_ext/string'
 
-@profiling = true
+@profiling = false
 
 require_relative 'softcover/formats'
 require_relative 'softcover/utils'
