@@ -68,6 +68,20 @@ module Softcover
     end
 
     # ===============================================
+    # Clean
+    # ===============================================
+    desc "clean", "Clean unneeded files"
+    def clean
+      rm(Dir.glob('*.aux'))
+      rm(Dir.glob('*.toc'))
+      rm(Dir.glob('*.out'))
+      rm(Dir.glob('*.tmp.*'))
+      rm(Dir.glob(path('tmp/*')))
+      rm('.highlight_cache')
+    end
+
+
+    # ===============================================
     # Server
     # ===============================================
 

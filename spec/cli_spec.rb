@@ -47,6 +47,28 @@ describe Softcover::CLI do
     end
   end
 
+  context "softcover clean" do
+    before do
+      chdir_to_fixtures
+
+      FileUtils.touch('foo.aux')
+      FileUtils.touch('foo.toc')
+      FileUtils.touch('foo.out')
+      FileUtils.touch('foo.tmp.pdf')
+      FileUtils.touch('.highlight_cache')
+    end
+
+    it "should remove unnecessary files" do
+      `softcover clean`
+      expect('foo.aux').not_to exist
+      expect('foo.aux').not_to exist
+      expect('foo.toc').not_to exist
+      expect('foo.out').not_to exist
+      expect('foo.tmp.pdf').not_to exist
+      expect('.highlight_cache').not_to exist
+    end
+  end
+
   shared_examples "book" do
     context "pdf" do
 

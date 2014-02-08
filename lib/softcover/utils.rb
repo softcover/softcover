@@ -179,8 +179,13 @@ module Softcover::Utils
     Dir.mkdir(dir) unless File.directory?(dir)
   end
 
+  # Removes a file (or list of files).
   def rm(file)
-    FileUtils.rm(file) if File.exist?(file)
+    if file.is_a?(Array)
+      file.each { |f| rm(f) }
+    else
+      FileUtils.rm(file) if File.exist?(file)
+    end
   end
 
   # Returns the system-independent file path.
