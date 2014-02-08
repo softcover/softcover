@@ -2,6 +2,7 @@ module Softcover
   module Commands
     module Build
       include Softcover::Output
+      include Softcover::Utils
       extend self
 
       # Builds the book for the given format.
@@ -17,13 +18,17 @@ module Softcover
       # Builds the book for all formats.
       def all_formats(options={})
         building_message('all formats', options)
-        Softcover::BUILD_ALL_FORMATS.each do |format|
-          if format == 'mobi'
-            building_message('EPUB & MOBI', options)
-          else
-            building_message(format.upcase, options)
+        if custom?
+          build_custom_formats!
+        else
+          Softcover::BUILD_ALL_FORMATS.each do |format|
+            if format == 'mobi'
+              building_message('EPUB & MOBI', options)
+            else
+              building_message(format.upcase, options)
+            end
+            builder_for(format).build!(options)
           end
-          builder_for(format).build!(options)
         end
       end
 
@@ -36,6 +41,24 @@ module Softcover
       # Returns the builder for the given format.
       def builder_for(format)
         "Softcover::Builders::#{format.titleize}".constantize.new
+      end
+
+      def custom?
+        File.exist?(build_config) && !custom_commands.empty?
+      end
+
+      def build_custom_formats!
+        execute custom_commands
+      end
+
+      # Returns custom commands (if any).
+      def custom_commands
+        commands(File.readlines(build_config).map(&:strip))
+      end
+
+      # Returns the filename for configuring `softcover build`.
+      def build_config
+        '.softcover-build'
       end
 
       private

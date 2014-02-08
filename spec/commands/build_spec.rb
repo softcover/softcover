@@ -47,4 +47,13 @@ describe Softcover::Commands::Build do
       build.preview
     end
   end
+
+  describe "commands helper" do
+    let(:lines) { ['foo', ' #  bar', 'baz'] }
+    subject { Softcover::Commands::Build.commands(lines) }
+
+    it { should match /foo/ }
+    it { should_not match /bar/ }
+    it { should match /baz/ }
+  end
 end

@@ -219,5 +219,12 @@ module Softcover::Utils
   def linux?
     RUBY_PLATFORM.match(/linux/)
   end
+
+  # Returns the commands from the given lines.
+  # We skip comments and blank lines.
+  def commands(lines)
+    skip = /(^\s*#|^\s*$)/
+    lines.reject { |line| line =~ skip }.join("\n")
+  end
 end
 
