@@ -30,12 +30,12 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'pygments.rb'
   gem.add_dependency 'kramdown'
 
-  gem.add_dependency 'sinatra'
-  gem.add_dependency 'thin'
-  gem.add_dependency 'async_sinatra'
-  gem.add_dependency 'sinatra-respond_to'
+  gem.add_dependency 'sinatra', '~> 1.4.4'
+  gem.add_dependency 'thin', '~> 1.6.1'
+  gem.add_dependency 'async_sinatra', '~> 1.1.0'
+  gem.add_dependency 'sinatra-respond_to', '~> 0.9.0'
   gem.add_dependency 'coffee-script'
   gem.add_dependency 'listen', '~> 1.3.1'
   gem.add_dependency 'rb-fsevent', '~> 0.9.3'
-  gem.add_dependency 'sanitize'
+  gem.add_dependency 'sanitize', '~> 2.0.6'
 end
