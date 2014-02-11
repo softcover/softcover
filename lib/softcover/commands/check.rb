@@ -6,17 +6,18 @@ module Softcover
 
       def check_dependencies!
         puts "Checking Softcover dependencies..."
-        simulate_work(0.5)
+        simulate_work(1)
         missing_dependencies = []
         dependencies.each do |label, name|
           printf "%-30s", "Checking for #{name}..."
-          simulate_work(0.25)
+          simulate_work(0.15)
           if present?(label)
             puts "Found"
           else
             missing_dependencies << label
             puts "Missing"
           end
+          simulate_work(0.15)
         end
         simulate_work(0.5)
         if missing_dependencies.empty?
