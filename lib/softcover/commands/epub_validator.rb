@@ -14,17 +14,11 @@ module Softcover
       private
 
         def java
-          filename = `which java`.chomp
-          url = 'http://www.java.com/en/download/help/index_installing.xml'
-          message = "Install Java (#{url})"
-          @java ||= executable(filename, message)
+          @java ||= executable(dependency_filename(:java))
         end
 
         def epubcheck
-          filename = File.join(Dir.home, 'epubcheck-3.0', 'epubcheck-3.0.jar')
-          url = 'https://github.com/IDPF/epubcheck/releases/download/v3.0/epubcheck-3.0.zip'
-          message = "Download EpubCheck 3.0 (#{url}) and unzip it in your home directory"
-          @epubcheck ||= executable(filename, message).inspect
+          @epubcheck ||= executable(dependency_filename(:epubcheck)).inspect
         end
     end
   end

@@ -177,20 +177,12 @@ module Softcover
 
       # Returns the PhantomJS executable (if available).
       def phantomjs
-        filename = `which phantomjs`.chomp
-        message  = "Install PhantomJS (http://phantomjs.org/)"
-        @phantomjs ||= executable(filename, message)
+        @phantomjs ||= executable(dependency_filename(:phantomjs))
       end
 
       # Returns the Inkscape executable (if available).
       def inkscape
-        filename = `which inkscape`.chomp
-        if filename.empty?
-          filename = '/Applications/Inkscape.app/Contents/Resources/bin/' +
-                     'inkscape'
-        end
-        message  = "Install Inkscape (http://inkscape.org/)"
-        @inkscape ||= executable(filename, message)
+        @inkscape ||= executable(dependency_filename(:inkscape))
       end
 
       # Strip attributes that are invalid in EPUB documents.

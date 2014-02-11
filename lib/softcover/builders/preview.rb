@@ -25,9 +25,7 @@ module Softcover
         end
 
         def ghostscript
-          filename = `which gs`.chomp
-          message  = "Install GhostScript (should come with LaTeX)"
-          @ghostscript ||= executable(filename, message)
+          @ghostscript ||= executable(dependency_filename(:ghostscript))
         end
     end
   end

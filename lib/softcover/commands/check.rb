@@ -2,6 +2,7 @@ module Softcover
   module Commands
     module Check
       extend self
+      extend Softcover::Utils
 
       def check_dependencies!
         puts "Checking Softcover dependencies..."
@@ -81,35 +82,7 @@ module Softcover
       end
 
       def present?(label)
-        File.exist?(filename(label))
-      end
-
-      def filename(label)
-        case label
-        when :latex
-          `which xelatex`.chomp
-        when :phantomjs
-          `which phantomjs`.chomp
-        when :kindlegen
-          `which kindlegen`.chomp
-        when :java
-          `which java`.chomp
-        when :calibre
-          `which ebook-convert`.chomp
-        when :ghostscript
-          `which gs`.chomp
-        when :epubcheck
-          File.join(Dir.home, 'epubcheck-3.0', 'epubcheck-3.0.jar')
-        when :inkscape
-          filename = `which inkscape`.chomp
-          if filename.empty?
-            filename = '/Applications/Inkscape.app/Contents/Resources/bin/' +
-                       'inkscape'
-          end
-          filename
-        else
-          raise "Unknown label #{label}"
-        end
+        File.exist?(dependency_filename(label))
       end
 
       # Simulate working for given time.

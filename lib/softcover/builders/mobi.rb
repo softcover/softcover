@@ -35,18 +35,11 @@ module Softcover
       private
 
         def calibre
-          filename = `which ebook-convert`.chomp
-          url = 'http://calibre-ebook.com/'
-          message  = "Install Calibre (#{url}) and enable command line tools"
-          message += " (http://manual.calibre-ebook.com/cli/cli-index.html)"
-          @calibre ||= executable(filename, message)
+          @calibre ||= executable(dependency_filename(:calibre))
         end
 
         def kindlegen
-          filename = `which kindlegen`.chomp
-          url = 'http://www.amazon.com/gp/feature.html?ie=UTF8&docId=1000765211'
-          message  = "Install kindlegen (#{url})"
-          @kindlegen ||= executable(filename, message)
+          @kindlegen ||= executable(dependency_filename(:kindlegen))
         end
     end
   end

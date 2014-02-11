@@ -67,9 +67,7 @@ module Softcover
         # The `xelatex` program is roughly equivalent to the more standard
         # `pdflatex`, but has better support for Unicode.
         def xelatex
-          filename = `which xelatex`.chomp
-          message  = "Install LaTeX (http://latex-project.org/ftp.html)"
-          @xelatex ||= executable(filename, message)
+          @xelatex ||= executable(dependency_filename(:latex))
         end
 
         # Returns the command to build the PDF (once).
