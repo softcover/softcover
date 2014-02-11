@@ -32,12 +32,22 @@ describe Softcover::Commands::Check do
     end
 
     it { should match /Checking for LaTeX.*Missing/ }
+    it { should match /Checking for PhantomJS.*Missing/ }
+    it { should match /Checking for Inkscape.*Missing/ }
     it { should match /Checking for Calibre.*Missing/ }
     it { should match /Checking for KindleGen.*Missing/ }
     it { should match /Checking for Java.*Missing/ }
-    it { should match /Checking for GhostScript.*Missing/ }
-    it { should match /Checking for PhantomJS.*Missing/ }
-    it { should match /Checking for Inkscape.*Missing/ }
     it { should match /Checking for EpubCheck.*Missing/ }
+    it { should match /Checking for GhostScript.*Missing/ }
+
+    it { should match /Missing dependencies:/ }
+    it { should match /LaTeX/ }
+    it { should match /PhantomJS/ }
+    it { should match /Inkscape/ }
+    it { should match /Calibre/ }
+    it { should match /KindleGen/ }
+    it { should match /Java/ }
+    it { should match /EpubCheck/ }
+    it { should match /GhostScript/ }
   end
 end
