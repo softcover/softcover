@@ -4,10 +4,11 @@ module Softcover
       extend self
 
       def check_dependencies!
-        dependencies = [[:latex, 'LaTeX']]
+        dependencies = [[:latex, 'LaTeX'],
+                        [:calibre, 'Calibre']]
 
         dependencies.each do |label, name|
-          print "Checking for #{name}... "
+          printf "%-30s", "Checking for #{name}..."
           if present?(label)
             puts "Found."
           else
@@ -17,8 +18,11 @@ module Softcover
       end
 
       def present?(program)
-        if program == :latex
+        case
+        when :latex
           File.exist?(`which xelatex`.chomp)
+        when :calibre
+          File.exist?(`which ebook-convert`.chomp)
         end
       end
 

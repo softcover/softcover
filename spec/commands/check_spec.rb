@@ -24,12 +24,14 @@ describe Softcover::Commands::Check do
 
   it { should match /all dependencies satisfied/i }
 
-  describe "LaTeX dependency" do
+  describe "missing dependencies" do
     before do
       Softcover::Commands::Check.stub(:present?).with(:latex).and_return(false)
+      Softcover::Commands::Check.stub(:present?).with(:calibre).
+                                                 and_return(false)
     end
 
-    it { should match /not found/i }
+    it { should match /Checking for LaTeX.*Not found/ }
+    it { should match /Checking for Calibre.*Not found/ }
   end
-
 end
