@@ -80,6 +80,13 @@ module Softcover
       rm('.highlight_cache')
     end
 
+    # ===============================================
+    # Clean
+    # ===============================================
+    desc "check", "Check dependencies"
+    def check
+      Softcover::Commands::Check.check_dependencies!
+    end
 
     # ===============================================
     # Server

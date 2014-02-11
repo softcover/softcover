@@ -169,4 +169,9 @@ describe Softcover::CLI do
       end
     end
   end
+
+  describe "check" do
+    subject { `softcover check` }
+    it { should match /all dependencies satisfied/i }
+  end
 end
