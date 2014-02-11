@@ -26,12 +26,18 @@ describe Softcover::Commands::Check do
 
   describe "missing dependencies" do
     before do
-      Softcover::Commands::Check.stub(:present?).with(:latex).and_return(false)
-      Softcover::Commands::Check.stub(:present?).with(:calibre).
-                                                 and_return(false)
+      Softcover::Commands::Check.dependency_labels.each do |label|
+        Softcover::Commands::Check.stub(:present?).with(label).and_return(false)
+      end
     end
 
-    it { should match /Checking for LaTeX.*Not found/ }
-    it { should match /Checking for Calibre.*Not found/ }
+    it { should match /Checking for LaTeX.*Missing/ }
+    it { should match /Checking for Calibre.*Missing/ }
+    it { should match /Checking for KindleGen.*Missing/ }
+    it { should match /Checking for Java.*Missing/ }
+    it { should match /Checking for GhostScript.*Missing/ }
+    it { should match /Checking for PhantomJS.*Missing/ }
+    it { should match /Checking for Inkscape.*Missing/ }
+    it { should match /Checking for EpubCheck.*Missing/ }
   end
 end
