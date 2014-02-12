@@ -5,6 +5,7 @@ module Softcover
       include Softcover::Utils
 
       def build!(options={})
+        make_png_from_gif
         if manifest.markdown?
           # Build the HTML to produce PolyTeX as a side-effect,
           # then update the manifest to reduce PDF generation
@@ -68,6 +69,24 @@ module Softcover
         # `pdflatex`, but has better support for Unicode.
         def xelatex
           @xelatex ||= executable(dependency_filename(:latex))
+        end
+
+        # Make a PNG for each GIF in the images/ directory.
+        def make_png_from_gif
+          gif_pattern = File.join('images', '**', '*.gif')
+          gif_files = Dir.glob(gif_pattern).reject { |f| File.directory?(f) }
+          gif_files.each do |gif|
+            dir = File.dirname(gif)
+            ext = File.extname(gif)
+            img = File.basename(gif, ext)
+            png = File.join(dir, "#{img}.png")
+            system "#{convert} #{gif} #{png}"
+          end
+        end
+
+        # Returns the executable to ImageMagick's `convert` program.
+        def convert
+          @convert ||= executable(dependency_filename(:convert))
         end
 
         # Returns the command to build the PDF (once).

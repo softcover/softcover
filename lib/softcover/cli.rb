@@ -81,7 +81,7 @@ module Softcover
     end
 
     # ===============================================
-    # Clean
+    # Check
     # ===============================================
     desc "check", "Check dependencies"
     def check

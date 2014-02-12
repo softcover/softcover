@@ -232,6 +232,8 @@ module Softcover::Utils
     case label
     when :latex
       `which xelatex`.chomp
+    when :convert
+      `which convert`.chomp
     when :phantomjs
       `which phantomjs`.chomp
     when :kindlegen
