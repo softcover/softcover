@@ -12,7 +12,7 @@ module Softcover
         else
           system(command)
         end
-        unless options[:kindlegen]
+        if options[:calibre]
           FileUtils.mv("ebooks/#{filename}.azw3", "ebooks/#{filename}.mobi")
           puts "MOBI saved to ebooks/#{filename}.mobi" unless silent
         end
@@ -25,10 +25,10 @@ module Softcover
 
       # Returns the command for making a MOBI, based on the options.
       def mobi_command(filename, options={})
-        if options[:kindlegen]
-          "#{kindlegen} ebooks/#{filename}.epub"
-        else
+        if options[:calibre]
           "#{calibre} ebooks/#{filename}.epub ebooks/#{filename}.azw3"
+        else
+          "#{kindlegen} ebooks/#{filename}.epub"
         end
       end
 
