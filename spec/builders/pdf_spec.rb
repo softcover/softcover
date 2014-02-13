@@ -24,6 +24,17 @@ describe Softcover::Builders::Pdf do
         end
       end
 
+      context "preamble file" do
+        subject(:preamble_file) { 'custom_preamble.tex' }
+        it { should exist }
+        # context "content" do
+        #   subject { File.read(preamble_file) }
+        #   it { should include '\documentclass' }
+        #   it { should include '\usepackage{latex_styles/softcover}' }
+        # end
+      end
+
+
       it "should prepend the fontsize verbatim declaration for source code" do
         fontsize = '\begin{Verbatim}[fontsize=\relsize'
         expect(File.read(Dir.glob('tmp/*.tmp.tex').first)).to include fontsize

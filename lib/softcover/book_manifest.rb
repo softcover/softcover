@@ -346,7 +346,8 @@ class Softcover::BookManifest < OpenStruct
       chapter_file_paths do |chapter_path|
         next if chapter_path =~ /frontmatter/
         unless File.exist?(chapter_path)
-          $stderr.puts "Chapter file in manifest not found in #{chapter_path}"
+          $stderr.puts "ERROR -- document not built"
+          $stderr.puts "Chapter file '#{chapter_path}'' not found"
           exit 1
         end
       end
