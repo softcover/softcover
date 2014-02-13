@@ -139,7 +139,9 @@ class Softcover::BookManifest < OpenStruct
     template_dir = File.join(File.dirname(__FILE__), 'template')
     files = [File.join(Softcover::Directories::CONFIG, 'marketing.yml'),
              path('images/cover-web.png'),
-             path('latex_styles/custom_pdf.sty')]
+             path('latex_styles/custom_pdf.sty'),
+             path('custom_preamble.tex')
+           ]
     files.each do |file|
       unless File.exist?(file)
         puts "Copying missing file '#{file}' from template"

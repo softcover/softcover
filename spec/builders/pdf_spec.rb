@@ -24,14 +24,17 @@ describe Softcover::Builders::Pdf do
         end
       end
 
-      context "preamble file" do
+      context "preamble" do
         subject(:preamble_file) { 'custom_preamble.tex' }
         it { should exist }
-        # context "content" do
-        #   subject { File.read(preamble_file) }
-        #   it { should include '\documentclass' }
-        #   it { should include '\usepackage{latex_styles/softcover}' }
-        # end
+        context "content" do
+          subject { Softcover::Utils::master_latex_header(builder.manifest) }
+          it { should include File.read(preamble_file) }
+          it { should include '\usepackage{latex_styles/softcover}' }
+          it { should include "\\title{#{builder.manifest.title}}" }
+          it { should include "\\author{#{builder.manifest.author}}" }
+          it { should include "\\date{#{builder.manifest.date}}" }
+        end
       end
 
 

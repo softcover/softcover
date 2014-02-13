@@ -103,15 +103,13 @@ module Softcover::Utils
       end
     end
     tex_file << '\end{document}'
-    tex_file.join("\n")
+    tex_file.join("\n") + "\n"
   end
 
   def master_latex_header(manifest)
-    preamble_filename = 'custom_preamble.tex'
-    # return File.read('') if
+    custom_preamble = File.read('custom_preamble.tex')
     subtitle = manifest.subtitle.nil? ? "" : "\\subtitle{#{manifest.subtitle}}"
-    preamble = <<-EOS
-\\documentclass[14pt]{extbook}
+    <<-EOS
 #{custom_preamble}
 \\usepackage{#{Softcover::Directories::STYLES}/softcover}
 \\VerbatimFootnotes % Allows verbatim text in footnotes
