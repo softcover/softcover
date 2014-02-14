@@ -97,9 +97,11 @@ module Softcover
       # unnecessary conversions.
       def polytex(chapter, markdown)
         File.write(chapter.cache_filename, digest(markdown))
+        language_labels = YAML.load_file('config/lang.yml')
         p = Polytexnic::Pipeline.new(markdown,
                                      source: :markdown,
-                                     custom_commands: Softcover.custom_styles)
+                                     custom_commands: Softcover.custom_styles,
+                                     language_labels: language_labels)
         p.polytex
       end
 
@@ -112,8 +114,10 @@ module Softcover
         polytex.gsub!(/(^\s*\\include{(.*?)})/) do
           File.read($2 + '.tex') + "\n"
         end
-        cc = Softcover.custom_styles
-        Polytexnic::Pipeline.new(polytex, custom_commands: cc).to_html
+        language_labels = YAML.load_file('config/lang.yml')
+        Polytexnic::Pipeline.new(polytex,
+                                 custom_commands: Softcover.custom_styles,
+                                 language_labels: language_labels).to_html
       end
 
       # Writes the full HTML file for the book.
