@@ -140,7 +140,8 @@ class Softcover::BookManifest < OpenStruct
     files = [File.join(Softcover::Directories::CONFIG, 'marketing.yml'),
              path('images/cover-web.png'),
              path('latex_styles/custom_pdf.sty'),
-             path('config/preamble.tex')
+             path('config/preamble.tex'),
+             path('config/lang.yml')
            ]
     files.each do |file|
       unless File.exist?(file)

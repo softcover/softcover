@@ -69,7 +69,11 @@ module Softcover
       def listing_customization
         language_labels = YAML.load_file('config/lang.yml')
         listing = language_labels["listing"].downcase
+        box     = language_labels["aside"]
         <<-EOS
+% Aside box label
+\\renewcommand{\\boxlabel}{#{box}}
+
 % Codelisting captions
 \\usepackage[hypcap=false]{caption}
 \\DeclareCaptionFormat{#{listing}}{\\hspace{-0.2em}\\colorbox[gray]{.85}{\\hspace{0.1em}\\parbox{0.997\\textwidth}{#1#2#3}}\\vspace{-1.3\\baselineskip}}
