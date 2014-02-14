@@ -25,7 +25,7 @@ describe Softcover::Builders::Pdf do
       end
 
       context "preamble" do
-        subject(:preamble_file) { 'custom_preamble.tex' }
+        subject(:preamble_file) { File.join('config', 'custom_preamble.tex') }
         it { should exist }
         context "content" do
           subject { Softcover::Utils::master_latex_header(builder.manifest) }

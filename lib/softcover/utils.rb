@@ -107,7 +107,7 @@ module Softcover::Utils
   end
 
   def master_latex_header(manifest)
-    custom_preamble = File.read('custom_preamble.tex')
+    custom_preamble = File.read(path('config/custom_preamble.tex'))
     subtitle = manifest.subtitle.nil? ? "" : "\\subtitle{#{manifest.subtitle}}"
     <<-EOS
 #{custom_preamble}
