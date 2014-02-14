@@ -124,7 +124,8 @@
 % Aside boxes
 \usepackage{amsthm}
 \theoremstyle{definition}
-\newtheorem{aside}{Box}[chapter]
+\newcommand{\boxlabel}{Box}
+\newtheorem{aside}{\boxlabel}[chapter]
 \usepackage{latex_styles/framed}
 \definecolor{shadecolor}{gray}{0.97}
 \definecolor{boxcolor}{gray}{0.10}
