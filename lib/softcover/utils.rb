@@ -263,4 +263,13 @@ module Softcover::Utils
   def language_labels
     YAML.load_file(File.join(Softcover::Directories::CONFIG, 'lang.yml'))
   end
+
+  def chapter_label(chapter_number)
+    if language_labels["chapter"]["order"] == "reverse"
+      "#{chapter_number} #{language_labels['chapter']['word']}"
+    else
+      "#{language_labels['chapter']['word']} #{chapter_number}"
+    end
+  end
+
 end

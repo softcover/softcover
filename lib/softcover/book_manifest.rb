@@ -42,12 +42,7 @@ class Softcover::BookManifest < OpenStruct
       if chapter_number.zero?
         html
       else
-        chapter = if language_labels["chapter"]["order"] == "reverse"
-                    "#{chapter_number} #{language_labels['chapter']['word']}"
-                  else
-                    "#{language_labels['chapter']['word']} #{chapter_number}"
-                  end
-        "#{chapter}: #{html}"
+        "#{chapter_label(chapter_number)}: #{html}"
       end
     end
 
@@ -114,7 +109,7 @@ class Softcover::BookManifest < OpenStruct
       if base_contents.match(/frontmatter/)
         @frontmatter = true
         chapters.push Chapter.new(slug:  'frontmatter',
-                                  title: 'Frontmatter',
+                                  title: language_labels["frontmatter"],
                                   sections: nil,
                                   chapter_number: 0)
       end

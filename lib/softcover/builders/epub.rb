@@ -393,7 +393,7 @@ module Softcover
       end
 
       def chapter_name(n)
-        n == 0 ? "Frontmatter" : "Chapter #{n}"
+        n == 0 ? language_labels["frontmatter"] : chapter_label(n)
       end
 
       # Returns the nav HTML content.
