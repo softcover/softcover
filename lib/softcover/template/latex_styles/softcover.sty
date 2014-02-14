@@ -114,12 +114,7 @@
 \numberwithin{codelisting}{chapter}
 \newenvironment{codelisting}{\refstepcounter{codelisting}\begin{framed_shaded}\vspace{-0.5em}}%
 {\end{framed_shaded}}
-% Codelisting captions
-\usepackage[hypcap=false]{caption}
-\DeclareCaptionFormat{listing}{\hspace{-0.2em}\colorbox[gray]{.85}{\hspace{0.1em}\parbox{0.997\textwidth}{#1#2#3}}\vspace{-1.3\baselineskip}}
-\captionsetup[listing]{format=listing,labelfont=bf,skip=16pt,font={rm,normalsize}}
-\DeclareCaptionType{listing}
-\newcommand{\codecaption}[1]{\captionof{listing}{#1}}
+% See latex_styles/language_customization.sty for codelisting captions.
 
 % Aside boxes
 \usepackage{amsthm}
@@ -144,6 +139,8 @@
     \begin{center}\large#1\end{center}
     \vskip0.5em}%
 }
+
+\usepackage{latex_styles/language_customization}
 
 % Add custom commands.
 \usepackage{latex_styles/custom}

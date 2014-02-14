@@ -37,7 +37,6 @@ describe Softcover::Builders::Pdf do
         end
       end
 
-
       it "should prepend the fontsize verbatim declaration for source code" do
         fontsize = '\begin{Verbatim}[fontsize=\relsize'
         expect(File.read(Dir.glob('tmp/*.tmp.tex').first)).to include fontsize
@@ -64,6 +63,12 @@ describe Softcover::Builders::Pdf do
         styles = File.join(Softcover::Directories::STYLES,
                            'polytexnic_commands.sty')
         expect(File.read(styles)).to match /newcommand/
+      end
+
+      context "language customization file" do
+        subject { File.join(Softcover::Directories::STYLES,
+                            'language_customization.sty') }
+        it { should exist }
       end
 
       context "after removing Book.txt" do

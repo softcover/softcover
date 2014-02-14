@@ -10,6 +10,7 @@ module Softcover
       @built_files = []
       ensure_style_file_locations
       write_polytexnic_commands_file
+      write_language_customization_file
     end
 
     def build!(options={})
@@ -51,8 +52,32 @@ module Softcover
 
       # Writes out the PolyTeXnic commands from polytexnic.
       def write_polytexnic_commands_file
-        styles_dir = File.join(Dir.pwd, Softcover::Directories::STYLES)
         Polytexnic.write_polytexnic_style_file(styles_dir)
       end
+
+      def write_language_customization_file
+        filename = File.join(styles_dir, 'language_customization.sty')
+        contents = listing_customization
+        File.write(filename, contents)
+      end
+
+      def styles_dir
+        File.join(Dir.pwd, Softcover::Directories::STYLES)
+      end
+
+
+      def listing_customization
+        language_labels = YAML.load_file('config/lang.yml')
+        listing = language_labels["listing"].downcase
+        <<-EOS
+% Codelisting captions
+\\usepackage[hypcap=false]{caption}
+\\DeclareCaptionFormat{#{listing}}{\\hspace{-0.2em}\\colorbox[gray]{.85}{\\hspace{0.1em}\\parbox{0.997\\textwidth}{#1#2#3}}\\vspace{-1.3\\baselineskip}}
+\\captionsetup[#{listing}]{format=#{listing},labelfont=bf,skip=16pt,font={rm,normalsize}}
+\\DeclareCaptionType{#{listing}}
+\\newcommand{\\codecaption}[1]{\\captionof{#{listing}}{#1}}
+        EOS
+      end
+
   end
 end

@@ -1,11 +1,11 @@
 ---
-translations:
-  chapter:
-    label: Chapter
-    order: standard     # Use 'reverse' to change 'Chapter 1' to '1 Chapter'
-  table: Table
-  figure: Figure
-  box: Box
-  listing: Listing
-  equation: Equation
-  eq: Eq
+chapter:
+  word: Chapter
+  order: standard     # Use 'reverse' to change 'Chapter 1' to '1 Chapter'
+table: Table
+figure: Figure
+aside: Box
+listing: Listing
+equation: Equation
+eq: Eq
+contents: Contents
