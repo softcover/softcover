@@ -30,7 +30,6 @@ module Softcover
         polytex_filenames = manifest.pdf_chapter_filenames << book_filename
         polytex_filenames.each do |filename|
           polytex = File.read(filename)
-          language_labels = YAML.load_file('config/lang.yml')
           latex   = Polytexnic::Pipeline.new(polytex,
                                              language_labels: language_labels).
                                             to_latex

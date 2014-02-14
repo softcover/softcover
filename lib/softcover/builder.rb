@@ -67,7 +67,6 @@ module Softcover
 
 
       def listing_customization
-        language_labels = YAML.load_file('config/lang.yml')
         listing = language_labels["listing"].downcase
         box     = language_labels["aside"]
         <<-EOS

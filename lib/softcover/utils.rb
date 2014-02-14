@@ -258,7 +258,9 @@ module Softcover::Utils
       raise "Unknown label #{label}"
     end
   end
+
+  # Returns the language labels from the config file.
+  def language_labels
+    YAML.load_file(File.join(Softcover::Directories::CONFIG, 'lang.yml'))
+  end
 end
-
-
-
