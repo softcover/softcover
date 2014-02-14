@@ -35,9 +35,38 @@ class Softcover::BookManifest < OpenStruct
 
     # Returns a chapter heading for use in the navigation menu.
     def menu_heading
-      raw_html = Polytexnic::Pipeline.new(title).to_html
+      language_labels = YAML.load_file('config/lang.yml')
+      raw_html = Polytexnic::Pipeline.new(title,
+                                          language_labels: language_labels).
+                                         to_html
       html = Nokogiri::HTML(raw_html).at_css('p').inner_html
-      chapter_number.zero? ? html : "Chapter #{chapter_number}: #{html}"
+      if chapter_number.zero?
+        html
+      else
+        chapter = if language_labels["chapter"]["order"] == "reverse"
+                    "#{chapter_number} #{lang['chapter']['word']}"
+                  else
+                    "#{lang['chapter']['word']} #{chapter_number}"
+                  end
+      end
+    end
+
+    def menu_heading
+      language_labels = YAML.load_file('config/lang.yml')
+      raw_html = Polytexnic::Pipeline.new(title,
+                                          language_labels: language_labels).
+                                         to_html
+      html = Nokogiri::HTML(raw_html).at_css('p').inner_html
+      if chapter_number.zero?
+        html
+      else
+        chapter = if language_labels["chapter"]["order"] == "reverse"
+                    "#{chapter_number} #{language_labels['chapter']['word']}"
+                  else
+                    "#{language_labels['chapter']['word']} #{chapter_number}"
+                  end
+        "#{chapter}: #{html}"
+      end
     end
 
     def to_hash
