@@ -34,6 +34,7 @@ module Softcover
         [[:latex,       'LaTeX'],
          [:ghostscript, 'GhostScript'],
          [:convert,     'ImageMagick'],
+         [:node,        'Node.js'],
          [:phantomjs,   'PhantomJS'],
          [:inkscape,    'Inkscape'],
          [:calibre,     'Calibre'],
@@ -58,6 +59,8 @@ module Softcover
           message += "      ∟ Huge download—start it now!"
         when :convert
           "ImageMagick (http://www.imagemagick.org/script/binary-releases.php)"
+        when :node
+          "NodeJS (http://nodejs.org/)"
         when :phantomjs
           "PhantomJS (http://phantomjs.org/)"
         when :kindlegen

@@ -40,6 +40,7 @@ describe Softcover::Commands::Check do
     it { should match /Checking for EpubCheck.*Missing/ }
     it { should match /Checking for GhostScript.*Missing/ }
     it { should match /Checking for ImageMagick.*Missing/ }
+    it { should match /Checking for Node\.js.*Missing/ }
 
     it { should match /Missing dependencies:/ }
     it { should match /LaTeX/ }
@@ -51,5 +52,6 @@ describe Softcover::Commands::Check do
     it { should match /EpubCheck/ }
     it { should match /GhostScript/ }
     it { should match /ImageMagick/ }
+    it { should match /Node\.js/ }
   end
 end

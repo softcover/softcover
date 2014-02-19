@@ -235,6 +235,8 @@ module Softcover::Utils
       `which xelatex`.chomp
     when :convert
       `which convert`.chomp
+    when :node
+      `which node`.chomp
     when :phantomjs
       `which phantomjs`.chomp
     when :kindlegen
