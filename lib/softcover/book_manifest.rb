@@ -147,7 +147,8 @@ class Softcover::BookManifest < OpenStruct
              path('images/cover-web.png'),
              path('latex_styles/custom_pdf.sty'),
              path('config/preamble.tex'),
-             path('config/lang.yml')
+             path('config/lang.yml'),
+             path('epub/OEBPS/styles/custom_epub.css')
            ]
     files.each do |file|
       unless File.exist?(file)

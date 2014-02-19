@@ -334,6 +334,7 @@ module Softcover
         <item id="softcover.css" href="styles/softcover.css" media-type="text/css"/>
         <item id="epub.css" href="styles/epub.css" media-type="text/css"/>
         <item id="custom.css" href="styles/custom.css" media-type="text/css"/>
+        <item id="custom_epub.css" href="styles/custom_epub.css" media-type="text/css"/>
         <item id="cover" href="cover.html" media-type="application/xhtml+xml"/>
         #{man_ch.join("\n")}
         #{images.join("\n")}
@@ -432,6 +433,7 @@ module Softcover
           <link rel="stylesheet" href="styles/softcover.css" type="text/css" />
           <link rel="stylesheet" href="styles/epub.css" type="text/css" />
           <link rel="stylesheet" href="styles/custom.css" type="text/css"/>
+          <link rel="stylesheet" href="styles/custom_epub.css" type="text/css"/>
           <link rel="stylesheet" type="application/vnd.adobe-page-template+xml" href="styles/page-template.xpgt" />
         </head>
 

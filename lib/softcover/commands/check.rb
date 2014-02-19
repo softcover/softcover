@@ -17,9 +17,9 @@ module Softcover
             missing_dependencies << label
             puts "Missing"
           end
-          simulate_work(0.15)
+          simulate_work(0.1)
         end
-        simulate_work(0.5)
+        simulate_work(0.25)
         if missing_dependencies.empty?
           puts "All dependencies satisfied."
         else
