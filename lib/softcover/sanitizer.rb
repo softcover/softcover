@@ -33,7 +33,7 @@ module Softcover
           'table'   => %w{id class},
           'tbody'   => %w{id class},
           'tr'   => %w{id class},
-          'td'   => %w{id class}
+          'td'   => %w{id class colspan}
         },
         protocols: {
           'a'   => {'href' => [:relative, 'http', 'https', 'mailto']},
