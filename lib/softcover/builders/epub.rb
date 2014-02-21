@@ -177,20 +177,12 @@ module Softcover
 
       # Returns the PhantomJS executable (if available).
       def phantomjs
-        filename = `which phantomjs`.chomp
-        message  = "Install PhantomJS (http://phantomjs.org/)"
-        @phantomjs ||= executable(filename, message)
+        @phantomjs ||= executable(dependency_filename(:phantomjs))
       end
 
       # Returns the Inkscape executable (if available).
       def inkscape
-        filename = `which inkscape`.chomp
-        if filename.empty?
-          filename = '/Applications/Inkscape.app/Contents/Resources/bin/' +
-                     'inkscape'
-        end
-        message  = "Install Inkscape (http://inkscape.org/)"
-        @inkscape ||= executable(filename, message)
+        @inkscape ||= executable(dependency_filename(:inkscape))
       end
 
       # Strip attributes that are invalid in EPUB documents.
@@ -342,6 +334,7 @@ module Softcover
         <item id="softcover.css" href="styles/softcover.css" media-type="text/css"/>
         <item id="epub.css" href="styles/epub.css" media-type="text/css"/>
         <item id="custom.css" href="styles/custom.css" media-type="text/css"/>
+        <item id="custom_epub.css" href="styles/custom_epub.css" media-type="text/css"/>
         <item id="cover" href="cover.html" media-type="application/xhtml+xml"/>
         #{man_ch.join("\n")}
         #{images.join("\n")}
@@ -401,7 +394,7 @@ module Softcover
       end
 
       def chapter_name(n)
-        n == 0 ? "Frontmatter" : "Chapter #{n}"
+        n == 0 ? language_labels["frontmatter"] : chapter_label(n)
       end
 
       # Returns the nav HTML content.
@@ -440,6 +433,7 @@ module Softcover
           <link rel="stylesheet" href="styles/softcover.css" type="text/css" />
           <link rel="stylesheet" href="styles/epub.css" type="text/css" />
           <link rel="stylesheet" href="styles/custom.css" type="text/css"/>
+          <link rel="stylesheet" href="styles/custom_epub.css" type="text/css"/>
           <link rel="stylesheet" type="application/vnd.adobe-page-template+xml" href="styles/page-template.xpgt" />
         </head>
 

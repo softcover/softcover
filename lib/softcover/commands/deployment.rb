@@ -30,13 +30,6 @@ module Softcover
       def deploy_config
         '.softcover-deploy'
       end
-
-      # Returns the commands from the given lines.
-      # We skip comments and blank lines.
-      def commands(lines)
-        skip = /(^\s*#|^\s*$)/
-        lines.reject { |line| line =~ skip }.join("\n")
-      end
     end
   end
 end

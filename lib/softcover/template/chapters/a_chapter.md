@@ -75,6 +75,12 @@ Softcover supports the inclusion of images, like this:
 
 ![Some dude.](images/2011_michael_hartl.png)
 
+Using \LaTeX\ labels, you can also include a caption (as in Figure~\ref{fig:captioned_image}) or just a figure number (as in Figure~\ref{fig:figure_number}).
+
+![Some dude.\label{fig:captioned_image}](images/2011_michael_hartl.png)
+
+![\label{fig:figure_number}](images/2011_michael_hartl.png)
+
 ### Tables
 
 Softcover supports raw tables via a simple table syntax:
@@ -88,6 +94,7 @@ Softcover supports raw tables via a simple table syntax:
 | `PATCH` | /users/1 | `update` | update user with id `1` |
 | `DELETE` | /users/1 | `destroy` | delete user with id `1` |
 
+See [*The Softcover Book*](http://manual.softcover.io/book/softcover_markdown#sec-embedded_tabular_and_tables) to learn how to make more complicated tables.
 
 ## Command-line interface
 
@@ -102,17 +109,9 @@ Commands:
   softcover build:mobi                 # Build MOBI
   softcover build:pdf                  # Build PDF
   softcover build:preview              # Build book preview in all formats
-  softcover config                     # View local config
-  softcover config:add key=value       # Add to your local config vars
-  softcover epub:validate, epub:check  # Validate EPUB with epubcheck
-  softcover help [COMMAND]             # Describe available commands...
-  softcover login                      # Log into Softcover account
-  softcover logout                     # Log out of Softcover account
-  softcover new <name>                 # Generate new book directory structure.
-  softcover open                       # Open book on Softcover website (OS X)
-  softcover publish                    # Publish your book on Softcover
-  softcover publish:screencasts        # Publish screencasts
-  softcover server                     # Run local server
+  .
+  .
+  .
 ```
 
 \noindent You can run `softcover help <command>` to get additional help on a given command:

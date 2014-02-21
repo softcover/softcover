@@ -35,9 +35,15 @@ class Softcover::BookManifest < OpenStruct
 
     # Returns a chapter heading for use in the navigation menu.
     def menu_heading
-      raw_html = Polytexnic::Pipeline.new(title).to_html
+      raw_html = Polytexnic::Pipeline.new(title,
+                                          language_labels: language_labels).
+                                         to_html
       html = Nokogiri::HTML(raw_html).at_css('p').inner_html
-      chapter_number.zero? ? html : "Chapter #{chapter_number}: #{html}"
+      if chapter_number.zero?
+        html
+      else
+        "#{chapter_label(chapter_number)}: #{html}"
+      end
     end
 
     def to_hash
@@ -103,7 +109,7 @@ class Softcover::BookManifest < OpenStruct
       if base_contents.match(/frontmatter/)
         @frontmatter = true
         chapters.push Chapter.new(slug:  'frontmatter',
-                                  title: 'Frontmatter',
+                                  title: language_labels["frontmatter"],
                                   sections: nil,
                                   chapter_number: 0)
       end
@@ -139,7 +145,11 @@ class Softcover::BookManifest < OpenStruct
     template_dir = File.join(File.dirname(__FILE__), 'template')
     files = [File.join(Softcover::Directories::CONFIG, 'marketing.yml'),
              path('images/cover-web.png'),
-             path('latex_styles/custom_pdf.sty')]
+             path('latex_styles/custom_pdf.sty'),
+             path('config/preamble.tex'),
+             path('config/lang.yml'),
+             path('epub/OEBPS/styles/custom_epub.css')
+           ]
     files.each do |file|
       unless File.exist?(file)
         puts "Copying missing file '#{file}' from template"
@@ -346,7 +356,9 @@ class Softcover::BookManifest < OpenStruct
       chapter_file_paths do |chapter_path|
         next if chapter_path =~ /frontmatter/
         unless File.exist?(chapter_path)
-          raise "Chapter file in manifest not found in #{chapter_path}"
+          $stderr.puts "ERROR -- document not built"
+          $stderr.puts "Chapter file '#{chapter_path}'' not found"
+          exit 1
         end
       end
     end

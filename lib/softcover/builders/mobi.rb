@@ -12,7 +12,7 @@ module Softcover
         else
           system(command)
         end
-        unless options[:kindlegen]
+        if options[:calibre]
           FileUtils.mv("ebooks/#{filename}.azw3", "ebooks/#{filename}.mobi")
           puts "MOBI saved to ebooks/#{filename}.mobi" unless silent
         end
@@ -25,28 +25,21 @@ module Softcover
 
       # Returns the command for making a MOBI, based on the options.
       def mobi_command(filename, options={})
-        if options[:kindlegen]
-          "#{kindlegen} ebooks/#{filename}.epub"
-        else
+        if options[:calibre]
           "#{calibre} ebooks/#{filename}.epub ebooks/#{filename}.azw3"
+        else
+          "#{kindlegen} ebooks/#{filename}.epub"
         end
       end
 
       private
 
         def calibre
-          filename = `which ebook-convert`.chomp
-          url = 'http://calibre-ebook.com/'
-          message  = "Install Calibre (#{url}) and enable command line tools"
-          message += " (http://manual.calibre-ebook.com/cli/cli-index.html)"
-          @calibre ||= executable(filename, message)
+          @calibre ||= executable(dependency_filename(:calibre))
         end
 
         def kindlegen
-          filename = `which kindlegen`.chomp
-          url = 'http://www.amazon.com/gp/feature.html?ie=UTF8&docId=1000765211'
-          message  = "Install kindlegen (#{url})"
-          @kindlegen ||= executable(filename, message)
+          @kindlegen ||= executable(dependency_filename(:kindlegen))
         end
     end
   end

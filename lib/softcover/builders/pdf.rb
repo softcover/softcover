@@ -5,6 +5,7 @@ module Softcover
       include Softcover::Utils
 
       def build!(options={})
+        make_png_from_gif
         if manifest.markdown?
           # Build the HTML to produce PolyTeX as a side-effect,
           # then update the manifest to reduce PDF generation
@@ -29,7 +30,9 @@ module Softcover
         polytex_filenames = manifest.pdf_chapter_filenames << book_filename
         polytex_filenames.each do |filename|
           polytex = File.read(filename)
-          latex   = Polytexnic::Pipeline.new(polytex).to_latex
+          latex   = Polytexnic::Pipeline.new(polytex,
+                                             language_labels: language_labels).
+                                            to_latex
           if filename == book_filename
             latex.gsub!(/\\include{(.*?)}/) do
               "\\include{#{Softcover::Utils.tmpify(manifest, $1)}.tmp}"
@@ -67,9 +70,25 @@ module Softcover
         # The `xelatex` program is roughly equivalent to the more standard
         # `pdflatex`, but has better support for Unicode.
         def xelatex
-          filename = `which xelatex`.chomp
-          message  = "Install LaTeX (http://latex-project.org/ftp.html)"
-          @xelatex ||= executable(filename, message)
+          @xelatex ||= executable(dependency_filename(:latex))
+        end
+
+        # Make a PNG for each GIF in the images/ directory.
+        def make_png_from_gif
+          gif_pattern = File.join('images', '**', '*.gif')
+          gif_files = Dir.glob(gif_pattern).reject { |f| File.directory?(f) }
+          gif_files.each do |gif|
+            dir = File.dirname(gif)
+            ext = File.extname(gif)
+            img = File.basename(gif, ext)
+            png = File.join(dir, "#{img}.png")
+            system "#{convert} #{gif} #{png}"
+          end
+        end
+
+        # Returns the executable to ImageMagick's `convert` program.
+        def convert
+          @convert ||= executable(dependency_filename(:convert))
         end
 
         # Returns the command to build the PDF (once).

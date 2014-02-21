@@ -103,13 +103,14 @@ module Softcover::Utils
       end
     end
     tex_file << '\end{document}'
-    tex_file.join("\n")
+    tex_file.join("\n") + "\n"
   end
 
   def master_latex_header(manifest)
+    preamble = File.read(path('config/preamble.tex'))
     subtitle = manifest.subtitle.nil? ? "" : "\\subtitle{#{manifest.subtitle}}"
     <<-EOS
-\\documentclass[14pt]{extbook}
+#{preamble}
 \\usepackage{#{Softcover::Directories::STYLES}/softcover}
 \\VerbatimFootnotes % Allows verbatim text in footnotes
 \\title{#{manifest.title}}
@@ -165,11 +166,11 @@ module Softcover::Utils
   end
 
   # Returns the executable if it exists, raising an error otherwise.
-  def executable(filename, message)
+  def executable(filename)
     filename.tap do |f|
       unless File.exist?(f)
         $stderr.puts "Document not built due to missing dependency"
-        $stderr.puts message
+        $stderr.puts "Run `softcover check` to check dependencies"
         exit 1
       end
     end
@@ -179,8 +180,13 @@ module Softcover::Utils
     Dir.mkdir(dir) unless File.directory?(dir)
   end
 
+  # Removes a file (or list of files).
   def rm(file)
-    FileUtils.rm(file) if File.exist?(file)
+    if file.is_a?(Array)
+      file.each { |f| rm(f) }
+    else
+      FileUtils.rm(file) if File.exist?(file)
+    end
   end
 
   # Returns the system-independent file path.
@@ -214,5 +220,58 @@ module Softcover::Utils
   def linux?
     RUBY_PLATFORM.match(/linux/)
   end
-end
 
+  # Returns the commands from the given lines.
+  # We skip comments and blank lines.
+  def commands(lines)
+    skip = /(^\s*#|^\s*$)/
+    lines.reject { |line| line =~ skip }.join("\n")
+  end
+
+  # Returns the filename of a dependency given a label.
+  def dependency_filename(label)
+    case label
+    when :latex
+      `which xelatex`.chomp
+    when :convert
+      `which convert`.chomp
+    when :node
+      `which node`.chomp
+    when :phantomjs
+      `which phantomjs`.chomp
+    when :kindlegen
+      `which kindlegen`.chomp
+    when :java
+      `which java`.chomp
+    when :calibre
+      `which ebook-convert`.chomp
+    when :ghostscript
+      `which gs`.chomp
+    when :epubcheck
+      File.join(Dir.home, 'epubcheck-3.0', 'epubcheck-3.0.jar')
+    when :inkscape
+      filename = `which inkscape`.chomp
+      if filename.empty?
+        filename = '/Applications/Inkscape.app/Contents/Resources/bin/' +
+                   'inkscape'
+      end
+      filename
+    else
+      raise "Unknown label #{label}"
+    end
+  end
+
+  # Returns the language labels from the config file.
+  def language_labels
+    YAML.load_file(File.join(Softcover::Directories::CONFIG, 'lang.yml'))
+  end
+
+  def chapter_label(chapter_number)
+    if language_labels["chapter"]["order"] == "reverse"
+      "#{chapter_number} #{language_labels['chapter']['word']}"
+    else
+      "#{language_labels['chapter']['word']} #{chapter_number}"
+    end
+  end
+
+end

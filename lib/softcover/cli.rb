@@ -42,9 +42,9 @@ module Softcover
                                         desc: "Find overfull hboxes",
                                         type: :boolean
       elsif format == 'mobi'
-        method_option :kindlegen, aliases: '-k',
-                                  desc: "Use kindlegen to build the MOBI",
-                                  type: :boolean
+        method_option :calibre, aliases: '-c',
+                                desc: "Use Calibre to build the MOBI",
+                                type: :boolean
       end
       method_option :quiet, aliases: '-q',
                             desc: "Quiet output", type: :boolean
@@ -65,6 +65,27 @@ module Softcover
                            desc: "Silent output", type: :boolean
     define_method "build:preview" do
       Softcover::Commands::Build.preview(options)
+    end
+
+    # ===============================================
+    # Clean
+    # ===============================================
+    desc "clean", "Clean unneeded files"
+    def clean
+      rm(Dir.glob('*.aux'))
+      rm(Dir.glob('*.toc'))
+      rm(Dir.glob('*.out'))
+      rm(Dir.glob('*.tmp.*'))
+      rm(Dir.glob(path('tmp/*')))
+      rm('.highlight_cache')
+    end
+
+    # ===============================================
+    # Check
+    # ===============================================
+    desc "check", "Check dependencies"
+    def check
+      Softcover::Commands::Check.check_dependencies!
     end
 
     # ===============================================

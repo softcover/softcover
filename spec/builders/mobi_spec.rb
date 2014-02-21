@@ -16,7 +16,9 @@ describe Softcover::Builders::Mobi do
 
     describe "MOBI command" do
       context "default" do
-        let(:command) { @builder.mobi_command(@builder.mobi_filename) }
+        let(:command) do
+          @builder.mobi_command(@builder.mobi_filename, calibre: true)
+        end
         it "should use Calibre's ebook-convert" do
           expect(command).to include 'ebook-convert'
         end
@@ -24,7 +26,7 @@ describe Softcover::Builders::Mobi do
 
       context "kindlegen" do
         let(:command) do
-          @builder.mobi_command(@builder.mobi_filename, kindlegen: true)
+          @builder.mobi_command(@builder.mobi_filename)
         end
         it "should use Amazon.com's kindlegen" do
           expect(command).to include 'kindlegen'
@@ -35,7 +37,7 @@ describe Softcover::Builders::Mobi do
         let(:filename) do
           @builder.mobi_filename(preview: true)
         end
-        it "should use Calibre's ebook-convert" do
+        it "should create a preview file" do
           expect(filename).to include 'book-preview'
         end
       end

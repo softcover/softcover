@@ -1,7 +1,7 @@
 \chapter{A chapter}
 \label{cha:a_chapter}
 
-This is the first paragraph of the Softcover template. It shows how to write a document in \PolyTeX, a subset of the \LaTeX\ typesetting language optimized for ebooks. For more information, see \href{http://manual.softcover.org/book}{\emph{The Softcover Book}} and the \href{http://example.com}{\PolyTeX\ source of the book}. To learn how to easily publish (and optionally sell) documents produced with Softcover, visit \href{http://softcover.io/}{Softcover.io}. Softcover is currently in private beta; go to \href{http://softcover.io/}{Softcover.io} to get an invitation.
+This is the first paragraph of the Softcover template. It shows how to write a document in \PolyTeX, a subset of the \LaTeX\ typesetting language optimized for ebooks. For more information, see \href{http://manual.softcover.org/book}{\emph{The Softcover Book}}. To learn how to easily publish (and optionally sell) documents produced with Softcover, visit \href{http://softcover.io/}{Softcover.io}. Softcover is currently in private beta; go to \href{http://softcover.io/}{Softcover.io} to get an invitation.
 
 This is the \emph{second} paragraph, showing how to emphasize text.\footnote{This is a footnote. It is numbered automatically.} You can also make text \textbf{bold} or \textit{italicized} (which looks the same as emphasized text).
 
@@ -22,7 +22,7 @@ def hello
   puts "hello, world!"
 end
 \end{code}
-\noindent Softcover can highlight any language supported by \href{http://pygments.org/languages/}{Pygments} (which means most of them).
+\noindent Softcover can highlight any language supported by \href{http://pygments.org/languages/}{Pygments} (which is most of them).
 
 You can also define \emph{code listings}, as seen in Listing~\ref{code:hello_world}. Such code listings are automatically numbered and linked.
 
@@ -39,7 +39,7 @@ end
 
 You can indicate inline code with the \verb+\kode+ command, as in \kode{current\_\-user}. If you prefer a plainer version of the same thing, you can use ``typewriter text'', as in \texttt{current\_\-user}.
 
-For words whose hypenation isn't built in, you can indicate an optional hyphen using \verb+\-+ (Listing~\ref{code:hyphenation}), which will only be used if necessary to make a clean line break (and even then only when producing PDFs). You can also define global hyphenation rules in \texttt{custom.sty}, which includes a rule for hyphenating ``JavaScript'' (Listing~\ref{code:custom}).
+For words whose hypenation isn't built in, you can indicate an optional hyphen using \verb+\-+ (Listing~\ref{code:hyphenation}), which will only be used if necessary to make a clean line break (and even then only when producing PDFs). You can also define global hyphenation rules in \texttt{custom\_pdf.sty}, which includes a rule for hyphenating ``JavaScript'' (Listing~\ref{code:custom}).
 
 \begin{codelisting}
 \label{code:hyphenation}
@@ -52,8 +52,8 @@ current\_\-user
 
 \begin{codelisting}
 \label{code:custom}
-\codecaption{Defining custom commands. \\ \filepath{latex\_styles/custom.sty}}
-%= <<(latex_styles/custom.sty, lang: tex)
+\codecaption{Defining custom commands. \\ \filepath{latex\_styles/custom\_pdf.sty}}
+%= <<(latex_styles/custom_pdf.sty, lang: tex)
 \end{codelisting}
 
 Listing~\ref{code:hyphenation} also shows how to escape the underscore character using a backslash. This is necessary because plain underscores are reserved for math environments (Section~\ref{sec:mathematics}).
@@ -140,11 +140,11 @@ Softcover supports raw tables via the \kode{tabular} environment. To make a tabu
 
 \section{Command-line interface}
 
-Softcover comes with a command-line interface called \kode{poly}. To get more information, just run \kode{softcoverhelp}:
+Softcover comes with a command-line interface called \kode{poly}. To get more information, just run \kode{softcover help}:
 
 %= lang:console
 \begin{code}
-$ softcoverhelp
+$ softcover help
 Commands:
   softcover build, build:all           # Build all formats
   softcover build:epub                 # Build EPUB
@@ -152,26 +152,18 @@ Commands:
   softcover build:mobi                 # Build MOBI
   softcover build:pdf                  # Build PDF
   softcover build:preview              # Build book preview in all formats
-  softcover config                     # View local config
-  softcover config:add key=value       # Add to your local config vars
-  softcover epub:validate, epub:check  # Validate EPUB with epubcheck
-  softcover help [COMMAND]             # Describe available commands...
-  softcover login                      # Log into Softcover account
-  softcover logout                     # Log out of Softcover account
-  softcover new <name>                 # Generate new book directory structure.
-  softcover open                       # Open book on Softcover website (OS X)
-  softcover publish                    # Publish your book on Softcover
-  softcover publish:screencasts        # Publish screencasts
-  softcover server                     # Run local server
+  .
+  .
+  .
 \end{code}
 
 \noindent You can run \kode{softcover help <command>} to get additional help on a given command:
 
 %= lang:console
 \begin{code}
-$ softcoverhelp build
+$ softcover help build
 Usage:
-  softcoverbuild, build:all
+  softcover build, build:all
 
 Options:
   -q, [--quiet]   # Quiet output
