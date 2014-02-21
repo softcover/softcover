@@ -29,7 +29,11 @@ module Softcover
           'img'  => %w{id class src alt},
           'em'   => %w{id class},
           'code' => %w{id class},
-          'strong' => %w{id class}
+          'strong' => %w{id class},
+          'table'   => %w{id class},
+          'tbody'   => %w{id class},
+          'tr'   => %w{id class},
+          'td'   => %w{id class}
         },
         protocols: {
           'a'   => {'href' => [:relative, 'http', 'https', 'mailto']},
