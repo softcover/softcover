@@ -153,6 +153,7 @@ class Softcover::BookManifest < OpenStruct
     files.each do |file|
       unless File.exist?(file)
         puts "Copying missing file '#{file}' from template"
+        FileUtils.mkdir_p(File.dirname(file))
         FileUtils.cp(File.join(template_dir, file), file)
       end
     end
