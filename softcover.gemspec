@@ -22,7 +22,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'msgpack', '~> 0.4.2'
   gem.add_dependency 'nokogiri', '~> 1.6.0'
   gem.add_dependency 'thor', '~> 0.18.1'
-  gem.add_dependency 'activesupport', '~> 4.0.3'
+  gem.add_dependency 'activesupport', '~> 3.2.16'
   gem.add_dependency 'rest-client', '~> 1.6.7'
   gem.add_dependency 'curb', '~> 0.8.5'
   gem.add_dependency 'ruby-progressbar', '~> 1.4.1'
