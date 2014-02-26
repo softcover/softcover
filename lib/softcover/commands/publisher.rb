@@ -89,7 +89,26 @@ module Softcover::Commands::Publisher
     puts "Processed #{current_book.processed_screencasts.size} screencasts."
   end
 
-  def unpublish!
+  def unpublish!(slug=nil)
+    require "rest_client"
+    require "softcover/client"
+
+    if slug.present?
+      begin
+        res = Softcover::Client.new.destroy_book_by_slug(slug)
+        if res["errors"]
+          puts "Errors: #{res.errors}"
+          return false
+        else
+          puts "Done!"
+          return true
+        end
+      rescue RestClient::ResourceNotFound
+        puts "Book with slug='#{slug}' not found under this account."
+        return false
+      end
+    end
+
     return false unless current_book
     if current_book.destroy
       Softcover::BookConfig.remove
