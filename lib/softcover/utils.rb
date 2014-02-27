@@ -64,7 +64,7 @@ module Softcover::Utils
   # We skip this step if Book.txt doesn't exist, as that means the user
   # is writing raw LaTeX.
   def write_master_latex_file(manifest)
-    if File.exist?(Softcover::BookManifest::TXT_PATH)
+    if File.exist?(manifest.book_file)
       File.write(master_filename(manifest), master_content(manifest))
     end
   end
@@ -74,15 +74,20 @@ module Softcover::Utils
     "#{manifest.filename}.tex"
   end
 
-  # Returns the lines of Book.txt as an array, removing any commented-out lines.
-  def book_txt_lines
+  # Returns the lines of book file as an array, removing commented-out lines.
+  def book_file_lines(manifest)
+    non_comment_lines(raw_lines(manifest))
+  end
+
+  # Returns only non-comment lines.
+  def non_comment_lines(lines)
     comment = /^\s*#.*$/
-    raw_lines.reject { |line| line.match(comment) }
+    lines.reject { |line| line.match(comment) }
   end
 
   # Returns all the lines in Book.txt.
-  def raw_lines
-    File.readlines(Softcover::BookManifest::TXT_PATH)
+  def raw_lines(manifest)
+    File.readlines(manifest.book_file)
   end
 
   # Returns the content for the master LaTeX file.
@@ -91,7 +96,7 @@ module Softcover::Utils
     source_file = /(.*)(?:\.md|\.tex)\s*$/
 
     tex_file = [master_latex_header(manifest)]
-    book_txt_lines.each do |line|
+    book_file_lines(manifest).each do |line|
       if line.match(source_file)
         tex_file << "\\include{#{manifest.polytex_dir}/#{$1}}"
       elsif line.match(front_or_mainmatter)  # frontmatter or mainmatter
@@ -245,8 +250,6 @@ module Softcover::Utils
       `which java`.chomp
     when :calibre
       `which ebook-convert`.chomp
-    when :ghostscript
-      `which gs`.chomp
     when :epubcheck
       File.join(Dir.home, 'epubcheck-3.0', 'epubcheck-3.0.jar')
     when :inkscape

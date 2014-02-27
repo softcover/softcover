@@ -3,6 +3,8 @@ require 'ostruct'
 class Softcover::BookManifest < OpenStruct
   include Softcover::Utils
 
+  attr_accessor :book_file
+
   class Softcover::MarketingManifest < Softcover::BookManifest
 
     YAML_PATH = File.join(Softcover::Directories::CONFIG, 'marketing.yml')
@@ -74,12 +76,14 @@ class Softcover::BookManifest < OpenStruct
   class Section < OpenStruct
   end
 
-  TXT_PATH  = 'Book.txt'
+  TXT_PATH     = 'Book.txt'
+  PREVIEW_PATH = 'Preview.txt'
   YAML_PATH = File.join(Softcover::Directories::CONFIG, 'book.yml')
 
   def initialize(options = {})
     @source = options[:source] || :polytex
     @origin = options[:origin]
+    @book_file = options[:preview] ? PREVIEW_PATH : TXT_PATH
 
     ensure_template_files
 
@@ -148,7 +152,8 @@ class Softcover::BookManifest < OpenStruct
              path('latex_styles/custom_pdf.sty'),
              path('config/preamble.tex'),
              path('config/lang.yml'),
-             path('epub/OEBPS/styles/custom_epub.css')
+             path('epub/OEBPS/styles/custom_epub.css'),
+             path('Preview.txt')
            ]
     files.each do |file|
       unless File.exist?(file)
@@ -309,7 +314,7 @@ class Softcover::BookManifest < OpenStruct
   def source_files
     self.class.find_book_root!
     md_tex = /.*(?:\.md|\.tex)/
-    book_txt_lines.select { |path| path =~ md_tex }.map(&:strip)
+    book_file_lines(self).select { |path| path =~ md_tex }.map(&:strip)
   end
 
   def basenames
@@ -327,7 +332,7 @@ class Softcover::BookManifest < OpenStruct
   end
 
   def read_from_md
-    { chapters: chapter_objects, filename: TXT_PATH }
+    { chapters: chapter_objects, filename: book_file }
   end
 
 
