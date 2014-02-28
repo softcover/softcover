@@ -11,8 +11,8 @@ module Softcover
           # then update the manifest to reduce PDF generation
           # to a previously solved problem.
           Softcover::Builders::Html.new.build!
-          self.manifest = Softcover::BookManifest.new(source: :polytex,
-                                                      origin: :markdown)
+          opts = options.merge({ source: :polytex, origin: :markdown})
+          self.manifest = Softcover::BookManifest.new(opts)
         end
 
         write_master_latex_file(manifest)
@@ -60,7 +60,7 @@ module Softcover
         elsif options[:'find-overfull']
           silence_stream(STDERR) { execute(cmd) }
         else
-          options[:preview] ? system(cmd) : execute(cmd)
+          execute(cmd)
         end
       end
 
@@ -126,7 +126,8 @@ module Softcover
         # While we're at it, we move it to the standard ebooks/ directory.
         def rename_pdf(basename, options={})
           tmp_pdf = basename + '.tmp.pdf'
-          pdf     = basename + '.pdf'
+          name    = options[:preview] ? basename + '-preview' : basename
+          pdf     = name + '.pdf'
           mkdir('ebooks')
           # Remove the intermediate tmp files unless only running once.
           rm_tmp = keep_tmp_files?(options) ? "" : "&& rm -f *.tmp.*"

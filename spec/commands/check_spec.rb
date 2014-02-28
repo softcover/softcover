@@ -38,7 +38,6 @@ describe Softcover::Commands::Check do
     it { should match /Checking for KindleGen.*Missing/ }
     it { should match /Checking for Java.*Missing/ }
     it { should match /Checking for EpubCheck.*Missing/ }
-    it { should match /Checking for GhostScript.*Missing/ }
     it { should match /Checking for ImageMagick.*Missing/ }
     it { should match /Checking for Node\.js.*Missing/ }
 
@@ -50,7 +49,6 @@ describe Softcover::Commands::Check do
     it { should match /KindleGen/ }
     it { should match /Java/ }
     it { should match /EpubCheck/ }
-    it { should match /GhostScript/ }
     it { should match /ImageMagick/ }
     it { should match /Node\.js/ }
   end

@@ -32,7 +32,6 @@ module Softcover
 
       def dependencies
         [[:latex,       'LaTeX'],
-         [:ghostscript, 'GhostScript'],
          [:convert,     'ImageMagick'],
          [:node,        'Node.js'],
          [:phantomjs,   'PhantomJS'],
@@ -74,8 +73,6 @@ module Softcover
         when :java
           url = 'http://www.java.com/en/download/help/index_installing.xml'
           "Java (#{url})"
-        when :ghostscript
-          "GhostScript (should come with LaTeX)"
         when :epubcheck
           url  = 'https://github.com/IDPF/epubcheck/releases/'
           url += 'download/v3.0/epubcheck-3.0.zip'
