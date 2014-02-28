@@ -61,6 +61,10 @@ module Softcover
       delete path_for(:books, book.id)
     end
 
+    def destroy_book_by_slug(slug)
+      delete path_for(:books, slug)
+    end
+
     # ============ Screencasts ===========
     def get_screencast_upload_params(files)
       JSON post path_for(:books, book.id, :screencasts), files: files
@@ -105,8 +109,6 @@ module Softcover
       end
 
       def handle_422
-        require "softcover/config"
-        Softcover::Config['api_key'] = nil
         return { "errors" => "You don't have access to that resource." }
       end
   end
