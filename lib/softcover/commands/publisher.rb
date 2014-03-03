@@ -86,7 +86,9 @@ module Softcover::Commands::Publisher
   end
 
   def exit_with_message
-    puts "Processed #{current_book.processed_screencasts.size} screencasts."
+    number = current_book.processed_screencasts.size
+    screencasts = number == 1 ? 'screencast' : 'screencasts'
+    puts "Processed #{number} #{screencasts}."
   end
 
   def unpublish!(slug=nil)
