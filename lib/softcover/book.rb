@@ -59,7 +59,7 @@ class Softcover::Book
   def files
     # question: should we use `git ls-files` instead?
     # TODO: only use pertinent files
-    paths = %w{html/*_fragment.html images/**/* ebooks/*}
+    paths = %w{html/*_fragment.html images/**/* ebooks/* config/*}
     Dir[*paths].reject { |path| File.directory?(path) }.map do |path|
       BookFile.new path
     end
