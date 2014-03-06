@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module Softcover
   module Commands
     module Check
