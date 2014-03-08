@@ -42,6 +42,7 @@ module Softcover
          [:kindlegen,   'KindleGen'],
          [:java,        'Java'],
          [:epubcheck,   'EpubCheck'],
+         [:zip,         'zip'],
         ]
       end
 
@@ -82,6 +83,8 @@ module Softcover
           message += "      ∟ Unzip EpubCheck into your home directory"
         when :inkscape
           message  = "Inkscape (http://inkscape.org/)"
+        when :zip
+          "zip (http://www.info-zip.org/)"
         else
           raise "Unknown label #{label}"
         end

@@ -259,6 +259,8 @@ module Softcover::Utils
                    'inkscape'
       end
       filename
+    when :zip
+      `which zip`.chomp
     else
       raise "Unknown label #{label}"
     end
