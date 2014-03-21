@@ -238,6 +238,8 @@ module Softcover::Utils
     case label
     when :latex
       `which xelatex`.chomp
+    when :ghostscript
+      `which gs`.chomp
     when :convert
       `which convert`.chomp
     when :node

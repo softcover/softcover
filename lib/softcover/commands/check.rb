@@ -34,6 +34,7 @@ module Softcover
 
       def dependencies
         [[:latex,       'LaTeX'],
+         [:ghostscript, 'GhostScript'],
          [:convert,     'ImageMagick'],
          [:node,        'Node.js'],
          [:phantomjs,   'PhantomJS'],
@@ -58,6 +59,8 @@ module Softcover
         when :latex
           message  = "LaTeX (http://latex-project.org/ftp.html)\n"
           message += "      ∟ Huge download—start it now!"
+        when :ghostscript
+          message  = "GhostScript (should come with LaTeX)\n"
         when :convert
           "ImageMagick (http://www.imagemagick.org/script/binary-releases.php)"
         when :node
