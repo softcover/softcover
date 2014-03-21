@@ -241,12 +241,12 @@ module Softcover
       # Make the EPUB, which is basically just a zipped HTML file.
       def make_epub(options={})
         filename = manifest.filename
-        zip_filename = filename + '.zip'
-        base_file = "zip -X0    #{zip_filename} mimetype"
-        zip = "zip -rDXg9"
-        meta_info = "#{zip} #{zip_filename} META-INF -x \*.DS_Store -x mimetype"
-        main_info = "#{zip} #{zip_filename} OEBPS    -x \*.DS_Store \*.gitkeep"
-        rename = "mv #{zip_filename} #{filename}.epub"
+        zfname = filename + '.zip'
+        base_file = "#{zip} -X0 #{zfname} mimetype"
+        fullzip = "#{zip} -rDXg9"
+        meta_info = "#{fullzip} #{zfname} META-INF -x \*.DS_Store -x mimetype"
+        main_info = "#{fullzip} #{zfname} OEBPS    -x \*.DS_Store \*.gitkeep"
+        rename = "mv #{zfname} #{filename}.epub"
         commands = [base_file, meta_info, main_info, rename]
         command = commands.join(' && ')
         Dir.chdir('epub') do
@@ -256,6 +256,10 @@ module Softcover
             system(command)
           end
         end
+      end
+
+      def zip
+        @zip ||= executable(dependency_filename(:zip))
       end
 
       # Move the completed EPUB book to the `ebooks` directory.

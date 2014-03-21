@@ -250,6 +250,8 @@ module Softcover::Utils
       `which kindlegen`.chomp
     when :java
       `which java`.chomp
+    when :zip
+      `which zip`.chomp
     when :calibre
       `which ebook-convert`.chomp
     when :epubcheck

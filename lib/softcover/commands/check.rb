@@ -42,6 +42,7 @@ module Softcover
          [:calibre,     'Calibre'],
          [:kindlegen,   'KindleGen'],
          [:java,        'Java'],
+         [:zip,         'zip'],
          [:epubcheck,   'EpubCheck'],
         ]
       end
@@ -69,7 +70,9 @@ module Softcover
           "PhantomJS (http://phantomjs.org/)"
         when :kindlegen
           url = 'http://www.amazon.com/gp/feature.html?ie=UTF8&docId=1000765211'
-          "KindleGen (#{url})"
+          message = "KindleGen (#{url})\n"
+          message += "      ∟ Put the kindlegen executable on your path, "
+          message += "e.g., in /usr/local/bin"
         when :calibre
           url = 'http://calibre-ebook.com/'
           message  = "Calibre (#{url})\n"
@@ -78,6 +81,8 @@ module Softcover
         when :java
           url = 'http://www.java.com/en/download/help/index_installing.xml'
           "Java (#{url})"
+        when :zip
+          "Install zip (e.g., apt-get install zip)"
         when :epubcheck
           url  = 'https://github.com/IDPF/epubcheck/releases/'
           url += 'download/v3.0/epubcheck-3.0.zip'
