@@ -77,13 +77,12 @@ class Softcover::BookManifest < OpenStruct
   end
 
   TXT_PATH     = 'Book.txt'
-  PREVIEW_PATH = 'Preview.txt'
   YAML_PATH = File.join(Softcover::Directories::CONFIG, 'book.yml')
 
   def initialize(options = {})
     @source = options[:source] || :polytex
     @origin = options[:origin]
-    @book_file = options[:preview] ? PREVIEW_PATH : TXT_PATH
+    @book_file = TXT_PATH
 
     ensure_template_files
 
@@ -152,8 +151,7 @@ class Softcover::BookManifest < OpenStruct
              path('latex_styles/custom_pdf.sty'),
              path('config/preamble.tex'),
              path('config/lang.yml'),
-             path('epub/OEBPS/styles/custom_epub.css'),
-             path('Preview.txt')
+             path('epub/OEBPS/styles/custom_epub.css')
            ]
     files.each do |file|
       unless File.exist?(file)
@@ -278,6 +276,13 @@ class Softcover::BookManifest < OpenStruct
   # code (maybe not a big problem on their system, but it would be a Bad Thing
   # on a server).
   def preview_chapter_range
+    raise
+    unless respond_to?(epub_mobi_preview_chapter_range)
+      $stderr.puts("Define epub_mobi_preview_chapter_range in config/book.yml")
+      $stderr.puts("See http://manual.softcover.io/book/getting_started#sec-build_previews")
+      exit(1)
+    end
+
     first, last = epub_mobi_preview_chapter_range.split('..').map(&:to_i)
     first..last
   end

@@ -63,7 +63,7 @@ module Softcover
 
       # Returns the chapters to write.
       def chapters
-        manifest.chapters
+        preview? ? preview_chapters : manifest.chapters
       end
 
       # Writes the HTML for the EPUB.
