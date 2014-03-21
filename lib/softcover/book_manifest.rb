@@ -276,10 +276,10 @@ class Softcover::BookManifest < OpenStruct
   # code (maybe not a big problem on their system, but it would be a Bad Thing
   # on a server).
   def preview_chapter_range
-    raise
-    unless respond_to?(epub_mobi_preview_chapter_range)
+    unless respond_to?(:epub_mobi_preview_chapter_range)
+      $stderr.puts("Error: Preview not built")
       $stderr.puts("Define epub_mobi_preview_chapter_range in config/book.yml")
-      $stderr.puts("See http://manual.softcover.io/book/getting_started#sec-build_previews")
+      $stderr.puts("See http://manual.softcover.io/book/getting_started#sec-build_preview")
       exit(1)
     end
 
