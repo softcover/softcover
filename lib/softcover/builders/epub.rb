@@ -401,7 +401,8 @@ module Softcover
       def nav_html
         title = manifest.title
         nav_list = manifest.chapters.map do |chapter|
-                     %(<li><a href="#{chapter.fragment_name}">#{chapter.title}</a></li>)
+                     element = preview? ? chapter.title : nav_link(chapter)
+                     %(<li>#{element}</li>)
                    end
 %(<?xml version="1.0" encoding="utf-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
@@ -419,6 +420,11 @@ module Softcover
     </body>
 </html>
 )
+      end
+
+      # Returns a navigation link for the chapter.
+      def nav_link(chapter)
+        %(<a href="#{chapter.fragment_name}">#{chapter.title}</a>)
       end
 
       # Returns the HTML template for a chapter.
