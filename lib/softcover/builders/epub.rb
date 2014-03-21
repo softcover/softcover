@@ -7,8 +7,8 @@ module Softcover
         @preview = options[:preview]
         Softcover::Builders::Html.new.build!
         if manifest.markdown?
-          self.manifest = Softcover::BookManifest.new(source: :polytex,
-                                                      origin: :markdown)
+          opts = options.merge({ source: :polytex, origin: :markdown })
+          self.manifest = Softcover::BookManifest.new(opts)
         end
         remove_html
         create_directories
@@ -61,9 +61,9 @@ module Softcover
         File.write(path('epub/OEBPS/content.opf'), content_opf)
       end
 
-      # Returns the chapters to write (accounting for previews).
+      # Returns the chapters to write.
       def chapters
-        preview? ? manifest.preview_chapters : manifest.chapters
+        manifest.chapters
       end
 
       # Writes the HTML for the EPUB.
@@ -367,9 +367,7 @@ module Softcover
       def toc_ncx
         title = manifest.title
         chapter_nav = []
-        offset = preview? ? manifest.preview_chapter_range.first : 0
-        chapters.each_with_index do |chapter, i|
-          n = i + offset
+        chapters.each_with_index do |chapter, n|
           chapter_nav << %(<navPoint id="#{chapter.slug}" playOrder="#{n+1}">)
           chapter_nav << %(    <navLabel><text>#{chapter_name(n)}</text></navLabel>)
           chapter_nav << %(    <content src="#{chapter.fragment_name}"/>)

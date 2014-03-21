@@ -162,13 +162,19 @@ module Softcover
     end
 
     desc "unpublish", "Remove book from Softcover"
+    method_option :slug, aliases: '-s',
+                          desc: "Specify slug", type: :string
+
+    method_option :force, aliases: '-f',
+                          desc: "Force", type: :boolean
     def unpublish
       require 'softcover/commands/publisher'
 
       invoke :login unless logged_in?
-      if ask("Type '#{unpublish_slug}' to unpublish:") == unpublish_slug
+      slug = options[:slug] || unpublish_slug
+      if options[:force] || ask("Type '#{slug}' to unpublish:") == slug
         puts "Unpublishing..." unless options[:silent]
-        Softcover::Commands::Publisher.unpublish!
+        Softcover::Commands::Publisher.unpublish!(slug)
       else
         puts "Canceled."
       end

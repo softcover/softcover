@@ -88,6 +88,18 @@ module WebmockHelpers
       to_return(:status => 200, :body => "", :headers => {})
   end
 
+  def stub_destroy_book_by_slug(book)
+    stub_request(:delete, "#{api_base_url}/books/#{book.slug}?api_key=").
+      with(:headers => headers(false)).
+      to_return(:status => 200, :body => "", :headers => {})
+  end
+
+  def stub_destroy_book_by_invalid_slug(slug)
+    stub_request(:delete, "#{api_base_url}/books/#{slug}?api_key=").
+      with(:headers => headers(false)).
+      to_return(:status => 404, :body => "", :headers => {})
+  end
+
   def stub_destroy_book_not_found(book)
     stub_request(:delete, "#{api_base_url}/books/#{book.id}?api_key=").
       with(:headers => headers(false)).

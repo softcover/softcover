@@ -70,6 +70,32 @@ describe Softcover::Commands::Publisher do
         expect(subject.unpublish!).to be_false
       end
     end
+
+    context "unpublishing outside book directory" do
+      before do
+        chdir_to_book
+        stub_create_book book
+        subject.publish!
+        Dir.chdir(File.dirname(__FILE__))
+      end
+
+      context "with valid slug option" do
+        before { stub_destroy_book_by_slug book }
+
+        it "unpublishes" do
+          expect(subject.unpublish!(book.slug)).to be_true
+        end
+      end
+
+      context "with invalid slug option" do
+        let(:slug) { "error" }
+        before { stub_destroy_book_by_invalid_slug slug }
+
+        it "does not unpublish" do
+          expect(subject.unpublish!(slug)).to be_false
+        end
+      end
+    end
   end
 
   describe "#publish_screencasts" do
