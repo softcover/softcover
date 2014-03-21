@@ -19,7 +19,6 @@ module Softcover
           output = input.sub('.pdf', '-preview.pdf')
           unless manifest.respond_to?(:pdf_preview_page_range)
             $stderr.puts("Error: Preview not built")
-            $stderr.puts("Preview not built")
             $stderr.puts("Define pdf_preview_page_range in config/book.yml")
             $stderr.puts("See http://manual.softcover.io/book/getting_started#sec-build_preview")
             exit(1)
