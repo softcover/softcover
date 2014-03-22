@@ -83,7 +83,16 @@ module Softcover
           File.open(target_filename, 'w') do |f|
             content = File.read(path("html/#{chapter.fragment_name}"))
             doc = strip_attributes(Nokogiri::HTML(content))
-            inner_html = doc.at_css('body').children.to_xhtml
+            body = doc.at_css('body')
+            if body.nil?
+              $stderr.puts "\nError: Document not built due to empty chapter"
+              $stderr.puts "Chapters must include a title using the Markdown"
+              $stderr.puts "    # This is a chapter"
+              $stderr.puts "or the LaTeX"
+              $stderr.puts "    \\chapter{This is a chapter}"
+              exit(1)
+            end
+            inner_html = body.children.to_xhtml
             if math?(inner_html)
               html = html_with_math(chapter, images_dir, texmath_dir, pngs,
                                     options)
