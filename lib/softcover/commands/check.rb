@@ -87,7 +87,7 @@ module Softcover
           url  = 'https://github.com/IDPF/epubcheck/releases/'
           url += 'download/v3.0/epubcheck-3.0.zip'
           message  = "EpubCheck 3.0 (#{url})\n"
-          message += "      ∟ Unzip EpubCheck into your home directory"
+          message += "      ∟ Unzip and put epubcheck-3.0/ in $HOME/bin"
         when :inkscape
           message  = "Inkscape (http://inkscape.org/)"
         else
