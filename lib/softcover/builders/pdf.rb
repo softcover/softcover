@@ -60,7 +60,7 @@ module Softcover
         elsif options[:'find-overfull']
           silence_stream(STDERR) { execute(cmd) }
         else
-          execute(cmd)
+          options[:preview] ? system(cmd) : execute(cmd)
         end
       end
 

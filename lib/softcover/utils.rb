@@ -238,6 +238,8 @@ module Softcover::Utils
     case label
     when :latex
       `which xelatex`.chomp
+    when :ghostscript
+      `which gs`.chomp
     when :convert
       `which convert`.chomp
     when :node
@@ -248,10 +250,12 @@ module Softcover::Utils
       `which kindlegen`.chomp
     when :java
       `which java`.chomp
+    when :zip
+      `which zip`.chomp
     when :calibre
       `which ebook-convert`.chomp
     when :epubcheck
-      File.join(Dir.home, 'epubcheck-3.0', 'epubcheck-3.0.jar')
+      File.join(Dir.home, 'bin', 'epubcheck-3.0', 'epubcheck-3.0.jar')
     when :inkscape
       filename = `which inkscape`.chomp
       if filename.empty?

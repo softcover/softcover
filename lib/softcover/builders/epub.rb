@@ -63,7 +63,7 @@ module Softcover
 
       # Returns the chapters to write.
       def chapters
-        manifest.chapters
+        preview? ? manifest.preview_chapters : manifest.chapters
       end
 
       # Writes the HTML for the EPUB.
@@ -83,7 +83,16 @@ module Softcover
           File.open(target_filename, 'w') do |f|
             content = File.read(path("html/#{chapter.fragment_name}"))
             doc = strip_attributes(Nokogiri::HTML(content))
-            inner_html = doc.at_css('body').children.to_xhtml
+            body = doc.at_css('body')
+            if body.nil?
+              $stderr.puts "\nError: Document not built due to empty chapter"
+              $stderr.puts "Chapters must include a title using the Markdown"
+              $stderr.puts "    # This is a chapter"
+              $stderr.puts "or the LaTeX"
+              $stderr.puts "    \\chapter{This is a chapter}"
+              exit(1)
+            end
+            inner_html = body.children.to_xhtml
             if math?(inner_html)
               html = html_with_math(chapter, images_dir, texmath_dir, pngs,
                                     options)
@@ -241,12 +250,12 @@ module Softcover
       # Make the EPUB, which is basically just a zipped HTML file.
       def make_epub(options={})
         filename = manifest.filename
-        zip_filename = filename + '.zip'
-        base_file = "zip -X0    #{zip_filename} mimetype"
-        zip = "zip -rDXg9"
-        meta_info = "#{zip} #{zip_filename} META-INF -x \*.DS_Store -x mimetype"
-        main_info = "#{zip} #{zip_filename} OEBPS    -x \*.DS_Store \*.gitkeep"
-        rename = "mv #{zip_filename} #{filename}.epub"
+        zfname = filename + '.zip'
+        base_file = "#{zip} -X0 #{zfname} mimetype"
+        fullzip = "#{zip} -rDXg9"
+        meta_info = "#{fullzip} #{zfname} META-INF -x \*.DS_Store -x mimetype"
+        main_info = "#{fullzip} #{zfname} OEBPS    -x \*.DS_Store \*.gitkeep"
+        rename = "mv #{zfname} #{filename}.epub"
         commands = [base_file, meta_info, main_info, rename]
         command = commands.join(' && ')
         Dir.chdir('epub') do
@@ -256,6 +265,10 @@ module Softcover
             system(command)
           end
         end
+      end
+
+      def zip
+        @zip ||= executable(dependency_filename(:zip))
       end
 
       # Move the completed EPUB book to the `ebooks` directory.
@@ -399,7 +412,8 @@ module Softcover
       def nav_html
         title = manifest.title
         nav_list = manifest.chapters.map do |chapter|
-                     %(<li><a href="#{chapter.fragment_name}">#{chapter.title}</a></li>)
+                     element = preview? ? chapter.title : nav_link(chapter)
+                     %(<li>#{element}</li>)
                    end
 %(<?xml version="1.0" encoding="utf-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
@@ -417,6 +431,11 @@ module Softcover
     </body>
 </html>
 )
+      end
+
+      # Returns a navigation link for the chapter.
+      def nav_link(chapter)
+        %(<a href="#{chapter.fragment_name}">#{chapter.title}</a>)
       end
 
       # Returns the HTML template for a chapter.
