@@ -73,7 +73,7 @@ module Softcover
     desc "clean", "Clean unneeded files"
     def clean
       rm(Dir.glob('*.aux'))
-      rm(Dir.glob(File.join('chapters', '*.aux'))
+      rm(Dir.glob(File.join('chapters', '*.aux')))
       rm(Dir.glob('*.toc'))
       rm(Dir.glob('*.out'))
       rm(Dir.glob('*.tmp.*'))
