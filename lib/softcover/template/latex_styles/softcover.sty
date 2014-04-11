@@ -109,9 +109,12 @@
 % Caption styling
 \usepackage[font={it,small}]{caption}
 
+% Include etoolbox package to get \ifdef needed to switch on articles/chapters
+\usepackage{etoolbox}
+
 % Codelistings
 \newcounter{codelisting}
-\numberwithin{codelisting}{chapter}
+\ifdef\chapter{\numberwithin{codelisting}{chapter}}
 \newenvironment{codelisting}{\refstepcounter{codelisting}\begin{framed_shaded}\vspace{-0.5em}}%
 {\end{framed_shaded}}
 % See latex_styles/language_customization.sty for codelisting captions.
@@ -120,7 +123,7 @@
 \usepackage{amsthm}
 \theoremstyle{definition}
 \newcommand{\boxlabel}{Box}
-\newtheorem{aside}{\boxlabel}[chapter]
+\ifdef\chapter{\newtheorem{aside}{\boxlabel}[chapter]}{\newtheorem{aside}{\boxlabel}}
 \usepackage{latex_styles/framed}
 \definecolor{shadecolor}{gray}{0.97}
 \definecolor{boxcolor}{gray}{0.10}
