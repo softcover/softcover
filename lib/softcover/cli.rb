@@ -193,12 +193,17 @@ module Softcover
     # Generator
     # ===============================================
 
-    desc "new <name>", "Generate new book directory structure"
+    desc "new <name>", "Generate new document directory structure"
     method_option :polytex,
                   :type => :boolean,
                   :default => false,
                   :aliases => "-p",
-                  :desc => "Generate a PolyTeX book."
+                  :desc => "Generate a PolyTeX document."
+    method_option :article,
+                  :type => :boolean,
+                  :default => false,
+                  :aliases => "-a",
+                  :desc => "Generate an article instead of a book."
     def new(n)
       Softcover::Commands::Generator.generate_file_tree(n, options)
     end
