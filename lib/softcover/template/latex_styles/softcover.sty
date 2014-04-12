@@ -114,7 +114,7 @@
 
 % Codelistings
 \newcounter{codelisting}
-\ifdef\chapter{\numberwithin{codelisting}{chapter}}
+\ifdef\chapter{\numberwithin{codelisting}{chapter}}{}
 \newenvironment{codelisting}{\refstepcounter{codelisting}\begin{framed_shaded}\vspace{-0.5em}}%
 {\end{framed_shaded}}
 % See latex_styles/language_customization.sty for codelisting captions.
