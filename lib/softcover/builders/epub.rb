@@ -70,12 +70,11 @@ module Softcover
       # Included is a math detector that processes the page with MathJax
       # (via page.js) so that math can be included in EPUB (and thence MOBI).
       def write_html(options={})
-        images_dir  = File.join('epub', 'OEBPS', 'images')
         texmath_dir = File.join(images_dir, 'texmath')
         mkdir images_dir
         mkdir texmath_dir
 
-        File.write(path('epub/OEBPS/cover.html'), cover_page)
+        File.write(path('epub/OEBPS/cover.html'), cover_page) if cover?
 
         pngs = []
         chapters.each_with_index do |chapter, i|
@@ -111,6 +110,10 @@ module Softcover
             FileUtils.rm(f)
           end
         end
+      end
+
+      def images_dir
+        File.join('epub', 'OEBPS', 'images')
       end
 
       # Returns HTML for HTML source that includes math.
@@ -374,6 +377,20 @@ module Softcover
 </body>
 </html>
 )
+      end
+
+      # Returns the name of the cover file.
+      # We support (in order) PNT, JPG/JPEG, and TIF.
+      def cover_file(ext='png')
+        extensions = %w[png jpg jpeg tif]
+        extensions.each do |ext|
+          file = Dir[path("#{images_dir}/cover.#{ext}")].first
+          return file if file
+        end
+      end
+
+      def cover?
+        File.exist?(cover_file)
       end
 
       # Returns the Table of Contents for the spine.
