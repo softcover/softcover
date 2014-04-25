@@ -98,37 +98,37 @@ describe Softcover::Commands::Publisher do
     end
   end
 
-  describe "#publish_screencasts" do
+  describe "#publish_media" do
     before do
       chdir_to_book
       book.id = 1
-      stub_screencasts_upload book
+      stub_media_upload book
     end
 
-    it "should start with 0 processed_screencasts" do
-      expect(book.processed_screencasts.length).to eq 0
-    end
+    # it "should start with 0 processed_media" do
+    #   expect(book.processed_media.length).to eq 0
+    # end
 
-    it "processes screencasts" do
-      subject.publish_screencasts!
-      expect(book.processed_screencasts.length).to be > 0
-    end
+    # it "processes media" do
+    #   subject.publish_media!
+    #   expect(book.processed_media.length).to be > 0
+    # end
 
-    it "daemonizes" do
-      subject.should_receive(:fork) do |&blk|
-        blk.call
-      end
-      subject.publish_screencasts! daemon: true
-      expect(book.processed_screencasts.length).to be > 0
-    end
+    # it "daemonizes" do
+    #   subject.should_receive(:fork) do |&blk|
+    #     blk.call
+    #   end
+    #   subject.publish_media! daemon: true
+    #   expect(book.processed_media.length).to be > 0
+    # end
 
-    it "watches" do
-      subject.should_receive(:loop) do |&blk|
-        blk.call
-      end
-      subject.publish_screencasts! watch: true
-      expect(book.processed_screencasts.length).to be > 0
-    end
+    # it "watches" do
+    #   subject.should_receive(:loop) do |&blk|
+    #     blk.call
+    #   end
+    #   subject.publish_media! watch: true
+    #   expect(book.processed_media.length).to be > 0
+    # end
 
   end
 end

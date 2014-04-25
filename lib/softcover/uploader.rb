@@ -41,6 +41,7 @@ module Softcover
             begin
               bar.send(:title=, "#{path} (#{x} / #{y})")
               bar.progress += ul_now - last_chunk
+              bar.refresh
             rescue
               nil
             end

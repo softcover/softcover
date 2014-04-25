@@ -122,13 +122,13 @@ module WebmockHelpers
                  to_return(:status => 200, :body => "", :headers => {})
   end
 
-  def stub_screencasts_upload(book)
+  def stub_media_upload(book)
     stub_s3_post
     stub_create_book(book)
 
     files = book.find_screencasts
     stub_request(:post,
-                 "#{api_base_url}/books/#{book.id}/screencasts").
+                 "#{api_base_url}/books/#{book.id}/media").
                   with(:body => {files: files }.to_json,
                        :headers => headers).
                   to_return(:status => 200, :body => {

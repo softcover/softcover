@@ -65,9 +65,12 @@ module Softcover
       delete path_for(:books, slug)
     end
 
-    # ============ Screencasts ===========
-    def get_screencast_upload_params(files)
-      JSON post path_for(:books, book.id, :screencasts), files: files
+    # ============ Media ===========
+    def get_media_upload_params(path, files, manifest=nil)
+      JSON post path_for(:books, book.id, :media),
+        path: path,
+        files: files,
+        manifest: manifest
       # TODO: handle errors
     end
 
