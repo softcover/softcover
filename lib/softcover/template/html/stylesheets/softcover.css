@@ -366,8 +366,8 @@ body #book {
 }
 
 #book .highlight pre {
-  margin: 10px;
-  font-size: 85%;
+  margin: 10px 0 10px 10px;
+  font-size: 83%;
   font-weight: bold;
 }
 
