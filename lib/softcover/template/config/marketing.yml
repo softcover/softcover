@@ -9,10 +9,7 @@ prices:
         Almost 9000 pages of content
         Includes a free copy of 1st Edition PDF
     media:
-      - html
-      - pdf
-      - epub
-      - mobi
+      - ebooks
     price: 3500
 
   -
@@ -25,8 +22,8 @@ prices:
         (QuickTime and Ogg Vorbis)
         Includes first edition screencasts
     media:
-      - html
-      - screencasts
+      - ebooks
+      - media/screencasts
     price: 12500
 
   -
@@ -38,11 +35,8 @@ prices:
         eBook formats for Kindle, Nook, and PDF
         Read online.
     media:
-      - html
-      - pdf
-      - epub
-      - mobi
-      - screencasts
+      - ebooks
+      - media/screencasts
     price: 12500
     regular_price: 19900
 

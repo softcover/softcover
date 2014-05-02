@@ -11,10 +11,9 @@ describe Softcover::Book do
 
         its(:filenames) { should include "html/chapter-1_fragment.html"}
         its(:filenames) { should_not include "html/chapter-1.html"}
+        its(:filenames) { should include "html/#{subject.slug}.html"}
 
-        its(:filenames) { should include "ebooks/test-book.mobi"}
-        its(:filenames) { should include "ebooks/test-book.epub"}
-        its(:filenames) { should include "ebooks/test-book.pdf"}
+        its(:filenames) { should include "config/marketing.yml"}
 
         its(:slug) { should eq "book" }
         its(:url) { should match /\/books\/(.*?)\/redirect/ }

@@ -146,20 +146,20 @@ module Softcover
       Softcover::Commands::Publisher.publish!(options)
     end
 
-    desc "publish:screencasts", "Publish screencasts"
+    desc "publish:media", "Publish media"
     method_option :daemon, aliases: '-d', force: false,
       desc: "Run as daemon", type: :boolean
     method_option :watch, aliases: '-w', type: :boolean,
       force: false, desc: "Watch a directory to auto upload."
 
     # TODO: make screencasts dir .book configurable
-    define_method "publish:screencasts" do |dir=
-      Softcover::Book::DEFAULT_SCREENCASTS_DIR|
+    define_method "publish:media" do |dir=
+      Softcover::Book::DEFAULT_MEDIA_DIR|
       require 'softcover/commands/publisher'
 
-      puts "Publishing screencasts in #{dir}"
+      puts "Publishing media bundles..."
       Softcover::Commands::Publisher.
-        publish_screencasts! options.merge(dir: dir)
+        publish_media! options.merge(dir: dir)
     end
 
     desc "unpublish", "Remove book from Softcover"
@@ -229,6 +229,7 @@ module Softcover
     desc "config", "View local config"
     def config
       require "softcover/config"
+      puts "Reading contents of #{Softcover::Config.path}:"
       Softcover::Config.read
     end
 

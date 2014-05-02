@@ -32,32 +32,30 @@ module Softcover::Commands::Publisher
     false
   end
 
-  # TODO: refactor this flow out of file?
-  def publish_screencasts!(options={})
+  def publish_media!(options={})
     return false unless current_book
 
     require 'ruby-progressbar'
     require 'curb'
 
-    current_book.screencasts_dir = options[:dir] ||
-                                   Softcover::Book::DEFAULT_SCREENCASTS_DIR
+    current_book.media_dir = options[:dir] || Softcover::Book::DEFAULT_MEDIA_DIR
 
     @watch = options[:watch]
 
     if options[:daemon]
       pid = fork do
-        run_publish_screencasts
+        run_publish_media
       end
 
       puts "Daemonized, pid: #{pid}"
     else
-      run_publish_screencasts
+      run_publish_media
     end
 
     current_book
   end
 
-  def run_publish_screencasts
+  def run_publish_media
     if @watch
       puts "Watching..."
 
@@ -68,7 +66,7 @@ module Softcover::Commands::Publisher
 
       begin
         loop do
-          process_screencasts
+          process_media
           sleep 1
         end
       rescue Interrupt
@@ -76,19 +74,19 @@ module Softcover::Commands::Publisher
         exit_with_message
       end
     else
-      process_screencasts
+      process_media
       exit_with_message
     end
   end
 
-  def process_screencasts
-    current_book.process_screencasts
+  def process_media
+    current_book.process_media
   end
 
   def exit_with_message
-    number = current_book.processed_screencasts.size
-    screencasts = number == 1 ? 'screencast' : 'screencasts'
-    puts "Processed #{number} #{screencasts}."
+    number = current_book.processed_media.size
+    dir = number == 1 ? "directory" : "directories"
+    puts "Processed #{number} #{dir}"
   end
 
   def unpublish!(slug=nil)
