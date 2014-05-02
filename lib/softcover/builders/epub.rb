@@ -70,12 +70,11 @@ module Softcover
       # Included is a math detector that processes the page with MathJax
       # (via page.js) so that math can be included in EPUB (and thence MOBI).
       def write_html(options={})
-        images_dir  = File.join('epub', 'OEBPS', 'images')
         texmath_dir = File.join(images_dir, 'texmath')
         mkdir images_dir
         mkdir texmath_dir
 
-        File.write(path('epub/OEBPS/cover.html'), cover_page)
+        File.write(path('epub/OEBPS/cover.html'), cover_page) if cover?
 
         pngs = []
         chapters.each_with_index do |chapter, i|
@@ -111,6 +110,10 @@ module Softcover
             FileUtils.rm(f)
           end
         end
+      end
+
+      def images_dir
+        File.join('epub', 'OEBPS', 'images')
       end
 
       # Returns HTML for HTML source that includes math.
@@ -316,6 +319,7 @@ module Softcover
         image_files = Dir['epub/OEBPS/images/**/*'].select { |f| File.file?(f) }
         images = image_files.map do |image|
                    ext = File.extname(image).sub('.', '')   # e.g., 'png'
+                   ext = 'jpeg' if ext == 'jpg'
                    # Strip off the leading 'epub/OEBPS'.
                    sep  = File::SEPARATOR
                    href = image.split(sep)[2..-1].join(sep)
@@ -337,7 +341,7 @@ module Softcover
         <dc:publisher>Softcover</dc:publisher>
         <dc:identifier id="BookID">urn:uuid:#{uuid}</dc:identifier>
         <meta property="dcterms:modified">#{Time.now.strftime('%Y-%m-%dT%H:%M:%S')}Z</meta>
-        <meta name="cover" content="img-cover-png"/>
+        <meta name="cover" content="cover-image"/>
     </metadata>
     <manifest>
         <item href="nav.html" id="nav" media-type="application/xhtml+xml" properties="nav"/>
@@ -369,11 +373,26 @@ module Softcover
 </head>
 <body>
   <div id="cover">
-     <img width="573" height="800" src="images/cover.png" alt="cover image" />
+     <img width="573" height="800" src="images/#{cover_img}" alt="cover" />
   </div>
 </body>
 </html>
 )
+      end
+
+      # Returns the name of the cover file.
+      # We support (in order) JPG/JPEG, PNG, and TIF.
+      def cover_img
+        extensions = %w[jpg jpeg ng tif]
+        extensions.each do |ext|
+          file = Dir[path("#{images_dir}/cover.#{ext}")].first
+          return File.basename(file) if file
+        end
+        return false
+      end
+
+      def cover?
+        cover_img
       end
 
       # Returns the Table of Contents for the spine.

@@ -81,6 +81,11 @@ describe Softcover::Builders::Epub do
           uuid = Regexp.escape(builder.manifest.uuid)
           expect(doc.to_xml).to match(/#{uuid}</)
         end
+
+        it "should have the right conver meta tag" do
+          meta = '<meta name="cover" content="cover-image"/>'
+          expect(doc.to_xml).to include meta
+        end
       end
 
       context "stylesheets directory" do
@@ -150,6 +155,13 @@ describe Softcover::Builders::Epub do
         end
         # Make sure at least one template file has math.
         expect(has_math).to be_true
+      end
+
+      describe "cover file" do
+        subject(:cover_file) { File.read(path('epub/OEBPS/cover.html')) }
+        it "should have the right cover image" do
+          expect(cover_file).to include 'cover.jpg'
+        end
       end
 
       it "should create math PNGs" do
