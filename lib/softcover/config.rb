@@ -41,18 +41,22 @@ module Softcover
         end
 
         def file_path
-          File.expand_path(self::PATH).tap do |path|
-            path.gsub!(/$/,"-test") if Softcover::test?
+          File.expand_path(path).tap do |full_path|
+            full_path.gsub!(/$/,"-test") if Softcover::test?
           end
         end
     end
   end
 
   class BookConfig < BaseConfig
-    PATH = ".softcover-book"
+    def self.path
+      ".softcover-book"
+    end
   end
 
   class Config < BaseConfig
-    PATH = "~/.softcover"
+    def self.path
+      File.exists?(".softcover") ? ".softcover" : "~/.softcover"
+    end
   end
 end
