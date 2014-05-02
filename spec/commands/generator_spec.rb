@@ -76,7 +76,7 @@ describe Softcover::Commands::Generator do
         it { should match(/html\//) }
         it { should match(/epub\//) }
         it { should match(/ebooks\//) }
-        it { should match(/screencasts\//) }
+        it { should match(/media\//) }
         it { should match(/log\//) }
         it { should match(/\.DS_Store/) }
       end
