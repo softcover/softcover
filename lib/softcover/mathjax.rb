@@ -7,9 +7,17 @@ module Softcover
                          # Call .inspect.inspect to escape the chapter number
                          # code for interpolation.
                          options[:chapter_number].inspect.inspect
-                       else
+                       elsif options[:chapter_number].nil?
                          '#{chapter_number}'
+                       else  # chapter_number is false, i.e., it's a single page
+                         false
                        end
+      fn = if chapter_number
+             "formatNumber: function (n) { return #{chapter_number} + '.' + n }"
+           else
+             ""
+           end
+
       <<-EOS
       MathJax.Hub.Config({
         "HTML-CSS": {
@@ -19,7 +27,7 @@ module Softcover
           extensions: ["AMSmath.js", "AMSsymbols.js"],
           equationNumbers: {
             autoNumber: "AMS",
-            formatNumber: function (n) { return #{chapter_number} + '.' + n }
+            #{fn}
           },
           Macros: {
             PolyTeX:    "Poly{\\\\TeX}",

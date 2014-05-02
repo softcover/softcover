@@ -25,8 +25,11 @@ describe Softcover::Builders::Html do
         let(:output) { File.read("html/book.html") }
         subject { output }
 
-        it { should match('<!DOCTYPE html>') }
-        it { should match('pygments.css') }
+        it { should include '<!DOCTYPE html>' }
+        it { should include 'pygments.css' }
+        it { should include 'MathJax' }
+        it { should_not include 'functionNumber'}
+
         context "HTML document" do
           subject(:doc) { Nokogiri::HTML(output) }
 
@@ -98,9 +101,10 @@ describe Softcover::Builders::Html do
         let(:output) { File.read(path('html/a_chapter.html')) }
         subject { output }
 
-        it { should match 'MathJax.Hub.Config' }
-        it { should match 'TeX-AMS-MML_SVG' }
-        it { should match 'A chapter' }
+        it { should include 'MathJax.Hub.Config' }
+        it { should include 'TeX-AMS-MML_SVG' }
+        it { should include 'formatNumber: function (n)' }
+        it { should include 'A chapter' }
       end
     end
   end

@@ -85,7 +85,8 @@ module Softcover::Commands::Publisher
 
   def exit_with_message
     number = current_book.processed_media.size
-    puts "Processed #{number} directory."
+    dir = number == 1 ? "directory" : "directories"
+    puts "Processed #{number} #{dir}"
   end
 
   def unpublish!(slug=nil)
