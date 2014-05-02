@@ -19,8 +19,8 @@ epub/
 # Generated ebooks
 ebooks/
 
-# Screencasts (likely to be huge)
-screencasts/
+# Media (likely to be huge)
+media/
 
 # Other miscellaneous files
 log/

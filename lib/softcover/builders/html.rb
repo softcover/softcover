@@ -44,6 +44,8 @@ module Softcover
           basename = File.basename(manifest.filename, '.tex')
           @html  = converted_html(basename)
           @title = basename
+          @mathjax = Softcover::Mathjax::config(chapter_number: false)
+          @src     = Softcover::Mathjax::AMS_SVG
           erb_file = File.read(File.join(File.dirname(__FILE__),
                                          '..', 'server', 'views',
                                          'book.html.erb'))
