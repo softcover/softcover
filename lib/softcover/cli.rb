@@ -229,6 +229,7 @@ module Softcover
     desc "config", "View local config"
     def config
       require "softcover/config"
+      puts "Reading contents of #{Softcover::Config.path}:"
       Softcover::Config.read
     end
 
