@@ -319,6 +319,7 @@ module Softcover
         image_files = Dir['epub/OEBPS/images/**/*'].select { |f| File.file?(f) }
         images = image_files.map do |image|
                    ext = File.extname(image).sub('.', '')   # e.g., 'png'
+                   ext = 'jpeg' if ext == 'jpg'
                    # Strip off the leading 'epub/OEBPS'.
                    sep  = File::SEPARATOR
                    href = image.split(sep)[2..-1].join(sep)
@@ -340,7 +341,7 @@ module Softcover
         <dc:publisher>Softcover</dc:publisher>
         <dc:identifier id="BookID">urn:uuid:#{uuid}</dc:identifier>
         <meta property="dcterms:modified">#{Time.now.strftime('%Y-%m-%dT%H:%M:%S')}Z</meta>
-        <meta name="cover" content="img-cover-png"/>
+        <meta name="cover" content="cover-image"/>
     </metadata>
     <manifest>
         <item href="nav.html" id="nav" media-type="application/xhtml+xml" properties="nav"/>
@@ -372,7 +373,7 @@ module Softcover
 </head>
 <body>
   <div id="cover">
-     <img width="573" height="800" src="images/cover.png" alt="cover image" />
+     <img width="573" height="800" src="images/#{cover_img}" alt="cover" />
   </div>
 </body>
 </html>
@@ -380,17 +381,18 @@ module Softcover
       end
 
       # Returns the name of the cover file.
-      # We support (in order) PNT, JPG/JPEG, and TIF.
-      def cover_file(ext='png')
-        extensions = %w[png jpg jpeg tif]
+      # We support (in order) JPG/JPEG, PNG, and TIF.
+      def cover_img
+        extensions = %w[jpg jpeg ng tif]
         extensions.each do |ext|
           file = Dir[path("#{images_dir}/cover.#{ext}")].first
-          return file if file
+          return File.basename(file) if file
         end
+        return false
       end
 
       def cover?
-        File.exist?(cover_file)
+        cover_img
       end
 
       # Returns the Table of Contents for the spine.
