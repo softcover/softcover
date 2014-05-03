@@ -5,40 +5,43 @@ prices:
     name: "HTML & Ebook"
     description:
       |
-        Optimized for Kindle and iPad
-        Almost 9000 pages of content
-        Includes a free copy of 1st Edition PDF
+        * DRM-free PDF/EPUB/MOBI versions of both the 2nd edition and the Rails 4.0 version of the Ruby on Rails Tutorial
+        * Includes both a Rails 4.0 supplementary chapter and the full Rails 4.0–compatible version
+        * Includes a free copy of the 1st edition
+        * Three full books with more than 600 pages of content each
+        * Recommended for readers who want the convenience of ebooks
     media:
       - ebooks
-    price: 3500
+    price: 4500
 
   -
-    code: screencasts
-    name: "HTML & Screencasts"
+    code: supplement
+    name: "HTML, Ebooks, and Supplement Screencast"
     description:
       |
-        Full updated for the 2nd edition
-        100% DRM-free digital downloads
-        (QuickTime and Ogg Vorbis)
-        Includes first edition screencasts
+        * Rails 3.2 & 4.0 ebooks and two Rails 4.0 supplementary screencasts
+        * Designed for previous customers of the 2nd edition ebooks or screencasts
+        * **Does not include the 2nd edition screencast series**
+        * New customers should buy the full bundle, which includes all the material in this bundle (and more)
     media:
       - ebooks
-      - media/screencasts
-    price: 12500
+      - media/screencasts_supplement
+    price: 5900
 
   -
     code: all
-    name: "HTML, Ebook, and Screencasts"
+    name: "HTML, Ebooks, and Screencasts"
     description:
       |
-        Includes all 50 screencasts
-        eBook formats for Kindle, Nook, and PDF
-        Read online.
+        * More than 15 hours of screencasts for hands-on Rails instruction
+        * Fully updated for the 2nd edition (Ruby 1.9/Rails 3.2)
+        * Includes two Rails 4.0 supplementary screencasts
+        * Includes Rails 3.2 & 4.0 ebooks (all formats)
     media:
       - ebooks
-      - media/screencasts
-    price: 12500
-    regular_price: 19900
+      - media/screencasts_supplement
+      - media/screencasts_2nd_edition
+    price: 14900
 
 authors:
   -
