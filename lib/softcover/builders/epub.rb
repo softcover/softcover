@@ -381,9 +381,9 @@ module Softcover
       end
 
       # Returns the name of the cover file.
-      # We support (in order) JPG/JPEG, PNG, and TIF.
+      # We support (in order) JPG/JPEG, PNG, and TIFF.
       def cover_img
-        extensions = %w[jpg jpeg ng tif]
+        extensions = %w[jpg jpeg png tiff]
         extensions.each do |ext|
           file = Dir[path("#{images_dir}/cover.#{ext}")].first
           return File.basename(file) if file
