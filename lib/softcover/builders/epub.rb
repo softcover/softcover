@@ -304,12 +304,6 @@ module Softcover
 </container>)
       end
 
-      def image_extension(image)
-        ext = File.extname(image).sub('.', '')   # e.g., 'png'
-        ext = 'jpeg' if ext == 'jpg'
-        ext
-      end
-
       # Returns the content configuration file.
       def content_opf
         title  = manifest.title
@@ -324,7 +318,8 @@ module Softcover
                  end
         image_files = Dir['epub/OEBPS/images/**/*'].select { |f| File.file?(f) }
         images = image_files.map do |image|
-                   ext = image_extension(image)
+                   ext = File.extname(image).sub('.', '')   # e.g., 'png'
+                   ext = 'jpeg' if ext == 'jpg'
                    # Strip off the leading 'epub/OEBPS'.
                    sep  = File::SEPARATOR
                    href = image.split(sep)[2..-1].join(sep)
@@ -335,17 +330,6 @@ module Softcover
                    id = "img-#{label}"
                    %(<item id="#{id}" href="#{href}" media-type="image/#{ext}"/>)
                  end
-        cover_meta = if cover?
-                       cover_id = 'cover-image'
-                       %(<meta name="cover" content="#{cover_id}"/>)
-                     else
-                       ''
-                     end
-        cover_item = if cover?
-                        %(<item id="#{cover_id}" href="images/#{cover_img}" media-type="image/#{image_extension(cover_img)}" />)
-                      else
-                       ''
-                     end
 %(<?xml version="1.0" encoding="UTF-8"?>
   <package unique-identifier="BookID" version="3.0" xmlns="http://www.idpf.org/2007/opf">
     <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"
@@ -357,7 +341,7 @@ module Softcover
         <dc:publisher>Softcover</dc:publisher>
         <dc:identifier id="BookID">urn:uuid:#{uuid}</dc:identifier>
         <meta property="dcterms:modified">#{Time.now.strftime('%Y-%m-%dT%H:%M:%S')}Z</meta>
-        #{cover_meta}
+        <meta name="cover" content="cover-image"/>
     </metadata>
     <manifest>
         <item href="nav.html" id="nav" media-type="application/xhtml+xml" properties="nav"/>
@@ -369,7 +353,6 @@ module Softcover
         <item id="custom.css" href="styles/custom.css" media-type="text/css"/>
         <item id="custom_epub.css" href="styles/custom_epub.css" media-type="text/css"/>
         <item id="cover" href="cover.html" media-type="application/xhtml+xml"/>
-        #{cover_item}
         #{man_ch.join("\n")}
         #{images.join("\n")}
     </manifest>
