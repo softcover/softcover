@@ -1,6 +1,9 @@
 #encoding: utf-8
 require 'ostruct'
 
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
+
 class Softcover::BookManifest < OpenStruct
   include Softcover::Utils
 
