@@ -44,7 +44,12 @@ class Softcover::BookManifest < OpenStruct
       raw_html = Polytexnic::Pipeline.new(title,
                                           language_labels: language_labels).
                                          to_html
-      html = Nokogiri::HTML(raw_html).at_css('p').inner_html
+      doc = Nokogiri::HTML(raw_html).at_css('p')
+      # Handle case of a footnote in the chapter title.
+      doc.css('sup').each do |footnote_node|
+        footnote_node.remove
+      end
+      html = doc.inner_html
       if chapter_number.zero?
         html
       else
