@@ -135,7 +135,7 @@ module Softcover
         return nil unless File.exist?('phantomjs_source.html')
         raw_source = File.read('phantomjs_source.html')
         source = strip_attributes(Nokogiri::HTML(raw_source))
-        rm 'phantomjs_source.html'
+        # rm 'phantomjs_source.html'
         # Remove the first body div, which is the hidden MathJax SVGs.
         if (mathjax_svgs = source.at_css('body div'))
           mathjax_svgs.remove
