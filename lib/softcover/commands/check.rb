@@ -44,6 +44,7 @@ module Softcover
          [:java,        'Java'],
          [:zip,         'zip'],
          [:epubcheck,   'EpubCheck'],
+         [:zip,         'zip'],
         ]
       end
 
@@ -90,6 +91,8 @@ module Softcover
           message += "      ∟ Unzip and put epubcheck-3.0/ in $HOME/bin"
         when :inkscape
           message  = "Inkscape (http://inkscape.org/)"
+        when :zip
+          "zip (http://www.info-zip.org/)"
         else
           raise "Unknown label #{label}"
         end
