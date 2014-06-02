@@ -42,3 +42,5 @@ Command line interface for Softcover.io
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+A third party Vagrant virtual machine can be found at: <https://github.com/cirosantilli/softcover_vagrant>
