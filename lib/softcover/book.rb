@@ -21,7 +21,7 @@ class Softcover::Book
   end
 
   class BookFile < Struct.new(:path)
-    LAST_WRITE_HORIZON = 5
+    LAST_WRITE_HORIZON = 0
 
     attr_accessor :checksum
     def initialize(*args)
