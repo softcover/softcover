@@ -83,7 +83,7 @@ describe Softcover::Builders::Epub do
         end
 
         it "should have the right conver meta tag" do
-          meta = '<meta name="cover" content="cover-image"/>'
+          meta = '<meta name="cover" content="img-cover-jpg"/>'
           expect(doc.to_xml).to include meta
         end
       end

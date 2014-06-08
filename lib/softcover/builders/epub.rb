@@ -341,7 +341,7 @@ module Softcover
         <dc:publisher>Softcover</dc:publisher>
         <dc:identifier id="BookID">urn:uuid:#{uuid}</dc:identifier>
         <meta property="dcterms:modified">#{Time.now.strftime('%Y-%m-%dT%H:%M:%S')}Z</meta>
-        <meta name="cover" content="cover-image"/>
+        <meta name="cover" content="#{cover_id}"/>
     </metadata>
     <manifest>
         <item href="nav.html" id="nav" media-type="application/xhtml+xml" properties="nav"/>
@@ -389,6 +389,10 @@ module Softcover
           return File.basename(file) if file
         end
         return false
+      end
+
+      def cover_id
+        "img-#{cover_img.sub('.', '-')}"
       end
 
       def cover?
