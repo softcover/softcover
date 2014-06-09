@@ -122,14 +122,17 @@ module WebmockHelpers
                  to_return(:status => 200, :body => "", :headers => {})
   end
 
-  def stub_media_upload(book)
+  def stub_media_upload(book, dir='ebooks')
     stub_s3_post
     stub_create_book(book)
 
-    files = book.find_screencasts
+    files = book.get_book_files(dir)
     stub_request(:post,
-                 "#{api_base_url}/books/#{book.id}/media").
-                  with(:body => {files: files }.to_json,
+                 /\/books\/#{book.id || '.+'}\/media/).
+                  with(:body => {
+                                  path: dir,
+                                  files: files,
+                                  manifest: nil}.to_json,
                        :headers => headers).
                   to_return(:status => 200, :body => {
                             upload_params: files.map { |file|
