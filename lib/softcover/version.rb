@@ -1,3 +1,3 @@
 module Softcover
-  VERSION = "0.9.20"
+  VERSION = "0.9.21"
 end
