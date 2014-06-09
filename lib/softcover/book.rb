@@ -1,5 +1,6 @@
 class Softcover::Book
   include Softcover::Utils
+  include Softcover::Output
 
   DEFAULT_MEDIA_DIR = "media"
 
@@ -174,14 +175,12 @@ class Softcover::Book
   # Media handling
   # ============================================================================
 
-  # 1. iterate over /ebooks, /media/*
+  # 1. iterate over /media/*
   # => use directory name as path parameter
   # => get checksums for all included files
   # => send each to /media API endpoint and then upload
 
   def process_media
-    process_media_directory "ebooks"
-
     Dir["media/*"].each do |media_dir|
       next unless File.directory?(media_dir) && !(media_dir =~ /^\./)
       process_media_directory media_dir
