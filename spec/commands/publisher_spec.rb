@@ -20,6 +20,7 @@ describe Softcover::Commands::Publisher do
       before do
         chdir_to_book
         stub_create_book book
+        stub_media_upload book
       end
 
       it "publishes" do
@@ -43,6 +44,7 @@ describe Softcover::Commands::Publisher do
       before do
         chdir_to_book
         stub_create_book book
+        stub_media_upload book
         subject.publish!
         stub_destroy_book book
       end
@@ -61,6 +63,7 @@ describe Softcover::Commands::Publisher do
       before do
         chdir_to_book
         stub_create_book book
+        stub_media_upload book
         subject.publish!
         Softcover::BookConfig['id'] = 0
         stub_destroy_book_not_found book
@@ -75,6 +78,7 @@ describe Softcover::Commands::Publisher do
       before do
         chdir_to_book
         stub_create_book book
+        stub_media_upload book
         subject.publish!
         Dir.chdir(File.dirname(__FILE__))
       end

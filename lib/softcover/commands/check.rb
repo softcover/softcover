@@ -67,12 +67,14 @@ module Softcover
         when :node
           "NodeJS (http://nodejs.org/)"
         when :phantomjs
-          "PhantomJS (http://phantomjs.org/)"
+          message = "PhantomJS (http://phantomjs.org/)\n"
+          message += "      ∟ Put bin/phantomjs somewhere on your path,"
+          message += " e.g., in /usr/local/bin"
         when :kindlegen
           url = 'http://www.amazon.com/gp/feature.html?ie=UTF8&docId=1000765211'
           message = "KindleGen (#{url})\n"
-          message += "      ∟ Put the kindlegen executable on your path, "
-          message += "e.g., in /usr/local/bin"
+          message += "      ∟ Put the kindlegen executable on your path,"
+          message += " e.g., in /usr/local/bin"
         when :calibre
           url = 'http://calibre-ebook.com/'
           message  = "Calibre (#{url})\n"

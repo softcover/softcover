@@ -14,7 +14,10 @@ module Softcover::Commands::Publisher
         puts "Uploading #{current_book.uploader.file_count} files " \
              "(#{as_size current_book.uploader.total_size}):"
       end
+
       url = current_book.upload!(options)
+      current_book.process_media_directory "ebooks"
+
       unless options[:quiet] || options[:silent]
         puts "Published! #{url}"
       end
