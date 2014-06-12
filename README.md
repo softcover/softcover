@@ -6,35 +6,18 @@ Softcover is an ebook typesetting system for technical authors. This is the main
 
 For more details about Softcover, see [*The Softcover Book*](http://manual.softcover.io/book).
 
-<!--
-# Softcover CLI
-
-Command line interface for Softcover.io
-
 ## Installation
 
     $ gem install softcover
 
 ## Usage
 
-    $ softcover <command>
+Run
 
-## Commands:
+    $ softcover help
 
-* login
-* logout
-* build:html, build:pdf, build:epub, build:mobi, build:all
-* build (aliased to build:html)
-* publish
-* new
+for a list of supported commands.
 
-## Development Notes
-    $ softcover config:add host=http://localhost:3000
-
-  * use "silence=false" to unsilence spec output:
-
-    $ silence=false bundle exec rspec
--->
 ## Contributing
 
 1. Fork it
