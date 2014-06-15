@@ -14,6 +14,7 @@ module Softcover
         create_directories
         write_mimetype
         write_container_xml
+        write_ibooks_xml
         write_toc
         write_nav
         copy_image_files
@@ -53,6 +54,14 @@ module Softcover
       # This is required by the EPUB standard.
       def write_container_xml
         File.write(path('epub/META-INF/container.xml'), container_xml)
+      end
+
+      # Writes iBooks-specific XML.
+      # This allows proper display of monospace fonts in code samples, among
+      # other things.
+      def write_ibooks_xml
+        xml_filename = 'com.apple.ibooks.display-options.xml'
+        File.write(path("epub/META-INF/#{xml_filename}"), ibooks_xml)
       end
 
       # Writes the content.opf file.
@@ -302,6 +311,15 @@ module Softcover
         <rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/>
    </rootfiles>
 </container>)
+      end
+
+      def ibooks_xml
+%(<?xml version="1.0" encoding="UTF-8"?>
+<display_options>
+  <platform name="*">
+    <option name="specified-fonts">true</option>
+  </platform>
+</display_options>)
       end
 
       # Returns the content configuration file.
