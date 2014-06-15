@@ -34,6 +34,10 @@ describe Softcover::Builders::Epub do
       expect('epub/META-INF/container.xml').to exist
     end
 
+    it "should have an iBooks XML file" do
+      expect('epub/META-INF/com.apple.ibooks.display-options.xml').to exist
+    end
+
     it "should have the right contents" do
       File.open('epub/META-INF/container.xml') do |f|
         expect(f.read).to match(/rootfile full-path="OEBPS\/content.opf"/)
