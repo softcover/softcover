@@ -6,9 +6,16 @@ module Softcover
 
       # Validates a book according to the EPUB standard.
       def validate!
-        epub = Dir.glob('ebooks/*.epub').first
-        puts "Validating EPUB..."
-        system("#{java} -jar #{epubcheck} #{epub}")
+        manifest = BookManifest.new(source: source)
+        epub = path("ebooks/#{manifest.filename}.epub")
+        if File.exist?(epub)
+          puts "Validating EPUB..."
+          system("#{java} -jar #{epubcheck} #{epub}")
+        else
+          puts "File '#{epub}' not found"
+          puts "Run 'softcover build:epub' to generate"
+          exit 1
+        end
       end
 
       private
