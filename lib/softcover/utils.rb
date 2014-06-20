@@ -197,7 +197,7 @@ module Softcover::Utils
   # Returns the system-independent file path.
   # It's nicer to write `path('foo/bar/baz')` than
   # `File.join('foo', 'bar', 'baz')`.
-  def path(path_string)
+  def path(path_string='')
     File.join(*path_string.split('/'))
   end
 
