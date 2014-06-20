@@ -17,16 +17,29 @@ describe Softcover::Builders::Mobi do
     describe "MOBI command" do
       context "default" do
         let(:command) do
-          @builder.mobi_command(@builder.mobi_filename, calibre: true)
+          @builder.mobi_command(@builder.mobi_filename)
         end
+
         it "should use Calibre's ebook-convert" do
           expect(command).to include 'ebook-convert'
+        end
+
+        it "should build both kinds of Kindle files" do
+          expect(command).to include ' --mobi-file-type both'
+        end
+
+        it "should include the cover" do
+          expect(command).to include ' --cover epub/OEBPS/images/cover.jpg'
+        end
+
+        it "should configure the cover to work with Kindle desktop app" do
+          expect(command).to include ' --share-not-sync'
         end
       end
 
       context "kindlegen" do
         let(:command) do
-          @builder.mobi_command(@builder.mobi_filename)
+          @builder.mobi_command(@builder.mobi_filename, kindlegen: true)
         end
         it "should use Amazon.com's kindlegen" do
           expect(command).to include 'kindlegen'

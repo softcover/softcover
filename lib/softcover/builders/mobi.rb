@@ -1,6 +1,8 @@
 module Softcover
   module Builders
     class Mobi < Builder
+      include Softcover::Utils
+      include Softcover::EpubUtils
 
       def build!(options={})
         Softcover::Builders::Epub.new.build!(options)
@@ -12,10 +14,6 @@ module Softcover
         else
           system(command)
         end
-        if options[:calibre]
-          FileUtils.mv("ebooks/#{filename}.azw3", "ebooks/#{filename}.mobi")
-          puts "MOBI saved to ebooks/#{filename}.mobi" unless silent
-        end
       end
 
       # Returns the filename of the MOBI (preview if necessary).
@@ -25,10 +23,11 @@ module Softcover
 
       # Returns the command for making a MOBI, based on the options.
       def mobi_command(filename, options={})
-        if options[:calibre]
-          "#{calibre} ebooks/#{filename}.epub ebooks/#{filename}.azw3"
-        else
+        if options[:kindlegen]
           "#{kindlegen} ebooks/#{filename}.epub"
+        else
+          "#{calibre} ebooks/#{filename}.epub ebooks/#{filename}.mobi" +
+          " #{calibre_options}"
         end
       end
 
@@ -36,6 +35,20 @@ module Softcover
 
         def calibre
           @calibre ||= executable(dependency_filename(:calibre))
+        end
+
+        # Returns the options for the Calibre `ebook-convert` CLI.
+        def calibre_options
+          # Include both Mobipocket & KF8 formats.
+          # It took me forever to figure this out. It really should be
+          # the Calibre default.
+          opts = "--mobi-file-type both"
+          if cover?
+            opts += " --cover #{cover_img_path}"
+            # Get covers to work in Kindle desktop app.
+            opts += " --share-not-sync"
+          end
+          opts
         end
 
         def kindlegen
