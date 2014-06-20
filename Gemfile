@@ -13,7 +13,7 @@ LC_ALL="en_US.UTF-8"
 gemspec
 
 group :test do
-  gem 'rspec'
+  gem 'rspec', '2.14.1'
   gem 'webmock',   require: false
   gem 'coveralls', require: false
   gem 'rack-test'
