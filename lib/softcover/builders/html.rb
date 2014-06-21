@@ -88,7 +88,8 @@ module Softcover
           # interim.
           unless (File.exist?(chapter.cache_filename) &&
                   File.read(chapter.cache_filename) == digest(markdown) &&
-                  File.exist?(polytex_filename))
+                  File.exist?(polytex_filename) &&
+                  !markdown.include?('\input'))
             File.write(polytex_filename, polytex(chapter, markdown))
           end
         end
