@@ -1,7 +1,35 @@
 module Softcover
+
+  module EpubUtils
+
+    # Returns the name of the cover file.
+    # We support (in order) JPG/JPEG, PNG, and TIFF.
+    def cover_img
+      extensions = %w[jpg jpeg png tiff]
+      extensions.each do |ext|
+        file = Dir[path("#{images_dir}/cover.#{ext}")].first
+        return File.basename(file) if file
+      end
+      return false
+    end
+
+    def cover?
+      cover_img
+    end
+
+    def cover_img_path
+      path("#{images_dir}/#{cover_img}")
+    end
+
+    def images_dir
+      path('epub/OEBPS/images')
+    end
+  end
+
   module Builders
     class Epub < Builder
       include Softcover::Output
+      include Softcover::EpubUtils
 
       def build!(options={})
         @preview = options[:preview]
@@ -119,10 +147,6 @@ module Softcover
             FileUtils.rm(f)
           end
         end
-      end
-
-      def images_dir
-        File.join('epub', 'OEBPS', 'images')
       end
 
       # Returns HTML for HTML source that includes math.
@@ -398,23 +422,8 @@ module Softcover
 )
       end
 
-      # Returns the name of the cover file.
-      # We support (in order) JPG/JPEG, PNG, and TIFF.
-      def cover_img
-        extensions = %w[jpg jpeg png tiff]
-        extensions.each do |ext|
-          file = Dir[path("#{images_dir}/cover.#{ext}")].first
-          return File.basename(file) if file
-        end
-        return false
-      end
-
       def cover_id
         "img-#{cover_img.sub('.', '-')}"
-      end
-
-      def cover?
-        cover_img
       end
 
       # Returns the Table of Contents for the spine.
