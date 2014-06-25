@@ -7,7 +7,7 @@ module Softcover::Commands::Publisher
   def publish!(options={})
     return false unless current_book
 
-    if current_book.create_or_update
+    if current_book.create_or_update(options)
       require 'ruby-progressbar'
       require 'curb'
       unless options[:quiet] || options[:silent]
@@ -47,18 +47,18 @@ module Softcover::Commands::Publisher
 
     if options[:daemon]
       pid = fork do
-        run_publish_media
+        run_publish_media(options)
       end
 
       puts "Daemonized, pid: #{pid}"
     else
-      run_publish_media
+      run_publish_media(options)
     end
 
     current_book
   end
 
-  def run_publish_media
+  def run_publish_media(options={})
     if @watch
       puts "Watching..."
 
@@ -69,7 +69,7 @@ module Softcover::Commands::Publisher
 
       begin
         loop do
-          process_media
+          process_media(options)
           sleep 1
         end
       rescue Interrupt
@@ -77,13 +77,13 @@ module Softcover::Commands::Publisher
         exit_with_message
       end
     else
-      process_media
+      process_media(options)
       exit_with_message
     end
   end
 
-  def process_media
-    current_book.process_media
+  def process_media(options={})
+    current_book.process_media(options)
   end
 
   def exit_with_message
