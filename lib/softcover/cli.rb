@@ -137,6 +137,8 @@ module Softcover
                           desc: "Quiet output", type: :boolean
     method_option :silent, aliases: '-s',
                            desc: "Silent output", type: :boolean
+    method_option :remove_unused_media_bundles, aliases: '-r',
+                           desc: "Remove unused media bundles", type: :boolean
     def publish
       require 'softcover/commands/publisher'
 
@@ -151,6 +153,8 @@ module Softcover
       desc: "Run as daemon", type: :boolean
     method_option :watch, aliases: '-w', type: :boolean,
       force: false, desc: "Watch a directory to auto upload."
+    method_option :remove_unused_media_files, aliases: '-r',
+                           desc: "Remove unused media files", type: :boolean
 
     # TODO: make screencasts dir .book configurable
     define_method "publish:media" do |dir=

@@ -93,25 +93,29 @@ class Softcover::Book
     end
   end
 
-  def create_or_update
+  def create_or_update(options={})
     raise "HTML not built!" if Dir['html/*'].empty?
 
-    res = @client.create_or_update_book id: id,
-                                        files: files,
-                                        title: title,
-                                        slug: slug,
-                                        subtitle: subtitle,
-                                        description: description,
-                                        chapters: chapter_attributes,
-                                        prices: prices,
-                                        faq: faq,
-                                        testimonials: testimonials,
-                                        marketing_content: marketing_content,
-                                        contact_email: contact_email,
-                                        hide_softcover_footer:
-                                          hide_softcover_footer,
-                                        authors: authors,
-                                        ga_account: ga_account
+    params = {
+      id: id,
+      files: files,
+      title: title,
+      slug: slug,
+      subtitle: subtitle,
+      description: description,
+      chapters: chapter_attributes,
+      prices: prices,
+      faq: faq,
+      testimonials: testimonials,
+      marketing_content: marketing_content,
+      contact_email: contact_email,
+      hide_softcover_footer: hide_softcover_footer,
+      authors: authors,
+      ga_account: ga_account,
+      remove_unused_media_bundles: options[:remove_unused_media_bundles]
+    }
+
+    res = @client.create_or_update_book params
 
     if res['errors']
       @errors = res['errors']
@@ -180,14 +184,14 @@ class Softcover::Book
   # => get checksums for all included files
   # => send each to /media API endpoint and then upload
 
-  def process_media
+  def process_media(options={})
     Dir["media/*"].each do |media_dir|
       next unless File.directory?(media_dir) && !(media_dir =~ /^\./)
-      process_media_directory media_dir
+      process_media_directory media_dir, options
     end
   end
 
-  def process_media_directory(dir)
+  def process_media_directory(dir, options={})
     return false if @processed_media.include?(dir)
 
     puts "Processing #{dir} directory..."
@@ -196,7 +200,7 @@ class Softcover::Book
       file.ready?
     end
 
-    upload_media! dir, files_to_upload
+    upload_media! dir, files_to_upload, options
 
     @processed_media.push dir
   end
@@ -207,13 +211,13 @@ class Softcover::Book
     end.compact
   end
 
-  def upload_media!(path, files)
+  def upload_media!(path, files, options={})
     return if files.empty?
 
     manifest_path = File.join(path, "manifest.yml")
     manifest = File.exists?(manifest_path) ? File.read(manifest_path) : nil
 
-    res = @client.get_media_upload_params path, files, manifest
+    res = @client.get_media_upload_params path, files, manifest, options
 
     if res['upload_params']
       media_uploader = Softcover::Uploader.new res

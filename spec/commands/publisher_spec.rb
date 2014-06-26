@@ -5,6 +5,8 @@ describe Softcover::Commands::Publisher do
   before(:all) { generate_book }
   after(:all)  { remove_book }
 
+  let(:publish_options) { { remove_unused_media_bundles: true } }
+
   describe "#publish" do
     context "publishing from non book directory" do
       before do
@@ -24,7 +26,7 @@ describe Softcover::Commands::Publisher do
       end
 
       it "publishes" do
-        expect(subject.publish!).to be_true
+        expect(subject.publish!(publish_options)).to be_true
       end
     end
   end
@@ -45,7 +47,7 @@ describe Softcover::Commands::Publisher do
         chdir_to_book
         stub_create_book book
         stub_media_upload book
-        subject.publish!
+        subject.publish! publish_options
         stub_destroy_book book
       end
 
@@ -64,7 +66,7 @@ describe Softcover::Commands::Publisher do
         chdir_to_book
         stub_create_book book
         stub_media_upload book
-        subject.publish!
+        subject.publish!(publish_options)
         Softcover::BookConfig['id'] = 0
         stub_destroy_book_not_found book
       end
@@ -79,7 +81,7 @@ describe Softcover::Commands::Publisher do
         chdir_to_book
         stub_create_book book
         stub_media_upload book
-        subject.publish!
+        subject.publish! publish_options
         Dir.chdir(File.dirname(__FILE__))
       end
 

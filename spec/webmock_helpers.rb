@@ -67,7 +67,8 @@ module WebmockHelpers
            contact_email: book.contact_email,
            hide_softcover_footer: book.hide_custom_domain_footer,
            authors: book.authors,
-           ga_account: book.ga_account
+           ga_account: book.ga_account,
+           remove_unused_media_bundles: true
         }.to_json,
            :headers => headers).
       to_return(:status => 200, :body => return_body, :headers => {})
@@ -122,7 +123,7 @@ module WebmockHelpers
                  to_return(:status => 200, :body => "", :headers => {})
   end
 
-  def stub_media_upload(book, dir='ebooks')
+  def stub_media_upload(book, dir='ebooks', options={})
     stub_s3_post
     stub_create_book(book)
 
@@ -132,7 +133,10 @@ module WebmockHelpers
                   with(:body => {
                                   path: dir,
                                   files: files,
-                                  manifest: nil}.to_json,
+                                  manifest: nil,
+                                  remove_unused_media_files:
+                                    options[:remove_unused_media_files]
+                                }.to_json,
                        :headers => headers).
                   to_return(:status => 200, :body => {
                             upload_params: files.map { |file|

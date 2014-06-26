@@ -66,11 +66,12 @@ module Softcover
     end
 
     # ============ Media ===========
-    def get_media_upload_params(path, files, manifest=nil)
+    def get_media_upload_params(path, files, manifest=nil, options={})
       JSON post path_for(:books, book.id, :media),
         path: path,
         files: files,
-        manifest: manifest
+        manifest: manifest,
+        remove_unused_media_files: options[:remove_unused_media_files]
       # TODO: handle errors
     end
 
