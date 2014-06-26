@@ -111,8 +111,6 @@ describe Softcover::Commands::Publisher do
       stub_media_upload book
     end
 
-    # expect()
-
     # it "should start with 0 processed_media" do
     #   expect(book.processed_media.length).to eq 0
     # end
