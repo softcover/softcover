@@ -41,6 +41,9 @@ module Softcover
         method_option :'find-overfull', aliases: '-f',
                                         desc: "Find overfull hboxes",
                                         type: :boolean
+        method_option :nonstop, aliases: '-n',
+                             desc: "Run PDF generator in nonstopmode",
+                             type: :boolean
       elsif format == 'mobi'
         method_option :kindlegen, aliases: '-k',
                                   desc: "Use KindleGen to build the MOBI",
