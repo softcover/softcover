@@ -28,6 +28,9 @@ authors:
     name: "The Author"
     image: /images/testimonial_1.png
     contact_email: "info@softcover.io"
+    contact_twitter: ""
+    contact_fb: ""
+    contact_gh: ""
     bio:
       |
         Author bio [link](https://www.softcover.io)
