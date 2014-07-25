@@ -65,13 +65,10 @@ module WebmockHelpers
            testimonials: book.testimonials,
            marketing_content: '',
            contact_email: book.contact_email,
-           contact_twitter: book.contact_twitter,
-           contact_fb: book.contact_fb,
-           contact_gh: book.contact_gh,
            hide_softcover_footer: book.hide_custom_domain_footer,
            authors: book.authors,
            ga_account: book.ga_account,
-           book_repo: book_repo,
+           repo_url: book.repo_url,
            remove_unused_media_bundles: true
         }.to_json,
            :headers => headers).

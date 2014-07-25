@@ -28,9 +28,9 @@ authors:
     name: "The Author"
     image: /images/testimonial_1.png
     contact_email: "info@softcover.io"
-    contact_twitter: ""
-    contact_fb: ""
-    contact_gh: ""
+    contact_twitter: "@softcover"
+    contact_fb: "http://facebook.com/softcover"
+    contact_gh: "@softcover"
     bio:
       |
         Author bio [link](https://www.softcover.io)
@@ -59,6 +59,6 @@ testimonials:
 
 marketing_content: ''
 
-book_repo: ''
+repo_url: ''
 contact_email: ''
 hide_custom_domain_footer: false

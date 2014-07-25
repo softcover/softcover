@@ -109,13 +109,10 @@ class Softcover::Book
       testimonials: testimonials,
       marketing_content: marketing_content,
       contact_email: contact_email,
-      contact_twitter: book.contact_twitter,
-      contact_fb: book.contact_fb,
-      contact_gh: book.contact_gh,
       hide_softcover_footer: hide_softcover_footer,
       authors: authors,
       ga_account: ga_account,
-      book_repo: book_repo,
+      repo_url: repo_url,
       remove_unused_media_bundles: options[:remove_unused_media_bundles]
     }
 
