@@ -160,7 +160,8 @@ class Softcover::BookManifest < OpenStruct
              path('latex_styles/custom_pdf.sty'),
              path('config/preamble.tex'),
              path('config/lang.yml'),
-             path('epub/OEBPS/styles/custom_epub.css')
+             path('epub/OEBPS/styles/custom_epub.css'),
+             path('epub/OEBPS/styles/page-template.xpgt'),
            ]
     files.each do |file|
       unless File.exist?(file)
