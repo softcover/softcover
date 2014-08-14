@@ -237,40 +237,30 @@ module Softcover::Utils
   def dependency_filename(label)
     case label
     when :latex
-      `which xelatex`.chomp
+      filename(:xelatex)
     when :ghostscript
-      `which gs`.chomp
+      filename(:gs)
     when :convert
       `which convert`.chomp
-    when :node
-      `which node`.chomp
-    when :phantomjs
-      `which phantomjs`.chomp
-    when :kindlegen
-      `which kindlegen`.chomp
-    when :java
-      `which java`.chomp
-    when :zip
-      `which zip`.chomp
     when :calibre
       `which ebook-convert`.chomp
     when :epubcheck
-      filename = `which epubcheck`.chomp
-      if filename.empty?
-        filename = \
-          File.join(Dir.home, 'bin', 'epubcheck-3.0', 'epubcheck-3.0.jar')
-      end
-      filename
+      default = File.join(Dir.home, 'bin', 'epubcheck-3.0', 'epubcheck-3.0.jar')
+      filename_or_default(:epubcheck, default)
     when :inkscape
-      filename = `which inkscape`.chomp
-      if filename.empty?
-        filename = '/Applications/Inkscape.app/Contents/Resources/bin/' +
-                   'inkscape'
-      end
-      filename
+      default = '/Applications/Inkscape.app/Contents/Resources/bin/inkscape'
+      filename_or_default(:inkscape, default)
     else
-      raise "Unknown label #{label}"
+      filename(label)
     end
+  end
+
+  def filename(name)
+    `which #{name}`.chomp
+  end
+
+  def filename_or_default(name, default)
+    (f = filename(name)).empty? ? default : f
   end
 
   # Returns the language labels from the config file.
