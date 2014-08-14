@@ -255,7 +255,12 @@ module Softcover::Utils
     when :calibre
       `which ebook-convert`.chomp
     when :epubcheck
-      File.join(Dir.home, 'bin', 'epubcheck-3.0', 'epubcheck-3.0.jar')
+      filename = `which epubcheck`.chomp
+      if filename.empty?
+        filename = \
+          File.join(Dir.home, 'bin', 'epubcheck-3.0', 'epubcheck-3.0.jar')
+      end
+      filename
     when :inkscape
       filename = `which inkscape`.chomp
       if filename.empty?
