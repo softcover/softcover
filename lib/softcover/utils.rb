@@ -237,13 +237,11 @@ module Softcover::Utils
   def dependency_filename(label)
     case label
     when :latex
-      filename(:xelatex)
+      get_filename(:xelatex)
     when :ghostscript
-      filename(:gs)
-    when :convert
-      `which convert`.chomp
+      get_filename(:gs)
     when :calibre
-      `which ebook-convert`.chomp
+      get_filename(:'ebook-convert')
     when :epubcheck
       default = File.join(Dir.home, 'bin', 'epubcheck-3.0', 'epubcheck-3.0.jar')
       filename_or_default(:epubcheck, default)
@@ -251,16 +249,16 @@ module Softcover::Utils
       default = '/Applications/Inkscape.app/Contents/Resources/bin/inkscape'
       filename_or_default(:inkscape, default)
     else
-      filename(label)
+      get_filename(label)
     end
   end
 
-  def filename(name)
+  def get_filename(name)
     `which #{name}`.chomp
   end
 
   def filename_or_default(name, default)
-    (f = filename(name)).empty? ? default : f
+    (f = get_filename(name)).empty? ? default : f
   end
 
   # Returns the language labels from the config file.
