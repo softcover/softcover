@@ -3,6 +3,7 @@
 *.log
 *.toc
 *.out
+/*.tex
 *.tmp.*
 tmp/
 generated_polytex/
