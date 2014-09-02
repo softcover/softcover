@@ -126,7 +126,9 @@ class Softcover::Book
     @attrs = res['book']
 
     self.id = @attrs['id']
-    Softcover::BookConfig['last_uploaded_at'] = Time.now
+
+    # Not needed for now:
+    # Softcover::BookConfig['last_uploaded_at'] = Time.now
 
     # res contains the S3 upload signatures needed
     @uploader = Softcover::Uploader.new res
