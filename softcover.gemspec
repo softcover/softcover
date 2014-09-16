@@ -28,7 +28,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'curb', '~> 0.8.5'
   gem.add_dependency 'ruby-progressbar', '~> 1.4.2'
   gem.add_dependency 'maruku', '~> 0.7.1'
-  gem.add_dependency 'pygments.rb', '~> 0.4.2'
+  gem.add_dependency 'pygments.rb', '~> 0.6.0'
   gem.add_dependency 'kramdown', '~> 1.3.2'
 
   gem.add_dependency 'sinatra', '~> 1.4.4'
