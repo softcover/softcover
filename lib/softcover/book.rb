@@ -112,6 +112,7 @@ class Softcover::Book
       hide_softcover_footer: hide_softcover_footer,
       authors: authors,
       ga_account: ga_account,
+      repo_url: repo_url,
       remove_unused_media_bundles: options[:remove_unused_media_bundles]
     }
 

@@ -68,6 +68,7 @@ module WebmockHelpers
            hide_softcover_footer: book.hide_custom_domain_footer,
            authors: book.authors,
            ga_account: book.ga_account,
+           repo_url: book.repo_url,
            remove_unused_media_bundles: true
         }.to_json,
            :headers => headers).
