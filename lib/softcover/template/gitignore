@@ -3,6 +3,7 @@
 *.log
 *.toc
 *.out
+/*.tex
 *.tmp.*
 tmp/
 generated_polytex/
@@ -21,8 +22,9 @@ epub/OEBPS/images
 epub/OEBPS/styles/*
 epub/mimetype
 epub/META-INF/*
-# Keep EPUB CSS customizations
+# Keep necessary EPUB files.
 !epub/OEBPS/styles/custom_epub.css
+!epub/OEBPS/styles/page-template.xpgt
 
 # Generated ebooks
 ebooks/

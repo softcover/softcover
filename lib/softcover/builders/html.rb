@@ -50,7 +50,7 @@ module Softcover
                                          '..', 'server', 'views',
                                          'book.html.erb'))
           file_content = ERB.new(erb_file).result(binding)
-          write_full_html_file(basename, file_content)
+          write_full_html_file(manifest.slug, file_content)
           write_chapter_html_files(Nokogiri::HTML(file_content), erb_file)
         end
 
