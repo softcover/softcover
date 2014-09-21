@@ -243,8 +243,11 @@ module Softcover::Utils
     when :calibre
       get_filename(:'ebook-convert')
     when :epubcheck
-      default = File.join(Dir.home, 'bin', 'epubcheck-3.0', 'epubcheck-3.0.jar')
-      filename_or_default(:epubcheck, default)
+      # Finds EpubCheck anywhere on the path.
+      cmd_path = ['epubcheck-3.0', 'epubcheck-3.0.jar']
+      possible_paths = ENV['PATH'].split(File::PATH_SEPARATOR).
+                                   collect { |x| File.join(x, cmd_path) }
+      possible_paths.select { |f| File.file?(f) }.first
     when :inkscape
       default = '/Applications/Inkscape.app/Contents/Resources/bin/inkscape'
       filename_or_default(:inkscape, default)
@@ -257,6 +260,7 @@ module Softcover::Utils
     `which #{name}`.chomp
   end
 
+  # Returns the filename if it exists on the path and a default otherwise.
   def filename_or_default(name, default)
     (f = get_filename(name)).empty? ? default : f
   end
