@@ -40,15 +40,19 @@ module Softcover
         # Returns the options for the Calibre `ebook-convert` CLI.
         def calibre_options
           # Include both Mobipocket & KF8 formats.
-          # It took me forever to figure this out. It really should be
+          # Figuring this out took around two years. It really should be
           # the Calibre default.
-          opts = "--mobi-file-type both"
+          opts = ["--mobi-file-type both"]
+          # Don't put pagebreaks in the detailed table of contents.
+          opts << "--chapter /"
           if cover?
-            opts += " --cover #{cover_img_path}"
+            # Add an explicit path to the cover image.
+            # Figuring this out took several days.
+            opts << "--cover #{cover_img_path}"
             # Get covers to work in Kindle desktop app.
-            opts += " --share-not-sync"
+            opts << "--share-not-sync"
           end
-          opts
+          opts.join(" ")
         end
 
         def kindlegen
