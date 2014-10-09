@@ -110,6 +110,7 @@ class Softcover::Book
       marketing_content: marketing_content,
       contact_email: contact_email,
       hide_softcover_footer: hide_softcover_footer,
+      author_name: author,
       authors: authors,
       ga_account: ga_account,
       repo_url: repo_url,
