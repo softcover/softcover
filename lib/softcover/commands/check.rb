@@ -79,7 +79,7 @@ module Softcover
           url = 'http://calibre-ebook.com/'
           message  = "Calibre (#{url})\n"
           message += "      ∟ Enable Calibre command-line tools"
-          message += " (http://manual.calibre-ebook.com/cli/cli-index.html)"
+          message += " (http://manual.calibre-ebook.com/generated/en/cli-index.html)"
         when :java
           url = 'http://www.java.com/en/download/help/index_installing.xml'
           "Java (#{url})"
