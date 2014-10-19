@@ -291,20 +291,20 @@ module Softcover
         # Copy over all images to guarantee the same directory structure.
         FileUtils.cp_r(File.join('html', 'images'),
                        File.join('epub', 'OEBPS'))
-        # # Parse the full HTML file with Nokogiri to get images actually used.
-        # html = File.read(manifest.full_html_file)
-        # html_image_filenames = Nokogiri::HTML(html).css('img').map do |node|
-        #                          node.attributes['src'].value
-        #                        end
-        # # Form the corresponding EPUB image paths.
-        # used_image_filenames = html_image_filenames.map do |filename|
-        #                          "epub/OEBPS/#{filename}"
-        #                        end
-        # # Delete unused images.
-        # Dir.glob("epub/OEBPS/images/**/*").each do |image|
-        #   next if File.directory?(image)
-        #   FileUtils.rm(image) unless used_image_filenames.include?(image)
-        # end
+        # Parse the full HTML file with Nokogiri to get images actually used.
+        html = File.read(manifest.full_html_file)
+        html_image_filenames = Nokogiri::HTML(html).css('img').map do |node|
+                                 node.attributes['src'].value
+                               end
+        # Form the corresponding EPUB image paths.
+        used_image_filenames = html_image_filenames.map do |filename|
+                                 "epub/OEBPS/#{filename}"
+                               end
+        # Delete unused images.
+        Dir.glob("epub/OEBPS/images/**/*").each do |image|
+          next if File.directory?(image)
+          FileUtils.rm(image) unless used_image_filenames.include?(image)
+        end
       end
 
       # Make the EPUB, which is basically just a zipped HTML file.
