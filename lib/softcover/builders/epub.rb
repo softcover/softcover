@@ -299,11 +299,11 @@ module Softcover
         # Form the corresponding EPUB image paths.
         used_image_filenames = html_image_filenames.map do |filename|
                                  "epub/OEBPS/#{filename}"
-                               end
+                               end.to_set
         # Delete unused images.
         Dir.glob("epub/OEBPS/images/**/*").each do |image|
           next if File.directory?(image)
-          FileUtils.rm(image) unless used_image_filenames.include?(image)
+          rm image unless used_image_filenames.include?(image)
         end
       end
 
