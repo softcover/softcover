@@ -195,7 +195,8 @@ module WebmockHelpers
     File.write(File.join('html', 'chapter-1_fragment.html'), 'test')
     File.write(File.join('html', 'test_fragment.html'),      'test')
     File.write(File.join('html', "#{name}.html"),            'test')
-    File.mkdir 'ebooks' unless File.exist?('ebooks')
+    mkdir path('html/images')
+    mkdir 'ebooks'
     Softcover::FORMATS.each do |format|
       dir = format == 'html' ? 'html' : 'ebooks'
       File.write(File.join(dir, "test-book.#{format}"), 'test')

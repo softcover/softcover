@@ -252,6 +252,11 @@ class Softcover::BookManifest < OpenStruct
     end
   end
 
+  # Returns the name of the HTML file containing the full book.
+  def full_html_file
+    path("html/#{slug}.html")
+  end
+
   # Returns chapters for the PDF.
   def pdf_chapter_names
     chaps = chapters.reject { |chapter| chapter.slug.match(/frontmatter/) }.

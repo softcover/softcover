@@ -5,11 +5,16 @@ describe Softcover::Builders::Epub do
     generate_book
     @file_to_be_removed = path('html/should_be_removed.html')
     File.write(@file_to_be_removed, '')
+    @image_not_to_be_included = path('html/images/not_used.png')
+    # File.write(@image_not_to_be_included, '')
     silence { `softcover build:epub` }
     @builder = Softcover::Builders::Epub.new
     @builder.build!
   end
-  after(:all) { remove_book }
+  after(:all) do
+    remove_book
+    rm(@image_not_to_be_included)
+  end
   subject(:builder) { @builder }
 
   it "should be valid" do

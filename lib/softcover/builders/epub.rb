@@ -7,8 +7,12 @@ module Softcover
     def cover_img
       extensions = %w[jpg jpeg png tiff]
       extensions.each do |ext|
-        file = Dir[path("#{images_dir}/cover.#{ext}")].first
-        return File.basename(file) if file
+        origin = "images/cover.#{ext}"
+        target = "#{images_dir}/cover.#{ext}"
+        if File.exist?(origin)
+          FileUtils.cp(origin, target)
+          return File.basename(target)
+        end
       end
       return false
     end
@@ -39,6 +43,7 @@ module Softcover
           self.manifest = Softcover::BookManifest.new(opts)
         end
         remove_html
+        remove_images
         create_directories
         write_mimetype
         write_container_xml
@@ -64,11 +69,17 @@ module Softcover
         FileUtils.rm(Dir.glob(path('epub/OEBPS/*.html')))
       end
 
+      # Removes images in case they are stale.
+      def remove_images
+        rm_r images_dir
+      end
+
       def create_directories
         mkdir('epub')
         mkdir(path('epub/OEBPS'))
         mkdir(path('epub/OEBPS/styles'))
         mkdir(path('epub/META-INF'))
+        mkdir(images_dir)
         mkdir('ebooks')
       end
 
@@ -276,11 +287,23 @@ module Softcover
       end
 
       # Copies the image files from the HTML version of the document.
-      # We remove PDF images, which are valid in PDF documents but not in EPUB.
       def copy_image_files
+        # Copy over all images to guarantee the same directory structure.
         FileUtils.cp_r(File.join('html', 'images'),
                        File.join('epub', 'OEBPS'))
-        File.delete(*Dir['epub/OEBPS/images/**/*.pdf'])
+        # # Parse the full HTML file with Nokogiri to get images actually used.
+        # html = File.read(manifest.full_html_file)
+        # html_image_filenames = Nokogiri::HTML(html).css('img').map do |node|
+        #                          node.attributes['src'].value
+        #                        end
+        # used_image_filenames = html_image_filenames.map do |filename|
+        #                          "epub/OEBPS/#{filename}"
+        #                        end
+        # # Delete unused images.
+        # Dir.glob("epub/OEBPS/images/**/*").each do |image|
+        #   next if File.directory?(image)
+        #   FileUtils.rm(image) unless used_image_filenames.include?(image)
+        # end
       end
 
       # Make the EPUB, which is basically just a zipped HTML file.

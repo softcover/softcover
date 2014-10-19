@@ -194,6 +194,11 @@ module Softcover::Utils
     end
   end
 
+  # Removes a directory recursively.
+  def rm_r(directory)
+    FileUtils.rm_r(directory) if File.directory?(directory)
+  end
+
   # Returns the system-independent file path.
   # It's nicer to write `path('foo/bar/baz')` than
   # `File.join('foo', 'bar', 'baz')`.
