@@ -5,16 +5,11 @@ describe Softcover::Builders::Epub do
     generate_book
     @file_to_be_removed = path('html/should_be_removed.html')
     File.write(@file_to_be_removed, '')
-    @image_not_to_be_included = path('html/images/not_used.png')
-    # File.write(@image_not_to_be_included, '')
     silence { `softcover build:epub` }
     @builder = Softcover::Builders::Epub.new
     @builder.build!
   end
-  after(:all) do
-    remove_book
-    rm(@image_not_to_be_included)
-  end
+  after(:all) { remove_book }
   subject(:builder) { @builder }
 
   it "should be valid" do
@@ -200,6 +195,7 @@ end
 
 describe Softcover::Builders::Epub do
   context "for a Markdown book" do
+    let(:unused_image) { File.basename(path('html/images/testimonial_1.png')) }
     before(:all) do
       generate_book(markdown: true)
       @builder = Softcover::Builders::Epub.new
@@ -219,6 +215,10 @@ describe Softcover::Builders::Epub do
 
     it "should remove the generated LaTeX files" do
       expect(Dir.glob(path('chapters/*.tex'))).to be_empty
+    end
+
+    it "should not include an image not used in the document" do
+      expect(path("epub/OEBPS/images/#{unused_image}")).not_to exist
     end
   end
 end

@@ -296,6 +296,7 @@ module Softcover
         # html_image_filenames = Nokogiri::HTML(html).css('img').map do |node|
         #                          node.attributes['src'].value
         #                        end
+        # # Form the corresponding EPUB image paths.
         # used_image_filenames = html_image_filenames.map do |filename|
         #                          "epub/OEBPS/#{filename}"
         #                        end
