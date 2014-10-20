@@ -66,6 +66,7 @@ module WebmockHelpers
            marketing_content: '',
            contact_email: book.contact_email,
            hide_softcover_footer: book.hide_custom_domain_footer,
+           author_name: book.author,
            authors: book.authors,
            ga_account: book.ga_account,
            repo_url: book.repo_url,
