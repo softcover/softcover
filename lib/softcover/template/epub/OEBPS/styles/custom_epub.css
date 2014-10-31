@@ -8,6 +8,10 @@
   font-size: 120%;
 }
 
+#title_page .date {
+  font-size: 120%;
+}
+
 #table_of_contents ul li {
   padding-left: 2em;
 }

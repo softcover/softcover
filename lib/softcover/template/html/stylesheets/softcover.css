@@ -314,6 +314,9 @@ body #book {
   list-style-type: none;
 }
 
+#book ul.footnotes.nonumbers li {
+  list-style-type: none;
+}
 
 #book .footnotes .header {
   padding-top: 1em;
@@ -443,3 +446,4 @@ body #book {
 #book span.intersentencespace {
   margin-right: 0.2em;
 }
+
