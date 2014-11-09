@@ -244,7 +244,7 @@ module Softcover
       # Strip attributes that are invalid in EPUB documents.
       def strip_attributes(doc)
         attrs = %w[data-tralics-id data-label data-number data-chapter
-                   role aria-readonly]
+                   role aria-readonly target]
         doc.tap do
           attrs.each do |attr|
             doc.xpath("//@#{attr}").remove
