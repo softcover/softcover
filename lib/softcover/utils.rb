@@ -252,7 +252,7 @@ module Softcover::Utils
       cmd_path = ['epubcheck-3.0', 'epubcheck-3.0.jar']
       possible_paths = ENV['PATH'].split(File::PATH_SEPARATOR).
                                    collect { |x| File.join(x, cmd_path) }
-      possible_paths.select { |f| File.file?(f) }.first
+      possible_paths.select { |f| File.file?(f) }.first || ""
     when :inkscape
       default = '/Applications/Inkscape.app/Contents/Resources/bin/inkscape'
       filename_or_default(:inkscape, default)
