@@ -14,6 +14,7 @@ describe Softcover::Book do
         its(:filenames) { should include "html/#{subject.slug}.html"}
 
         its(:filenames) { should include "config/marketing.yml"}
+        its(:filenames) { should include "html/stylesheets/custom.css"}
 
         its(:slug) { should eq "book" }
         its(:url) { should match /\/books\/(.*?)\/redirect/ }

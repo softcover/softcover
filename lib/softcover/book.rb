@@ -58,7 +58,8 @@ class Softcover::Book
 
   # get array of paths and checksums
   def files
-    paths = %W{html/#{slug}.html html/*_fragment.html images/**/* config/*}
+    paths = %W{html/#{slug}.html html/*_fragment.html images/**/* config/*
+               html/stylesheets/custom.css}
     Dir[*paths].map do |path|
       BookFile.new(path) unless File.directory?(path)
     end.compact
