@@ -115,7 +115,8 @@ class Softcover::Book
       authors: authors,
       ga_account: ga_account,
       repo_url: repo_url,
-      remove_unused_media_bundles: options[:remove_unused_media_bundles]
+      remove_unused_media_bundles: options[:remove_unused_media_bundles],
+      custom_math: custom_math
     }
 
     res = @client.create_or_update_book params
@@ -234,6 +235,10 @@ class Softcover::Book
     else
       raise 'server error'
     end
+  end
+
+  def custom_math
+    Softcover::Mathjax.custom_macros
   end
 
   private
