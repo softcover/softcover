@@ -42,6 +42,8 @@ module Softcover
 
         if manifest.polytex?
           basename = File.basename(manifest.filename, '.tex')
+          # puts "In manifest polytex"
+          # puts basename
           @html  = converted_html(basename)
           @title = basename
           @mathjax = Softcover::Mathjax::config(chapter_number: false)
@@ -152,13 +154,16 @@ module Softcover
 
       # Splits the full XML document into chapters.
       def split_into_chapters(xml)
+        puts "In split into chapters .>>>>>>"
         chapter_number = 0
         current_chapter = manifest.chapters.first
         reference_cache = {}
         xml.css('#book>div').each do |node|
           klass = node.attributes['class'].to_s
+          #puts klass
           id = node.attributes['id'].to_s
           if klass == 'chapter' || id == 'frontmatter'
+            puts "Found a klass chapter"
             current_chapter = manifest.chapters[chapter_number]
             node['data-chapter'] = current_chapter.slug
             chapter_number += 1
@@ -170,6 +175,8 @@ module Softcover
           end
 
           current_chapter.nodes.push node
+          #puts "node="
+          #puts current_chapter.slug
         end
         reference_cache
       end
