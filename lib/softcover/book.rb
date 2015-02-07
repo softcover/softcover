@@ -58,7 +58,8 @@ class Softcover::Book
 
   # get array of paths and checksums
   def files
-    paths = %W{html/#{slug}.html html/*_fragment.html images/**/* config/*}
+    paths = %W{html/#{slug}.html html/*_fragment.html images/**/* config/*
+               html/stylesheets/custom.css}
     Dir[*paths].map do |path|
       BookFile.new(path) unless File.directory?(path)
     end.compact
@@ -114,7 +115,8 @@ class Softcover::Book
       authors: authors,
       ga_account: ga_account,
       repo_url: repo_url,
-      remove_unused_media_bundles: options[:remove_unused_media_bundles]
+      remove_unused_media_bundles: options[:remove_unused_media_bundles],
+      custom_math: custom_math
     }
 
     res = @client.create_or_update_book params
@@ -233,6 +235,10 @@ class Softcover::Book
     else
       raise 'server error'
     end
+  end
+
+  def custom_math
+    Softcover::Mathjax.custom_macros
   end
 
   private

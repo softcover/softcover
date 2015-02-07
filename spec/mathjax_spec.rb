@@ -38,8 +38,8 @@ describe Softcover::Mathjax do
 
     let(:polytex)    { 'PolyTeX:    "Poly{\\\\TeX}"' }
     let(:polytexnic) { 'PolyTeXnic: "Poly{\\\\TeX}nic"' }
-    let(:foo)        { 'foo: "{x}"' }
-    let(:bar)        { 'bar: ["\\\\textbf{#1}", 1]' }
+    let(:foo)        { '"foo": "{x}"' }
+    let(:bar)        { '"bar": ["\\\\textbf{#1}", 1]' }
     let(:config)     { mathjax.config }
 
     it "should not raise an error" do
@@ -52,8 +52,8 @@ describe Softcover::Mathjax do
   context '#escaped_config' do
     let(:polytex)    { 'PolyTeX:    "Poly{\\\\\\\\TeX}"' }
     let(:polytexnic) { 'PolyTeXnic: "Poly{\\\\\\\\TeX}nic"' }
-    let(:foo)        { 'foo: "{x}"' }
-    let(:bar)        { 'bar: ["\\\\\\\\textbf{#1}", 1]' }
+    let(:foo)        { '"foo": "{x}"' }
+    let(:bar)        { '"bar": ["\\\\\\\\textbf{#1}", 1]' }
     let(:config)     { mathjax.escaped_config }
 
     it_should_behave_like "config"

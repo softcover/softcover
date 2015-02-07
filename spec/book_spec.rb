@@ -14,6 +14,7 @@ describe Softcover::Book do
         its(:filenames) { should include "html/#{subject.slug}.html"}
 
         its(:filenames) { should include "config/marketing.yml"}
+        its(:filenames) { should include "html/stylesheets/custom.css"}
 
         its(:slug) { should eq "book" }
         its(:url) { should match /\/books\/(.*?)\/redirect/ }
@@ -34,6 +35,17 @@ describe Softcover::Book do
         its(:faq) { should_not be_empty }
         its(:testimonials) { should_not be_empty }
         its(:marketing_content) { should be_empty }
+      end
+
+      describe "custom math" do
+        let(:math) do
+          "\"softcover\": \"\\\\texttt{softcover}\"" +
+            ",\n\"unitvec\": [\"{\\\\hat #1}\", 1]"
+        end
+
+        its(:custom_math) do
+          should eq math
+        end
       end
     end
   end

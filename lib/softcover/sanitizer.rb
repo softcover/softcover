@@ -35,6 +35,9 @@ module Softcover
           'tr'   => %w{id class},
           'td'   => %w{id class colspan}
         },
+        css: {
+          properties: %w{color height width}
+        },
         protocols: {
           'a'   => {'href' => [:relative, 'http', 'https', 'mailto']},
           'img' => {'src'  => [:relative, 'http', 'https']}
