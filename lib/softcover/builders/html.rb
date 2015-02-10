@@ -46,12 +46,9 @@ module Softcover
           @title = basename
           @mathjax = Softcover::Mathjax::config(chapter_number: false)
           @src     = Softcover::Mathjax::AMS_SVG
-          erb_file = File.read(File.join(File.dirname(__FILE__),
-                                         '..', 'server', 'views',
-                                         'book.html.erb'))
           file_content = ERB.new(erb_file).result(binding)
           write_full_html_file(manifest.slug, file_content)
-          write_chapter_html_files(Nokogiri::HTML(file_content), erb_file)
+          write_chapter_html_files(Nokogiri::HTML(file_content))
         end
 
         if Softcover::profiling?
@@ -140,13 +137,13 @@ module Softcover
       # Writes the full HTML file for each chapter.
       # The resulting files are self-contained HTML documents suitable
       # for viewing in isolation.
-      def write_chapter_html_files(html, erb_file)
+      def write_chapter_html_files(html)
         reference_cache = split_into_chapters(html)
         target_cache = build_target_cache(html)
         manifest.chapters.each_with_index do |chapter, i|
           update_cross_references(chapter, reference_cache, target_cache)
           write_fragment_file(chapter)
-          write_complete_file(chapter, erb_file, i)
+          write_complete_file(chapter, i)
         end
       end
 
@@ -215,7 +212,7 @@ module Softcover
       end
 
       # Writes the chapter as a complete, self-contained HTML document.
-      def write_complete_file(chapter, erb_file, n)
+      def write_complete_file(chapter, n)
         html_filename = File.join('html', chapter.slug + '.html')
         File.open(html_filename, 'w') do |f|
           @html = chapter.nodes.map(&:to_xhtml).join("\n")
@@ -233,6 +230,11 @@ module Softcover
         # This also arranges to clear out unused HTML files, as happens when,
         # e.g., the name of a LaTeX chapter file changes.
         FileUtils.rm(Dir.glob(path('html/*.html')))
+      end
+
+
+      def erb_file
+        manifest.html_template
       end
     end
   end
