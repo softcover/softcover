@@ -222,3 +222,55 @@ describe Softcover::Builders::Epub do
     end
   end
 end
+
+describe Softcover::EpubUtils do
+  let(:dummy_class) { Class.new { include Softcover::EpubUtils } }    
+  let(:title) { 'Foo Bar & Grill' }
+  let(:uuid) { '550e8400-e29b-41d4-a716-446655440000' }
+
+  context "content.opf template" do
+    let(:copyright) { '2015' }
+    let(:author) { "Laurel & Hardy" }
+    let(:cover_id) { '17' }
+    let(:toc_chapters) { [] }
+    let(:manifest_chapters) { [] }
+    let(:images) { [] }
+
+    let(:template) do
+      dummy_class.new.content_opf_template(title, copyright, author, uuid, 
+                                           cover_id, toc_chapters, 
+                                           manifest_chapters, images)       
+    end
+
+    it "should have the right (escaped) content" do
+      expect(template).to include('Foo Bar &amp; Grill')
+      expect(template).to include('Laurel &amp; Hardy')
+      expect(template).to include(copyright)
+      expect(template).to include(uuid)
+      expect(template).to include(cover_id)
+    end    
+  end
+
+  context "toc.ncx template" do
+    let(:chapter_nav) { [] }
+    let(:template) do
+      dummy_class.new.toc_ncx_template(title, uuid, chapter_nav)       
+    end
+
+    it "should have the right (escaped) content" do
+      expect(template).to include('Foo Bar &amp; Grill')
+      expect(template).to include(uuid)
+    end    
+  end
+
+  context "nav.html template" do
+    let(:nav_list) { [] }
+    let(:template) do
+      dummy_class.new.nav_html_template(title, nav_list)       
+    end
+
+    it "should have the right (escaped) content" do
+      expect(template).to include('Foo Bar &amp; Grill')
+    end    
+  end
+end

@@ -18,7 +18,7 @@ class Softcover::BookManifest < OpenStruct
   end
 
   def escaped_title
-    CGI::escape(title)
+    CGI.escape_html(title)
   end
 
   class NotFound < StandardError
