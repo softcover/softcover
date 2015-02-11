@@ -163,6 +163,7 @@ class Softcover::BookManifest < OpenStruct
              path('latex_styles/custom_pdf.sty'),
              path('config/preamble.tex'),
              path('config/lang.yml'),
+             path('config/template.html.erb'),
              path('epub/OEBPS/styles/custom_epub.css'),
              path('epub/OEBPS/styles/page-template.xpgt'),
            ]
@@ -358,6 +359,9 @@ class Softcover::BookManifest < OpenStruct
     { chapters: chapter_objects, filename: book_file }
   end
 
+  def html_template
+    File.read(File.join('config', 'template.html.erb'))
+  end
 
   private
 
@@ -379,7 +383,6 @@ class Softcover::BookManifest < OpenStruct
         FileUtils.mv base, Softcover::Directories::CONFIG
       end
     end
-
 
     def verify_paths!
       chapter_file_paths do |chapter_path|
