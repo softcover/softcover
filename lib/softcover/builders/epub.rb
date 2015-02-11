@@ -28,6 +28,88 @@ module Softcover
     def images_dir
       path('epub/OEBPS/images')
     end
+
+    def escape(string)
+      CGI.escape_html(string)
+    end
+
+    # Returns a content.opf file based on a valid template.
+    def content_opf_template(title, copyright, author, uuid, cover_id, 
+                             toc_chapters, manifest_chapters, images)        
+%(<?xml version="1.0" encoding="UTF-8"?>
+<package unique-identifier="BookID" version="3.0" xmlns="http://www.idpf.org/2007/opf">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"
+      xmlns:opf="http://www.idpf.org/2007/opf">
+      <dc:title>#{escape(title)}</dc:title>
+      <dc:language>en</dc:language>
+      <dc:rights>Copyright (c) #{copyright} #{escape(author)}</dc:rights>
+      <dc:creator>#{author}</dc:creator>
+      <dc:publisher>Softcover</dc:publisher>
+      <dc:identifier id="BookID">urn:uuid:#{uuid}</dc:identifier>
+      <meta property="dcterms:modified">#{Time.now.strftime('%Y-%m-%dT%H:%M:%S')}Z</meta>
+      <meta name="cover" content="#{cover_id}"/>
+  </metadata>
+  <manifest>
+      <item href="nav.html" id="nav" media-type="application/xhtml+xml" properties="nav"/>
+      <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+      <item id="page-template.xpgt" href="styles/page-template.xpgt" media-type="application/vnd.adobe-page-template+xml"/>
+      <item id="pygments.css" href="styles/pygments.css" media-type="text/css"/>
+      <item id="softcover.css" href="styles/softcover.css" media-type="text/css"/>
+      <item id="epub.css" href="styles/epub.css" media-type="text/css"/>
+      <item id="custom.css" href="styles/custom.css" media-type="text/css"/>
+      <item id="custom_epub.css" href="styles/custom_epub.css" media-type="text/css"/>
+      <item id="cover" href="cover.html" media-type="application/xhtml+xml"/>
+      #{manifest_chapters.join("\n")}
+      #{images.join("\n")}
+  </manifest>
+  <spine toc="ncx">
+    <itemref idref="cover" linear="no" />
+    #{toc_chapters.join("\n")}
+  </spine>
+</package>
+)
+    end
+
+    # Returns a toc.ncx file based on a valid template.
+    def toc_ncx_template(title, uuid, chapter_nav)
+%(<?xml version="1.0" encoding="UTF-8"?>
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+    <head>
+        <meta name="dtb:uid" content="#{uuid}"/>
+        <meta name="dtb:depth" content="2"/>
+        <meta name="dtb:totalPageCount" content="0"/>
+        <meta name="dtb:maxPageNumber" content="0"/>
+    </head>
+    <docTitle>
+        <text>#{escape(title)}</text>
+    </docTitle>
+    <navMap>
+      #{chapter_nav.join("\n")}
+    </navMap>
+</ncx>
+)
+    end
+
+    # Returns the navigation HTML based on a valid template.
+    def nav_html_template(title, nav_list)
+%(<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <meta charset="UTF-8" />
+        <title>#{title}</title>
+    </head>
+    <body>
+        <nav epub:type="toc">
+            <h1>#{escape(title)}</h1>
+            <ol>
+              #{nav_list.join("\n")}
+            </ol>
+        </nav>
+    </body>
+</html>
+)      
+    end
+
   end
 
   module Builders
@@ -372,10 +454,6 @@ module Softcover
 
       # Returns the content configuration file.
       def content_opf
-        title  = manifest.title
-        author = manifest.author
-        copyright = manifest.copyright
-        uuid = manifest.uuid
         man_ch = chapters.map do |chapter|
                    %(<item id="#{chapter.slug}" href="#{chapter.fragment_name}" media-type="application/xhtml+xml"/>)
                  end
@@ -396,38 +474,9 @@ module Softcover
                    id = "img-#{label}"
                    %(<item id="#{id}" href="#{href}" media-type="image/#{ext}"/>)
                  end
-%(<?xml version="1.0" encoding="UTF-8"?>
-  <package unique-identifier="BookID" version="3.0" xmlns="http://www.idpf.org/2007/opf">
-    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"
-        xmlns:opf="http://www.idpf.org/2007/opf">
-        <dc:title>#{title}</dc:title>
-        <dc:language>en</dc:language>
-        <dc:rights>Copyright (c) #{copyright} #{author}</dc:rights>
-        <dc:creator>#{author}</dc:creator>
-        <dc:publisher>Softcover</dc:publisher>
-        <dc:identifier id="BookID">urn:uuid:#{uuid}</dc:identifier>
-        <meta property="dcterms:modified">#{Time.now.strftime('%Y-%m-%dT%H:%M:%S')}Z</meta>
-        <meta name="cover" content="#{cover_id}"/>
-    </metadata>
-    <manifest>
-        <item href="nav.html" id="nav" media-type="application/xhtml+xml" properties="nav"/>
-        <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
-        <item id="page-template.xpgt" href="styles/page-template.xpgt" media-type="application/vnd.adobe-page-template+xml"/>
-        <item id="pygments.css" href="styles/pygments.css" media-type="text/css"/>
-        <item id="softcover.css" href="styles/softcover.css" media-type="text/css"/>
-        <item id="epub.css" href="styles/epub.css" media-type="text/css"/>
-        <item id="custom.css" href="styles/custom.css" media-type="text/css"/>
-        <item id="custom_epub.css" href="styles/custom_epub.css" media-type="text/css"/>
-        <item id="cover" href="cover.html" media-type="application/xhtml+xml"/>
-        #{man_ch.join("\n")}
-        #{images.join("\n")}
-    </manifest>
-    <spine toc="ncx">
-      <itemref idref="cover" linear="no" />
-      #{toc_ch.join("\n")}
-    </spine>
-  </package>
-)
+        content_opf_template(manifest.title, manifest.copyright, 
+                             manifest.author, manifest.uuid, cover_id, 
+                             toc_ch, man_ch, images)
       end
 
       def cover_page
@@ -452,7 +501,6 @@ module Softcover
 
       # Returns the Table of Contents for the spine.
       def toc_ncx
-        title = manifest.title
         chapter_nav = []
         chapters.each_with_index do |chapter, n|
           chapter_nav << %(<navPoint id="#{chapter.slug}" playOrder="#{n+1}">)
@@ -460,22 +508,7 @@ module Softcover
           chapter_nav << %(    <content src="#{chapter.fragment_name}"/>)
           chapter_nav << %(</navPoint>)
         end
-%(<?xml version="1.0" encoding="UTF-8"?>
-<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
-    <head>
-        <meta name="dtb:uid" content="#{manifest.uuid}"/>
-        <meta name="dtb:depth" content="2"/>
-        <meta name="dtb:totalPageCount" content="0"/>
-        <meta name="dtb:maxPageNumber" content="0"/>
-    </head>
-    <docTitle>
-        <text>#{title}</text>
-    </docTitle>
-    <navMap>
-      #{chapter_nav.join("\n")}
-    </navMap>
-</ncx>
-)
+        toc_ncx_template(manifest.title, manifest.uuid, chapter_nav)
       end
 
       def chapter_name(n)
@@ -484,27 +517,11 @@ module Softcover
 
       # Returns the nav HTML content.
       def nav_html
-        title = manifest.title
         nav_list = manifest.chapters.map do |chapter|
                      element = preview? ? chapter.title : nav_link(chapter)
                      %(<li>#{element}</li>)
                    end
-%(<?xml version="1.0" encoding="utf-8"?>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
-    <head>
-        <meta charset="UTF-8" />
-        <title>#{title}</title>
-    </head>
-    <body>
-        <nav epub:type="toc">
-            <h1>#{title}</h1>
-            <ol>
-              #{nav_list.join("\n")}
-            </ol>
-        </nav>
-    </body>
-</html>
-)
+        nav_html_template(manifest.title, nav_list)
       end
 
       # Returns a navigation link for the chapter.
