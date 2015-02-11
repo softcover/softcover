@@ -372,7 +372,7 @@ module Softcover
 
       # Returns the content configuration file.
       def content_opf
-        title  = manifest.title
+        title  = manifest.escaped_title
         author = manifest.author
         copyright = manifest.copyright
         uuid = manifest.uuid
@@ -452,7 +452,7 @@ module Softcover
 
       # Returns the Table of Contents for the spine.
       def toc_ncx
-        title = manifest.title
+        title = manifest.escaped_title
         chapter_nav = []
         chapters.each_with_index do |chapter, n|
           chapter_nav << %(<navPoint id="#{chapter.slug}" playOrder="#{n+1}">)
@@ -484,7 +484,7 @@ module Softcover
 
       # Returns the nav HTML content.
       def nav_html
-        title = manifest.title
+        title = manifest.escaped_title
         nav_list = manifest.chapters.map do |chapter|
                      element = preview? ? chapter.title : nav_link(chapter)
                      %(<li>#{element}</li>)
