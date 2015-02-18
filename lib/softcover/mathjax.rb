@@ -24,12 +24,13 @@ module Softcover
           availableFonts: ["TeX"],
         },
         TeX: {
-          extensions: ["AMSmath.js", "AMSsymbols.js"],
+          extensions: ["cancel.js", "AMSmath.js", "AMSsymbols.js"],
           equationNumbers: {
             autoNumber: "AMS",
             #{fn}
           },
           Macros: {
+            texttt: ['{#1}',1],
             PolyTeX:    "Poly{\\\\TeX}",
             PolyTeXnic: "Poly{\\\\TeX}nic",
             #{custom_macros}

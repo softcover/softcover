@@ -207,9 +207,13 @@ module Softcover
         File.write(path('epub/OEBPS/cover.html'), cover_page) if cover?
 
         pngs = []
+        puts chapters
         chapters.each_with_index do |chapter, i|
           target_filename = path("epub/OEBPS/#{chapter.fragment_name}")
+          puts target_filename
           File.open(target_filename, 'w') do |f|
+            #puts "writing html for file:"
+            #puts "#{chapter.fragment_name}"
             content = File.read(path("html/#{chapter.fragment_name}"))
             doc = strip_attributes(Nokogiri::HTML(content))
             body = doc.at_css('body')
