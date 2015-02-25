@@ -1,7 +1,121 @@
 module Softcover
+
+  module EpubUtils
+
+    # Returns the name of the cover file.
+    # We support (in order) JPG/JPEG, PNG, and TIFF.
+    def cover_img
+      extensions = %w[jpg jpeg png tiff]
+      extensions.each do |ext|
+        origin = "images/cover.#{ext}"
+        target = "#{images_dir}/cover.#{ext}"
+        if File.exist?(origin)
+          FileUtils.cp(origin, target)
+          return File.basename(target)
+        end
+      end
+      return false
+    end
+
+    def cover?
+      cover_img
+    end
+
+    def cover_img_path
+      path("#{images_dir}/#{cover_img}")
+    end
+
+    def images_dir
+      path('epub/OEBPS/images')
+    end
+
+    def escape(string)
+      CGI.escape_html(string)
+    end
+
+    # Returns a content.opf file based on a valid template.
+    def content_opf_template(title, copyright, author, uuid, cover_id, 
+                             toc_chapters, manifest_chapters, images)        
+%(<?xml version="1.0" encoding="UTF-8"?>
+<package unique-identifier="BookID" version="3.0" xmlns="http://www.idpf.org/2007/opf">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"
+      xmlns:opf="http://www.idpf.org/2007/opf">
+      <dc:title>#{escape(title)}</dc:title>
+      <dc:language>en</dc:language>
+      <dc:rights>Copyright (c) #{copyright} #{escape(author)}</dc:rights>
+      <dc:creator>#{author}</dc:creator>
+      <dc:publisher>Softcover</dc:publisher>
+      <dc:identifier id="BookID">urn:uuid:#{uuid}</dc:identifier>
+      <meta property="dcterms:modified">#{Time.now.strftime('%Y-%m-%dT%H:%M:%S')}Z</meta>
+      <meta name="cover" content="#{cover_id}"/>
+  </metadata>
+  <manifest>
+      <item href="nav.html" id="nav" media-type="application/xhtml+xml" properties="nav"/>
+      <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+      <item id="page-template.xpgt" href="styles/page-template.xpgt" media-type="application/vnd.adobe-page-template+xml"/>
+      <item id="pygments.css" href="styles/pygments.css" media-type="text/css"/>
+      <item id="softcover.css" href="styles/softcover.css" media-type="text/css"/>
+      <item id="epub.css" href="styles/epub.css" media-type="text/css"/>
+      <item id="custom.css" href="styles/custom.css" media-type="text/css"/>
+      <item id="custom_epub.css" href="styles/custom_epub.css" media-type="text/css"/>
+      <item id="cover" href="cover.html" media-type="application/xhtml+xml"/>
+      #{manifest_chapters.join("\n")}
+      #{images.join("\n")}
+  </manifest>
+  <spine toc="ncx">
+    <itemref idref="cover" linear="no" />
+    #{toc_chapters.join("\n")}
+  </spine>
+</package>
+)
+    end
+
+    # Returns a toc.ncx file based on a valid template.
+    def toc_ncx_template(title, uuid, chapter_nav)
+%(<?xml version="1.0" encoding="UTF-8"?>
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+    <head>
+        <meta name="dtb:uid" content="#{uuid}"/>
+        <meta name="dtb:depth" content="2"/>
+        <meta name="dtb:totalPageCount" content="0"/>
+        <meta name="dtb:maxPageNumber" content="0"/>
+    </head>
+    <docTitle>
+        <text>#{escape(title)}</text>
+    </docTitle>
+    <navMap>
+      #{chapter_nav.join("\n")}
+    </navMap>
+</ncx>
+)
+    end
+
+    # Returns the navigation HTML based on a valid template.
+    def nav_html_template(title, nav_list)
+%(<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+    <head>
+        <meta charset="UTF-8" />
+        <title>#{title}</title>
+    </head>
+    <body>
+        <nav epub:type="toc">
+            <h1>#{escape(title)}</h1>
+            <ol>
+              #{nav_list.join("\n")}
+            </ol>
+        </nav>
+    </body>
+</html>
+)      
+    end
+
+  end
+
   module Builders
     class Epub < Builder
       include Softcover::Output
+      include Softcover::EpubUtils
 
       def build!(options={})
         @preview = options[:preview]
@@ -11,9 +125,11 @@ module Softcover
           self.manifest = Softcover::BookManifest.new(opts)
         end
         remove_html
+        remove_images
         create_directories
         write_mimetype
         write_container_xml
+        write_ibooks_xml
         write_toc
         write_nav
         copy_image_files
@@ -35,11 +151,17 @@ module Softcover
         FileUtils.rm(Dir.glob(path('epub/OEBPS/*.html')))
       end
 
+      # Removes images in case they are stale.
+      def remove_images
+        rm_r images_dir
+      end
+
       def create_directories
         mkdir('epub')
         mkdir(path('epub/OEBPS'))
         mkdir(path('epub/OEBPS/styles'))
         mkdir(path('epub/META-INF'))
+        mkdir(images_dir)
         mkdir('ebooks')
       end
 
@@ -53,6 +175,14 @@ module Softcover
       # This is required by the EPUB standard.
       def write_container_xml
         File.write(path('epub/META-INF/container.xml'), container_xml)
+      end
+
+      # Writes iBooks-specific XML.
+      # This allows proper display of monospace fonts in code samples, among
+      # other things.
+      def write_ibooks_xml
+        xml_filename = 'com.apple.ibooks.display-options.xml'
+        File.write(path("epub/META-INF/#{xml_filename}"), ibooks_xml)
       end
 
       # Writes the content.opf file.
@@ -70,12 +200,11 @@ module Softcover
       # Included is a math detector that processes the page with MathJax
       # (via page.js) so that math can be included in EPUB (and thence MOBI).
       def write_html(options={})
-        images_dir  = File.join('epub', 'OEBPS', 'images')
         texmath_dir = File.join(images_dir, 'texmath')
         mkdir images_dir
         mkdir texmath_dir
 
-        File.write(path('epub/OEBPS/cover.html'), cover_page)
+        File.write(path('epub/OEBPS/cover.html'), cover_page) if cover?
 
         pngs = []
         chapters.each_with_index do |chapter, i|
@@ -197,7 +326,7 @@ module Softcover
       # Strip attributes that are invalid in EPUB documents.
       def strip_attributes(doc)
         attrs = %w[data-tralics-id data-label data-number data-chapter
-                   role aria-readonly]
+                   role aria-readonly target]
         doc.tap do
           attrs.each do |attr|
             doc.xpath("//@#{attr}").remove
@@ -240,11 +369,24 @@ module Softcover
       end
 
       # Copies the image files from the HTML version of the document.
-      # We remove PDF images, which are valid in PDF documents but not in EPUB.
       def copy_image_files
+        # Copy over all images to guarantee the same directory structure.
         FileUtils.cp_r(File.join('html', 'images'),
                        File.join('epub', 'OEBPS'))
-        File.delete(*Dir['epub/OEBPS/images/**/*.pdf'])
+        # Parse the full HTML file with Nokogiri to get images actually used.
+        html = File.read(manifest.full_html_file)
+        html_image_filenames = Nokogiri::HTML(html).css('img').map do |node|
+                                 node.attributes['src'].value
+                               end
+        # Form the corresponding EPUB image paths.
+        used_image_filenames = html_image_filenames.map do |filename|
+                                 "epub/OEBPS/#{filename}"
+                               end.to_set
+        # Delete unused images.
+        Dir.glob("epub/OEBPS/images/**/*").each do |image|
+          next if File.directory?(image)
+          rm image unless used_image_filenames.include?(image)
+        end
       end
 
       # Make the EPUB, which is basically just a zipped HTML file.
@@ -301,12 +443,17 @@ module Softcover
 </container>)
       end
 
+      def ibooks_xml
+%(<?xml version="1.0" encoding="UTF-8"?>
+<display_options>
+  <platform name="*">
+    <option name="specified-fonts">true</option>
+  </platform>
+</display_options>)
+      end
+
       # Returns the content configuration file.
       def content_opf
-        title  = manifest.title
-        author = manifest.author
-        copyright = manifest.copyright
-        uuid = manifest.uuid
         man_ch = chapters.map do |chapter|
                    %(<item id="#{chapter.slug}" href="#{chapter.fragment_name}" media-type="application/xhtml+xml"/>)
                  end
@@ -316,6 +463,7 @@ module Softcover
         image_files = Dir['epub/OEBPS/images/**/*'].select { |f| File.file?(f) }
         images = image_files.map do |image|
                    ext = File.extname(image).sub('.', '')   # e.g., 'png'
+                   ext = 'jpeg' if ext == 'jpg'
                    # Strip off the leading 'epub/OEBPS'.
                    sep  = File::SEPARATOR
                    href = image.split(sep)[2..-1].join(sep)
@@ -326,38 +474,9 @@ module Softcover
                    id = "img-#{label}"
                    %(<item id="#{id}" href="#{href}" media-type="image/#{ext}"/>)
                  end
-%(<?xml version="1.0" encoding="UTF-8"?>
-  <package unique-identifier="BookID" version="3.0" xmlns="http://www.idpf.org/2007/opf">
-    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"
-        xmlns:opf="http://www.idpf.org/2007/opf">
-        <dc:title>#{title}</dc:title>
-        <dc:language>en</dc:language>
-        <dc:rights>Copyright (c) #{copyright} #{author}</dc:rights>
-        <dc:creator>#{author}</dc:creator>
-        <dc:publisher>Softcover</dc:publisher>
-        <dc:identifier id="BookID">urn:uuid:#{uuid}</dc:identifier>
-        <meta property="dcterms:modified">#{Time.now.strftime('%Y-%m-%dT%H:%M:%S')}Z</meta>
-        <meta name="cover" content="img-cover-png"/>
-    </metadata>
-    <manifest>
-        <item href="nav.html" id="nav" media-type="application/xhtml+xml" properties="nav"/>
-        <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
-        <item id="page-template.xpgt" href="styles/page-template.xpgt" media-type="application/vnd.adobe-page-template+xml"/>
-        <item id="pygments.css" href="styles/pygments.css" media-type="text/css"/>
-        <item id="softcover.css" href="styles/softcover.css" media-type="text/css"/>
-        <item id="epub.css" href="styles/epub.css" media-type="text/css"/>
-        <item id="custom.css" href="styles/custom.css" media-type="text/css"/>
-        <item id="custom_epub.css" href="styles/custom_epub.css" media-type="text/css"/>
-        <item id="cover" href="cover.html" media-type="application/xhtml+xml"/>
-        #{man_ch.join("\n")}
-        #{images.join("\n")}
-    </manifest>
-    <spine toc="ncx">
-      <itemref idref="cover" linear="no" />
-      #{toc_ch.join("\n")}
-    </spine>
-  </package>
-)
+        content_opf_template(manifest.title, manifest.copyright, 
+                             manifest.author, manifest.uuid, cover_id, 
+                             toc_ch, man_ch, images)
       end
 
       def cover_page
@@ -369,16 +488,19 @@ module Softcover
 </head>
 <body>
   <div id="cover">
-     <img width="573" height="800" src="images/cover.png" alt="cover image" />
+     <img width="573" height="800" src="images/#{cover_img}" alt="cover" />
   </div>
 </body>
 </html>
 )
       end
 
+      def cover_id
+        "img-#{cover_img.sub('.', '-')}"
+      end
+
       # Returns the Table of Contents for the spine.
       def toc_ncx
-        title = manifest.title
         chapter_nav = []
         chapters.each_with_index do |chapter, n|
           chapter_nav << %(<navPoint id="#{chapter.slug}" playOrder="#{n+1}">)
@@ -386,22 +508,7 @@ module Softcover
           chapter_nav << %(    <content src="#{chapter.fragment_name}"/>)
           chapter_nav << %(</navPoint>)
         end
-%(<?xml version="1.0" encoding="UTF-8"?>
-<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
-    <head>
-        <meta name="dtb:uid" content="#{manifest.uuid}"/>
-        <meta name="dtb:depth" content="2"/>
-        <meta name="dtb:totalPageCount" content="0"/>
-        <meta name="dtb:maxPageNumber" content="0"/>
-    </head>
-    <docTitle>
-        <text>#{title}</text>
-    </docTitle>
-    <navMap>
-      #{chapter_nav.join("\n")}
-    </navMap>
-</ncx>
-)
+        toc_ncx_template(manifest.title, manifest.uuid, chapter_nav)
       end
 
       def chapter_name(n)
@@ -410,27 +517,11 @@ module Softcover
 
       # Returns the nav HTML content.
       def nav_html
-        title = manifest.title
         nav_list = manifest.chapters.map do |chapter|
                      element = preview? ? chapter.title : nav_link(chapter)
                      %(<li>#{element}</li>)
                    end
-%(<?xml version="1.0" encoding="utf-8"?>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
-    <head>
-        <meta charset="UTF-8" />
-        <title>#{title}</title>
-    </head>
-    <body>
-        <nav epub:type="toc">
-            <h1>#{title}</h1>
-            <ol>
-              #{nav_list.join("\n")}
-            </ol>
-        </nav>
-    </body>
-</html>
-)
+        nav_html_template(manifest.title, nav_list)
       end
 
       # Returns a navigation link for the chapter.

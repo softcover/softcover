@@ -44,11 +44,13 @@ module Softcover
           basename = File.basename(manifest.filename, '.tex')
           @html  = converted_html(basename)
           @title = basename
+          @mathjax = Softcover::Mathjax::config(chapter_number: false)
+          @src     = Softcover::Mathjax::AMS_SVG
           erb_file = File.read(File.join(File.dirname(__FILE__),
                                          '..', 'server', 'views',
                                          'book.html.erb'))
           file_content = ERB.new(erb_file).result(binding)
-          write_full_html_file(basename, file_content)
+          write_full_html_file(manifest.slug, file_content)
           write_chapter_html_files(Nokogiri::HTML(file_content), erb_file)
         end
 
@@ -86,7 +88,8 @@ module Softcover
           # interim.
           unless (File.exist?(chapter.cache_filename) &&
                   File.read(chapter.cache_filename) == digest(markdown) &&
-                  File.exist?(polytex_filename))
+                  File.exist?(polytex_filename) &&
+                  !markdown.include?('\input'))
             File.write(polytex_filename, polytex(chapter, markdown))
           end
         end

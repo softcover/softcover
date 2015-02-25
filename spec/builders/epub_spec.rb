@@ -34,6 +34,10 @@ describe Softcover::Builders::Epub do
       expect('epub/META-INF/container.xml').to exist
     end
 
+    it "should have an iBooks XML file" do
+      expect('epub/META-INF/com.apple.ibooks.display-options.xml').to exist
+    end
+
     it "should have the right contents" do
       File.open('epub/META-INF/container.xml') do |f|
         expect(f.read).to match(/rootfile full-path="OEBPS\/content.opf"/)
@@ -80,6 +84,11 @@ describe Softcover::Builders::Epub do
         it "should have a unique UUID" do
           uuid = Regexp.escape(builder.manifest.uuid)
           expect(doc.to_xml).to match(/#{uuid}</)
+        end
+
+        it "should have the right conver meta tag" do
+          meta = '<meta name="cover" content="img-cover-jpg"/>'
+          expect(doc.to_xml).to include meta
         end
       end
 
@@ -152,6 +161,13 @@ describe Softcover::Builders::Epub do
         expect(has_math).to be_true
       end
 
+      describe "cover file" do
+        subject(:cover_file) { File.read(path('epub/OEBPS/cover.html')) }
+        it "should have the right cover image" do
+          expect(cover_file).to include 'cover.jpg'
+        end
+      end
+
       it "should create math PNGs" do
         expect(path("epub/OEBPS/images/texmath")).to exist
         expect(Dir[path("epub/OEBPS/images/texmath/*.png")]).not_to be_empty
@@ -179,6 +195,7 @@ end
 
 describe Softcover::Builders::Epub do
   context "for a Markdown book" do
+    let(:unused_image) { File.basename(path('html/images/testimonial_1.png')) }
     before(:all) do
       generate_book(markdown: true)
       @builder = Softcover::Builders::Epub.new
@@ -199,5 +216,61 @@ describe Softcover::Builders::Epub do
     it "should remove the generated LaTeX files" do
       expect(Dir.glob(path('chapters/*.tex'))).to be_empty
     end
+
+    it "should not include an image not used in the document" do
+      expect(path("epub/OEBPS/images/#{unused_image}")).not_to exist
+    end
+  end
+end
+
+describe Softcover::EpubUtils do
+  let(:dummy_class) { Class.new { include Softcover::EpubUtils } }    
+  let(:title) { 'Foo Bar & Grill' }
+  let(:uuid) { '550e8400-e29b-41d4-a716-446655440000' }
+
+  context "content.opf template" do
+    let(:copyright) { '2015' }
+    let(:author) { "Laurel & Hardy" }
+    let(:cover_id) { '17' }
+    let(:toc_chapters) { [] }
+    let(:manifest_chapters) { [] }
+    let(:images) { [] }
+
+    let(:template) do
+      dummy_class.new.content_opf_template(title, copyright, author, uuid, 
+                                           cover_id, toc_chapters, 
+                                           manifest_chapters, images)       
+    end
+
+    it "should have the right (escaped) content" do
+      expect(template).to include('Foo Bar &amp; Grill')
+      expect(template).to include('Laurel &amp; Hardy')
+      expect(template).to include(copyright)
+      expect(template).to include(uuid)
+      expect(template).to include(cover_id)
+    end    
+  end
+
+  context "toc.ncx template" do
+    let(:chapter_nav) { [] }
+    let(:template) do
+      dummy_class.new.toc_ncx_template(title, uuid, chapter_nav)       
+    end
+
+    it "should have the right (escaped) content" do
+      expect(template).to include('Foo Bar &amp; Grill')
+      expect(template).to include(uuid)
+    end    
+  end
+
+  context "nav.html template" do
+    let(:nav_list) { [] }
+    let(:template) do
+      dummy_class.new.nav_html_template(title, nav_list)       
+    end
+
+    it "should have the right (escaped) content" do
+      expect(template).to include('Foo Bar &amp; Grill')
+    end    
   end
 end

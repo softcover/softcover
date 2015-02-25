@@ -66,8 +66,12 @@ module WebmockHelpers
            marketing_content: '',
            contact_email: book.contact_email,
            hide_softcover_footer: book.hide_custom_domain_footer,
+           author_name: book.author,
            authors: book.authors,
-           ga_account: book.ga_account
+           ga_account: book.ga_account,
+           repo_url: book.repo_url,
+           remove_unused_media_bundles: true,
+           custom_math: book.custom_math
         }.to_json,
            :headers => headers).
       to_return(:status => 200, :body => return_body, :headers => {})
@@ -122,14 +126,20 @@ module WebmockHelpers
                  to_return(:status => 200, :body => "", :headers => {})
   end
 
-  def stub_screencasts_upload(book)
+  def stub_media_upload(book, dir='ebooks', options={})
     stub_s3_post
     stub_create_book(book)
 
-    files = book.find_screencasts
+    files = book.get_book_files(dir)
     stub_request(:post,
-                 "#{api_base_url}/books/#{book.id}/screencasts").
-                  with(:body => {files: files }.to_json,
+                 /\/books\/#{book.id || '.+'}\/media/).
+                  with(:body => {
+                                  path: dir,
+                                  files: files,
+                                  manifest: nil,
+                                  remove_unused_media_files:
+                                    options[:remove_unused_media_files]
+                                }.to_json,
                        :headers => headers).
                   to_return(:status => 200, :body => {
                             upload_params: files.map { |file|
@@ -186,7 +196,9 @@ module WebmockHelpers
     File.write(File.join('html', 'chapter-1.html'),          'test')
     File.write(File.join('html', 'chapter-1_fragment.html'), 'test')
     File.write(File.join('html', 'test_fragment.html'),      'test')
-    File.mkdir 'ebooks' unless File.exist?('ebooks')
+    File.write(File.join('html', "#{name}.html"),            'test')
+    mkdir path('html/images')
+    mkdir 'ebooks'
     Softcover::FORMATS.each do |format|
       dir = format == 'html' ? 'html' : 'ebooks'
       File.write(File.join(dir, "test-book.#{format}"), 'test')

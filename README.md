@@ -1,40 +1,23 @@
 # Softcover
 
-[![Build Status](https://travis-ci.org/softcover/softcover.png?branch=master)](https://travis-ci.org/softcover/softcover) [![Coverage Status](https://coveralls.io/repos/softcover/softcover/badge.png)](https://coveralls.io/r/softcover/softcover)
-
+<!-- [![Build Status](https://travis-ci.org/softcover/softcover.png?branch=master)](https://travis-ci.org/softcover/softcover) [![Coverage Status](https://coveralls.io/repos/softcover/softcover/badge.png)](https://coveralls.io/r/softcover/softcover)
+ -->
 Softcover is an ebook typesetting system for technical authors. This is the main gem, `softcover`, which depends on `polytexnic` to convert Markdown or PolyTeX input to HTML and LaTeX, and thence to EPUB, MOBI, and PDF. Authors can use Softcover to publish and optionally sell the resulting ebooks (as well as associated digital goods such as screencasts) on the [Softcover publishing platform](http://www.softcover.io/).
 
 For more details about Softcover, see [*The Softcover Book*](http://manual.softcover.io/book).
 
-<!--
-# Softcover CLI
-
-Command line interface for Softcover.io
-
 ## Installation
 
-    $ gem install softcover
+    $ gem install softcover --pre
 
 ## Usage
 
-    $ softcover <command>
+Run
 
-## Commands:
+    $ softcover help
 
-* login
-* logout
-* build:html, build:pdf, build:epub, build:mobi, build:all
-* build (aliased to build:html)
-* publish
-* new
+for a list of supported commands.
 
-## Development Notes
-    $ softcover config:add host=http://localhost:3000
-
-  * use "silence=false" to unsilence spec output:
-
-    $ silence=false bundle exec rspec
--->
 ## Contributing
 
 1. Fork it

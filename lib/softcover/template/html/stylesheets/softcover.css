@@ -174,10 +174,15 @@ body #book {
 
 #book .graphics.image img {
   margin-top: 2em;
+  max-width: 100%
 }
 
 #book .graphics.image.box img {
   border: 1px solid #666;
+}
+#book a .graphics img {
+  display: block;
+  margin: 2em auto auto;
 }
 
 #book .table {
@@ -309,6 +314,9 @@ body #book {
   list-style-type: none;
 }
 
+#book ul.footnotes.nonumbers li {
+  list-style-type: none;
+}
 
 #book .footnotes .header {
   padding-top: 1em;
@@ -366,8 +374,8 @@ body #book {
 }
 
 #book .highlight pre {
-  margin: 10px;
-  font-size: 85%;
+  margin: 10px 0 10px 10px;
+  font-size: 80%;
   font-weight: bold;
 }
 
@@ -438,3 +446,4 @@ body #book {
 #book span.intersentencespace {
   margin-right: 0.2em;
 }
+

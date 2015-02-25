@@ -1,4 +1,8 @@
+#encoding: utf-8
 require 'ostruct'
+
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
 
 class Softcover::BookManifest < OpenStruct
   include Softcover::Utils
@@ -13,6 +17,9 @@ class Softcover::BookManifest < OpenStruct
     end
   end
 
+  def escaped_title
+    CGI.escape_html(title)
+  end
 
   class NotFound < StandardError
     def message
@@ -40,7 +47,12 @@ class Softcover::BookManifest < OpenStruct
       raw_html = Polytexnic::Pipeline.new(title,
                                           language_labels: language_labels).
                                          to_html
-      html = Nokogiri::HTML(raw_html).at_css('p').inner_html
+      doc = Nokogiri::HTML(raw_html).at_css('p')
+      # Handle case of a footnote in the chapter title.
+      doc.css('sup').each do |footnote_node|
+        footnote_node.remove
+      end
+      html = doc.inner_html
       if chapter_number.zero?
         html
       else
@@ -151,7 +163,8 @@ class Softcover::BookManifest < OpenStruct
              path('latex_styles/custom_pdf.sty'),
              path('config/preamble.tex'),
              path('config/lang.yml'),
-             path('epub/OEBPS/styles/custom_epub.css')
+             path('epub/OEBPS/styles/custom_epub.css'),
+             path('epub/OEBPS/styles/page-template.xpgt'),
            ]
     files.each do |file|
       unless File.exist?(file)
@@ -240,6 +253,11 @@ class Softcover::BookManifest < OpenStruct
 
       file_path
     end
+  end
+
+  # Returns the name of the HTML file containing the full book.
+  def full_html_file
+    path("html/#{slug}.html")
   end
 
   # Returns chapters for the PDF.

@@ -1,10 +1,11 @@
 class Softcover::Book
   include Softcover::Utils
+  include Softcover::Output
 
-  DEFAULT_SCREENCASTS_DIR = "screencasts"
+  DEFAULT_MEDIA_DIR = "media"
 
   attr_accessor :errors, :uploader, :signatures, :manifest,
-                :processed_screencasts, :screencasts_dir
+                :processed_media, :media_dir
 
   class UploadError < StandardError; end
 
@@ -15,13 +16,13 @@ class Softcover::Book
 
     @client = Softcover::Client.new_with_book self
 
-    @screencasts_dir = DEFAULT_SCREENCASTS_DIR
+    @media_dir = DEFAULT_MEDIA_DIR
 
-    @processed_screencasts = []
+    @processed_media = []
   end
 
   class BookFile < Struct.new(:path)
-    LAST_WRITE_HORIZON = 5
+    LAST_WRITE_HORIZON = 0
 
     attr_accessor :checksum
     def initialize(*args)
@@ -57,12 +58,11 @@ class Softcover::Book
 
   # get array of paths and checksums
   def files
-    # question: should we use `git ls-files` instead?
-    # TODO: only use pertinent files
-    paths = %w{html/*_fragment.html images/**/* ebooks/* config/*}
-    Dir[*paths].reject { |path| File.directory?(path) }.map do |path|
-      BookFile.new path
-    end
+    paths = %W{html/#{slug}.html html/*_fragment.html images/**/* config/*
+               html/stylesheets/custom.css}
+    Dir[*paths].map do |path|
+      BookFile.new(path) unless File.directory?(path)
+    end.compact
   end
 
   def filenames
@@ -94,25 +94,32 @@ class Softcover::Book
     end
   end
 
-  def create_or_update
+  def create_or_update(options={})
     raise "HTML not built!" if Dir['html/*'].empty?
 
-    res = @client.create_or_update_book id: id,
-                                        files: files,
-                                        title: title,
-                                        slug: slug,
-                                        subtitle: subtitle,
-                                        description: description,
-                                        chapters: chapter_attributes,
-                                        prices: prices,
-                                        faq: faq,
-                                        testimonials: testimonials,
-                                        marketing_content: marketing_content,
-                                        contact_email: contact_email,
-                                        hide_softcover_footer:
-                                          hide_softcover_footer,
-                                        authors: authors,
-                                        ga_account: ga_account
+    params = {
+      id: id,
+      files: files,
+      title: title,
+      slug: slug,
+      subtitle: subtitle,
+      description: description,
+      chapters: chapter_attributes,
+      prices: prices,
+      faq: faq,
+      testimonials: testimonials,
+      marketing_content: marketing_content,
+      contact_email: contact_email,
+      hide_softcover_footer: hide_softcover_footer,
+      author_name: author,
+      authors: authors,
+      ga_account: ga_account,
+      repo_url: repo_url,
+      remove_unused_media_bundles: options[:remove_unused_media_bundles],
+      custom_math: custom_math
+    }
+
+    res = @client.create_or_update_book params
 
     if res['errors']
       @errors = res['errors']
@@ -123,8 +130,11 @@ class Softcover::Book
     @attrs = res['book']
 
     self.id = @attrs['id']
-    Softcover::BookConfig['last_uploaded_at'] = Time.now
 
+    # Not needed for now:
+    # Softcover::BookConfig['last_uploaded_at'] = Time.now
+
+    # res contains the S3 upload signatures needed
     @uploader = Softcover::Uploader.new res
 
     true
@@ -172,45 +182,63 @@ class Softcover::Book
   end
 
   # ============================================================================
-  # Screencast handling
+  # Media handling
   # ============================================================================
 
-  def process_screencasts
-    files_to_upload = find_screencasts.select do |file|
-      next false if @processed_screencasts.include?(file)
+  # 1. iterate over /media/*
+  # => use directory name as path parameter
+  # => get checksums for all included files
+  # => send each to /media API endpoint and then upload
 
+  def process_media(options={})
+    Dir["media/*"].each do |media_dir|
+      next unless File.directory?(media_dir) && !(media_dir =~ /^\./)
+      process_media_directory media_dir, options
+    end
+  end
+
+  def process_media_directory(dir, options={})
+    return false if @processed_media.include?(dir)
+
+    puts "Processing #{dir} directory..."
+
+    files_to_upload = get_book_files(dir).select do |file|
       file.ready?
     end
 
-    upload_screencasts! files_to_upload
+    upload_media! dir, files_to_upload, options
 
-    @processed_screencasts += files_to_upload
+    @processed_media.push dir
   end
 
-  SCREENCAST_FORMATS = %w{mov ogv mp4 webm}
-
-  def find_screencasts
-    formats = SCREENCAST_FORMATS * ','
-    Dir["#{@screencasts_dir}/**/*.{#{formats},zip}"].map do |path|
-      BookFile.new path
-    end
+  def get_book_files(dir)
+    Dir["#{dir}/**/*"].map do |path|
+      BookFile.new(path) unless File.directory?(path)
+    end.compact
   end
 
-  def upload_screencasts!(files)
+  def upload_media!(path, files, options={})
     return if files.empty?
 
-    res = @client.get_screencast_upload_params files
+    manifest_path = File.join(path, "manifest.yml")
+    manifest = File.exists?(manifest_path) ? File.read(manifest_path) : nil
+
+    res = @client.get_media_upload_params path, files, manifest, options
 
     if res['upload_params']
-      screencast_uploader = Softcover::Uploader.new res
-      screencast_uploader.after_each do |params|
+      media_uploader = Softcover::Uploader.new res
+      media_uploader.after_each do |params|
         notify_file_upload params['path']
       end
-      screencast_uploader.upload!
+      media_uploader.upload!
       notify_upload_complete
     else
       raise 'server error'
     end
+  end
+
+  def custom_math
+    Softcover::Mathjax.custom_macros
   end
 
   private

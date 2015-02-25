@@ -42,9 +42,9 @@ module Softcover
                                         desc: "Find overfull hboxes",
                                         type: :boolean
       elsif format == 'mobi'
-        method_option :calibre, aliases: '-c',
-                                desc: "Use Calibre to build the MOBI",
-                                type: :boolean
+        method_option :kindlegen, aliases: '-k',
+                                  desc: "Use KindleGen to build the MOBI",
+                                  type: :boolean
       end
       method_option :quiet, aliases: '-q',
                             desc: "Quiet output", type: :boolean
@@ -137,6 +137,8 @@ module Softcover
                           desc: "Quiet output", type: :boolean
     method_option :silent, aliases: '-s',
                            desc: "Silent output", type: :boolean
+    method_option :remove_unused_media_bundles, aliases: '-r',
+                           desc: "Remove unused media bundles", type: :boolean
     def publish
       require 'softcover/commands/publisher'
 
@@ -146,20 +148,22 @@ module Softcover
       Softcover::Commands::Publisher.publish!(options)
     end
 
-    desc "publish:screencasts", "Publish screencasts"
+    desc "publish:media", "Publish media"
     method_option :daemon, aliases: '-d', force: false,
       desc: "Run as daemon", type: :boolean
     method_option :watch, aliases: '-w', type: :boolean,
       force: false, desc: "Watch a directory to auto upload."
+    method_option :remove_unused_media_files, aliases: '-r',
+                           desc: "Remove unused media files", type: :boolean
 
     # TODO: make screencasts dir .book configurable
-    define_method "publish:screencasts" do |dir=
-      Softcover::Book::DEFAULT_SCREENCASTS_DIR|
+    define_method "publish:media" do |dir=
+      Softcover::Book::DEFAULT_MEDIA_DIR|
       require 'softcover/commands/publisher'
 
-      puts "Publishing screencasts in #{dir}"
+      puts "Publishing media bundles..."
       Softcover::Commands::Publisher.
-        publish_screencasts! options.merge(dir: dir)
+        publish_media! options.merge(dir: dir)
     end
 
     desc "unpublish", "Remove book from Softcover"
@@ -234,6 +238,7 @@ module Softcover
     desc "config", "View local config"
     def config
       require "softcover/config"
+      puts "Reading contents of #{Softcover::Config.path}:"
       Softcover::Config.read
     end
 

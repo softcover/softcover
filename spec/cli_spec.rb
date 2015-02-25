@@ -121,6 +121,12 @@ describe Softcover::CLI do
           expect(path('ebooks/book.mobi')).to exist
         end
       end
+
+      context "command-line options" do
+        subject(:options) { `softcover help build:mobi` }
+        it { should_not include 'calibre' }
+        it { should     include 'kindlegen' }
+      end
     end
   end
 

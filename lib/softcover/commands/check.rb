@@ -67,17 +67,19 @@ module Softcover
         when :node
           "NodeJS (http://nodejs.org/)"
         when :phantomjs
-          "PhantomJS (http://phantomjs.org/)"
+          message = "PhantomJS (http://phantomjs.org/)\n"
+          message += "      ∟ Put bin/phantomjs somewhere on your path,"
+          message += " e.g., in /usr/local/bin"
         when :kindlegen
           url = 'http://www.amazon.com/gp/feature.html?ie=UTF8&docId=1000765211'
           message = "KindleGen (#{url})\n"
-          message += "      ∟ Put the kindlegen executable on your path, "
-          message += "e.g., in /usr/local/bin"
+          message += "      ∟ Put the kindlegen executable on your path,"
+          message += " e.g., in /usr/local/bin"
         when :calibre
           url = 'http://calibre-ebook.com/'
           message  = "Calibre (#{url})\n"
           message += "      ∟ Enable Calibre command-line tools"
-          message += " (http://manual.calibre-ebook.com/cli/cli-index.html)"
+          message += " (http://manual.calibre-ebook.com/generated/en/cli-index.html)"
         when :java
           url = 'http://www.java.com/en/download/help/index_installing.xml'
           "Java (#{url})"
@@ -87,7 +89,7 @@ module Softcover
           url  = 'https://github.com/IDPF/epubcheck/releases/'
           url += 'download/v3.0/epubcheck-3.0.zip'
           message  = "EpubCheck 3.0 (#{url})\n"
-          message += "      ∟ Unzip and put epubcheck-3.0/ in $HOME/bin"
+          message += "      ∟ Unzip and place epubcheck-3.0/ in a directory on your path"
         when :inkscape
           message  = "Inkscape (http://inkscape.org/)"
         else

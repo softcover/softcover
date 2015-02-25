@@ -194,10 +194,15 @@ module Softcover::Utils
     end
   end
 
+  # Removes a directory recursively.
+  def rm_r(directory)
+    FileUtils.rm_r(directory) if File.directory?(directory)
+  end
+
   # Returns the system-independent file path.
   # It's nicer to write `path('foo/bar/baz')` than
   # `File.join('foo', 'bar', 'baz')`.
-  def path(path_string)
+  def path(path_string='')
     File.join(*path_string.split('/'))
   end
 
@@ -237,35 +242,32 @@ module Softcover::Utils
   def dependency_filename(label)
     case label
     when :latex
-      `which xelatex`.chomp
+      get_filename(:xelatex)
     when :ghostscript
-      `which gs`.chomp
-    when :convert
-      `which convert`.chomp
-    when :node
-      `which node`.chomp
-    when :phantomjs
-      `which phantomjs`.chomp
-    when :kindlegen
-      `which kindlegen`.chomp
-    when :java
-      `which java`.chomp
-    when :zip
-      `which zip`.chomp
+      get_filename(:gs)
     when :calibre
-      `which ebook-convert`.chomp
+      get_filename(:'ebook-convert')
     when :epubcheck
-      File.join(Dir.home, 'bin', 'epubcheck-3.0', 'epubcheck-3.0.jar')
+      # Finds EpubCheck anywhere on the path.
+      cmd_path = ['epubcheck-3.0', 'epubcheck-3.0.jar']
+      possible_paths = ENV['PATH'].split(File::PATH_SEPARATOR).
+                                   collect { |x| File.join(x, cmd_path) }
+      possible_paths.select { |f| File.file?(f) }.first || ""
     when :inkscape
-      filename = `which inkscape`.chomp
-      if filename.empty?
-        filename = '/Applications/Inkscape.app/Contents/Resources/bin/' +
-                   'inkscape'
-      end
-      filename
+      default = '/Applications/Inkscape.app/Contents/Resources/bin/inkscape'
+      filename_or_default(:inkscape, default)
     else
-      raise "Unknown label #{label}"
+      get_filename(label)
     end
+  end
+
+  def get_filename(name)
+    `which #{name}`.chomp
+  end
+
+  # Returns the filename if it exists on the path and a default otherwise.
+  def filename_or_default(name, default)
+    (f = get_filename(name)).empty? ? default : f
   end
 
   # Returns the language labels from the config file.

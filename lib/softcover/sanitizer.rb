@@ -16,7 +16,7 @@ module Softcover
         remove_contents: %w{script},
         attributes: {
           'div' => %w{id class data-tralics-id data-number data-chapter},
-          'a'    => %w{id class href},
+          'a'    => %w{id class href target},
           'span' => %w{id class style},
           'ol'   => %w{id class},
           'ul'   => %w{id class},
@@ -34,6 +34,9 @@ module Softcover
           'tbody'   => %w{id class},
           'tr'   => %w{id class},
           'td'   => %w{id class colspan}
+        },
+        css: {
+          properties: %w{color height width}
         },
         protocols: {
           'a'   => {'href' => [:relative, 'http', 'https', 'mailto']},

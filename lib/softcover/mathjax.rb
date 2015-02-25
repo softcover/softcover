@@ -7,9 +7,17 @@ module Softcover
                          # Call .inspect.inspect to escape the chapter number
                          # code for interpolation.
                          options[:chapter_number].inspect.inspect
-                       else
+                       elsif options[:chapter_number].nil?
                          '#{chapter_number}'
+                       else  # chapter_number is false, i.e., it's a single page
+                         false
                        end
+      fn = if chapter_number
+             "formatNumber: function (n) { return #{chapter_number} + '.' + n }"
+           else
+             ""
+           end
+
       <<-EOS
       MathJax.Hub.Config({
         "HTML-CSS": {
@@ -19,7 +27,7 @@ module Softcover
           extensions: ["AMSmath.js", "AMSsymbols.js"],
           equationNumbers: {
             autoNumber: "AMS",
-            formatNumber: function (n) { return #{chapter_number} + '.' + n }
+            #{fn}
           },
           Macros: {
             PolyTeX:    "Poly{\\\\TeX}",
@@ -45,13 +53,12 @@ module Softcover
     AMS_HTML = '/' + MATHJAX + 'TeX-AMS_HTML'
     AMS_SVG  = MATHJAX + 'TeX-AMS-MML_SVG'
 
+    # Returns the custom macros as defined in the custom style file.
+    def self.custom_macros
+      extract_macros(Softcover.custom_styles)
+    end
 
     private
-
-      # Returns the custom macros as defined in the custom style file.
-      def self.custom_macros
-        extract_macros(Softcover.custom_styles)
-      end
 
       # Extracts and formats the macros from the given string of style commands.
       # The output format is compatible with the macro configuration described
@@ -63,13 +70,13 @@ module Softcover
         cmd_no_args = /^\s*\\newcommand\{\\(.*?)\}\{(.*)\}/
         cna = styles.scan(cmd_no_args).map do |name, definition|
           escaped_definition = definition.gsub('\\', '\\\\\\\\')
-          %(#{name}: "#{escaped_definition}")
+          %("#{name}": "#{escaped_definition}")
         end
         # Then grab the commands with arguments.
         cmd_with_args = /^\s*\\newcommand\{\\(.*?)\}\[(\d+)\]\{(.*)\}/
         cwa = styles.scan(cmd_with_args).map do |name, number, definition|
           escaped_definition = definition.gsub('\\', '\\\\\\\\')
-          %(#{name}: ["#{escaped_definition}", #{number}])
+          %("#{name}": ["#{escaped_definition}", #{number}])
         end
         (cna + cwa).join(",\n")
       end

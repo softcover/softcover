@@ -5,52 +5,32 @@ prices:
     name: "HTML & Ebook"
     description:
       |
-        Optimized for Kindle and iPad
-        Almost 9000 pages of content
-        Includes a free copy of 1st Edition PDF
+        * Optimized for computer screens, Kindle, and iPad
+        * Incredibly awesome content
     media:
-      - html
-      - pdf
-      - epub
-      - mobi
+      - ebooks
     price: 3500
-
-  -
-    code: screencasts
-    name: "HTML & Screencasts"
-    description:
-      |
-        Full updated for the 2nd edition
-        100% DRM-free digital downloads
-        (QuickTime and Ogg Vorbis)
-        Includes first edition screencasts
-    media:
-      - html
-      - screencasts
-    price: 12500
 
   -
     code: all
     name: "HTML, Ebook, and Screencasts"
     description:
       |
-        Includes all 50 screencasts
-        eBook formats for Kindle, Nook, and PDF
-        Read online.
+        * Includes 10 hours of video screencasts
+        * Ebooks inclded in PDF/EPUB/MOBI formats
     media:
-      - html
-      - pdf
-      - epub
-      - mobi
-      - screencasts
+      - ebooks
+      - media/screencasts
     price: 12500
-    regular_price: 19900
 
 authors:
   -
     name: "The Author"
     image: /images/testimonial_1.png
     contact_email: "info@softcover.io"
+    contact_twitter: "@softcover"
+    contact_fb: "http://facebook.com/softcover"
+    contact_gh: "@softcover"
     bio:
       |
         Author bio [link](https://www.softcover.io)
@@ -79,5 +59,6 @@ testimonials:
 
 marketing_content: ''
 
+repo_url: ''
 contact_email: ''
 hide_custom_domain_footer: false

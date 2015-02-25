@@ -3,6 +3,7 @@
 *.log
 *.toc
 *.out
+/*.tex
 *.tmp.*
 tmp/
 generated_polytex/
@@ -13,14 +14,23 @@ generated_polytex/
 # Generated HTML files
 html/*.html
 
-# Generated EPUB/MOBI files
-epub/
+# Generated EPUB files
+epub/OEBPS/*.html
+epub/OEBPS/*.opf
+epub/OEBPS/*.ncx
+epub/OEBPS/images
+epub/OEBPS/styles/*
+epub/mimetype
+epub/META-INF/*
+# Keep necessary EPUB files.
+!epub/OEBPS/styles/custom_epub.css
+!epub/OEBPS/styles/page-template.xpgt
 
 # Generated ebooks
 ebooks/
 
-# Screencasts (likely to be huge)
-screencasts/
+# Media (likely to be huge)
+media/
 
 # Other miscellaneous files
 log/

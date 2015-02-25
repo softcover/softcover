@@ -23,10 +23,10 @@ module Softcover
             $stderr.puts("See http://manual.softcover.io/book/getting_started#sec-build_preview")
             exit(1)
           end
-          range  = manifest.pdf_preview_page_range.split('..').map(&:to_i)
+          range = manifest.pdf_preview_page_range.split('..').map(&:to_i)
           cmd  = %(yes | #{ghostscript} -dBATCH -sOutputFile="#{output}")
           cmd += %( -dFirstPage=#{range.first} -dLastPage=#{range.last})
-          cmd += %( -sDEVICE=pdfwrite "#{input}" > /dev/null)
+          cmd += %( -sDEVICE=pdfwrite "#{input}" > /dev/null 2> /dev/null)
           execute cmd
         end
 
