@@ -41,7 +41,7 @@ module Softcover
           File.write(Softcover::Utils.tmpify(manifest, filename), latex)
         end
         write_pygments_file(:latex, Softcover::Directories::STYLES)
-        copy_polytexnic_sty
+        copy_polytexnic_sty(options)
 
         # Renaming the PDF in the command is necessary because `execute`
         # below uses `exec` (except in tests, where it breaks). Since `exec`
@@ -142,10 +142,10 @@ module Softcover
         end
 
         # Copies the style file to ensure it's always fresh.
-        def copy_polytexnic_sty
+        def copy_polytexnic_sty(options)
           softcover_sty  = File.join(Softcover::Directories::STYLES,
                                      'softcover.sty')
-          source_sty     = File.join(Softcover::Utils.template_dir, 
+          source_sty     = File.join(Softcover::Utils.template_dir(options), 
                                      softcover_sty)
           FileUtils.cp source_sty, softcover_sty
         end

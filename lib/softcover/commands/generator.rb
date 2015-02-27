@@ -10,7 +10,7 @@ module Softcover
         @name = name
         @markdown = !options[:polytex]
         @article = options[:article]
-        template_dir = Softcover::Utils.template_dir
+        template_dir = Softcover::Utils.template_dir(article: @article)
 
         thor = Thor::Shell::Basic.new
 
@@ -91,8 +91,9 @@ module Softcover
 
       # Returns the files and directories based on the input format.
       def files_directories_maybe_markdown
-        fds = Dir.glob(File.join(Softcover::Utils.template_dir, "**/*"), 
-                                 File::FNM_DOTMATCH)
+        fds = Dir.glob(
+                File.join(Softcover::Utils.template_dir(article: @article), 
+                          "**/*"), File::FNM_DOTMATCH)
         if markdown?
           # Skip the PolyTeX chapter files, which will be generated later.
           fds.reject { |e| e =~ /\/chapters\/.*\.tex/ }

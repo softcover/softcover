@@ -5,13 +5,13 @@ module Softcover
     class Html < Builder
       include Softcover::Utils
 
-      def setup
+      def setup(options)
         Dir.mkdir "html" unless File.directory?("html")
         html_styles = path('html/stylesheets')
         unless File.directory?(html_styles)
           Dir.mkdir html_styles
         end
-        template_dir = Softcover::Utils.template_dir
+        template_dir = Softcover::Utils.template_dir(options)
         custom_css = path("#{template_dir}/html/stylesheets/custom.css")
         target = path("#{html_styles}/custom.css")
         FileUtils.cp(custom_css, target) unless File.exist?(target)
@@ -50,7 +50,7 @@ module Softcover
                                          '..', 'server', 'views',
                                          'book.html.erb'))
           file_content = ERB.new(erb_file).result(binding)
-          write_full_html_file(manifest.slug, file_content)
+          write_full_html_file(manifest.slug, file_content, options)
           write_chapter_html_files(Nokogiri::HTML(file_content), erb_file)
         end
 
@@ -124,13 +124,13 @@ module Softcover
       # Writes the full HTML file for the book.
       # The resulting file is a self-contained HTML document suitable
       # for viewing in isolation.
-      def write_full_html_file(basename, file_content)
+      def write_full_html_file(basename, file_content, options)
         html_filename = File.join('html', basename + '.html')
         File.open(html_filename, 'w') do |f|
           f.write(file_content)
         end
         polytexnic_css = File.join('html', 'stylesheets', 'softcover.css')
-        source_css     = File.join(Softcover::Utils.template_dir, 
+        source_css     = File.join(Softcover::Utils.template_dir(options), 
                                    polytexnic_css)
         FileUtils.cp source_css, polytexnic_css
         write_pygments_file(:html, File.join('html', 'stylesheets'))

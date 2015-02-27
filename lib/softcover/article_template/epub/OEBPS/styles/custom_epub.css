@@ -1,0 +1,21 @@
+/* Custom styles specific to EPUB (and hence MOBI) books */
+
+#title_page .title {
+  font-size: 200%;
+}
+
+#title_page .author {
+  font-size: 120%;
+}
+
+#title_page .date {
+  font-size: 120%;
+}
+
+#table_of_contents ul li {
+  padding-left: 2em;
+}
+
+body {
+  font-size: 80%;
+}

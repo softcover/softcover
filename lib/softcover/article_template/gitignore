@@ -1,0 +1,38 @@
+# Generated LaTeX files
+*.aux
+*.log
+*.toc
+*.out
+/*.tex
+*.tmp.*
+tmp/
+generated_polytex/
+
+.highlight_cache
+.softcover-book
+
+# Generated HTML files
+html/*.html
+
+# Generated EPUB files
+epub/OEBPS/*.html
+epub/OEBPS/*.opf
+epub/OEBPS/*.ncx
+epub/OEBPS/images
+epub/OEBPS/styles/*
+epub/mimetype
+epub/META-INF/*
+# Keep necessary EPUB files.
+!epub/OEBPS/styles/custom_epub.css
+!epub/OEBPS/styles/page-template.xpgt
+
+# Generated ebooks
+ebooks/
+
+# Media (likely to be huge)
+media/
+
+# Other miscellaneous files
+log/
+*.bak
+.DS_Store
