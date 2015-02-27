@@ -283,4 +283,8 @@ module Softcover::Utils
     end
   end
 
+  # Returns the directory of the document template.
+  def template_dir
+    File.expand_path File.join(File.dirname(__FILE__), "book_template")
+  end
 end

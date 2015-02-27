@@ -11,7 +11,7 @@ module Softcover
         unless File.directory?(html_styles)
           Dir.mkdir html_styles
         end
-        template_dir = path("#{File.dirname(__FILE__)}/../template")
+        template_dir = Softcover::Utils.template_dir
         custom_css = path("#{template_dir}/html/stylesheets/custom.css")
         target = path("#{html_styles}/custom.css")
         FileUtils.cp(custom_css, target) unless File.exist?(target)
@@ -130,8 +130,8 @@ module Softcover
           f.write(file_content)
         end
         polytexnic_css = File.join('html', 'stylesheets', 'softcover.css')
-        source_css     = File.join(File.dirname(__FILE__),
-                                   "../template/#{polytexnic_css}")
+        source_css     = File.join(Softcover::Utils.template_dir, 
+                                   polytexnic_css)
         FileUtils.cp source_css, polytexnic_css
         write_pygments_file(:html, File.join('html', 'stylesheets'))
         built_files.push html_filename

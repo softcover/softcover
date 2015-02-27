@@ -9,6 +9,8 @@ module Softcover
       def generate_file_tree(name, options = {})
         @name = name
         @markdown = !options[:polytex]
+        @article = options[:article]
+        template_dir = Softcover::Utils.template_dir
 
         thor = Thor::Shell::Basic.new
 
@@ -81,11 +83,7 @@ module Softcover
         book_yml = File.join(Softcover::Directories::CONFIG, 'book.yml')
         puts "Done. Please update #{book_yml}"
       end
-
-      def template_dir
-        File.expand_path File.join File.dirname(__FILE__), "..", "template"
-      end
-
+      
       # Returns a list of all the files and directories used to build the book.
       def all_files_and_directories
         files_directories_maybe_markdown
@@ -93,7 +91,8 @@ module Softcover
 
       # Returns the files and directories based on the input format.
       def files_directories_maybe_markdown
-        fds = Dir.glob(File.join(template_dir, "**/*"), File::FNM_DOTMATCH)
+        fds = Dir.glob(File.join(Softcover::Utils.template_dir, "**/*"), 
+                                 File::FNM_DOTMATCH)
         if markdown?
           # Skip the PolyTeX chapter files, which will be generated later.
           fds.reject { |e| e =~ /\/chapters\/.*\.tex/ }

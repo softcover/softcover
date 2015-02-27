@@ -23,7 +23,7 @@ class Softcover::BookManifest < OpenStruct
 
   class NotFound < StandardError
     def message
-      "Invalid book directory, no manifest file found!"
+      "Invalid document directory, no manifest file found!"
     end
   end
 
@@ -157,7 +157,7 @@ class Softcover::BookManifest < OpenStruct
   # Needed for backwards compatibility.
   def ensure_template_files
     self.class.find_book_root!
-    template_dir = File.join(File.dirname(__FILE__), 'template')
+    template_dir = Softcover::Utils.template_dir
     files = [File.join(Softcover::Directories::CONFIG, 'marketing.yml'),
              path('images/cover-web.png'),
              path('latex_styles/custom_pdf.sty'),
