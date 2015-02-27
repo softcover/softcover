@@ -94,6 +94,7 @@ class Softcover::BookManifest < OpenStruct
   def initialize(options = {})
     @source = options[:source] || :polytex
     @origin = options[:origin]
+    @article = options[:article]
     @book_file = TXT_PATH
 
     ensure_template_files
@@ -157,7 +158,7 @@ class Softcover::BookManifest < OpenStruct
   # Needed for backwards compatibility.
   def ensure_template_files
     self.class.find_book_root!
-    template_dir = Softcover::Utils.template_dir
+    template_dir = Softcover::Utils.template_dir(article: @article)
     files = [File.join(Softcover::Directories::CONFIG, 'marketing.yml'),
              path('images/cover-web.png'),
              path('latex_styles/custom_pdf.sty'),

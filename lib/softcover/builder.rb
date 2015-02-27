@@ -14,7 +14,7 @@ module Softcover
     end
 
     def build!(options={})
-      setup
+      setup(options)
       build(options)
       verify
       self

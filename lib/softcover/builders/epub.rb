@@ -135,7 +135,7 @@ module Softcover
         copy_image_files
         write_html(options)
         write_contents
-        create_style_files
+        create_style_files(options)
         make_epub(options)
         move_epub
       end
@@ -343,7 +343,7 @@ module Softcover
         !!string.match(/(?:\\\(|\\\[|\\begin{equation})/)
       end
 
-      def create_style_files
+      def create_style_files(options)
         html_styles = File.join('html', 'stylesheets')
         epub_styles = File.join('epub', 'OEBPS', 'styles')
 
@@ -352,7 +352,7 @@ module Softcover
                    clean_book_id(path("#{html_styles}/softcover.css")))
 
         # Copy over the EPUB-specific CSS.
-        template_dir = Softcover::Utils.template_dir
+        template_dir = Softcover::Utils.template_dir(options)
         epub_css     = File.join(template_dir, epub_styles, 'epub.css')
         FileUtils.cp(epub_css, epub_styles)
 

@@ -284,7 +284,8 @@ module Softcover::Utils
   end
 
   # Returns the directory of the document template.
-  def template_dir
-    File.expand_path File.join(File.dirname(__FILE__), "book_template")
+  def template_dir(options)
+    doc = options[:article] ? 'article' : 'book'
+    File.expand_path File.join(File.dirname(__FILE__), "#{doc}_template")
   end
 end

@@ -1,0 +1,449 @@
+/* This file is auto-generated. Do not edit. */
+
+body #book {
+  width: 41em;
+  font-size: 18px;
+  font-family: Georgia, serif;
+  line-height: 1.5;
+  margin-left: 5em;
+  color: #070707;
+  margin-bottom: 20em;
+}
+
+#book h1 {
+  font-size: 230%;
+  border-top: 2px solid #333;
+  padding-top: 1em;
+}
+
+#book h2 {
+  font-size: 180%;
+  margin-top: 1.5em;
+}
+
+#book h3 {
+  margin-top: 1.5em;
+}
+
+#book h4 {
+  margin-top: 2em;
+}
+
+#book img.tex {
+  vertical-align: -6px;
+}
+
+/* Title and subtitle */
+
+#book .title {
+  text-align: center;
+  font-size: 250%;
+}
+
+#book .subtitle {
+  border-top: none;
+  padding-top: 0;
+  margin: 0;
+  text-align: center;
+  font-size: 140%;
+}
+
+#book .author {
+  margin-top: 1em;
+  text-align: center;
+}
+
+#book .date {
+  margin-top: 1em;
+  text-align: center;
+}
+
+#book a {
+  color: #002f72;
+  text-decoration: underline;
+}
+
+#book a.tex {
+  text-decoration: none;
+}
+
+#book code {
+  font-size: 95%;
+  color: darkgreen;
+  font-weight: bold;
+}
+
+#book .number {
+  margin-right: 1em;
+}
+
+#book h1 span.number {
+  display: block;
+  margin-bottom: 0.5em;
+  font-size: 80%;
+}
+
+#book span.number {
+  font-weight: bold;
+}
+
+#book .label {
+  font-weight: bold;
+  margin-right: 0.5em;
+}
+
+#book .header {
+  font-weight: bold;
+  margin-right: 0.5em;
+}
+
+#book .caption .header {
+  font-weight: normal;
+}
+
+#book .code {
+  margin-top: 0.2em;
+  width: 100%;
+  white-space: pre;
+  font-family: "Courier New", Courier, monospace;
+  border: 1px solid #999;
+  background: #eee;
+  margin-bottom: 1em;
+}
+
+#book .codelisting {
+  width: 100%;
+  border: 1px solid #999;
+  background: #eee;
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+#book .codelisting .code {
+  border: 0;
+  margin-bottom: 0;
+}
+
+#book .codelisting .heading {
+  width: 100%;
+  background: #ccc;
+  line-height: 1.2;
+  padding-top: 0.1em;
+  padding-bottom: 0.3em;
+}
+
+#book .codelisting .heading .number {
+  margin-right: 0.3em;
+  margin-left: 0.3em;
+}
+
+#book .codelisting .heading span.filepath {
+  display: block;
+  margin-left: 0.4em;
+  margin-top: 0.2em;
+  margin-bottom: 0.1em;
+  padding-top: 10px;
+  font-style: italic;
+}
+
+#book .codelisting span.break {
+  margin-top: -0.4em;
+}
+
+#book .code .highlight .lineno {
+  color: #666;
+  font-weight: normal;
+}
+
+#book .filepath {
+  font-family: Courier, monospace;
+  font-size: 80%;
+}
+
+#book .inline_verbatim {
+  font-family: Courier, monospace;
+}
+
+#book a.ref {
+  color: #002f72;
+}
+
+#book .graphics.image {
+  text-align: center;
+}
+
+#book .graphics.image img {
+  margin-top: 2em;
+  max-width: 100%
+}
+
+#book .graphics.image.box img {
+  border: 1px solid #666;
+}
+#book a .graphics img {
+  display: block;
+  margin: 2em auto auto;
+}
+
+#book .table {
+  text-align: center;
+  margin-top: 2em;
+}
+
+#book table.tabular {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#book .center {
+  text-align: center;
+}
+
+#book .displaymath {
+  text-align: center;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+#book .caption {
+  font-size: 0.85em;
+  font-style: italic;
+  text-align: center;
+  margin-bottom: 3em;
+  margin-top: 1em;
+}
+
+#book .equation {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+#book .equation_number {
+  float: right;
+}
+
+#book table.tabular {
+  border-collapse: collapse;
+}
+
+#book .tabular th {
+  padding: 0.5em;
+}
+
+#book .tabular th.align_left {
+  text-align: left;
+}
+
+#book .tabular th.align_center {
+  text-align: center;
+}
+
+#book .tabular th.align_right {
+  text-align: right;
+}
+
+#book .tabular th.left_border {
+  border-left: 1px solid black;
+}
+
+#book .tabular th.right_border {
+  border-right: 1px solid black;
+}
+
+#book .tabular td {
+  padding: 0.5em;
+}
+
+#book .tabular td.align_left {
+  text-align: left;
+}
+
+#book .tabular td.align_center {
+  text-align: center;
+}
+
+#book .tabular td.align_right {
+  text-align: right;
+}
+
+#book .tabular td.left_border {
+  border-left: 1px solid black;
+}
+
+#book .tabular td.right_border {
+  border-right: 1px solid black;
+}
+
+#book .tabular tr.top_border {
+  border-top: 1px solid black;
+}
+
+#book .tabular tr.bottom_border {
+  border-bottom: 1px solid black;
+}
+
+#book .tabular tr.top_border {
+  border-top: 1px solid black;
+}
+
+#book .footnotes {
+  border-top: 1px solid black;
+  margin-top: 5em;
+  font-size: 90%;
+}
+
+#book sup.footnote {
+  font-size: 90%;
+  margin-right: 2px;
+  line-height: 0;
+}
+
+#book sup.footnote.intersentence {
+  margin-right: 0px;
+}
+
+#book sup.footnote a:visited {
+  color: #002f72;
+}
+
+#book ol.footnotes a.arrow {
+  text-decoration: none;
+}
+
+#book ol.footnotes.nonumbers li {
+  list-style-type: none;
+}
+
+#book ul.footnotes.nonumbers li {
+  list-style-type: none;
+}
+
+#book .footnotes .header {
+  padding-top: 1em;
+  padding-bottom: 0.5em;
+  margin-left: 0.5em;
+  font-size: 120%;
+  font-weight: bold;
+}
+
+#book a.arrow {
+  text-decoration: none;
+}
+
+#book a:visited.arrow {
+  color: #002f72;
+}
+
+#book a.section  {
+  color: #070707;
+  text-decoration: none;
+}
+
+#book a.heading {
+  color: #000;
+  text-decoration: none;
+}
+
+#book a:hover.heading {
+  text-decoration: underline;
+}
+
+#book .aside {
+  border: 1px solid #999;
+  padding: 0.5em;
+  background: #eee;
+  width: 100%;
+}
+
+#book .aside .heading {
+  font-weight: bold;
+}
+
+#book .highlight {
+  width: 100%;
+  padding-right: 0.5px;
+}
+
+#book .highlight .go {
+  color: darkgreen;
+}
+
+#book pre {
+  line-height: 1.2em;
+  font-family: monospace;
+}
+
+#book .highlight pre {
+  margin: 10px 0 10px 10px;
+  font-size: 80%;
+  font-weight: bold;
+}
+
+#book #table_of_contents {
+  margin-top: -1em;
+  margin-bottom: 3em;
+  margin-left: -1.8em;
+}
+
+#book #table_of_contents ul {
+  list-style-type: none;
+  list-style-position: outside;
+  padding-left: 0;
+  line-height: 1.2em;
+}
+
+#book #table_of_contents li.chapter {
+  font-weight: bold;
+  padding-top: 1.2em;
+}
+
+#book #table_of_contents ul li {
+  padding-left: 3.6em;
+}
+
+#book #table_of_contents a {
+  color: #002f72;
+}
+
+#book .navigation {
+  font-size: 90%;
+  padding-bottom: 2em;
+}
+
+#book .navigation .prev_page {
+  float: left;
+}
+
+#book .navigation .next_page {
+  float: right;
+}
+
+#book a span.undefined_ref {
+  color: red;
+}
+
+#book .tt {
+  font-family: Courier, monospace;
+}
+
+#book .sc {
+  font-variant: small-caps;
+}
+
+#book .texhtml {
+  line-height: 0.5;
+}
+
+#book span.break {
+  display: block;
+}
+
+#book h1 span.break {
+  display: block;
+  margin-top: 0.5em;
+}
+
+#book span.intersentencespace {
+  margin-right: 0.2em;
+}
+

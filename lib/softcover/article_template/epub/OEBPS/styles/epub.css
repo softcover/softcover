@@ -1,0 +1,23 @@
+/* Styles specific to EPUB books */
+
+body {
+  width: auto;
+  margin-left: 0.5em;
+}
+
+.highlight pre {
+  font-size: 80%;
+  font-weight: bold;
+}
+
+code {
+  font-size: 100%;
+}
+
+.code {
+  font-size: 90%;
+}
+
+.aside {
+  width: auto;
+}

@@ -1,0 +1,174 @@
+% This is a generated file. Do not edit.
+
+% Page size
+% These settings are optimized for ebooks.
+% If you want different settings, override them in custom_pdf.sty.
+\setlength{\oddsidemargin}{.25in}
+\setlength{\evensidemargin}{.25in}
+\setlength{\textheight}{8in}
+\setlength{\textwidth}{6.25in}
+\setlength{\topmargin}{0in}
+
+% Font encodings
+\usepackage[T1]{fontenc}
+% Be able to define colors
+\usepackage[svgnames]{xcolor}
+% Be able to include book covers
+\usepackage{pdfpages}
+% Include graphics
+\usepackage{graphicx}
+\def\maxwidth#1{\ifdim\Gin@nat@width>#1 #1\else\Gin@nat@width\fi}
+% Support the \url command
+\usepackage{url}
+% Commands included by PolyTeXnic
+\usepackage{latex_styles/polytexnic_commands}
+% Links
+\definecolor{darkblue}{rgb}{0,0.18,0.45}
+\definecolor{darkgreen}{rgb}{0,0.39,0}
+% Bizarrely, we need to define the ALL CAPS version of DARKGREEN to account
+% for some edge cases, whose nature remains mysterious.
+\definecolor{DARKGREEN}{rgb}{0,0.39,0}
+\definecolor{hilightyellow}{rgb}{1.0,1.0,0.8}
+% Configure hyperref footnotes
+\usepackage[hyperfootnotes=false]{hyperref}
+\hypersetup{hyperfootnotes=false}
+\hypersetup{colorlinks,linkcolor=darkblue,urlcolor=blue}
+% Syntax highlighting
+\usepackage{latex_styles/pygments}
+% Change color of '@go', "general output", from gray to dark green.
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor{darkgreen}{##1}}}
+% American Mathematical Society extensions
+\usepackage{amsmath}
+\usepackage{amsfonts}
+% 'Verbatim' environment
+\usepackage{fancyvrb}
+% Be able to resize text relative to other text
+\usepackage{relsize}
+% Support longtable environment.
+\usepackage{longtable}
+% Support strikethrough (via \sout{text})
+\usepackage[normalem]{ulem}
+
+% Configure fonts
+\renewcommand{\rmdefault}{ptm}
+\usepackage{courier}
+\normalfont % in case the EC fonts aren't available
+
+% Code environments
+\DefineVerbatimEnvironment%
+  {code}{Verbatim}{fontsize=\relsize{-2.5},fontseries=b}
+% The metacode environment exists solely to allow meta-discussion of the code
+% environment, as in
+%   %= lang:latex
+%   \begin{metacode}
+%   %= lang:ruby
+%   \begin{code}
+%   def foo
+%     "bar"
+%   end
+%   \end{code}
+%   \end{metacode}
+\DefineVerbatimEnvironment%
+  {metacode}{Verbatim}{fontsize=\relsize{-2.5},fontseries=b}
+% Use a nice font in code environments.
+\usepackage[scaled=0.92]{helvet}
+
+% Filesystem paths
+\newcommand{\filepath}[1]{\textit{\texttt{\small #1}}}
+
+% Size-constrained images
+\newcommand{\image}[1]{\begin{center}\includegraphics[width=\maxwidth{0.95\textwidth}]{#1}\end{center}}
+\newcommand{\imagebox}[1]{\begin{center}\fbox{\includegraphics[width=\maxwidth{0.95\textwidth}]{#1}}\end{center}}
+
+\newenvironment{framed_shaded}{%
+  \def\FrameCommand##1{\hskip\@totalleftmargin
+  \fcolorbox{boxcolor}{shadecolor}{##1}%
+      % There is no \@totalrightmargin, so:
+      \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+  \MakeFramed {\advance\hsize-\width
+    \@totalleftmargin\z@ \linewidth\hsize
+    \advance\labelsep\fboxsep
+    \@setminipage\vspace{0.3em}}%
+ }{\vspace{-0.6em}\par\unskip\@minipagefalse\endMakeFramed}
+
+\newenvironment{full_framed_shaded}{%
+  \def\FrameCommand{\fboxsep=\FrameSep\fcolorbox{boxcolor}{shadecolor}}%
+  \MakeFramed {\advance\hsize\width \FrameRestore}}%
+ {\endMakeFramed}
+
+\newenvironment{container}{%
+  \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+  \colorbox{white}{##1}\hskip-\fboxsep
+      % There is no \@totalrightmargin, so:
+      \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+  \MakeFramed {\advance\hsize-\width
+    \@totalleftmargin\z@ \linewidth\hsize
+    \@setminipage}%
+ }{\par\unskip\@minipagefalse\endMakeFramed}
+
+% Caption styling
+\usepackage[font={it,small}]{caption}
+
+% Codelistings
+\newcounter{codelisting}
+\@ifundefined{chapter}{}{\numberwithin{codelisting}{chapter}}
+\newenvironment{codelisting}{\refstepcounter{codelisting}\begin{framed_shaded}\vspace{-0.5em}}%
+{\end{framed_shaded}}
+% See latex_styles/language_customization.sty for codelisting captions.
+
+% Aside boxes
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newcommand{\boxlabel}{Box}
+\@ifundefined{chapter}
+  {\newtheorem{aside}{\boxlabel}}
+  {\newtheorem{aside}{\boxlabel}[chapter]}
+\usepackage{latex_styles/framed}
+\definecolor{shadecolor}{gray}{0.97}
+\definecolor{boxcolor}{gray}{0.10}
+\newenvironment{shaded_aside}[2]{\begin{full_framed_shaded}\begin{aside}\label{#2} \textbf{#1}\end{aside}}{\bigskip\end{full_framed_shaded}}
+
+% Additional commands
+\newcommand{\heading}[1]{\textbf{#1}}
+\newcommand{\kodesize}{\smaller[0.75]}
+\newcommand{\kode}[1]{\textcolor{darkgreen}{\textbf{\texttt{\kodesize #1}}}}
+\newcommand{\coloredtext}[2]{\textcolor{#1}{#2}}
+\newcommand{\coloredtexthtml}[2]{\textcolor[HTML]{#1}{#2}}
+
+% Subtitle command
+\usepackage{titling}
+\newcommand{\subtitle}[1]{%
+  \posttitle{%
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip0.5em}%
+}
+
+% Enable the \pbox command for paragraph boxes in tables.
+\usepackage{pbox}
+
+% Enable float placement options.
+\usepackage{float}
+
+% Define some commonly used Unicode characters.
+\usepackage{newunicodechar}
+\newunicodechar{—}{---}
+\newunicodechar{–}{--}
+
+\usepackage{latex_styles/language_customization}
+
+% Fix quotes in code environments.
+% Provides "upquote.sty" functionality compatible with the latest Pygments.
+\RequirePackage{textcomp}
+\begingroup
+\catcode`'=\active
+\catcode``=\active
+\g@addto@macro\@noligs
+   {\let`\textasciigrave
+    \let'\textquotesingle
+    \let\PYZsq\textquotesingle}
+\endgroup
+
+% Include custom commands.
+\usepackage{latex_styles/custom}
+\usepackage{latex_styles/custom_pdf}
