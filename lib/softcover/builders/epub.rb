@@ -352,7 +352,7 @@ module Softcover
                    clean_book_id(path("#{html_styles}/softcover.css")))
 
         # Copy over the EPUB-specific CSS.
-        template_dir = File.join(File.dirname(__FILE__), '..', 'template')
+        template_dir = Softcover::Utils.template_dir
         epub_css     = File.join(template_dir, epub_styles, 'epub.css')
         FileUtils.cp(epub_css, epub_styles)
 

@@ -145,8 +145,8 @@ module Softcover
         def copy_polytexnic_sty
           softcover_sty  = File.join(Softcover::Directories::STYLES,
                                      'softcover.sty')
-          source_sty     = File.join(File.dirname(__FILE__),
-                                     '..', 'template', softcover_sty)
+          source_sty     = File.join(Softcover::Utils.template_dir, 
+                                     softcover_sty)
           FileUtils.cp source_sty, softcover_sty
         end
     end
