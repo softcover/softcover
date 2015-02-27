@@ -88,13 +88,12 @@ class Softcover::BookManifest < OpenStruct
   class Section < OpenStruct
   end
 
-  TXT_PATH     = 'Book.txt'
+  TXT_PATH  = 'Book.txt'
   YAML_PATH = File.join(Softcover::Directories::CONFIG, 'book.yml')
 
   def initialize(options = {})
     @source = options[:source] || :polytex
     @origin = options[:origin]
-    @article = options[:article]
     @book_file = TXT_PATH
 
     ensure_template_files
@@ -138,8 +137,21 @@ class Softcover::BookManifest < OpenStruct
       chapter_includes(base_contents).each_with_index do |name, i|
         slug = File.basename(name, '.*')
         chapter_title_regex = /^\s*\\chapter{(.*)}/
-        content = File.read(File.join(polytex_dir, slug + '.tex'))
+        filename = File.join(polytex_dir, slug + '.tex')
+        content = File.read(filename)
         chapter_title = content[chapter_title_regex, 1]
+        if article? && @origin == :markdown
+          # Override the title and
+          unless chapter_title.nil?
+            # Override the titel
+            self.title = chapter_title
+            # Overwrite book.yml with the new title.
+            book_yml = File.read(YAML_PATH)
+            File.write(YAML_PATH, book_yml.sub(/title: .*/, "title: #{title}"))
+            # Strip out the chapter line, which is invalid in articles.
+            File.write(filename, content.sub(chapter_title_regex, ''))
+          end
+        end
         j = 0
         sections = content.scan(/^\s*\\section{(.*)}/).flatten.map do |name|
           Section.new(name: name, section_number: j += 1)
@@ -158,7 +170,7 @@ class Softcover::BookManifest < OpenStruct
   # Needed for backwards compatibility.
   def ensure_template_files
     self.class.find_book_root!
-    template_dir = Softcover::Utils.template_dir(article: @article)
+    template_dir = Softcover::Utils.template_dir(article: article?)
     files = [File.join(Softcover::Directories::CONFIG, 'marketing.yml'),
              path('images/cover-web.png'),
              path('latex_styles/custom_pdf.sty'),
@@ -236,6 +248,11 @@ class Softcover::BookManifest < OpenStruct
   # Returns true if converting PolyTeX source.
   def polytex?
     @source == :polytex
+  end
+
+  # Returns true if document is an article.
+  def article?
+    File.readlines(path('config/preamble.tex')).first =~ /extarticle/
   end
 
   # Returns an iterator for the chapter file paths.
