@@ -119,7 +119,8 @@ module Softcover
         end
         Polytexnic::Pipeline.new(polytex,
                                  custom_commands: Softcover.custom_styles,
-                                 language_labels: language_labels).to_html
+                                 language_labels: language_labels,
+                                 article: Softcover::Utils.article?).to_html
       end
 
       # Writes the full HTML file for the book.
