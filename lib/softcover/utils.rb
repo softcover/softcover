@@ -288,4 +288,9 @@ module Softcover::Utils
     doc = options[:article] ? 'article' : 'book'
     File.expand_path File.join(File.dirname(__FILE__), "#{doc}_template")
   end
+
+  # Returns true if document is an article.
+  def article?
+    File.readlines(path('config/preamble.tex')).first =~ /extarticle/
+  end
 end

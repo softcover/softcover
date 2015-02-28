@@ -103,7 +103,8 @@ module Softcover
         p = Polytexnic::Pipeline.new(markdown,
                                      source: :markdown,
                                      custom_commands: Softcover.custom_styles,
-                                     language_labels: language_labels)
+                                     language_labels: language_labels,
+                                     article: Softcover::Utils.article?)
         p.polytex
       end
 
@@ -130,7 +131,7 @@ module Softcover
           f.write(file_content)
         end
         polytexnic_css = File.join('html', 'stylesheets', 'softcover.css')
-        source_css     = File.join(Softcover::Utils.template_dir(options), 
+        source_css     = File.join(Softcover::Utils.template_dir(options),
                                    polytexnic_css)
         FileUtils.cp source_css, polytexnic_css
         write_pygments_file(:html, File.join('html', 'stylesheets'))
