@@ -34,8 +34,8 @@ module Softcover
     end
 
     # Returns a content.opf file based on a valid template.
-    def content_opf_template(title, copyright, author, uuid, cover_id, 
-                             toc_chapters, manifest_chapters, images)        
+    def content_opf_template(title, copyright, author, uuid, cover_id,
+                             toc_chapters, manifest_chapters, images)
 %(<?xml version="1.0" encoding="UTF-8"?>
 <package unique-identifier="BookID" version="3.0" xmlns="http://www.idpf.org/2007/opf">
   <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"
@@ -107,7 +107,7 @@ module Softcover
         </nav>
     </body>
 </html>
-)      
+)
     end
 
   end
@@ -310,6 +310,10 @@ module Softcover
           png['alt'] = png_filename.sub('.png', '')
           svg.replace(png)
         end
+        # Make references relative.
+        source.css('a.hyperref').each do |ref_node|
+          ref_node['href'] = ref_node['href'].sub('.html', '_fragment.html')
+        end
         source.at_css('div#book').children.to_xhtml
       end
 
@@ -474,8 +478,8 @@ module Softcover
                    id = "img-#{label}"
                    %(<item id="#{id}" href="#{href}" media-type="image/#{ext}"/>)
                  end
-        content_opf_template(manifest.title, manifest.copyright, 
-                             manifest.author, manifest.uuid, cover_id, 
+        content_opf_template(manifest.title, manifest.copyright,
+                             manifest.author, manifest.uuid, cover_id,
                              toc_ch, man_ch, images)
       end
 
