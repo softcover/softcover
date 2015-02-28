@@ -156,6 +156,13 @@ module Softcover
         chapter_number = 0
         current_chapter = manifest.chapters.first
         reference_cache = {}
+        if Softcover::Utils.article?
+          # Include all the material before the first section.
+          xml.css('#book').children.each do |node|
+            current_chapter.nodes.push node # unless node['id'] ==  'book'
+            break if node['class'] == 'section'
+          end
+        end
         xml.css('#book>div').each do |node|
           klass = node.attributes['class'].to_s
           id = node.attributes['id'].to_s
@@ -218,6 +225,12 @@ module Softcover
       # Writes the chapter as a complete, self-contained HTML document.
       def write_complete_file(chapter, erb_file, n)
         html_filename = File.join('html', chapter.slug + '.html')
+        # Make references absolute.
+        chapter.nodes.each do |node|
+          node.css('a.hyperref').each do |ref_node|
+            ref_node['href'] = ref_node['href'].sub('_fragment', '')
+          end
+        end
         File.open(html_filename, 'w') do |f|
           @html = chapter.nodes.map(&:to_xhtml).join("\n")
           @mathjax = Softcover::Mathjax::config(chapter_number: n)
