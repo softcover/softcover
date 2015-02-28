@@ -170,7 +170,8 @@ class Softcover::BookManifest < OpenStruct
   # Needed for backwards compatibility.
   def ensure_template_files
     self.class.find_book_root!
-    template_dir = Softcover::Utils.template_dir(article: article?)
+    template_dir = Softcover::Utils.template_dir(article:
+                                                 Softcover::Utils.article?)
     files = [File.join(Softcover::Directories::CONFIG, 'marketing.yml'),
              path('images/cover-web.png'),
              path('latex_styles/custom_pdf.sty'),
@@ -248,11 +249,6 @@ class Softcover::BookManifest < OpenStruct
   # Returns true if converting PolyTeX source.
   def polytex?
     @source == :polytex
-  end
-
-  # Returns true if document is an article.
-  def article?
-    File.readlines(path('config/preamble.tex')).first =~ /extarticle/
   end
 
   # Returns an iterator for the chapter file paths.

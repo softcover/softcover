@@ -4,10 +4,15 @@ module Softcover
     # Returns the MathJax configuration.
     def self.config(options = {})
       chapter_number = if options[:chapter_number]
-                         # Call .inspect.inspect to escape the chapter number
-                         # code for interpolation.
-                         options[:chapter_number].inspect.inspect
-                       elsif options[:chapter_number].nil?
+                         if options[:chapter_number].zero?
+                             # Case for articles, which have chapter "0"
+                             false
+                           else
+                             # Call .inspect.inspect to escape the chapter
+                             # number code for interpolation.
+                             options[:chapter_number].inspect.inspect
+                           end
+                         elsif options[:chapter_number].nil?
                          '#{chapter_number}'
                        else  # chapter_number is false, i.e., it's a single page
                          false
