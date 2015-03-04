@@ -94,7 +94,7 @@ module Softcover
         # Returns the command to build the PDF (once).
         def build_pdf(book_filename, options={})
           tmp_filename = Softcover::Utils.tmpify(manifest, book_filename)
-          if options[:silent] || options[:quite]
+          if options[:silent] || options[:quiet]
               "#{xelatex} --interaction=nonstopmode #{tmp_filename} #{options[:filters]}"
           elsif options[:nonstop]
               "#{xelatex} --interaction=nonstopmode #{tmp_filename} #{options[:filters]}"
