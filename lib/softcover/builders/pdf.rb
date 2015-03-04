@@ -94,13 +94,19 @@ module Softcover
         # Returns the command to build the PDF (once).
         def build_pdf(book_filename, options={})
           tmp_filename = Softcover::Utils.tmpify(manifest, book_filename)
-          "#{xelatex} #{tmp_filename} #{options[:filters]}"
+          if options[:silent] || options[:quite]
+              "#{xelatex} --interaction=nonstopmode #{tmp_filename} #{options[:filters]}"
+          elsif options[:nonstop]
+              "#{xelatex} --interaction=nonstopmode #{tmp_filename} #{options[:filters]}"
+	  else
+              "#{xelatex} #{tmp_filename} #{options[:filters]}"
+          end
         end
 
         # Returns the full command to build the PDF.
         def pdf_cmd(book_filename, options={})
           if options[:once]
-            build_pdf(book_filename)
+            build_pdf(book_filename, options)
           elsif options[:'find-overfull']
             # The way we do things, code listings show up as "Overfull", but
             # they're actually fine, so filter them out.
@@ -115,7 +121,7 @@ module Softcover
                       filters: "| #{filter_out_listings} | #{show_context}" )
           else
             # Run the command twice (to guarantee up-to-date cross-references).
-            cmd = build_pdf(book_filename)
+            cmd = build_pdf(book_filename, options)
             "#{cmd} ; #{cmd}"
           end
         end

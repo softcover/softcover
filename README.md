@@ -25,3 +25,10 @@ for a list of supported commands.
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+###Local Development
+
+1. check out the fork
+2. add new feature
+3. build it localy with ```gem build softcover.gemspec```
+4. install the local version for using ```gem install softcover-1.0.beta2.gem```
