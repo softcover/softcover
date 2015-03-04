@@ -143,7 +143,7 @@ class Softcover::BookManifest < OpenStruct
         if article? && @origin == :markdown
           # Override the title and
           unless chapter_title.nil?
-            # Override the titel
+            # Override the title
             self.title = chapter_title
             # Overwrite book.yml with the new title.
             book_yml = File.read(YAML_PATH)
