@@ -13,7 +13,7 @@ describe Softcover::App do
       generate_book
       Softcover::Builders::Html.new.build!
     end
-    # after(:all)  { remove_book }
+    after(:all)  { remove_book }
 
     before { chdir_to_book }
 
@@ -77,8 +77,8 @@ describe Softcover::App do
       end
 
       it 'GET image within book' do
-        get '/images/2011_michael_hartl.png'
-        expect_server_response_of_type 'image/png'
+        get '/images/01_michael_hartl_headshot.jpg'
+        expect_server_response_of_type 'image/jpeg'
       end
 
       def expect_server_response_of_type(type)
