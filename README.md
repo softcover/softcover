@@ -8,7 +8,7 @@ For more details about Softcover, see [*The Softcover Book*](http://manual.softc
 
 ## Installation
 
-    $ gem install softcover --pre
+    $ gem install softcover
 
 ## Usage
 
