@@ -98,7 +98,7 @@ module Softcover
               "#{xelatex} --interaction=nonstopmode #{tmp_filename} #{options[:filters]}"
           elsif options[:nonstop]
               "#{xelatex} --interaction=nonstopmode #{tmp_filename} #{options[:filters]}"
-	  else
+	        else
               "#{xelatex} #{tmp_filename} #{options[:filters]}"
           end
         end
