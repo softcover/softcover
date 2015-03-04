@@ -291,6 +291,6 @@ module Softcover::Utils
 
   # Returns true if document is an article.
   def article?
-    File.readlines(path('config/preamble.tex')).first =~ /extarticle/
+    !!File.readlines(path('config/preamble.tex')).first.match(/extarticle/)
   end
 end

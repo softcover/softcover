@@ -13,7 +13,7 @@ describe Softcover::App do
       generate_book
       Softcover::Builders::Html.new.build!
     end
-    # after(:all)  { remove_book }
+    after(:all)  { remove_book }
 
     before { chdir_to_book }
 
