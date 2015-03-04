@@ -8,7 +8,7 @@ For more details about Softcover, see [*The Softcover Book*](http://manual.softc
 
 ## Installation
 
-    $ gem install softcover --pre
+    $ gem install softcover
 
 ## Usage
 
@@ -25,3 +25,11 @@ for a list of supported commands.
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+### Local Development
+
+1. Check out the fork
+2. Add new feature
+3. Install it locally with `bundle exec rake install`
+
+Once your changes are implemented, please update the documentation in the [Softcover manual](https://github.com/softcover/softcover_book) and make another pull request there.
