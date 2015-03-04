@@ -44,6 +44,7 @@ class Softcover::BookManifest < OpenStruct
 
     # Returns a chapter heading for use in the navigation menu.
     def menu_heading
+      # ***test
       raw_html = Polytexnic::Pipeline.new(title,
                                           language_labels: language_labels).
                                          to_html
@@ -53,7 +54,7 @@ class Softcover::BookManifest < OpenStruct
         footnote_node.remove
       end
       html = doc.inner_html
-      if chapter_number.zero?
+      if chapter_number.zero? || article?
         html
       else
         "#{chapter_label(chapter_number)}: #{html}"
@@ -115,7 +116,6 @@ class Softcover::BookManifest < OpenStruct
     marshal_load attrs
 
     write_master_latex_file(self)
-
     if polytex?
       tex_filename = filename + '.tex'
       self.chapters = []
@@ -141,9 +141,12 @@ class Softcover::BookManifest < OpenStruct
         content = File.read(filename)
         chapter_title = content[chapter_title_regex, 1]
         if article? && @origin == :markdown
-          # Override the title and
-          unless chapter_title.nil?
-            # Override the title
+          if chapter_title.nil?
+            # *** test
+            # Articles are "chapters" with the title of the full document.
+            chapter_title = title
+          else
+            # Override the title based on the value of the top-level heading.
             self.title = chapter_title
             # Overwrite book.yml with the new title.
             book_yml = File.read(YAML_PATH)
@@ -162,6 +165,7 @@ class Softcover::BookManifest < OpenStruct
                                   chapter_number: i + 1)
       end
     end
+    write_master_latex_file(self)
     verify_paths! if options[:verify_paths]
   end
 

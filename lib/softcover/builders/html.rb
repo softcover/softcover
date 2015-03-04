@@ -24,8 +24,6 @@ module Softcover
           RubyProf.start
         end
 
-        write_master_latex_file(manifest)
-
         if manifest.markdown?
           unless options[:'find-overfull']
             remove_unneeded_polytex_files
@@ -59,7 +57,7 @@ module Softcover
           printer = RubyProf::GraphPrinter.new(result)
           printer.print(STDOUT, {})
         end
-
+        write_master_latex_file(manifest)
         true
       end
 
@@ -166,21 +164,26 @@ module Softcover
           end
         end
         xml.css('#book>div').each do |node|
-          next if node['id'] == 'title_page'
-          klass = node.attributes['class'].to_s
-          id = node.attributes['id'].to_s
-          if klass == 'chapter' || id == 'frontmatter'
-            current_chapter = manifest.chapters[chapter_number]
-            node['data-chapter'] = current_chapter.slug
-            chapter_number += 1
-          end
+          # Include the title page info.
+          if node['id'] == 'title_page'
+            # ***test
+            current_chapter.nodes.unshift node
+          else
+            klass = node.attributes['class'].to_s
+            id = node.attributes['id'].to_s
+            if klass == 'chapter' || id == 'frontmatter'
+              current_chapter = manifest.chapters[chapter_number]
+              node['data-chapter'] = current_chapter.slug
+              chapter_number += 1
+            end
 
-          reference_cache[node['data-tralics-id']] = current_chapter
-          node.xpath('.//*[@data-tralics-id]').each do |labeled_node|
-            reference_cache[labeled_node['data-tralics-id']] = current_chapter
-          end
+            reference_cache[node['data-tralics-id']] = current_chapter
+            node.xpath('.//*[@data-tralics-id]').each do |labeled_node|
+              reference_cache[labeled_node['data-tralics-id']] = current_chapter
+            end
 
-          current_chapter.nodes.push node
+            current_chapter.nodes.push node
+          end
         end
         reference_cache
       end
