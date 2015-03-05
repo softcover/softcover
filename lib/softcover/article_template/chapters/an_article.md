@@ -42,7 +42,6 @@ end
 
 Softcover supports mathematical typesetting via embedded \LaTeX. This includes both inline math, such as \( \phi^2 - \phi - 1 = 0, \) and centered math, such as
 \[ \phi^2 - \phi - 1 = 0. \]
-
 Softcover also supports numbered equations via embedded \LaTeX, as seen in Eq.~\eqref{eq:phi} and Eq.~\eqref{eq:gauss}.
 
 \begin{equation}
