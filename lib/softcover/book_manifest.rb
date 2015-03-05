@@ -158,6 +158,7 @@ class Softcover::BookManifest < OpenStruct
         sections = content.scan(/^\s*\\section{(.*)}/).flatten.map do |name|
           Section.new(name: name, section_number: j += 1)
         end
+        chapter_title = title if article?
         chapters.push Chapter.new(slug: slug,
                                   title: chapter_title,
                                   sections: sections,
