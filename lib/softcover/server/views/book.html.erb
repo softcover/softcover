@@ -25,7 +25,7 @@
     <% end %>
   </head>
   <body>
-    <% if @local_server %>
+    <% if @local_server && !Softcover::Utils.article? %>
     <div id='bookMenu' class='bookMenuFixed'>
       <div class='wrapper'>
         <div class='bookMenuArows'>
