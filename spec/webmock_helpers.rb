@@ -187,9 +187,10 @@ module WebmockHelpers
     name   = options[:name]   || 'book'
     source = options[:source] || :polytex
     remove_book
-    Dir.chdir File.join File.dirname(__FILE__), "fixtures/"
+    Dir.chdir File.join(File.dirname(__FILE__), "fixtures/")
     flags = []
     flags << '-p' unless options[:markdown]
+    flags << '-a' if options[:article]
     silence { system "softcover new #{name} #{flags.join(' ')}" }
     chdir_to_book
     File.mkdir 'html' unless File.exist?('html')
