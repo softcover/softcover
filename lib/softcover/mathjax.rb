@@ -4,8 +4,8 @@ module Softcover
     # Returns the MathJax configuration.
     def self.config(options = {})
       chapter_number = if options[:chapter_number]
-                         if options[:chapter_number].zero?
-                             # Case for articles, which have chapter "0"
+                         if (options[:chapter_number].zero? ||
+                             Softcover::Utils.article?)
                              false
                            else
                              # Call .inspect.inspect to escape the chapter
@@ -13,17 +13,17 @@ module Softcover
                              options[:chapter_number].inspect.inspect
                            end
                          elsif options[:chapter_number].nil?
-                         '#{chapter_number}'
+                          false
                        else  # chapter_number is false, i.e., it's a single page
                          false
                        end
       fn = if chapter_number
-             "formatNumber: function (n) { return #{chapter_number} + '.' + n }"
+             "formatNumber: function (n) { return #{chapter_number} + '.adfadsfa  ' + n }"
            else
              ""
            end
 
-      <<-EOS
+      config = <<-EOS
       MathJax.Hub.Config({
         "HTML-CSS": {
           availableFonts: ["TeX"],
@@ -45,6 +45,7 @@ module Softcover
         imageFont: null
       });
       EOS
+      config
     end
 
     # Rerturns a version of the MathJax configuration escaped for the server.

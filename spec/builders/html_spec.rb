@@ -167,4 +167,45 @@ describe Softcover::Builders::Html do
       end
     end
   end
+
+  describe "when making an article" do
+    before(:all) do
+      generate_book(markdown: true, article: true)
+    end
+    after(:all)  { remove_book }
+
+    describe "#build!" do
+      subject(:builder) { Softcover::Builders::Html.new }
+
+      before do
+        @file_to_be_removed = path("#{builder.manifest.polytex_dir}/remove.tex")
+        File.write(@file_to_be_removed, '')
+        builder.build!
+      end
+
+      let(:html_file) { path("html/an_article.html") }
+
+      its(:built_files) { should include html_file }
+      its(:built_files) { should include path("html/an_article_fragment.html") }
+      its(:built_files) { should_not include path("html/another_chapter.html") }
+
+      describe "article html" do
+        subject { File.read(html_file) }
+        it { should include builder.manifest.title }
+      end
+
+      describe "master LaTeX file" do
+        let(:master_file) { builder.master_filename(builder.manifest) }
+        subject { File.read(master_file) }
+        it { should include '{extarticle}' }
+        it { should include "\\title{#{builder.manifest.title}}" }
+        it { should include "\\subtitle{#{builder.manifest.subtitle}}" }
+        it { should include "\\author{#{builder.manifest.author}}" }
+        it { should include '\date{}' }
+        it { should include '\begin{document}' }
+        it { should include '\include{generated_polytex/an_article}' }
+        it { should include '\end{document}' }
+      end
+    end
+  end
 end

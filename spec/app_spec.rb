@@ -88,4 +88,31 @@ describe Softcover::App do
       end
     end
   end
+
+  context "article" do
+    before(:all) do
+      generate_book(article: true)
+      Softcover::Builders::Html.new.build!
+    end
+    after(:all)  { remove_book }
+
+    before { chdir_to_book }
+
+    let(:manifest) { Softcover::BookManifest.new }
+    let(:article) { manifest.chapters.first }
+
+    it 'redirects / to article' do
+      get '/'
+      expect(last_response).to be_redirect
+      expect(last_response.location).to match article.slug
+      puts last_response
+    end
+
+    it 'GET chapter' do
+      get "/#{article.slug}"
+      expect(last_response).to be_ok
+      expect(last_response.body).to match Regexp.new(article.title)
+      expect(last_response.body).not_to match Regexp.new('Chapter 1')
+    end
+  end
 end

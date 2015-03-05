@@ -166,7 +166,6 @@ module Softcover
         xml.css('#book>div').each do |node|
           # Include the title page info.
           if node['id'] == 'title_page'
-            # ***test
             current_chapter.nodes.unshift node
           else
             klass = node.attributes['class'].to_s

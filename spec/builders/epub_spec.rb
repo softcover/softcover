@@ -224,7 +224,7 @@ describe Softcover::Builders::Epub do
 end
 
 describe Softcover::EpubUtils do
-  let(:dummy_class) { Class.new { include Softcover::EpubUtils } }    
+  let(:dummy_class) { Class.new { include Softcover::EpubUtils } }
   let(:title) { 'Foo Bar & Grill' }
   let(:uuid) { '550e8400-e29b-41d4-a716-446655440000' }
 
@@ -237,9 +237,9 @@ describe Softcover::EpubUtils do
     let(:images) { [] }
 
     let(:template) do
-      dummy_class.new.content_opf_template(title, copyright, author, uuid, 
-                                           cover_id, toc_chapters, 
-                                           manifest_chapters, images)       
+      dummy_class.new.content_opf_template(title, copyright, author, uuid,
+                                           cover_id, toc_chapters,
+                                           manifest_chapters, images)
     end
 
     it "should have the right (escaped) content" do
@@ -248,29 +248,47 @@ describe Softcover::EpubUtils do
       expect(template).to include(copyright)
       expect(template).to include(uuid)
       expect(template).to include(cover_id)
-    end    
+    end
   end
 
   context "toc.ncx template" do
     let(:chapter_nav) { [] }
     let(:template) do
-      dummy_class.new.toc_ncx_template(title, uuid, chapter_nav)       
+      dummy_class.new.toc_ncx_template(title, uuid, chapter_nav)
     end
 
     it "should have the right (escaped) content" do
       expect(template).to include('Foo Bar &amp; Grill')
       expect(template).to include(uuid)
-    end    
+    end
   end
 
   context "nav.html template" do
     let(:nav_list) { [] }
     let(:template) do
-      dummy_class.new.nav_html_template(title, nav_list)       
+      dummy_class.new.nav_html_template(title, nav_list)
     end
 
     it "should have the right (escaped) content" do
       expect(template).to include('Foo Bar &amp; Grill')
-    end    
+    end
+  end
+end
+
+describe "article validation" do
+  before(:all) do
+    generate_book(markdown: true, article: true)
+    @file_to_be_removed = path('html/should_be_removed.html')
+    File.write(@file_to_be_removed, '')
+    silence { `softcover build:epub` }
+    @builder = Softcover::Builders::Epub.new
+    @builder.build!
+  end
+  after(:all) { remove_book }
+  subject(:builder) { @builder }
+
+  it "should be valid" do
+    output = `softcover epub:validate`
+    expect(output).to match(/No errors or warnings/)
   end
 end

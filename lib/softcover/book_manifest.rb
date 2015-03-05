@@ -44,7 +44,6 @@ class Softcover::BookManifest < OpenStruct
 
     # Returns a chapter heading for use in the navigation menu.
     def menu_heading
-      # ***test
       raw_html = Polytexnic::Pipeline.new(title,
                                           language_labels: language_labels).
                                          to_html
@@ -159,6 +158,7 @@ class Softcover::BookManifest < OpenStruct
         sections = content.scan(/^\s*\\section{(.*)}/).flatten.map do |name|
           Section.new(name: name, section_number: j += 1)
         end
+        chapter_title = title if article?
         chapters.push Chapter.new(slug: slug,
                                   title: chapter_title,
                                   sections: sections,
