@@ -1,32 +1,23 @@
 # Title of the Article
 
-This is the first paragraph of the Softcover Markdown template produced with the \softcover\ command-line interface. It shows how to write a document in Markdown, a lightweight markup language, augmented with the [kramdown](http://kramdown.gettalong.org/) converter and some custom extensions, including support for embedded \PolyTeX, a subset of the powerful \LaTeX\ typesetting system.  For more information, see [*The Softcover Book*](http://manual.softcover.io/book). To learn how to easily publish (and optionally sell) documents produced with Softcover, visit [Softcover.io](http://softcover.io/).
+The is the first paragraph of the Softcover document template. It shows how to write a document in [Markdown](http://daringfireball.net/projects/markdown/), augmented with some custom extensions, including numbered footnotes[^sample-footnote] and embedded \LaTeX.[^pronunciation]
 
-This is the *second* paragraph, showing how to emphasize text.[^sample-footnote] You can also make text **bold** or _emphasize a second way_. Via embedded \PolyTeX, Softcover also supports colored text, such as \coloredtext{red}{red}, \coloredtext{CornflowerBlue}{cornflower blue}, and \coloredtexthtml{E8AB3A}{arbitrary HTML colors}.
+This is the second paragraph, showing how to *emphasize* text. You can also make text **bold**.
 
 ## A section
 \label{sec:a_section}
 
-This is a section. You can refer to it using the \LaTeX\ cross-reference syntax, like so: Section~\ref{sec:a_section}.
+This is a section. We'll take a look at some of the features supported by Softcover.
 
 ### Source code
 
-This is a subsection.
-
-You can typeset code samples and other verbatim text using four spaces of indentation:
+In plain Markdown, you can typeset code samples and other verbatim text using four spaces of indentation:
 
     def hello
       puts "hello, world"
     end
 
-Softcover also comes with full support for syntax-highlighted source code using kramdown's default syntax, which combines the language name with indentation:
-
-{lang="ruby"}
-    def hello
-      puts "hello, world"
-    end
-
-Softcover's Markdown mode also extends kramdown to support "code fencing" from GitHub-flavored Markdown:
+Softcover also supports GitHub-style "code fencing" with language-specific syntax highlighting:
 
 ```ruby
 def hello
@@ -34,7 +25,7 @@ def hello
 end
 ```
 
-The last of these can be combined with \PolyTeX's `codelisting` environment to make code listings with linked cross-references (Listing~\ref{code:hello}).
+The second of these can be combined with Softcover's `codelisting` environment to make code listings with linked cross-references via embedded \LaTeX\ (Listing~\ref{code:hello}).
 
 \begin{codelisting}
 \codecaption{Hello, world.}
@@ -49,36 +40,38 @@ end
 
 ### Mathematics
 
-Softcover's Markdown mode supports mathematical typesetting using \LaTeX\ syntax, including inline math, such as \( \phi^2 - \phi - 1 = 0, \) and centered math, such as
+Softcover supports mathematical typesetting via embedded \LaTeX. This includes both inline math, such as \( \phi^2 - \phi - 1 = 0, \) and centered math, such as
 \[ \phi = \frac{1+\sqrt{5}}{2}. \]
-It also supports centered equations with linked cross-reference via embedded \PolyTeX\ (Eq.~\eqref{eq:phi}).
+
+Softcover also supports numbered equations via embedded \LaTeX, as seen in Eq.~\eqref{eq:phi}.
 
 \begin{equation}
 \label{eq:phi}
 \phi = \frac{1+\sqrt{5}}{2}
 \end{equation}
 
-Softcover also supports an alternate math syntax, such as {$$}\phi^2 - \phi - 1 = 0{/$$}, and centered math, such as
-
-{$$}
-\phi = \frac{1+\sqrt{5}}{2}.
-{/$$}
-
-The \LaTeX\ syntax is strongly preferred, but the alternate syntax is included for maximum compatibility with other systems.
 
 ## Images and tables
+\label{sec:images_and_tables}
 
-This is the second section.
+This is the second section. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+### Images
 
 Softcover supports the inclusion of images, like this:
 
-![Some dude.](images/2011_michael_hartl.png)
+![Some dude.](images/01_michael_hartl_headshot.jpg)
 
 Using \LaTeX\ labels, you can also include a caption (as in Figure~\ref{fig:captioned_image}) or just a figure number (as in Figure~\ref{fig:figure_number}).
 
-![Some dude.\label{fig:captioned_image}](images/2011_michael_hartl.png)
+![Some dude.\label{fig:captioned_image}](images/01_michael_hartl_headshot.jpg)
 
-![\label{fig:figure_number}](images/2011_michael_hartl.png)
+![\label{fig:figure_number}](images/01_michael_hartl_headshot.jpg)
 
 ### Tables
 
@@ -93,49 +86,27 @@ Softcover supports raw tables via a simple table syntax:
 | `PATCH` | /users/1 | `update` | update user with id `1` |
 | `DELETE` | /users/1 | `destroy` | delete user with id `1` |
 
-See [*The Softcover Book*](http://manual.softcover.io/book/softcover_markdown#sec-embedded_tabular_and_tables) to learn how to make more complicated tables.
+Softcover also supports more complicated tables and `tabular` environments via embedded \LaTeX, as seen in Table~\ref{table:answer}.
 
-## Command-line interface
+\begin{table}
+\caption{An important answer in several bases.\label{table:answer}}
+\begin{tabular}{|r|lc|}
+  \hline
+  2A & hexadecimal & (base 16) \\
+  52 & octal & (base 8) \\
+  101010 & binary & (base 2) \\
+  \hline
+  42 & decimal & (base 10) \\
+  \hline
+  \multicolumn{3}{|c|}{\textsc{All your base are belong to us.}} \\
+  \hline
+\end{tabular}
+\end{table}
 
-Softcover comes with a command-line interface called `softcover`. To get more information, just run `softcover help`:
+## Final section
 
-```console
-$ softcover help
-Commands:
-  softcover build, build:all           # Build all formats
-  softcover build:epub                 # Build EPUB
-  softcover build:html                 # Build HTML
-  softcover build:mobi                 # Build MOBI
-  softcover build:pdf                  # Build PDF
-  softcover build:preview              # Build book preview in all formats
-  .
-  .
-  .
-```
+This is the final section. The previous sections were Section~\ref{sec:a_section} and Section~\ref{sec:images_and_tables}.
 
-\noindent You can run `softcover help <command>` to get additional help on a given command:
-
-```console
-$ softcover help build
-Usage:
-  softcover build, build:all
-
-Options:
-  -q, [--quiet]   # Quiet output
-  -s, [--silent]  # Silent output
-
-Build all formats
-```
-
-## Miscellanea
-
-This is the end of the template---apart from two mostly empty chapters. In fact, let’s include the last chapter in its entirety, just to see how mostly empty it is:
-
-<<(chapters/yet_another_chapter.md, lang: text)
-
-Visit [*The Softcover Book*](http://manual.softcover.io) to learn more about what Softcover can do.
-
-
-[^sample-footnote]: This is a footnote. It is numbered automatically.
+[^sample-footnote]: Like this.
 
 [^pronunciation]: Pronunciations of "LaTeX" differ, but *lay*-tech is the one I prefer.

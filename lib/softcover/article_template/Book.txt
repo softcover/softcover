@@ -1,3 +1,3 @@
 cover
 maketitle
-a_chapter.md
+an_article.md
