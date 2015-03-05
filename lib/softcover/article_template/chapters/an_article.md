@@ -25,7 +25,7 @@ def hello
 end
 ```
 
-The second of these can be combined with Softcover's `codelisting` environment to make code listings with linked cross-references via embedded \LaTeX\ (Listing~\ref{code:hello}).
+The second of these can be combined with Softcover's `codelisting` environment to make code listings via embedded \LaTeX, as shown in Listing~\ref{code:hello}.
 
 \begin{codelisting}
 \codecaption{Hello, world.}
@@ -41,13 +41,18 @@ end
 ### Mathematics
 
 Softcover supports mathematical typesetting via embedded \LaTeX. This includes both inline math, such as \( \phi^2 - \phi - 1 = 0, \) and centered math, such as
-\[ \phi = \frac{1+\sqrt{5}}{2}. \]
+\[ \phi^2 - \phi - 1 = 0. \]
 
-Softcover also supports numbered equations via embedded \LaTeX, as seen in Eq.~\eqref{eq:phi}.
+Softcover also supports numbered equations via embedded \LaTeX, as seen in Eq.~\eqref{eq:phi} and Eq.~\eqref{eq:gauss}.
 
 \begin{equation}
 \label{eq:phi}
-\phi = \frac{1+\sqrt{5}}{2}
+\phi = \frac{1+\sqrt{5}}{2} \approx 1.618
+\end{equation}
+
+\begin{equation}
+\label{eq:gauss}
+\mathbf{\nabla}\cdot\mathbf{B} = 0 \qquad\mbox{Gauss's law}
 \end{equation}
 
 
