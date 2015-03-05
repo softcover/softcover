@@ -183,10 +183,10 @@ describe Softcover::Builders::Html do
         builder.build!
       end
 
-      let(:html_file) { path("html/a_chapter.html") }
+      let(:html_file) { path("html/an_article.html") }
 
       its(:built_files) { should include html_file }
-      its(:built_files) { should include path("html/a_chapter_fragment.html") }
+      its(:built_files) { should include path("html/an_article_fragment.html") }
       its(:built_files) { should_not include path("html/another_chapter.html") }
 
       describe "article html" do
@@ -203,7 +203,7 @@ describe Softcover::Builders::Html do
         it { should include "\\author{#{builder.manifest.author}}" }
         it { should include '\date{}' }
         it { should include '\begin{document}' }
-        it { should include '\include{generated_polytex/a_chapter}' }
+        it { should include '\include{generated_polytex/an_article}' }
         it { should include '\end{document}' }
       end
     end
