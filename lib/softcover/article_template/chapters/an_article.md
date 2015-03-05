@@ -91,22 +91,6 @@ Softcover supports raw tables via a simple table syntax:
 | `PATCH` | /users/1 | `update` | update user with id `1` |
 | `DELETE` | /users/1 | `destroy` | delete user with id `1` |
 
-Softcover also supports more complicated tables and `tabular` environments via embedded \LaTeX, as seen in Table~\ref{table:answer}.
-
-\begin{table}
-\caption{An important answer in several bases.\label{table:answer}}
-\begin{tabular}{|r|lc|}
-  \hline
-  2A & hexadecimal & (base 16) \\
-  52 & octal & (base 8) \\
-  101010 & binary & (base 2) \\
-  \hline
-  42 & decimal & (base 10) \\
-  \hline
-  \multicolumn{3}{|c|}{\textsc{All your base are belong to us.}} \\
-  \hline
-\end{tabular}
-\end{table}
 
 ## Final section
 
