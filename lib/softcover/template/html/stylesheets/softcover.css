@@ -431,6 +431,7 @@ body #book {
 }
 
 #book .texhtml {
+  font-family: font-family: 'CMU Serif', cmr10, LMRoman10-Regular, 'Times New Roman', 'Nimbus Roman No9 L', Times, serif;
   line-height: 0.5;
 }
 
