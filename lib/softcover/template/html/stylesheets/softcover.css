@@ -431,19 +431,23 @@ body #book {
 }
 
 #book .texhtml {
-  font-family: font-family: 'CMU Serif', cmr10, LMRoman10-Regular, 'Times New Roman', 'Nimbus Roman No9 L', Times, serif;
+  font-family: 'CMU Serif', cmr10, LMRoman10-Regular, 'Times New Roman', 'Nimbus Roman No9 L', Times, serif !important;
   line-height: 0.5;
 }
 
 #book .texhtml .texhtmlA {
-  font-size: 0.75em;
-  margin-left: -0.33em;
-  vertical-align: 0.32em;
+  font-size: 70%;
+  line-height: 0;
+  margin-left: -0.36em;
+  margin-right: -0.15em;
+  vertical-align: 0.3em;
 }
 
 #book .texhtml .texhtmlE {
-  margin-left: -0.15em;
-  vertical-align: -0.3em;
+  margin-left: -0.1667em;
+  vertical-align: -0.5ex;
+  line-height: 0;
+  margin-right: -0.125em;
 }
 
 #book span.break {
