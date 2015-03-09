@@ -434,6 +434,17 @@ body #book {
   line-height: 0.5;
 }
 
+#book .texhtml .texhtmlA {
+  font-size: 0.75em;
+  margin-left: -0.33em;
+  vertical-align: 0.32em;
+}
+
+#book .texhtml .texhtmlE {
+  margin-left: -0.15em;
+  vertical-align: -0.3em;
+}
+
 #book span.break {
   display: block;
 }
