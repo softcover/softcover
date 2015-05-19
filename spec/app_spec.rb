@@ -105,7 +105,6 @@ describe Softcover::App do
       get '/'
       expect(last_response).to be_redirect
       expect(last_response.location).to match article.slug
-      puts last_response
     end
 
     it 'GET chapter' do
