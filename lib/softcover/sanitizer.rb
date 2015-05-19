@@ -12,7 +12,7 @@ module Softcover
 
       sanitize_options = {
         elements: %w{div span p a ul ol li h1 h2 h3 h4
-          pre em sup table tbody thead tr td img code strong},
+          pre em sup table tbody thead tr td img code strong blockquote},
         remove_contents: %w{script},
         attributes: {
           'div' => %w{id class data-tralics-id data-number data-chapter},
