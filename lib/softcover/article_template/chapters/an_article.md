@@ -1,6 +1,6 @@
 # Title of the Article
 
-The is the first paragraph of the Softcover document template. It shows how to write a document in [Markdown](http://daringfireball.net/projects/markdown/), augmented with some custom extensions, including numbered footnotes[^sample-footnote] and embedded \LaTeX.[^pronunciation]
+The is the first paragraph of the Softcover article template. It shows how to write a document in [Markdown](http://daringfireball.net/projects/markdown/), augmented with some custom extensions, including numbered footnotes[^sample-footnote] and embedded \LaTeX.[^pronunciation]
 
 This is the second paragraph, showing how to *emphasize* text. You can also make text **bold**.
 
@@ -20,6 +20,7 @@ In plain Markdown, you can typeset code samples and other verbatim text using fo
 Softcover also supports GitHub-style "code fencing" with language-specific syntax highlighting:
 
 ```ruby
+# "Hello, world!" in Ruby.
 def hello
   puts "hello, world!"
 end
@@ -31,6 +32,7 @@ The second of these can be combined with Softcover's `codelisting` environment t
 \codecaption{Hello, world.}
 \label{code:hello}
 ```ruby
+# "Hello, world!" in Ruby.
 def hello
   puts "hello, world!"
 end
@@ -89,6 +91,20 @@ Softcover supports raw tables via a simple table syntax:
 | `GET` | /users/1/edit | `edit` | page to edit user with id `1` |
 | `PATCH` | /users/1 | `update` | update user with id `1` |
 | `DELETE` | /users/1 | `destroy` | delete user with id `1` |
+
+Via embedded \LaTeX, Softcover supports `table` and `tabular` environments as well, as shown in Table~\ref{table:figure_placement}.
+
+\begin{table}
+\caption{Options for a float placement specifier.\label{table:figure_placement}}
+\begin{tabular}{l|l}
+\textbf{Specifier} & \textbf{Placement} \\ \hline
+\kode{h} & Place the float \emph{approximately} here \\
+\kode{h!} & Place the float \emph{(almost) exactly} here \\
+\kode{t} & Place at the top of the page \\
+\kode{b} & Place at the bottom of the page \\
+\kode{p} & Put on a special page for floats only
+\end{tabular}
+\end{table}
 
 
 ## Final section

@@ -1,170 +1,125 @@
-This is the first paragraph of the Softcover template. It shows how to write a document in \PolyTeX, a subset of the \LaTeX\ typesetting language optimized for ebooks. For more information, see \href{http://manual.softcover.org/book}{\emph{The Softcover Book}}. To learn how to easily publish (and optionally sell) documents produced with Softcover, visit \href{http://softcover.io/}{Softcover.io}.
+The is the first paragraph of the Softcover article template. It shows how to write a document in \PolyTeX, a subset of the \LaTeX\ typesetting language optimized for writing ebooks.\footnote{Pronunciations of ``LaTeX'' differ, but \emph{lay}-tech is the one I prefer.}
 
-This is the \emph{second} paragraph, showing how to emphasize text.\footnote{This is a footnote. It is numbered automatically.} You can also make text \textbf{bold} or \textit{italicized} (which looks the same as emphasized text).
+This is the second paragraph, showing how to \emph{emphasize} text. You can also make text \textbf{bold}.
 
 \section{A section}
 \label{sec:a_section}
 
-This is a section. Because it has a label, we can refer to it as Section~\ref{sec:a_section}. The cross-reference will be automatically numbered and linked. There's another reference to this section in Section~\ref{sec:floats}, as well as one in Chapter~\ref{cha:another_chapter}.
+This is a section. We'll take a look at some of the features supported by Softcover.
 
 \subsection{Source code}
-\label{sec:source_code}
 
-This is a subsection. As usual, it can be referenced by label (Section~\ref{sec:source_code}). Note that the label starts with \kode{sec:}, not \kode{ssec:} or \kode{subsec:}. Any of these would work, but I find that sections often become subsections (and vice versa) when figuring out the structure of a book, and using \kode{sec:} to prefix them both saves having to change labels.
+In plain Markdown, you can typeset code samples and other verbatim text using four spaces of indentation:
 
-Softcover comes with full support for syntax-highlighted source code:
+\begin{verbatim}
+def hello
+  puts "hello, world"
+end
+\end{verbatim}
+
+Softcover also supports GitHub-style ``code fencing'' with language-specific syntax highlighting:
+
 %= lang:ruby
 \begin{code}
+# "Hello, world!" in Ruby.
 def hello
   puts "hello, world!"
 end
 \end{code}
-\noindent Softcover can highlight any language supported by \href{http://pygments.org/languages/}{Pygments} (which is most of them).
 
-You can also define \emph{code listings}, as seen in Listing~\ref{code:hello_world}. Such code listings are automatically numbered and linked.
+The second of these can be combined with Softcover's \kode{codelisting} environment to make code listings via embedded \LaTeX, as shown in Listing~\ref{code:hello}.
 
 \begin{codelisting}
-\label{code:hello_world}
-\codecaption{``Hello, world!'' in Ruby.}
+\codecaption{Hello, world.}
+\label{code:hello}
 %= lang:ruby
 \begin{code}
+# "Hello, world!" in Ruby.
 def hello
   puts "hello, world!"
 end
 \end{code}
 \end{codelisting}
-
-You can indicate inline code with the \verb+\kode+ command, as in \kode{current\_\-user}. If you prefer a plainer version of the same thing, you can use ``typewriter text'', as in \texttt{current\_\-user}.
-
-For words whose hypenation isn't built in, you can indicate an optional hyphen using \verb+\-+ (Listing~\ref{code:hyphenation}), which will only be used if necessary to make a clean line break (and even then only when producing PDFs). You can also define global hyphenation rules in \texttt{custom\_pdf.sty}, which includes a rule for hyphenating ``JavaScript'' (Listing~\ref{code:custom}).
-
-\begin{codelisting}
-\label{code:hyphenation}
-\codecaption{Adding an optional hyphen to \kode{current\_user}.}
-%= lang:latex
-\begin{code}
-current\_\-user
-\end{code}
-\end{codelisting}
-
-\begin{codelisting}
-\label{code:custom}
-\codecaption{Defining custom commands. \\ \filepath{latex\_styles/custom\_pdf.sty}}
-%= <<(latex_styles/custom_pdf.sty, lang: tex)
-\end{codelisting}
-
-Listing~\ref{code:hyphenation} also shows how to escape the underscore character using a backslash. This is necessary because plain underscores are reserved for math environments (Section~\ref{sec:mathematics}).
 
 \subsection{Mathematics}
-\label{sec:mathematics}
 
-Softcover supports full mathematical typesetting, including inline math, such as $\phi^2 - \phi - 1 = 0$, and centered math, such as
-\[ \phi = \frac{1+\sqrt{5}}{2}. \]
-It also supports cross-referenced equations, as in Eq.~\eqref{eq:golden_ratio} and Eq.~\eqref{eq:stokes_theorem}.
+Softcover supports mathematical typesetting via embedded \LaTeX. This includes both inline math, such as \( \phi^2 - \phi - 1 = 0, \) and centered math, such as
+\[ \phi^2 - \phi - 1 = 0. \]
+Softcover also supports numbered equations via embedded \LaTeX, as seen in Eq.~\eqref{eq:phi} and Eq.~\eqref{eq:gauss}.
 
 \begin{equation}
-\label{eq:golden_ratio}
-\phi = \frac{1+\sqrt{5}}{2} \approx 1.618 \qquad{\text{The Golden Ratio}}
+\label{eq:phi}
+\phi = \frac{1+\sqrt{5}}{2} \approx 1.618
 \end{equation}
 
 \begin{equation}
-\label{eq:stokes_theorem}
-\int_\Omega d\omega = \int_{\partial\Omega} \omega \qquad{\text{Generalized Stokes's Theorem}}
+\label{eq:gauss}
+\mathbf{\nabla}\cdot\mathbf{B} = 0 \qquad\mbox{Gauss's law}
 \end{equation}
 
-\section{Floats}
-\label{sec:floats}
+\section{Images and tables}
+\label{sec:images_and_tables}
 
-This is the second section. As we saw above above, the first section is Section~\ref{sec:a_section}.
+This is the second section. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-Softcover supports \href{http://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions}{\emph{floats}} such as figures and tables, including numbered captions and linked cross-references. The defining quality of a float is that its placement isn't guaranteed (i.e., it ``floats'' in the document), so you shouldn't generally assume it will be placed immediately after the text that precedes it. (Such placement \emph{will} be the case with HTML-based output, but \emph{not} in PDFs, where \TeX's state-of-the-art float placement algorithm is in charge.)
+\subsection{Images}
 
-\subsection{Graphics and figures}
-\label{sec:graphics_and_figures}
+Softcover supports the inclusion of images, like this:
 
-You can include raw graphics like this:
+\image{images/01_michael_hartl_headshot.jpg}
 
-\includegraphics{images/2011_michael_hartl.png}
+Using \LaTeX\ labels, you can also include a caption (as in Figure~\ref{fig:captioned_image}) or just a figure number (as in Figure~\ref{fig:figure_number}).
 
-\noindent You can also include centered images:
-
-\image{images/2011_michael_hartl.png}
-
-\noindent Or include one with a box, like so:
-
-\imagebox{images/2011_michael_hartl.png}
-
-To turn an image into a figure, use the \kode{figure} environment (Figure~\ref{fig:the_dude}).
-
-\begin{figure}
-\imagebox{images/2011_michael_hartl.png}
-\caption{Some \href{http://michaelhartl.com/}{dude}.\label{fig:the_dude}}
+\begin{figure}[h]
+\begin{center}
+\image{images/01_michael_hartl_headshot.jpg}
+\end{center}
+\caption{Some dude.\label{fig:captioned_image}}
 \end{figure}
 
-\subsection{Tables and tabular environments}
-\label{tables_and_tabular}
+\begin{figure}[h]
+\begin{center}
+\image{images/01_michael_hartl_headshot.jpg}
+\end{center}
+\caption{\label{fig:figure_number}}
+\end{figure}
 
-Softcover supports raw tables via the \kode{tabular} environment. To make a tabular environment into a full-blown table, with a number and a caption, use the \kode{table} environment (Table~\ref{table:rails_actions}), which includes some special magic to make the font size nicer in PDFs.
+\subsection{Tables}
 
-\bigskip
+Softcover supports raw tables via the \LaTeX\ \kode{table} or \kode{longtable} environments.
 
-\begin{tabular}{llll}
-\textbf{HTTP request} & \textbf{URL} & \textbf{Action} & \textbf{Purpose} \\ \hline
+\begin{longtable}{|l|l|l|l|}
+\hline
+\textbf{HTTP request} & \textbf{URL} & \textbf{Action} & \textbf{Purpose}\\
+\kode{GET} & /users & \kode{index} & page to list all users\\
+\kode{GET} & /users/1 & \kode{show} & page to show user with id \kode{1}\\
+\kode{GET} & /users/new & \kode{new} & page to make a new user\\
+\kode{POST} & /users & \kode{create} & create a new user\\
+\kode{GET} & /users/1/edit & \kode{edit} & page to edit user with id \kode{1}\\
+\kode{PATCH} & /users/1 & \kode{update} & update user with id \kode{1}\\
+\kode{DELETE} & /users/1 & \kode{destroy} & delete user with id \kode{1}\\
+\hline
+\end{longtable}
 
-\texttt{GET} & /users & \texttt{index} & page to list all users \\
-\texttt{GET} & /users/1 & \texttt{show} & page to show user with id \texttt{1}\\
-\texttt{GET} & /users/new & \texttt{new} & page to make a new user \\
-\texttt{POST} & /users & \texttt{create} & create a new user \\
-\texttt{GET} & /users/1/edit & \texttt{edit} & page to edit user with id \texttt{1} \\
-\texttt{PATCH} & /users/1 & \texttt{update} & update user with id \texttt{1}  \\
-\texttt{DELETE} & /users/1 & \texttt{destroy} & delete user with id \texttt{1}
-\end{tabular}
+Softcover also supports \kode{tabular} environments, as shown in Table~\ref{table:figure_placement}.
 
 \begin{table}
-\begin{tabular}{llll}
-\textbf{HTTP request} & \textbf{URL} & \textbf{Action} & \textbf{Purpose} \\ \hline
-
-\texttt{GET} & /users & \texttt{index} & page to list all users \\
-\texttt{GET} & /users/1 & \texttt{show} & page to show user with id \texttt{1}\\
-\texttt{GET} & /users/new & \texttt{new} & page to make a new user \\
-\texttt{POST} & /users & \texttt{create} & create a new user \\
-\texttt{GET} & /users/1/edit & \texttt{edit} & page to edit user with id \texttt{1} \\
-\texttt{PATCH} & /users/1 & \texttt{update} & update user with id \texttt{1}  \\
-\texttt{DELETE} & /users/1 & \texttt{destroy} & delete user with id \texttt{1}
+\caption{Options for a float placement specifier.\label{table:figure_placement}}
+\begin{tabular}{l|l}
+\textbf{Specifier} & \textbf{Placement} \\ \hline
+\kode{h} & Place the float \emph{approximately} here \\
+\kode{h!} & Place the float \emph{(almost) exactly} here \\
+\kode{t} & Place at the top of the page \\
+\kode{b} & Place at the bottom of the page \\
+\kode{p} & Put on a special page for floats only
 \end{tabular}
-\caption{The default \href{http://rubyonrails.org/}{Rails} actions.\label{table:rails_actions}}
 \end{table}
 
-\section{Command-line interface}
+\section{Final section}
 
-Softcover comes with a command-line interface called \kode{poly}. To get more information, just run \kode{softcover help}:
-
-%= lang:console
-\begin{code}
-$ softcover help
-Commands:
-  softcover build, build:all           # Build all formats
-  softcover build:epub                 # Build EPUB
-  softcover build:html                 # Build HTML
-  softcover build:mobi                 # Build MOBI
-  softcover build:pdf                  # Build PDF
-  softcover build:preview              # Build book preview in all formats
-  .
-  .
-  .
-\end{code}
-
-\noindent You can run \kode{softcover help <command>} to get additional help on a given command:
-
-%= lang:console
-\begin{code}
-$ softcover help build
-Usage:
-  softcover build, build:all
-
-Options:
-  -q, [--quiet]   # Quiet output
-  -s, [--silent]  # Silent output
-
-Build all formats
-\end{code}
+This is the final section. The previous sections were Section~\ref{sec:a_section} and Section~\ref{sec:images_and_tables}.
