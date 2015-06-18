@@ -530,7 +530,7 @@ module Softcover
 
       # Returns a navigation link for the chapter.
       def nav_link(chapter)
-        %(<a href="#{chapter.fragment_name}">#{chapter.title}</a>)
+        %(<a href="#{chapter.fragment_name}">#{chapter.html_title}</a>)
       end
 
       # Returns the HTML template for a chapter.

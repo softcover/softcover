@@ -60,6 +60,10 @@ class Softcover::BookManifest < OpenStruct
       end
     end
 
+    def html_title
+      Polytexnic::Pipeline.new(title).to_html
+    end
+
     def to_hash
       marshal_dump.merge({ menu_heading: menu_heading })
     end
