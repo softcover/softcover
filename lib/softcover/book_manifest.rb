@@ -60,8 +60,10 @@ class Softcover::BookManifest < OpenStruct
       end
     end
 
+    # Run the title through the Polytexnic pipeline to make an HTML title.
     def html_title
-      Polytexnic::Pipeline.new(title).to_html
+      Nokogiri::HTML(Polytexnic::Pipeline.new(title).to_html).at_css('p')
+                                                             .inner_html.strip
     end
 
     def to_hash
