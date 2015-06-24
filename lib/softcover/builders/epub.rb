@@ -36,6 +36,13 @@ module Softcover
     # Returns a content.opf file based on a valid template.
     def content_opf_template(title, copyright, author, uuid, cover_id,
                              toc_chapters, manifest_chapters, images)
+      if cover?
+        cover_meta = %(<meta name="cover" content="#{cover_id}"/>)
+        cover_html = '<item id="cover" href="cover.html" media-type="application/xhtml+xml"/>'
+        cover_ref  = '<itemref idref="cover" linear="no" />'
+      else
+        cover_meta = cover_html = cover_ref = ''
+      end
 %(<?xml version="1.0" encoding="UTF-8"?>
 <package unique-identifier="BookID" version="3.0" xmlns="http://www.idpf.org/2007/opf">
   <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"
@@ -47,7 +54,7 @@ module Softcover
       <dc:publisher>Softcover</dc:publisher>
       <dc:identifier id="BookID">urn:uuid:#{uuid}</dc:identifier>
       <meta property="dcterms:modified">#{Time.now.strftime('%Y-%m-%dT%H:%M:%S')}Z</meta>
-      <meta name="cover" content="#{cover_id}"/>
+      #{cover_meta}
   </metadata>
   <manifest>
       <item href="nav.html" id="nav" media-type="application/xhtml+xml" properties="nav"/>
@@ -58,12 +65,12 @@ module Softcover
       <item id="epub.css" href="styles/epub.css" media-type="text/css"/>
       <item id="custom.css" href="styles/custom.css" media-type="text/css"/>
       <item id="custom_epub.css" href="styles/custom_epub.css" media-type="text/css"/>
-      <item id="cover" href="cover.html" media-type="application/xhtml+xml"/>
+      #{cover_html}
       #{manifest_chapters.join("\n")}
       #{images.join("\n")}
   </manifest>
   <spine toc="ncx">
-    <itemref idref="cover" linear="no" />
+    #{cover_ref}
     #{toc_chapters.join("\n")}
   </spine>
 </package>
@@ -500,7 +507,7 @@ module Softcover
       end
 
       def cover_id
-        "img-#{cover_img.sub('.', '-')}"
+        cover? ? "img-#{cover_img.sub('.', '-')}" : nil
       end
 
       # Returns the Table of Contents for the spine.
