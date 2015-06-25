@@ -36,7 +36,7 @@ module Softcover
     # Returns a content.opf file based on a valid template.
     def content_opf_template(title, copyright, author, uuid, cover_id,
                              toc_chapters, manifest_chapters, images)
-      if cover?
+      if cover_id
         cover_meta = %(<meta name="cover" content="#{cover_id}"/>)
         cover_html = '<item id="cover" href="cover.html" media-type="application/xhtml+xml"/>'
         cover_ref  = '<itemref idref="cover" linear="no" />'
