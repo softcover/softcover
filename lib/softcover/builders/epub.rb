@@ -17,8 +17,11 @@ module Softcover
       return false
     end
 
+    # Returns true when producing a cover.
+    # We include a cover when not producing an Amazon-specific book
+    # as long as there's a cover image.
     def cover?
-      cover_img
+      !options[:amazon] && cover_img
     end
 
     def cover_img_path
