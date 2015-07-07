@@ -14,6 +14,7 @@ body #book {
   font-size: 230%;
   border-top: 2px solid #333;
   padding-top: 1em;
+  text-align: left;
 }
 
 #book h2 {
@@ -324,6 +325,15 @@ body #book {
   margin-left: 0.5em;
   font-size: 120%;
   font-weight: bold;
+}
+
+#book ul.footnotes li {
+  line-height: 1.4;
+  margin-bottom: 1em;
+}
+
+#book ul.footnotes li p {
+  line-height: 1.4;
 }
 
 #book a.arrow {
