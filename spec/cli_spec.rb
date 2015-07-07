@@ -33,6 +33,20 @@ describe Softcover::CLI do
     it { should include 'f, [--find-overfull]' }
   end
 
+  context "softcover build:epub options" do
+    subject { `softcover help build:epub` }
+    it { should include '-q, [--quiet]' }
+    it { should include '-s, [--silent]' }
+  end
+
+  context "softcover build:mobi options" do
+    subject { `softcover help build:mobi` }
+    it { should include '-q, [--quiet]' }
+    it { should include '-s, [--silent]' }
+    it { should include '-k, [--kindlegen]' }
+    it { should include '-a, [--amazon]' }
+  end
+
   context "softcover new options" do
     subject { `softcover help new` }
     it { should include '-p, [--polytex]' }

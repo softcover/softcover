@@ -24,7 +24,7 @@ module Softcover
       # Returns the command for making a MOBI, based on the options.
       def mobi_command(filename, options={})
         silent = options[:silent] || Softcover.test?
-        if options[:kindlegen]
+        if options[:kindlegen] || options[:amazon]
           cmd = "#{kindlegen} ebooks/#{filename}.epub"
         else
           cmd = "#{calibre} ebooks/#{filename}.epub ebooks/#{filename}.mobi" +

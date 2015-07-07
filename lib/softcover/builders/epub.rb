@@ -1,5 +1,4 @@
 module Softcover
-
   module EpubUtils
 
     # Returns the name of the cover file.
@@ -19,8 +18,10 @@ module Softcover
 
     # Returns true when producing a cover.
     # We include a cover when not producing an Amazon-specific book
-    # as long as there's a cover image.
-    def cover?
+    # as long as there's a cover image. (When uploading a book to
+    # Amazon KDP, the cover gets uploaded separately, so the MOBI file itself
+    # should have not have a cover.)
+    def cover?(options={})
       !options[:amazon] && cover_img
     end
 
@@ -144,7 +145,7 @@ module Softcover
         write_nav
         copy_image_files
         write_html(options)
-        write_contents
+        write_contents(options)
         create_style_files(options)
         make_epub(options)
         move_epub
@@ -197,8 +198,8 @@ module Softcover
 
       # Writes the content.opf file.
       # This is required by the EPUB standard.
-      def write_contents
-        File.write(path('epub/OEBPS/content.opf'), content_opf)
+      def write_contents(options={})
+        File.write(path('epub/OEBPS/content.opf'), content_opf(options))
       end
 
       # Returns the chapters to write.
@@ -214,7 +215,7 @@ module Softcover
         mkdir images_dir
         mkdir texmath_dir
 
-        File.write(path('epub/OEBPS/cover.html'), cover_page) if cover?
+        File.write(path('epub/OEBPS/cover.html'), cover_page) if cover?(options)
 
         pngs = []
         chapters.each_with_index do |chapter, i|
@@ -467,7 +468,7 @@ module Softcover
       end
 
       # Returns the content configuration file.
-      def content_opf
+      def content_opf(options={})
         man_ch = chapters.map do |chapter|
                    %(<item id="#{chapter.slug}" href="#{chapter.fragment_name}" media-type="application/xhtml+xml"/>)
                  end
@@ -489,7 +490,7 @@ module Softcover
                    %(<item id="#{id}" href="#{href}" media-type="image/#{ext}"/>)
                  end
         content_opf_template(manifest.title, manifest.copyright,
-                             manifest.author, manifest.uuid, cover_id,
+                             manifest.author, manifest.uuid, cover_id(options),
                              toc_ch, man_ch, images)
       end
 
@@ -509,8 +510,8 @@ module Softcover
 )
       end
 
-      def cover_id
-        cover? ? "img-#{cover_img.sub('.', '-')}" : nil
+      def cover_id(options)
+        cover?(options) ? "img-#{cover_img.sub('.', '-')}" : nil
       end
 
       # Returns the Table of Contents for the spine.
