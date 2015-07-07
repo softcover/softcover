@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Softcover::Commands::Deployment do
 
   describe "default commands" do
+    before { Softcover::Commands::Deployment.stub(:article?).and_return(false) }
     subject { Softcover::Commands::Deployment.default_commands }
 
     it { should match /softcover build:all/ }
