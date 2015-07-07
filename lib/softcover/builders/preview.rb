@@ -3,6 +3,10 @@ module Softcover
     class Preview < Builder
 
       def build!
+        if article?
+          $stderr.puts "Previews not supported for articles"
+          exit(1)
+        end
         # Recall that MOBI generation makes an EPUB as a side-effect.
         Softcover::Builders::Mobi.new.build!(preview: true)
         Softcover::Builders::Pdf.new.build!(preview: true)

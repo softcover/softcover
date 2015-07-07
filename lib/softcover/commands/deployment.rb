@@ -5,7 +5,7 @@ module Softcover
       extend self
 
       # Deploy a book by building and publishing it.
-      # The deploy steps can be customized using `.poly-publish`
+      # The deploy steps can be customized using `.softcover-publish`
       # in the book project's home directory.
       def deploy!
         if File.exist?('.softcover-deploy') && !custom_commands.empty?
@@ -17,8 +17,12 @@ module Softcover
 
       # Returns the default commands.
       def default_commands
-        commands(['softcover build:all', 'softcover build:preview',
-                  'softcover publish'])
+        if article?
+          commands(['softcover build:all', 'softcover publish'])
+        else
+          commands(['softcover build:all', 'softcover build:preview',
+                    'softcover publish'])
+        end
       end
 
       # Returns custom commands (if any).

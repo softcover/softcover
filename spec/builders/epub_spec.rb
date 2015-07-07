@@ -291,4 +291,9 @@ describe "article validation" do
     output = `softcover epub:validate`
     expect(output).to match(/No errors or warnings/)
   end
+
+  it "should description" do
+    commands = Softcover::Commands::Deployment.default_commands
+    expect(commands).not_to include('preview')
+  end
 end
