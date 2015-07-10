@@ -45,6 +45,8 @@ module Softcover
             cp_path = File.join(File.dirname(cp_path),
                                 File.basename(path.dup, '.erb'))
           elsif path =~ /gitignore/
+            next if  markdown? && path =~ /latex_gitignore/
+            next if !markdown? && path =~ /markdown_gitignore/
             cp_path = '.gitignore'
           end
 
@@ -83,7 +85,7 @@ module Softcover
         book_yml = File.join(Softcover::Directories::CONFIG, 'book.yml')
         puts "Done. Please update #{book_yml}"
       end
-      
+
       # Returns a list of all the files and directories used to build the book.
       def all_files_and_directories
         files_directories_maybe_markdown
@@ -92,7 +94,7 @@ module Softcover
       # Returns the files and directories based on the input format.
       def files_directories_maybe_markdown
         fds = Dir.glob(
-                File.join(Softcover::Utils.template_dir(article: @article), 
+                File.join(Softcover::Utils.template_dir(article: @article),
                           "**/*"), File::FNM_DOTMATCH)
         if markdown?
           # Skip the PolyTeX chapter files, which will be generated later.

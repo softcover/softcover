@@ -65,7 +65,7 @@ body #book {
 }
 
 #book a.tex {
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 #book code {
@@ -105,11 +105,14 @@ body #book {
 #book .code {
   margin-top: 0.2em;
   width: 100%;
-  white-space: pre;
   font-family: "Courier New", Courier, monospace;
   border: 1px solid #999;
   background: #eee;
   margin-bottom: 1em;
+}
+
+#book .code pre {
+  white-space: pre;
 }
 
 #book .codelisting {
@@ -308,7 +311,7 @@ body #book {
 }
 
 #book ol.footnotes a.arrow {
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 #book ol.footnotes.nonumbers li {
@@ -327,17 +330,8 @@ body #book {
   font-weight: bold;
 }
 
-#book ul.footnotes li {
-  line-height: 1.4;
-  margin-bottom: 1em;
-}
-
-#book ul.footnotes li p {
-  line-height: 1.4;
-}
-
 #book a.arrow {
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 #book a:visited.arrow {
@@ -346,12 +340,12 @@ body #book {
 
 #book a.section  {
   color: #070707;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 #book a.heading {
   color: #000;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 #book a:hover.heading {

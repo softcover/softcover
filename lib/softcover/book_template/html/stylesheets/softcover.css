@@ -105,11 +105,14 @@ body #book {
 #book .code {
   margin-top: 0.2em;
   width: 100%;
-  white-space: pre;
   font-family: "Courier New", Courier, monospace;
   border: 1px solid #999;
   background: #eee;
   margin-bottom: 1em;
+}
+
+#book .code pre {
+  white-space: pre;
 }
 
 #book .codelisting {

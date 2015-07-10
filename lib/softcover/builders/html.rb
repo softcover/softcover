@@ -158,9 +158,10 @@ module Softcover
         if Softcover::Utils.article?
           # Include all the material before the first section.
           xml.css('#book').children.each do |node|
-            next if node['id'] == 'title_page'
+            next  if node['id'] == 'title_page'
             break if node['class'] == 'section'
             current_chapter.nodes.push node
+            node.remove
           end
         end
         xml.css('#book>div').each do |node|
