@@ -26,3 +26,8 @@ code {
 a span.undefined_ref {
   color: #002f72;
 }
+
+/* Needed for properly formatted blockquotes in Kindle for iPad */
+p.quote {
+  margin-left: 2em;
+}
