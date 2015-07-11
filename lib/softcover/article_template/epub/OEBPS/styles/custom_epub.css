@@ -19,3 +19,8 @@
 body {
   font-size: 80%;
 }
+
+/* Needed to prevent red links in Kindle for iPad */
+a span.undefined_ref {
+  color: #002f72;
+}
