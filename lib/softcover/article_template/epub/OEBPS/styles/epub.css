@@ -29,5 +29,6 @@ a span.undefined_ref {
 
 /* Needed for properly formatted blockquotes in Kindle for iPad */
 p.quote {
-  margin-left: 2em;
+  margin-left:  1em;
+  margin-right: 1em;
 }
