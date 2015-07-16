@@ -380,7 +380,7 @@ module Softcover
       # For some reason, EPUB books hate the #book ids in the stylesheet
       # (i.e., such books fail to validate), so remove them.
       def clean_book_id(filename)
-        File.read(filename).gsub(/#book/, '')
+        File.read(filename).gsub(/#book /, '')
       end
 
       # Copies the image files from the HTML version of the document.
