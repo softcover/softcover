@@ -115,6 +115,8 @@ module Softcover
         polytex.gsub!(/(^\s*\\include{(.*?)})/) do
           File.read($2 + '.tex') + "\n"
         end
+        # Insert a newline, needed to avoid formatting weirdness in articles.
+        polytex.gsub!(/\\maketitle/, "\\maketitle\n") if article?
         Polytexnic::Pipeline.new(polytex,
                                  custom_commands: Softcover.custom_styles,
                                  language_labels: language_labels,

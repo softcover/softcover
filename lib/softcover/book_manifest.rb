@@ -147,7 +147,6 @@ class Softcover::BookManifest < OpenStruct
         chapter_title = content[chapter_title_regex, 1]
         if article? && @origin == :markdown
           if chapter_title.nil?
-            # *** test
             # Articles are "chapters" with the title of the full document.
             chapter_title = title
           else
