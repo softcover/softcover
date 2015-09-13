@@ -151,10 +151,17 @@
 \usepackage{float}
 
 % Define some commonly used Unicode characters.
+\DeclareRobustCommand{\cmdkey}{\raisebox{-.035em}{\includegraphics[height=.75em]{command}}}
 \usepackage{newunicodechar}
+\newunicodechar{⌘}{\cmdkey}
+\newunicodechar{⌥}{\optkey}
+\newunicodechar{⌃}{\ctlkey}
+\newunicodechar{⇧}{\shiftkey}
+\newunicodechar{␣}{\textvisiblespace}
 \newunicodechar{—}{---}
 \newunicodechar{–}{--}
 \newunicodechar{™}{\texttrademark}
+\newunicodechar{©}{\copyright}
 \newunicodechar{®}{\textregistered}
 \newunicodechar{…}{\ldots}
 
