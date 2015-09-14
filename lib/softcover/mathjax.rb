@@ -13,12 +13,12 @@ module Softcover
                              options[:chapter_number].inspect.inspect
                            end
                          elsif options[:chapter_number].nil?
-                          false
+                           '#{chapter_number}'
                        else  # chapter_number is false, i.e., it's a single page
                          false
                        end
       fn = if chapter_number
-             "formatNumber: function (n) { return #{chapter_number} + '.adfadsfa  ' + n }"
+             "formatNumber: function (n) { return #{chapter_number} + '.' + n }"
            else
              ""
            end
