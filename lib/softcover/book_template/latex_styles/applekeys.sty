@@ -1,0 +1,43 @@
+%%
+%% This is file `applekeys.sty',
+%%
+%% This file assumes you have Kino's keysymbols files in both .eps (the original
+%% versions) for use with latex+ghostscript processing via dvips and converted 
+%% versions in .pdf (easily created by dropping the .eps files onto, e.g., TeXShop)
+%% for pdflatex processing.
+%%
+%% There is nothing "religious" about the size or vertical placement of each of the
+%% graphics; these just look ok to my eyes, at this time, especially with Lucida Bright.
+%% You are free to change the size and placement as you see fit for personal use.
+%% Just don't ascribe your choices to me.
+%%
+%% 2005/08/24 - Changed \newcommand to \DeclareRobustCommand to
+%% 	allow easy use in section headings and table of contents. Note: still
+%%	a problem with the hyperref package.
+%%
+\ProvidesPackage{applekeys}
+[2005/08/24 H.S.
+For inclusion of apple key graphics
+]
+\RequirePackage{graphicx}
+\DeclareRobustCommand{\cmdkey}{\raisebox{-.035em}{\includegraphics[height=.75em]{command}}}
+\DeclareRobustCommand{\optkey}{\raisebox{-.005em}{\includegraphics[height=.65em]{option}}}
+\DeclareRobustCommand{\shiftkey}{\raisebox{-.04em}{\includegraphics[height=.83em]{shift}}}
+\DeclareRobustCommand{\ctlkey}{\raisebox{.27em}{\includegraphics[height=.45em]{control}}}
+\DeclareRobustCommand{\delkey}{\raisebox{-0.02em}{\includegraphics[height=.75em]{delete}}}
+\DeclareRobustCommand{\applekey}{\raisebox{-0.01em}{\includegraphics[height=.90em]{apple}}}
+\DeclareRobustCommand{\openapplekey}{\raisebox{-0.01em}%
+							{\includegraphics[height=.90em]{apple_outline}}}
+\DeclareRobustCommand{\capslockkey}{\raisebox{-0.02em}%
+							{\includegraphics[height=.88em]{capslock}}}
+\DeclareRobustCommand{\ejectkey}{\raisebox{0.01em}{\includegraphics[height=.7em]{eject}}}
+\DeclareRobustCommand{\pencilkey}{\raisebox{-0.01em}{\includegraphics[height=.8em]{pencil}}}
+\DeclareRobustCommand{\esckey}{\raisebox{-0.03em}{\includegraphics[height=.75em]{escape}}}
+\DeclareRobustCommand{\tabkey}{\raisebox{-0.02em}{\includegraphics[height=.75em]{tab}}}
+\DeclareRobustCommand{\revtabkey}{\raisebox{-0.02em}{\includegraphics[height=.75em]{revtab}}}
+\DeclareRobustCommand{\returnkey}{\raisebox{-0.06em}{\includegraphics[height=.65em]{return}}}
+\DeclareRobustCommand{\revreturnkey}{\raisebox{-0.06em}%
+							{\includegraphics[height=.65em]{revreturn}}}
+\DeclareRobustCommand{\powerkey}{\raisebox{-0.04em}{\includegraphics[height=.83em]{power}}}
+%%
+%% End of file `applekeys.sty'

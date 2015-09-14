@@ -184,6 +184,7 @@ class Softcover::BookManifest < OpenStruct
     files = [File.join(Softcover::Directories::CONFIG, 'marketing.yml'),
              path('images/cover-web.png'),
              path('latex_styles/custom_pdf.sty'),
+             path('latex_styles/applekeys.sty'),
              path('config/preamble.tex'),
              path('config/lang.yml'),
              path('epub/OEBPS/styles/custom_epub.css'),
