@@ -77,7 +77,7 @@ describe Softcover::App do
       end
 
       it 'GET image within book' do
-        get '/images/01_michael_hartl_headshot.jpg'
+        get '/images/figures/01_michael_hartl_headshot.jpg'
         expect_server_response_of_type 'image/jpeg'
       end
 

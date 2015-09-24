@@ -71,13 +71,13 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 Softcover supports the inclusion of images, like this:
 
-![Some dude.](images/01_michael_hartl_headshot.jpg)
+![Some dude.](images/figures/01_michael_hartl_headshot.jpg)
 
 Using \LaTeX\ labels, you can also include a caption (as in Figure~\ref{fig:captioned_image}) or just a figure number (as in Figure~\ref{fig:figure_number}).
 
-![Some dude.\label{fig:captioned_image}](images/01_michael_hartl_headshot.jpg)
+![Some dude.\label{fig:captioned_image}](images/figures/01_michael_hartl_headshot.jpg)
 
-![\label{fig:figure_number}](images/01_michael_hartl_headshot.jpg)
+![\label{fig:figure_number}](images/figures/01_michael_hartl_headshot.jpg)
 
 ### Tables
 
