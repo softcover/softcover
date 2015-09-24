@@ -13,7 +13,7 @@ OptionParser.new do |opts|
     options[:all] = true
   end
 
-  options.on("-w", "Resize to given width (in pixels)") do |width|
+  opts.on("-w", "Resize to given width (in pixels)") do |width|
     options[:width] = width
   end
 end.parse!
@@ -25,7 +25,7 @@ Dir.glob('full_size_figures/*').each do |full_size_filename|
     # Needed for backwards compatibility.
     filename = "#{target_dir}/#{$1}.#{$2}"
   else
-    filename = "#{target_dir}/#{full_size_filename}"
+    filename = "#{target_dir}/#{File.basename(full_size_filename)}"
   end
   unless File.exist?(filename) && !options[:all]
     cmd =  "convert #{full_size_filename} -resize #{width} #{filename}"

@@ -9,6 +9,9 @@
 # in the `images/figures` directory. The idea is to keep the full-size figures
 # in case they're ever needed, but to resize them so they're not too big
 # for inclusion in the document.
+# The method is to look for the most recently modified PNG file on the desktop
+# and move it (while renaming it) to the `full_size_figures` directory. Then
+# a normal-size figure is generated using the `make_figures` script.
 
 require 'fileutils'
 require 'optparse'
