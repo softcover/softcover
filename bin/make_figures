@@ -1,24 +1,34 @@
 #!/usr/bin/env ruby
+require 'optparse'
 
-# Make display figures based on the full-size figures.
+# Makes display figures based on the full-size figures.
+# The idea is to avoid throwing away data by storing full-size figures,
+# but resize them to a size appropriate for use in the document.
 
-def all?
-  ARGV.first == "-a"
-end
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: rename_screenshot [options]"
 
-width = "700\\>" # px
+  opts.on("-a", "Regenerate all figures from full-size images") do
+    options[:all] = true
+  end
+
+  options.on("-w", "Resize to given width (in pixels)") do |width|
+    options[:width] = width
+  end
+end.parse!
+
+width = (options[:width] || "700") + '\>'
 target_dir = "images/figures"
 Dir.glob('full_size_figures/*').each do |full_size_filename|
-  unless full_size_filename =~ /(\w+)-full\.(.*)/
-    msg = "#{full_size_filename.inspect} invalid\n"
-    msg += "Full filenames must be of the form 'filename-full.extension'"
-    raise msg
+  if full_size_filename =~ /(\w+)-full\.(.*)/
+    # Needed for backwards compatibility.
+    filename = "#{target_dir}/#{$1}.#{$2}"
+  else
+    filename = "#{target_dir}/#{full_size_filename}"
   end
-  filename = "#{target_dir}/#{$1}.#{$2}"
-  unless File.exist?(filename) && !all?
+  unless File.exist?(filename) && !options[:all]
     cmd =  "convert #{full_size_filename} -resize #{width} #{filename}"
-    # puts cmd
-    # cmd = "cp #{full_size_filename} #{filename}"
     system cmd
   end
 end

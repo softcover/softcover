@@ -1,4 +1,15 @@
 #!/usr/bin/env ruby
+
+# Renames a screenshot.
+# This is intended for use with Shift-Cmd-4 on Mac OS X.
+# 1. Use Shift-Cmd-4 to take a screenshot
+# 2. Run `rename_screenshot figure_name` to create a full-size figure
+#    called `figure_name.png` in the `full_size_figures` directories.
+# A corresponding smaller resized figure is automagically created
+# in the `images/figures` directory. The idea is to keep the full-size figures
+# in case they're ever needed, but to resize them so they're not too big
+# for inclusion in the document.
+
 require 'fileutils'
 require 'optparse'
 
@@ -29,7 +40,7 @@ if name.nil?
   exit 1
 end
 FileUtils.mkdir("full_size_figures") unless File.exist?("full_size_figures")
-target = "full_size_figures/#{name}-full.png"
+target = "full_size_figures/#{name}.png"
 
 if options[:invert]
   rm(target) if File.exist?(target)
