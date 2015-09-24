@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+# Make display figures based on the full-size figures.
+
+def all?
+  ARGV.first == "-a"
+end
+
+width = "700\\>" # px
+target_dir = "images/figures"
+Dir.glob('full_size_figures/*').each do |full_size_filename|
+  unless full_size_filename =~ /(\w+)-full\.(.*)/
+    msg = "#{full_size_filename.inspect} invalid\n"
+    msg += "Full filenames must be of the form 'filename-full.extension'"
+    raise msg
+  end
+  filename = "#{target_dir}/#{$1}.#{$2}"
+  unless File.exist?(filename) && !all?
+    cmd =  "convert #{full_size_filename} -resize #{width} #{filename}"
+    # puts cmd
+    # cmd = "cp #{full_size_filename} #{filename}"
+    system cmd
+  end
+end
+system "git add -A"

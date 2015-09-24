@@ -1,0 +1,52 @@
+#!/usr/bin/env ruby
+require 'fileutils'
+require 'optparse'
+
+def figure(name)
+  "images/figures/#{name}.png"
+end
+
+def rm(filename)
+  FileUtils.rm(filename) if File.exist?(filename)
+end
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: rename_screenshot [options]"
+
+  opts.on("-f", "Force overwrite of existing file") do
+    options[:force] = true
+  end
+
+  opts.on("-i", "Invert a renaming by removing the relevant images") do
+    options[:invert] = true
+  end
+end.parse!
+
+name = ARGV.shift
+if name.nil?
+  puts "usage: rename_screenshot filename [options]"
+  exit 1
+end
+FileUtils.mkdir("full_size_figures") unless File.exist?("full_size_figures")
+target = "full_size_figures/#{name}-full.png"
+
+if options[:invert]
+  rm(target) if File.exist?(target)
+  rm(figure(name))
+end
+
+most_recent = Dir["#{ENV['HOME']}/Desktop/*.png"].sort_by do |a|
+                File.stat(a).mtime
+              end.reverse.first
+response = 'y'
+if File.exist?(target) && !options[:force]
+  puts "File #{target} already exists. Replace? [Y/n]"
+  response = gets.strip.downcase
+end
+unless response.downcase == 'n'
+  FileUtils.mv(most_recent, target)
+  rm(figure(name))
+  system "make_figures"
+  system "git add -A"
+end
