@@ -29,7 +29,7 @@ module Softcover
           availableFonts: ["TeX"],
         },
         TeX: {
-          extensions: ["AMSmath.js", "AMSsymbols.js"],
+          extensions: ["AMSmath.js", "AMSsymbols.js", "color.js"],
           equationNumbers: {
             autoNumber: "AMS",
             #{fn}
