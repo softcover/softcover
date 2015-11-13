@@ -8,9 +8,9 @@ Gem::Specification.new do |gem|
   gem.version       = Softcover::VERSION
   gem.authors       = ["Michael Hartl", "Nick Merwin"]
   gem.email         = ["michael@softcover.io"]
-  gem.description   = %q{CLI interface for softcover.io}
-  gem.summary       = %q{A typesetting system for technical authors}
-  gem.homepage      = "http://manual.softcover.io/"
+  gem.description   = %q{Command-line interface for softcover.io}
+  gem.summary       = %q{An ebook production system & sales and marketing platform for technical authors}
+  gem.homepage      = "http://manual.softcover.io/book"
   gem.license       = "MIT"
 
   gem.files         = `git ls-files`.split($/)
