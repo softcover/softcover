@@ -10,7 +10,7 @@ For more details about Softcover, see [*The Softcover Book*](http://manual.softc
 
     $ gem install softcover
 
-If installing on OS X Maverics or Later
+If installing on OS X Mavericks or Later
 
     $ gem install softcover -- --with-cppflags=-I/usr/local/opt/openssl/include
 
