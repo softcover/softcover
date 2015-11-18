@@ -24,7 +24,9 @@ class Softcover::App < Sinatra::Base
   get '/main.js' do
     require 'coffee_script'
     @mathjax_src    = Softcover::Mathjax::AMS_HTML
-    @mathjax_config = Softcover::Mathjax.escaped_config
+    @mathjax_config = Softcover::Utils.article? ?
+                      Softcover::Mathjax.escaped_config(chapter_number: false) :
+                      Softcover::Mathjax.escaped_config
     coffee erb :'main.js'
   end
 

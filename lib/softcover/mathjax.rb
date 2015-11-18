@@ -51,8 +51,8 @@ module Softcover
     # Rerturns a version of the MathJax configuration escaped for the server.
     # There's an extra interpolation somewhere between here and the server,
     # which this method corrects for.
-    def self.escaped_config
-      self.config.gsub('\\', '\\\\\\\\')
+    def self.escaped_config(options={})
+      self.config(options).gsub('\\', '\\\\\\\\')
     end
 
     MATHJAX  = 'MathJax/MathJax.js?config='
