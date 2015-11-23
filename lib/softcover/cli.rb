@@ -100,9 +100,10 @@ module Softcover
 
     desc 'server', 'Run local server'
     method_option :port, type: :numeric, default: 4000, aliases: '-p'
+    method_option :bind, type: :string, default: '0.0.0.0', aliases: '-o'
     def server
       if Softcover::BookManifest::valid_directory?
-        Softcover::Commands::Server.run options[:port]
+        Softcover::Commands::Server.run options[:port], options[:bind]
       else
         puts 'Not in a valid book directory.'
         exit 1
