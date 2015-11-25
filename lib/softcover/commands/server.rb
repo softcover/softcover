@@ -51,16 +51,17 @@ module Softcover::Commands::Server
     puts e.message
   end
 
-  def start_server(port)
+  def start_server(port, bind)
     require 'softcover/server/app'
-    puts "Running Softcover server on http://localhost:#{port}"
+    puts "Running Softcover server on http://#{bind}:#{port}"
     Softcover::App.set :port, port
+    Softcover::App.set :bind, bind
     Softcover::App.run!
   end
 
-  def run(port)
+  def run(port, bind)
     rebuild
     listen_for_changes
-    start_server port
+    start_server port, bind
   end
 end

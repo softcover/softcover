@@ -6,7 +6,6 @@ class Softcover::App < Sinatra::Base
   register Sinatra::Async
 
   set :public_folder, 'html'
-  set :bind, '0.0.0.0'
 
   configure do
     mime_type :map, 'application/javascript'
