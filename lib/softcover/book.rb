@@ -116,7 +116,8 @@ class Softcover::Book
       ga_account: ga_account,
       repo_url: repo_url,
       remove_unused_media_bundles: options[:remove_unused_media_bundles],
-      custom_math: custom_math
+      custom_math: custom_math,
+      convert_kit_follow_tag_id: convert_kit_follow_tag_id
     }
 
     res = @client.create_or_update_book params

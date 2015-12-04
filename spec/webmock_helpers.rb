@@ -71,7 +71,8 @@ module WebmockHelpers
            ga_account: book.ga_account,
            repo_url: book.repo_url,
            remove_unused_media_bundles: true,
-           custom_math: book.custom_math
+           custom_math: book.custom_math,
+           convert_kit_follow_tag_id: nil
         }.to_json,
            :headers => headers).
       to_return(:status => 200, :body => return_body, :headers => {})
