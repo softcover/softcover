@@ -472,9 +472,18 @@ module Softcover
         man_ch = chapters.map do |chapter|
                    %(<item id="#{chapter.slug}" href="#{chapter.fragment_name}" media-type="application/xhtml+xml"/>)
                  end
-        toc_ch = chapters.map do |chapter|
-                   %(<itemref idref="#{chapter.slug}"/>)
-                 end
+        if article?
+          # Grab hrefs from Table of Contents
+          filename = File.join('epub', 'OEBPS', chapters.first.fragment_name)
+          doc = Nokogiri::HTML(File.read(filename))
+          anchors = %(.//*[@id='table_of_contents']/ul/li[@class="section"]/a[@class="heading hyperref"])
+          idrefs = doc.xpath(anchors).map { |s| s.attributes['href'].value }
+          toc_ch = idrefs.map { |ref| %(<itemref idref="#{ref}"/>) }
+        else
+          toc_ch = chapters.map do |chapter|
+                     %(<itemref idref="#{chapter.slug}"/>)
+                   end
+        end
         image_files = Dir['epub/OEBPS/images/**/*'].select { |f| File.file?(f) }
         images = image_files.map do |image|
                    ext = File.extname(image).sub('.', '')   # e.g., 'png'
