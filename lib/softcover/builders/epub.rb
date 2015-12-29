@@ -272,7 +272,7 @@ module Softcover
         return nil unless File.exist?('phantomjs_source.html')
         raw_source = File.read('phantomjs_source.html')
         source = strip_attributes(Nokogiri::HTML(raw_source))
-        # rm 'phantomjs_source.html'
+        rm 'phantomjs_source.html'
         # Remove the first body div, which is the hidden MathJax SVGs.
         if (mathjax_svgs = source.at_css('body div'))
           mathjax_svgs.remove
@@ -354,18 +354,8 @@ module Softcover
       # This gives a false positive when math is included in verbatim
       # environments and nowhere else, but it does little harm (requiring only
       # an unnecessary call to page.js).
-      # The regex includes both standard (La)TeX and amsmath extensions.
       def math?(string)
-        math_regex = /(?:\\\(
-                        |\\\[
-                        |\\begin{(?:equation
-                                   |align
-                                   |gather
-                                   |flalign
-                                   |multline
-                                   |alignat
-                                   |split))/x
-        !!string.match(math_regex)
+        !!string.match(/(?:\\\(|\\\[|\\begin{equation})/)
       end
 
       def create_style_files(options)
