@@ -141,12 +141,12 @@ module Softcover
         write_mimetype
         write_container_xml
         write_ibooks_xml
-        write_toc
-        write_nav
         copy_image_files
         write_html(options)
         write_contents(options)
         create_style_files(options)
+        write_toc
+        write_nav
         make_epub(options)
         move_epub
       end
@@ -472,9 +472,9 @@ module Softcover
         man_ch = chapters.map do |chapter|
                    %(<item id="#{chapter.slug}" href="#{chapter.fragment_name}" media-type="application/xhtml+xml"/>)
                  end
-        toc_ch = chapters.map do |chapter|
-                   %(<itemref idref="#{chapter.slug}"/>)
-                 end
+          toc_ch = chapters.map do |chapter|
+                     %(<itemref idref="#{chapter.slug}"/>)
+                   end
         image_files = Dir['epub/OEBPS/images/**/*'].select { |f| File.file?(f) }
         images = image_files.map do |image|
                    ext = File.extname(image).sub('.', '')   # e.g., 'png'
@@ -517,31 +517,63 @@ module Softcover
       # Returns the Table of Contents for the spine.
       def toc_ncx
         chapter_nav = []
-        chapters.each_with_index do |chapter, n|
-          chapter_nav << %(<navPoint id="#{chapter.slug}" playOrder="#{n+1}">)
-          chapter_nav << %(    <navLabel><text>#{chapter_name(n)}</text></navLabel>)
-          chapter_nav << %(    <content src="#{chapter.fragment_name}"/>)
-          chapter_nav << %(</navPoint>)
+
+        if article?
+          article = chapters.first
+          section_names_and_ids(article).each_with_index do |(name, id), n|
+            chapter_nav << %(<navPoint id="#{id}" playOrder="#{n+1}">)
+            chapter_nav << %(    <navLabel><text>#{escape(name)}</text></navLabel>)
+            chapter_nav << %(    <content src="#{article.fragment_name}##{id}"/>)
+            chapter_nav << %(</navPoint>)
+          end
+        else
+          chapters.each_with_index do |chapter, n|
+            chapter_nav << %(<navPoint id="#{chapter.slug}" playOrder="#{n+1}">)
+            chapter_nav << %(    <navLabel><text>#{chapter_name(n)}</text></navLabel>)
+            chapter_nav << %(    <content src="#{chapter.fragment_name}"/>)
+            chapter_nav << %(</navPoint>)
+          end
         end
         toc_ncx_template(manifest.title, manifest.uuid, chapter_nav)
       end
 
       def chapter_name(n)
-        n == 0 ? language_labels["frontmatter"] : chapter_label(n)
+        n == 0 ? language_labels["frontmatter"]
+               : "#{chapter_label(n)}: #{chapters[n].title}"
       end
 
       # Returns the nav HTML content.
       def nav_html
-        nav_list = manifest.chapters.map do |chapter|
-                     element = preview? ? chapter.title : nav_link(chapter)
-                     %(<li>#{element}</li>)
-                   end
+        if article?
+          article = chapters.first
+          nav_list = section_names_and_ids(article).map do |name, id|
+                       %(<li> <a href="#{article.fragment_name}##{id}">#{name}</a></li>)
+                     end
+        else
+          nav_list = manifest.chapters.map do |chapter|
+                       element = preview? ? chapter.title : nav_link(chapter)
+                       %(<li>#{element}</li>)
+                     end
+        end
         nav_html_template(manifest.title, nav_list)
       end
 
       # Returns a navigation link for the chapter.
       def nav_link(chapter)
         %(<a href="#{chapter.fragment_name}">#{chapter.html_title}</a>)
+      end
+
+      # Returns a list of the section names and CSS ids.
+      # Form is [['Beginning', 'sec-beginning'], ['Next', 'sec-next']]
+      def section_names_and_ids(article)
+        # Grab section names and ids from the article.
+        filename = File.join('epub', 'OEBPS', article.fragment_name)
+        doc = Nokogiri::HTML(File.read(filename))
+        names = doc.css('div.section>h2').map do |s|
+                  s.children.children.last.content
+                end
+        ids = doc.css('div.section').map { |s| s.attributes['id'].value }
+        names.zip(ids)
       end
 
       # Returns the HTML template for a chapter.
