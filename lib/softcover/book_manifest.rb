@@ -31,7 +31,7 @@ class Softcover::BookManifest < OpenStruct
     include Softcover::Utils
 
     def fragment_name
-      "#{slug}_fragment.html"
+      "#{slug}_fragment.#{html_extension}"
     end
 
     def fragment_path
@@ -281,7 +281,7 @@ class Softcover::BookManifest < OpenStruct
 
   # Returns the name of the HTML file containing the full book.
   def full_html_file
-    path("html/#{slug}.html")
+    path("html/#{slug}.#{html_extension}")
   end
 
   # Returns chapters for the PDF.

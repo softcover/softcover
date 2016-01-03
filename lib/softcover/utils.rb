@@ -41,6 +41,10 @@ module Softcover::Utils
     Softcover::Config['api_key'].present?
   end
 
+  def html_extension
+    'html'
+  end
+
   UNITS = %W(B KB MB GB TB).freeze
 
   def as_size(number)
@@ -238,6 +242,13 @@ module Softcover::Utils
     lines.reject { |line| line =~ skip }.join("\n")
   end
 
+  # Returns first location on the path for a given file.
+  def first_path(file)
+    possible_paths = ENV['PATH'].split(File::PATH_SEPARATOR).
+                                       collect { |x| File.join(x, file) }
+    possible_paths.find { |f| File.file?(f) }
+  end
+
   # Returns the filename of a dependency given a label.
   def dependency_filename(label)
     case label
@@ -249,10 +260,9 @@ module Softcover::Utils
       get_filename(:'ebook-convert')
     when :epubcheck
       # Finds EpubCheck anywhere on the path.
-      cmd_path = ['epubcheck-3.0', 'epubcheck-3.0.jar']
-      possible_paths = ENV['PATH'].split(File::PATH_SEPARATOR).
-                                   collect { |x| File.join(x, cmd_path) }
-      possible_paths.select { |f| File.file?(f) }.first || ""
+      version_3 = path('epubcheck-3.0/epubcheck-3.0.jar')
+      version_4 = path('epubcheck-4.0.1/epubcheck.jar')
+      first_path(version_4) || first_path(version_3) || ""
     when :inkscape
       default = '/Applications/Inkscape.app/Contents/Resources/bin/inkscape'
       filename_or_default(:inkscape, default)

@@ -13,6 +13,7 @@ generated_polytex/
 
 # Generated HTML files
 html/*.html
+html/*.xhtml
 
 # Generated EPUB files
 epub/OEBPS/*.html

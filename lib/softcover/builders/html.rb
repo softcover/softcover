@@ -127,7 +127,7 @@ module Softcover
       # The resulting file is a self-contained HTML document suitable
       # for viewing in isolation.
       def write_full_html_file(basename, file_content, options)
-        html_filename = File.join('html', basename + '.html')
+        html_filename = File.join('html', "#{basename}.#{html_extension}")
         File.open(html_filename, 'w') do |f|
           f.write(file_content)
         end
@@ -221,7 +221,8 @@ module Softcover
 
       # Writes the chapter fragment HTML (omitting, e.g., <html> tags, etc.)
       def write_fragment_file(chapter)
-        html_filename = File.join('html', "#{chapter.slug}_fragment.html")
+        html_filename = File.join('html',
+                                  "#{chapter.slug}_fragment.#{html_extension}")
         File.open(html_filename, 'w') do |f|
           chapter.nodes.each do |node|
             f.write(node.to_xhtml)
@@ -232,7 +233,7 @@ module Softcover
 
       # Writes the chapter as a complete, self-contained HTML document.
       def write_complete_file(chapter, erb_file, n)
-        html_filename = File.join('html', chapter.slug + '.html')
+        html_filename = File.join('html', "#{chapter.slug}.#{html_extension}")
         # Make references absolute.
         chapter.nodes.each do |node|
           node.css('a.hyperref').each do |ref_node|
@@ -255,6 +256,7 @@ module Softcover
         # This also arranges to clear out unused HTML files, as happens when,
         # e.g., the name of a LaTeX chapter file changes.
         FileUtils.rm(Dir.glob(path('html/*.html')))
+        FileUtils.rm(Dir.glob(path('html/*.xhtml')))
       end
     end
   end

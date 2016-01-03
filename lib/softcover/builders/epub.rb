@@ -25,6 +25,15 @@ module Softcover
       !options[:amazon] && cover_img
     end
 
+    def cover_filename
+      xhtml("cover.#{html_extension}")
+    end
+
+    # Transforms foo.html to foo.xhtml
+    def xhtml(filename)
+      filename.sub('.html', '.xhtml')
+    end
+
     def cover_img_path
       path("#{images_dir}/#{cover_img}")
     end
@@ -32,6 +41,11 @@ module Softcover
     def images_dir
       path('epub/OEBPS/images')
     end
+
+    def nav_filename
+      xhtml("nav.#{html_extension}")
+    end
+
 
     def escape(string)
       CGI.escape_html(string)
@@ -42,7 +56,7 @@ module Softcover
                              toc_chapters, manifest_chapters, images)
       if cover_id
         cover_meta = %(<meta name="cover" content="#{cover_id}"/>)
-        cover_html = '<item id="cover" href="cover.html" media-type="application/xhtml+xml"/>'
+        cover_html = %(<item id="cover" href="#{cover_filename}" media-type="application/xhtml+xml"/>)
         cover_ref  = '<itemref idref="cover" linear="no" />'
       else
         cover_meta = cover_html = cover_ref = ''
@@ -61,7 +75,7 @@ module Softcover
       #{cover_meta}
   </metadata>
   <manifest>
-      <item href="nav.html" id="nav" media-type="application/xhtml+xml" properties="nav"/>
+      <item href="#{nav_filename}" id="nav" media-type="application/xhtml+xml" properties="nav"/>
       <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
       <item id="page-template.xpgt" href="styles/page-template.xpgt" media-type="application/vnd.adobe-page-template+xml"/>
       <item id="pygments.css" href="styles/pygments.css" media-type="text/css"/>
@@ -160,6 +174,7 @@ module Softcover
       # All the HTML is generated, so this clears out any unused files.
       def remove_html
         FileUtils.rm(Dir.glob(path('epub/OEBPS/*.html')))
+        FileUtils.rm(Dir.glob(path('epub/OEBPS/*.xhtml')))
       end
 
       # Removes images in case they are stale.
@@ -215,14 +230,18 @@ module Softcover
         mkdir images_dir
         mkdir texmath_dir
 
-        File.write(path('epub/OEBPS/cover.html'), cover_page) if cover?(options)
+        File.write(path("epub/OEBPS/#{cover_filename}"), cover_page) if cover?(options)
 
         pngs = []
         chapters.each_with_index do |chapter, i|
-          target_filename = path("epub/OEBPS/#{chapter.fragment_name}")
+          target_filename = path("epub/OEBPS/#{xhtml(chapter.fragment_name)}")
           File.open(target_filename, 'w') do |f|
             content = File.read(path("html/#{chapter.fragment_name}"))
             doc = strip_attributes(Nokogiri::HTML(content))
+            # Use xhtml in references.
+            doc.css('a.hyperref').each do |ref_node|
+              ref_node['href'] = ref_node['href'].sub('.html', xhtml('.html'))
+            end
             body = doc.at_css('body')
             if body.nil?
               $stderr.puts "\nError: Document not built due to empty chapter"
@@ -262,9 +281,10 @@ module Softcover
       # SHAs of their contents, which arranges both for unique filenames
       # and for automatic disk caching.
       def html_with_math(chapter, images_dir, texmath_dir, pngs, options={})
-        content = File.read(File.join("html", "#{chapter.slug}.html"))
+        content = File.read(File.join("html",
+                                      "#{chapter.slug}.#{html_extension}"))
         pagejs = "#{File.dirname(__FILE__)}/utils/page.js"
-        url = "file://#{Dir.pwd}/html/#{chapter.slug}.html"
+        url = "file://#{Dir.pwd}/html/#{chapter.slug}.#{html_extension}"
         cmd = "#{phantomjs} #{pagejs} #{url}"
         silence { silence_stream(STDERR) { system cmd } }
         # Sometimes in tests the phantomjs_source.html file is missing.
@@ -323,7 +343,8 @@ module Softcover
         end
         # Make references relative.
         source.css('a.hyperref').each do |ref_node|
-          ref_node['href'] = ref_node['href'].sub('.html', '_fragment.html')
+          ref_node['href'] = ref_node['href'].sub('.html',
+                                                  xhtml('_fragment.html'))
         end
         source.at_css('div#book').children.to_xhtml
       end
@@ -446,7 +467,7 @@ module Softcover
       # Writes the navigation file.
       # This is required by the EPUB standard.
       def write_nav
-        File.write('epub/OEBPS/nav.html', nav_html)
+        File.write("epub/OEBPS/#{nav_filename}", nav_html)
       end
 
       def container_xml
@@ -470,7 +491,7 @@ module Softcover
       # Returns the content configuration file.
       def content_opf(options={})
         man_ch = chapters.map do |chapter|
-                   %(<item id="#{chapter.slug}" href="#{chapter.fragment_name}" media-type="application/xhtml+xml"/>)
+                   %(<item id="#{chapter.slug}" href="#{xhtml(chapter.fragment_name)}" media-type="application/xhtml+xml"/>)
                  end
           toc_ch = chapters.map do |chapter|
                      %(<itemref idref="#{chapter.slug}"/>)
@@ -523,14 +544,14 @@ module Softcover
           section_names_and_ids(article).each_with_index do |(name, id), n|
             chapter_nav << %(<navPoint id="#{id}" playOrder="#{n+1}">)
             chapter_nav << %(    <navLabel><text>#{escape(name)}</text></navLabel>)
-            chapter_nav << %(    <content src="#{article.fragment_name}##{id}"/>)
+            chapter_nav << %(    <content src="#{xhtml(article.fragment_name)}##{id}"/>)
             chapter_nav << %(</navPoint>)
           end
         else
           chapters.each_with_index do |chapter, n|
             chapter_nav << %(<navPoint id="#{chapter.slug}" playOrder="#{n+1}">)
             chapter_nav << %(    <navLabel><text>#{chapter_name(n)}</text></navLabel>)
-            chapter_nav << %(    <content src="#{chapter.fragment_name}"/>)
+            chapter_nav << %(    <content src="#{xhtml(chapter.fragment_name)}"/>)
             chapter_nav << %(</navPoint>)
           end
         end
@@ -547,7 +568,7 @@ module Softcover
         if article?
           article = chapters.first
           nav_list = section_names_and_ids(article).map do |name, id|
-                       %(<li> <a href="#{article.fragment_name}##{id}">#{name}</a></li>)
+                       %(<li> <a href="#{xhtml(article.fragment_name)}##{id}">#{name}</a></li>)
                      end
         else
           nav_list = manifest.chapters.map do |chapter|
@@ -560,14 +581,14 @@ module Softcover
 
       # Returns a navigation link for the chapter.
       def nav_link(chapter)
-        %(<a href="#{chapter.fragment_name}">#{chapter.html_title}</a>)
+        %(<a href="#{xhtml(chapter.fragment_name)}">#{chapter.html_title}</a>)
       end
 
       # Returns a list of the section names and CSS ids.
       # Form is [['Beginning', 'sec-beginning'], ['Next', 'sec-next']]
       def section_names_and_ids(article)
         # Grab section names and ids from the article.
-        filename = File.join('epub', 'OEBPS', article.fragment_name)
+        filename = File.join('epub', 'OEBPS', xhtml(article.fragment_name))
         doc = Nokogiri::HTML(File.read(filename))
         names = doc.css('div.section>h2').map do |s|
                   s.children.children.last.content

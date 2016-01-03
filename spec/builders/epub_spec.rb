@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Softcover::Builders::Epub do
   before(:all) do
     generate_book
-    @file_to_be_removed = path('html/should_be_removed.html')
+    @file_to_be_removed = path('html/should_be_removed.xhtml')
     File.write(@file_to_be_removed, '')
     silence { `softcover build:epub` }
     @builder = Softcover::Builders::Epub.new
@@ -118,9 +118,9 @@ describe Softcover::Builders::Epub do
       it { should exist }
 
       it "should contain the right filenames in the right order" do
-        filenames = %w[frontmatter_fragment.html a_chapter_fragment.html
-                       another_chapter_fragment.html
-                       yet_another_chapter_fragment.html]
+        filenames = %w[frontmatter_fragment.xhtml a_chapter_fragment.xhtml
+                       another_chapter_fragment.xhtml
+                       yet_another_chapter_fragment.xhtml]
         source_files = doc.css('content').map { |node| node['src'] }
         expect(source_files).to eql(filenames)
       end
@@ -150,11 +150,11 @@ describe Softcover::Builders::Epub do
 
       it "should create the HTML files" do
         has_math = false
-        expect(path('epub/OEBPS/cover.html')).to exist
+        expect(path('epub/OEBPS/cover.xhtml')).to exist
         builder.manifest.chapters.each_with_index do |chapter, i|
           content = File.read(path("html/#{chapter.slug}_fragment.html"))
           has_math ||= builder.math?(content)
-          fragment = path("epub/OEBPS/#{chapter.slug}_fragment.html")
+          fragment = path("epub/OEBPS/#{chapter.slug}_fragment.xhtml")
           expect(fragment).to exist
         end
         # Make sure at least one template file has math.
@@ -162,7 +162,7 @@ describe Softcover::Builders::Epub do
       end
 
       describe "cover file" do
-        subject(:cover_file) { File.read(path('epub/OEBPS/cover.html')) }
+        subject(:cover_file) { File.read(path('epub/OEBPS/cover.xhtml')) }
         it "should have the right cover image" do
           expect(cover_file).to include 'cover.jpg'
         end
@@ -263,7 +263,7 @@ describe Softcover::EpubUtils do
     end
   end
 
-  context "nav.html template" do
+  context "nav.xhtml template" do
     let(:nav_list) { [] }
     let(:template) do
       dummy_class.new.nav_html_template(title, nav_list)
@@ -278,7 +278,7 @@ end
 describe "article validation" do
   before(:all) do
     generate_book(markdown: true, article: true)
-    @file_to_be_removed = path('html/should_be_removed.html')
+    @file_to_be_removed = path('html/should_be_removed.xhtml')
     File.write(@file_to_be_removed, '')
     silence { `softcover build:epub` }
     @builder = Softcover::Builders::Epub.new
