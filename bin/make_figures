@@ -13,7 +13,7 @@ OptionParser.new do |opts|
     options[:all] = true
   end
 
-  opts.on("-w", "Resize to given width (in pixels)") do |width|
+  opts.on("-w [width]", "Resize to given width (in pixels)") do |width|
     options[:width] = width
   end
 end.parse!

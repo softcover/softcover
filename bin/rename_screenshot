@@ -34,6 +34,10 @@ OptionParser.new do |opts|
   opts.on("-i", "Invert a renaming by removing the relevant images") do
     options[:invert] = true
   end
+
+  opts.on("-w [width]", "Resize to given width (in pixels)") do |width|
+    options[:width] = width
+  end
 end.parse!
 
 name = ARGV.shift
@@ -60,6 +64,10 @@ end
 unless response.downcase == 'n'
   FileUtils.mv(most_recent, target)
   rm(figure(name))
-  system "make_figures"
+  if options[:width]
+    system "make_figures -w #{options[:width]}"
+  else
+    system "make_figures"
+  end
   system "git add -A"
 end
