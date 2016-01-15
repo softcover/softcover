@@ -5,19 +5,11 @@ require 'optparse'
 # Renames a screenshot.
 # This is intended for use with Shift-Cmd-4 on Mac OS X.
 # 1. Use Shift-Cmd-4 to take a screenshot
-# 2. Run `rename_screenshot figure_name` to create a full-size figure
-#    called `figure_name.png` in the `full_size_figures` directory.
-# A corresponding smaller resized figure is automagically created
-# in the `images/figures` directory. The idea is to keep the full-size figures
-# in case they're ever needed, but to resize them so they're not too big
-# for inclusion in the document.
+# 2. Run `rename_screenshot figure_name` to create a figure
+#    called `figure_name.png` in the `images/figures/` directory.
 # The method is to look for the most recently modified PNG file on the desktop
-# and move it (while renaming it) to the `full_size_figures` directory. Then
-# a normal-size figure is generated using the `make_figures` script.
+# and move it (while renaming it) to the `images/figures` directory.
 
-def figure(name)
-  "images/figures/#{name}.png"
-end
 
 def rm(filename)
   FileUtils.rm(filename) if File.exist?(filename)
@@ -31,13 +23,6 @@ OptionParser.new do |opts|
     options[:force] = true
   end
 
-  opts.on("-i", "Invert a renaming by removing the relevant images") do
-    options[:invert] = true
-  end
-
-  opts.on("-w [width]", "Resize to given width (in pixels)") do |width|
-    options[:width] = width
-  end
 end.parse!
 
 name = ARGV.shift
@@ -45,13 +30,13 @@ if name.nil?
   puts "usage: rename_screenshot filename [options]"
   exit 1
 end
-FileUtils.mkdir("full_size_figures") unless File.exist?("full_size_figures")
-target = "full_size_figures/#{name}.png"
 
-if options[:invert]
-  rm(target) if File.exist?(target)
-  rm(figure(name))
+unless File.directory?('images/figures')
+  $stderr.puts "ERROR: 'images/figures' doesn't exist. Create and re-run."
+  exit 1
 end
+
+target = "images/figures/#{name}.png"
 
 most_recent = Dir["#{ENV['HOME']}/Desktop/*.png"].sort_by do |a|
                 File.stat(a).mtime
@@ -63,11 +48,5 @@ if File.exist?(target) && !options[:force]
 end
 unless response.downcase == 'n'
   FileUtils.mv(most_recent, target)
-  rm(figure(name))
-  if options[:width]
-    system "make_figures -w #{options[:width]}"
-  else
-    system "make_figures"
-  end
-  system "git add -A"
+  system "git add #{target}"
 end
