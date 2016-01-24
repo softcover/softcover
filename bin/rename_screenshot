@@ -43,10 +43,10 @@ most_recent = Dir["#{ENV['HOME']}/Desktop/*.png"].sort_by do |a|
               end.reverse.first
 response = 'y'
 if File.exist?(target) && !options[:force]
-  puts "File #{target} already exists. Replace? [Y/n]"
+  puts "File #{target} already exists. Replace? [y/N]"
   response = gets.strip.downcase
 end
-unless response.downcase == 'n'
+if response.downcase == 'y'
   FileUtils.mv(most_recent, target)
   system "git add #{target}"
 end
