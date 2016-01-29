@@ -316,9 +316,11 @@ module Softcover
           first_child.replace(svg) unless svg == first_child
           output = svg.to_xhtml
           svg_filename = File.join(texmath_dir, "#{digest(output)}.svg")
+          svg_filename_abspath = File.join("#{Dir.pwd}", svg_filename)
           File.write(svg_filename, output)
           # Convert to PNG.
           png_filename = svg_filename.sub('.svg', '.png')
+          png_filename_abspath = svg_filename_abspath.sub('.svg', '.png')
           pngs << png_filename
           unless File.exist?(png_filename)
             unless options[:silent] || options[:quiet]
@@ -327,7 +329,7 @@ module Softcover
             svg_height = svg['style'].scan(/height: (.*?);/).flatten.first
             scale_factor = 8   # This scale factor turns out to look good.
             h = scale_factor * svg_height.to_f
-            cmd = "#{inkscape} -f #{svg_filename} -e #{png_filename} -h #{h}pt"
+            cmd = "#{inkscape} -f #{svg_filename_abspath} -e #{png_filename_abspath} -h #{h}pt"
             if options[:silent]
               silence { silence_stream(STDERR) { system cmd } }
             else
