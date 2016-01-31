@@ -304,7 +304,6 @@ module Softcover
         source.css('script').each(&:remove)
         # Remove all the MathJax preview spans.
         source.css('MathJax_Preview').each(&:remove)
-
         # Suck out all the SVGs
         svgs   = source.css('div#book svg')
         frames = source.css('span.MathJax_SVG')
@@ -318,17 +317,43 @@ module Softcover
           svg_filename = File.join(texmath_dir, "#{digest(output)}.svg")
           svg_filename_abspath = File.join("#{Dir.pwd}", svg_filename)
           File.write(svg_filename, output)
-          # Convert to PNG.
+          # Convert to PNG named:
           png_filename = svg_filename.sub('.svg', '.png')
           png_filename_abspath = svg_filename_abspath.sub('.svg', '.png')
           pngs << png_filename
+          #
+          # Settings for inline math in ePub / mobi
+          pt_scale_factor = 16  # scaling factor used for SVG --> PNG conversion
+          height_scale_factor = 0.50  # 1ex/1em for scaling math PNG's height
+          valign_scale_factor = 0.45  # 1ex/1em when scaling PNG's vertical-align
+          # these are used in three-step process below: Extract, Convert, Eeplace
+          # STEP1: Extract information from svg tag.
+          svg_height = svg['style'].scan(/height: (.*?);/).flatten.first
+          if svg_height
+            svg_height_in_ex = Float(svg_height.gsub('ex',''))
+            png_height = (svg_height_in_ex * height_scale_factor).to_s + 'em'
+           # MathJax sets SVG height in `ex` units but we wan `em` units for PNG
+          end
+          # Extract vertical-align css proprty for for inline math.
+          if svg.parent.parent.attr('class') == "inline_math"
+            vertical_align = svg['style'].scan(/vertical-align: (.*?);/).flatten.first
+            if vertical_align
+              valign_in_ex = Float(vertical_align.gsub('ex',''))
+              # png vertical-align in ems is the css equivalent of `depth` in TeX
+              png_valign = (valign_in_ex * valign_scale_factor).to_s + 'em'
+            else
+              png_valign = "0em"
+            end
+          else # No vertical align for displayed math
+            png_valign = nil
+          end
+          # STEP2: Generate PNG from each SVG (if necessary).
           unless File.exist?(png_filename)
+            h = pt_scale_factor * svg_height.to_f  # PNG height in pt
             unless options[:silent] || options[:quiet]
               puts "Creating #{png_filename}"
             end
-            svg_height = svg['style'].scan(/height: (.*?);/).flatten.first
-            scale_factor = 8   # This scale factor turns out to look good.
-            h = scale_factor * svg_height.to_f
+            # generate png from the MathJax_SVG using inkscape
             cmd = "#{inkscape} -f #{svg_filename_abspath} -e #{png_filename_abspath} -h #{h}pt"
             if options[:silent]
               silence { silence_stream(STDERR) { system cmd } }
@@ -337,10 +362,14 @@ module Softcover
             end
           end
           rm svg_filename
+          # STEP 3: Replace svg element with an equivalent png.
           png = Nokogiri::XML::Node.new('img', source)
-          png['src'] = File.join('images', 'texmath',
-                                 File.basename(png_filename))
+          png['src'] = File.join('images', 'texmath', File.basename(png_filename))
           png['alt'] = png_filename.sub('.png', '')
+          png['style']  = 'height:' + png_height + ';'
+          if png_valign
+            png['style'] += ' vertical-align:' + png_valign + ';'
+          end
           svg.replace(png)
         end
         # Make references relative.
