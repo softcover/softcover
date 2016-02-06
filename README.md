@@ -22,6 +22,12 @@ Run
 
 for a list of supported commands.
 
+## Adding a precompiled binary
+
+We would like Softcover to support as many systems as possible. If you needed to compile your own `tralics` binary ([see here](https://github.com/softcover/tralics)) and would like to contribute it back to the project, please send an email to <michael@softcover.io> with the `tralics` binary attached and with the result of running the following command:
+
+    $ ruby -e 'puts RUBY_PLATFORM'
+
 ## Contributing
 
 1. Fork it
