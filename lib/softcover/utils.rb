@@ -303,4 +303,18 @@ module Softcover::Utils
   def article?
     !!File.readlines(path('config/preamble.tex')).first.match(/extarticle/)
   end
+
+  # Silences a stream.
+  # This is taken directly from Rails Active Support `silence_stream`.
+  # The `silence_stream` method is deprecated because it's not thread-safe, but
+  # we don't care about that and the deprecation warnings are annoying.
+  def silence_stream(stream)
+    old_stream = stream.dup
+    stream.reopen(RbConfig::CONFIG['host_os'] =~ /mswin|mingw/ ? 'NUL:' : '/dev/null')
+    stream.sync = true
+    yield
+  ensure
+    stream.reopen(old_stream)
+    old_stream.close
+  end
 end
