@@ -74,6 +74,14 @@ body #book {
   font-weight: bold;
 }
 
+#book code.tt {
+  font-family: Courier, monospace;
+  color: #070707;
+  font-size: 100%;
+  font-weight: normal;
+}
+
+
 #book .number {
   margin-right: 1em;
 }
@@ -425,10 +433,6 @@ body #book {
 
 #book a span.undefined_ref {
   color: red;
-}
-
-#book .tt {
-  font-family: Courier, monospace;
 }
 
 #book .sc {
