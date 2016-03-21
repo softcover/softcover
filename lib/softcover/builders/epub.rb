@@ -561,8 +561,12 @@ module Softcover
       end
 
       def chapter_name(n)
-        n == 0 ? language_labels["frontmatter"]
-               : "#{chapter_label(n)}: #{chapters[n].title}"
+        n == 0 ? language_labels["frontmatter"] : strip_html(chapters[n].menu_heading)
+      end
+
+      # Strip HTML elements from the given text.
+      def strip_html(text)
+        Nokogiri::HTML.fragment(text).content
       end
 
       # Returns the nav HTML content.
