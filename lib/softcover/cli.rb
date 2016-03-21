@@ -266,6 +266,14 @@ module Softcover
       puts 'Config var removed.'
     end
 
+    # ===============================================
+    # Utilities
+    # ===============================================
+    desc "add_exercises", "Add exercise id elements as spans (warning: files are overwritten)"
+    define_method "exercises" do
+      Softcover::Commands::Exercises.add_to_chapters!
+    end
+
     protected
       def ask_without_echo(*args)
         system "stty -echo"
