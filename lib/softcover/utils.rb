@@ -262,7 +262,7 @@ module Softcover::Utils
       # Finds EpubCheck anywhere on the path.
       version_3 = path('epubcheck-3.0/epubcheck-3.0.jar')
       version_4 = path('epubcheck-4.0.1/epubcheck.jar')
-      first_path(version_4) || first_path(version_3) || ""
+      first_path(version_4) || first_path(version_3) || get_filename(:'epubcheck') || ""
     when :inkscape
       default = '/Applications/Inkscape.app/Contents/Resources/bin/inkscape'
       filename_or_default(:inkscape, default)
