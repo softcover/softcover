@@ -14,6 +14,8 @@ On some systems, you may need to add an extra option to handle SSL correctly:
 
     $ gem install softcover -- --with-cppflags=-I/usr/local/opt/openssl/include
 
+Then install the dependencies as described [http://manual.softcover.io/book/getting_started#sec-installing_softcover](here).
+
 ## Usage
 
 Run
