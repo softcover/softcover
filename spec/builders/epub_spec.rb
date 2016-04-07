@@ -172,6 +172,24 @@ describe Softcover::Builders::Epub do
         expect(path("epub/OEBPS/images/texmath")).to exist
         expect(Dir[path("epub/OEBPS/images/texmath/*.png")]).not_to be_empty
       end
+
+      it "should record vertical-align of inline math SVGs" do
+        content = File.read(path("./epub/OEBPS/a_chapter_fragment.xhtml"))
+        html = Nokogiri::HTML(content)
+        math_imgs = html.search('span.inline_math img')
+        math_imgs.each do |math_img|
+          expect(math_img['style']).to match /vertical-align/
+        end
+      end
+
+      it "should not add vertical-align to displayed math" do
+        content = File.read(path("./epub/OEBPS/a_chapter_fragment.xhtml"))
+        html = Nokogiri::HTML(content)
+        math_imgs = html.search('div.equation img')
+        math_imgs.each do |math_img|
+          expect(math_img['style']).not_to match /vertical-align/
+        end
+      end
     end
 
     it "should create the style files" do
