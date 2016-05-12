@@ -38,7 +38,8 @@ module Softcover
 
         	File.open(path, "w") { |f| f.write str }
 
-        	puts "#{path}: wrote #{n} exercises"
+            exercises = n == 1 ? "exercise" : "exercises"
+        	puts "#{path}: wrote #{n} #{exercises}"
         end
       end
 
