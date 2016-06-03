@@ -1,6 +1,5 @@
 require 'polytexnic'
 require 'active_support/core_ext/string'
-require 'tilt/erubis'
 require 'tilt/coffee'
 require 'tilt/erb'
 
