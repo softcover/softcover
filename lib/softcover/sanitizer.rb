@@ -18,7 +18,7 @@ module Softcover
         remove_contents: %w{script},
         attributes: {
           'div' => %w{id class data-tralics-id data-number data-chapter},
-          'a'    => %w{id class href target},
+          'a'    => %w{id class href target rel},
           'span' => %w{id class style},
           'ol'   => %w{id class},
           'ul'   => %w{id class},
