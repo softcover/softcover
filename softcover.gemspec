@@ -38,5 +38,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'coffee-script', '~> 2.2.0'
   gem.add_dependency 'listen', '~> 1.3.1'
   gem.add_dependency 'rb-fsevent', '~> 0.9.3'
-  gem.add_dependency 'sanitize', '~> 3.0.3'
+  gem.add_dependency 'sanitize', '~> 4.0.1'
 end
