@@ -150,6 +150,8 @@ module Softcover
           write_fragment_file(chapter)
           write_complete_file(chapter, erb_file, i)
         end
+      rescue NoMethodError
+        $stderr.puts "Build failed. Check that no chapter contains more than one top-level section (#)"
       end
 
       # Splits the full XML document into chapters.
