@@ -331,8 +331,8 @@ module Softcover
           svg_height = svg['style'].scan(/height: (.*?);/).flatten.first
           if svg_height
             svg_height_in_ex = Float(svg_height.gsub('ex',''))
-            png_height = (svg_height_in_ex * ex2em_height_scaling).to_s + 'em'
             # MathJax sets SVG height in `ex` units but we want em units for PNG
+            png_height = (svg_height_in_ex * ex2em_height_scaling).to_s + 'em'
           end
           # Extract vertical-align css proprty for for inline math.
           if svg.parent.parent.attr('class') == "inline_math"
@@ -350,12 +350,13 @@ module Softcover
           end
           # STEP2: Generate PNG from each SVG (if necessary).
           unless File.exist?(png_filename)
-            h = ex2pt_scale_factor * svg_height_in_ex       # = PNG height in pt
+            # h = ex2pt_scale_factor * svg_height_in_ex       # = PNG height in pt
             unless options[:silent] || options[:quiet]
               puts "Creating #{png_filename}"
             end
             # generate png from the MathJax_SVG using inkscape
-            cmd = "#{inkscape} -f #{svg_abspath} -e #{png_abspath} -h #{h}pt"
+            # cmd = "#{inkscape} -f #{svg_abspath} -e #{png_abspath} -h #{h}pt"
+            cmd = "#{inkscape} -f #{svg_abspath} -e #{png_abspath}"
             if options[:silent]
               silence { silence_stream(STDERR) { system cmd } }
             else
@@ -364,14 +365,14 @@ module Softcover
           end
           rm svg_filename
           # STEP 3: Replace svg element with an equivalent png.
-          png = Nokogiri::XML::Node.new('img', source)
-          png['src'] = File.join('images', 'texmath', File.basename(png_filename))
-          png['alt'] = png_filename.sub('.png', '')
-          png['style']  = 'height:' + png_height + ';'
-          if png_valign
-            png['style'] += ' vertical-align:' + png_valign + ';'
-          end
-          svg.replace(png)
+          # png = Nokogiri::XML::Node.new('img', source)
+          # png['src'] = File.join('images', 'texmath', File.basename(png_filename))
+          # png['alt'] = png_filename.sub('.png', '')
+          # # png['style']  = 'height:' + png_height + ';'
+          # if png_valign
+          #   png['style'] += ' vertical-align:' + png_valign + ';'
+          # end
+          # svg.replace(png)
         end
         # Make references relative.
         source.css('a.hyperref').each do |ref_node|
