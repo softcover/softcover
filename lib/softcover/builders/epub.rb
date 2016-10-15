@@ -328,7 +328,7 @@ module Softcover
           ex2pt_scale_factor = 15         # =1ex/1pt scaling for SVG-->PNG conv.
           # These are used a three-step process below: Extract, Convert, Replace
           # STEP1: Extract information from svg tag.
-          svg_height = svg['style'].scan(/height: (.*?);/).flatten.first
+          svg_height = svg['height']
           if svg_height
             svg_height_in_ex = Float(svg_height.gsub('ex',''))
             # MathJax sets SVG height in `ex` units but we want em units for PNG
@@ -356,7 +356,6 @@ module Softcover
             end
             # generate png from the MathJax_SVG using inkscape
             cmd = "#{inkscape} -f #{svg_abspath} -e #{png_abspath} -h #{h}pt"
-            # cmd = "#{inkscape} -f #{svg_abspath} -e #{png_abspath}"
             if options[:silent]
               silence { silence_stream(STDERR) { system cmd } }
             else
