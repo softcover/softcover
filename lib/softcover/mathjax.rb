@@ -42,7 +42,8 @@ module Softcover
         },
         showProcessingMessages: false,
         messageStyle: "none",
-        imageFont: null
+        imageFont: null,
+        "AssistiveMML": { disabled: true }
       });
       MathJax.Hub.Queue([alert,'MathJax Done']);
       EOS
@@ -58,7 +59,6 @@ module Softcover
 
     MATHJAX  = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config='
     AMS_HTML = MATHJAX + 'TeX-AMS_HTML'
-    MATHJAX_LOCAL = 'MathJax/MathJax.js?config='
     AMS_SVG  = MATHJAX + 'TeX-AMS-MML_SVG'
 
     # Returns the custom macros as defined in the custom style file.

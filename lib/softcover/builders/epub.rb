@@ -350,13 +350,13 @@ module Softcover
           end
           # STEP2: Generate PNG from each SVG (if necessary).
           unless File.exist?(png_filename)
-            # h = ex2pt_scale_factor * svg_height_in_ex       # = PNG height in pt
+            h = ex2pt_scale_factor * svg_height_in_ex       # = PNG height in pt
             unless options[:silent] || options[:quiet]
               puts "Creating #{png_filename}"
             end
             # generate png from the MathJax_SVG using inkscape
-            # cmd = "#{inkscape} -f #{svg_abspath} -e #{png_abspath} -h #{h}pt"
-            cmd = "#{inkscape} -f #{svg_abspath} -e #{png_abspath}"
+            cmd = "#{inkscape} -f #{svg_abspath} -e #{png_abspath} -h #{h}pt"
+            # cmd = "#{inkscape} -f #{svg_abspath} -e #{png_abspath}"
             if options[:silent]
               silence { silence_stream(STDERR) { system cmd } }
             else
