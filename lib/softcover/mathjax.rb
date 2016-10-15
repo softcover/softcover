@@ -45,7 +45,6 @@ module Softcover
         imageFont: null,
         "AssistiveMML": { disabled: true }
       });
-      MathJax.Hub.Queue([alert,'MathJax Done']);
       EOS
       config
     end

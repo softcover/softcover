@@ -20,6 +20,9 @@
     <% if @mathjax %>
       <script type="text/x-mathjax-config">
         <%= @mathjax %>
+        if (/PhantomJS/.test(window.navigator.userAgent)) {
+          MathJax.Hub.Queue([alert, 'MathJax Done']);
+        }
       </script>
       <script type="text/javascript" src="<%= @src %>"></script>
     <% end %>
