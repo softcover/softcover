@@ -266,6 +266,10 @@ module Softcover::Utils
     when :inkscape
       default = '/Applications/Inkscape.app/Contents/Resources/bin/inkscape'
       filename_or_default(:inkscape, default)
+    when :phantomjs
+      phantomjs = get_filename(label)
+      # Test for version 2, which is now necessary.
+      `#{phantomjs} -v` =~ /^2\./ ? phantomjs : ""
     else
       get_filename(label)
     end

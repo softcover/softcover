@@ -68,7 +68,7 @@ module Softcover
           "NodeJS (http://nodejs.org/)"
         when :phantomjs
           message = "PhantomJS (http://phantomjs.org/)\n"
-          message += "      ∟ Put bin/phantomjs somewhere on your path,"
+          message += "      ∟ Put bin/phantomjs version 2 somewhere on your path,"
           message += " e.g., in /usr/local/bin"
         when :kindlegen
           url = 'http://www.amazon.com/gp/feature.html?ie=UTF8&docId=1000765211'
