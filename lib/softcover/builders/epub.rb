@@ -364,14 +364,14 @@ module Softcover
           end
           rm svg_filename
           # STEP 3: Replace svg element with an equivalent png.
-          # png = Nokogiri::XML::Node.new('img', source)
-          # png['src'] = File.join('images', 'texmath', File.basename(png_filename))
-          # png['alt'] = png_filename.sub('.png', '')
-          # # png['style']  = 'height:' + png_height + ';'
-          # if png_valign
-          #   png['style'] += ' vertical-align:' + png_valign + ';'
-          # end
-          # svg.replace(png)
+          png = Nokogiri::XML::Node.new('img', source)
+          png['src']    = File.join('images', 'texmath', File.basename(png_filename))
+          png['alt']    = png_filename.sub('.png', '')
+          png['style']  = 'height:' + png_height + ';'
+          if png_valign
+            png['style'] += ' vertical-align:' + png_valign + ';'
+          end
+          svg.replace(png)
         end
         # Make references relative.
         source.css('a.hyperref').each do |ref_node|
