@@ -14,7 +14,10 @@ describe Softcover::Builders::Epub do
 
   it "should be valid" do
     output = `softcover epub:validate`
-    expect(output).to match(/No errors or warnings/)
+    english = "No errors or warnings"
+    # I (mhartl) sometimes set my system language to Spanish.
+    spanish = "No se han detectado errores o advertencias"
+    expect(output).to match(/(#{english}|#{spanish})/)
   end
 
   describe "mimetype file" do
@@ -224,7 +227,11 @@ describe Softcover::Builders::Epub do
     subject(:builder) { @builder }
 
     it "should be valid" do
-      expect(`softcover epub:validate`).to match(/No errors or warnings/)
+      output = `softcover epub:validate`
+      english = "No errors or warnings"
+      # I (mhartl) sometimes set my system language to Spanish.
+      spanish = "No se han detectado errores o advertencias"
+      expect(output).to match(/(#{english}|#{spanish})/)
     end
 
     it "should not raise an error" do
@@ -307,7 +314,10 @@ describe "article validation" do
 
   it "should be valid" do
     output = `softcover epub:validate`
-    expect(output).to match(/No errors or warnings/)
+    english = "No errors or warnings"
+    # I (mhartl) sometimes set my system language to Spanish.
+    spanish = "No se han detectado errores o advertencias"
+    expect(output).to match(/(#{english}|#{spanish})/)
   end
 
   it "should description" do
