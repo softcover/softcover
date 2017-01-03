@@ -311,6 +311,14 @@ module Softcover
           # Save the SVG file.
           svg['viewBox'] = svg['viewbox']
           svg.remove_attribute('viewbox')
+          # Workaround for bug in Inkscape 0.91 on MacOS X:
+          # extract height/width from svg attributes and move them to style attr
+          svg_height = svg['height']  # in ex
+          svg_width = svg['width']    # in ex
+          svg['style'] += ' height:'+svg_height+';' + ' width:'+svg_width+';'
+          svg.remove_attribute('height')
+          svg.remove_attribute('width')
+          # /Workaround
           first_child = frame.children.first
           first_child.replace(svg) unless svg == first_child
           output = svg.to_xhtml
@@ -322,25 +330,20 @@ module Softcover
           png_abspath = svg_abspath.sub('.svg', '.png')
           pngs << png_filename
           #
-          # Settings for inline math in ePub / mobi
+          # Settings for texmath images in ePub / mobi
           ex2em_height_scaling = 0.51     # =1ex/1em for math png height
           ex2em_valign_scaling = 0.481482 # =1ex/1em for math png vertical-align
           ex2pt_scale_factor = 15         # =1ex/1pt scaling for SVG-->PNG conv.
-          # These are used a three-step process below: Extract, Convert, Replace
-          # STEP1: Extract information from svg tag.
-          svg_height = svg['height']
-          if svg_height
-            svg_height_in_ex = Float(svg_height.gsub('ex',''))
-            # MathJax sets SVG height in `ex` units but we want em units for PNG
-            png_height = (svg_height_in_ex * ex2em_height_scaling).to_s + 'em'
-          end
-          # Extract vertical-align css proprty for for inline math.
+          # These are used a three-step process below: Compute, Convert, Replace
+          # STEP1: compute height and vertical-align in `em` units
+          svg_height_in_ex = Float(svg_height.gsub('ex',''))
+          # MathJax sets SVG height in `ex` units but we want `em` units for PNG
+          png_height = (svg_height_in_ex * ex2em_height_scaling).to_s + 'em'
+          # Extract vertical-align css proprty for inline math equations:
           if svg.parent.parent.attr('class') == "inline_math"
             vertical_align = svg['style'].scan(/vertical-align: (.*?);/).flatten.first
             if vertical_align
               valign_in_ex = Float(vertical_align.gsub('ex',''))
-              valign_in_ex += 0.1155  # correction factor for MathJax 1px margin
-              # png vertical-align in ems is the css equivalent of depth in TeX
               png_valign = (valign_in_ex * ex2em_valign_scaling).to_s + 'em'
             else
               png_valign = "0em"
@@ -348,7 +351,7 @@ module Softcover
           else # No vertical align for displayed math
             png_valign = nil
           end
-          # STEP2: Generate PNG from each SVG (if necessary).
+          # STEP2: Generate PNG from each SVG (unless PNG exists already).
           unless File.exist?(png_filename)
             h = ex2pt_scale_factor * svg_height_in_ex       # = PNG height in pt
             unless options[:silent] || options[:quiet]
