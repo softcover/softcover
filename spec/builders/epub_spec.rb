@@ -173,6 +173,12 @@ describe Softcover::Builders::Epub do
         expect(Dir[path("epub/OEBPS/images/texmath/*.png")]).not_to be_empty
       end
 
+      it "math PNGs shouldn't be too small (regression test for empty PNGs)" do
+        Dir[path("epub/OEBPS/images/texmath/*.png")].each do |pngfile|
+           expect(File.size(pngfile)).to be > 500
+        end
+      end
+
       it "should record vertical-align of inline math SVGs" do
         content = File.read(path("./epub/OEBPS/a_chapter_fragment.xhtml"))
         html = Nokogiri::HTML(content)
