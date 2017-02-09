@@ -20,6 +20,10 @@ class Softcover::App < Sinatra::Base
     redirect @manifest.first_chapter.slug
   end
 
+  get '/ping' do
+    'pong'
+  end
+
   get '/main.js' do
     require 'coffee_script'
     @mathjax_src    = Softcover::Mathjax::AMS_HTML

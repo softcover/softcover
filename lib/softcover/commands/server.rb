@@ -3,13 +3,13 @@ require 'listen'
 module Softcover::Commands::Server
   include Softcover::Output
   include Softcover::Utils
-  attr_accessor :no_listener
+  attr_accessor :no_listener, :server_pid
   extend self
 
   # Listens for changes to the book's source files.
   def listen_for_changes
     return if defined?(@no_listener) && @no_listener
-    server_pid = Process.pid
+    @server_pid = Process.pid
     filter_regex = /(\.md|\.tex|custom\.sty|custom\.css|Book\.txt|book\.yml)$/
     @listener = Listen.to('.')
     @listener.filter(filter_regex)
@@ -18,7 +18,7 @@ module Softcover::Commands::Server
       first_modified = modified.try(:first)
       unless first_modified =~ ignore_regex
         rebuild first_modified
-        Process.kill("HUP", server_pid)
+        Process.kill("HUP", @server_pid)
       end
     end
     @listener.start
@@ -54,9 +54,17 @@ module Softcover::Commands::Server
   def start_server(port, bind)
     require 'softcover/server/app'
     puts "Running Softcover server on http://#{bind}:#{port}"
-    Softcover::App.set :port, port
-    Softcover::App.set :bind, bind
-    Softcover::App.run!
+    loop do
+      @server_pid = fork do
+        Softcover::App.set :port, port
+        Softcover::App.set :bind, bind
+        Softcover::App.run!
+      end
+      sleep 60
+      puts "Reloading server to prevent memory bloat..."
+      Process.kill "SIGINT", @server_pid
+      Process.wait @server_pid
+    end
   end
 
   def run(port, bind)
