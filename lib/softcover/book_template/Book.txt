@@ -7,3 +7,4 @@ mainmatter:
 a_chapter.md
 another_chapter.md
 yet_another_chapter.md
+# debug.md
