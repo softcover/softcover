@@ -18,5 +18,21 @@
 
 body {
   font-size: 80%;
-  line-height: 1.4;
+  line-height: 1.2;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+  text-indent: 0.95em;
+}
+
+p.noindent {
+  text-indent: 0;
+}
+
+blockquote p {
+  text-indent: 0;
+  margin-top:    0em;
+  margin-bottom: 0.5em;
 }
