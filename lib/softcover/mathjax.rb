@@ -56,7 +56,7 @@ module Softcover
       self.config(options).gsub('\\', '\\\\\\\\')
     end
 
-    MATHJAX  = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config='
+    MATHJAX  = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config='
     AMS_HTML = MATHJAX + 'TeX-AMS_HTML'
     AMS_SVG  = MATHJAX + 'TeX-AMS-MML_SVG'
 
