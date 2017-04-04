@@ -76,6 +76,12 @@ p.quote {
   margin-bottom: 0.5em;
 }
 
+li p {
+  text-indent: 0;
+  margin-top:    0em;
+  margin-bottom: 0.5em;
+}
+
 .aside {
   margin: 15px 0;
 }
