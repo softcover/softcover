@@ -34,6 +34,8 @@ code {
 
 .code {
   font-size: 90%;
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
 }
 
 .aside {
@@ -52,6 +54,10 @@ p {
 }
 
 p.noindent {
+  text-indent: 0;
+}
+
+.inline_math {
   text-indent: 0;
 }
 
