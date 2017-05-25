@@ -47,6 +47,7 @@ a span.undefined_ref {
   color: #002f72;
 }
 
+/* Hanging indentation */
 p {
   margin: 0;
   padding: 0;
@@ -58,6 +59,9 @@ p.noindent {
 }
 
 .inline_math {
+  text-indent: 0;
+}
+.center p {
   text-indent: 0;
 }
 
