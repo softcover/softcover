@@ -21,6 +21,11 @@ class Softcover::BookManifest < OpenStruct
     CGI.escape_html(title)
   end
 
+  # Run the title through the Polytexnic pipeline to make an HTML title.
+  def html_title
+    polytexnic_html(title)
+  end
+
   class NotFound < StandardError
     def message
       "Invalid document directory, no manifest file found!"
@@ -62,8 +67,7 @@ class Softcover::BookManifest < OpenStruct
 
     # Run the title through the Polytexnic pipeline to make an HTML title.
     def html_title
-      Nokogiri::HTML(Polytexnic::Pipeline.new(title).to_html).at_css('p')
-                                                             .inner_html.strip
+      self.polytexnic_html(title)
     end
 
     def to_hash

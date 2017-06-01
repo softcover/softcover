@@ -326,4 +326,10 @@ module Softcover::Utils
     stream.reopen(old_stream)
     old_stream.close
   end
+
+  # Run text through the Polytexnic pipeline to make an HTML snippet.
+  def polytexnic_html(text)
+    Nokogiri::HTML(Polytexnic::Pipeline.new(text).to_html).at_css('p')
+                                                         .inner_html.strip
+  end
 end

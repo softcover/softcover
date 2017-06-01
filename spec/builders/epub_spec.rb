@@ -256,7 +256,7 @@ end
 
 describe Softcover::EpubUtils do
   let(:dummy_class) { Class.new { include Softcover::EpubUtils } }
-  let(:title) { 'Foo Bar & Grill' }
+  let(:escaped_title) { 'Foo Bar &amp; Grill' }
   let(:uuid) { '550e8400-e29b-41d4-a716-446655440000' }
 
   context "content.opf template" do
@@ -268,8 +268,8 @@ describe Softcover::EpubUtils do
     let(:images) { [] }
 
     let(:template) do
-      dummy_class.new.content_opf_template(title, copyright, author, uuid,
-                                           cover_id, toc_chapters,
+      dummy_class.new.content_opf_template(escaped_title, copyright, author,
+                                           uuid, cover_id, toc_chapters,
                                            manifest_chapters, images)
     end
 
@@ -285,7 +285,7 @@ describe Softcover::EpubUtils do
   context "toc.ncx template" do
     let(:chapter_nav) { [] }
     let(:template) do
-      dummy_class.new.toc_ncx_template(title, uuid, chapter_nav)
+      dummy_class.new.toc_ncx_template(escaped_title, uuid, chapter_nav)
     end
 
     it "should have the right (escaped) content" do
@@ -297,7 +297,7 @@ describe Softcover::EpubUtils do
   context "nav.xhtml template" do
     let(:nav_list) { [] }
     let(:template) do
-      dummy_class.new.nav_html_template(title, nav_list)
+      dummy_class.new.nav_html_template(escaped_title, nav_list)
     end
 
     it "should have the right (escaped) content" do

@@ -52,7 +52,7 @@ module Softcover
     end
 
     # Returns a content.opf file based on a valid template.
-    def content_opf_template(title, copyright, author, uuid, cover_id,
+    def content_opf_template(escaped_title, copyright, author, uuid, cover_id,
                              toc_chapters, manifest_chapters, images)
       if cover_id
         cover_meta = %(<meta name="cover" content="#{cover_id}"/>)
@@ -65,10 +65,10 @@ module Softcover
 <package unique-identifier="BookID" version="3.0" xmlns="http://www.idpf.org/2007/opf">
   <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"
       xmlns:opf="http://www.idpf.org/2007/opf">
-      <dc:title>#{escape(title)}</dc:title>
+      <dc:title>#{escaped_title}</dc:title>
       <dc:language>en</dc:language>
       <dc:rights>Copyright (c) #{copyright} #{escape(author)}</dc:rights>
-      <dc:creator>#{author}</dc:creator>
+      <dc:creator>#{escape(author)}</dc:creator>
       <dc:publisher>Softcover</dc:publisher>
       <dc:identifier id="BookID">urn:uuid:#{uuid}</dc:identifier>
       <meta property="dcterms:modified">#{Time.now.strftime('%Y-%m-%dT%H:%M:%S')}Z</meta>
@@ -96,7 +96,7 @@ module Softcover
     end
 
     # Returns a toc.ncx file based on a valid template.
-    def toc_ncx_template(title, uuid, chapter_nav)
+    def toc_ncx_template(escaped_title, uuid, chapter_nav)
 %(<?xml version="1.0" encoding="UTF-8"?>
 <ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
     <head>
@@ -106,7 +106,7 @@ module Softcover
         <meta name="dtb:maxPageNumber" content="0"/>
     </head>
     <docTitle>
-        <text>#{escape(title)}</text>
+        <text>#{escaped_title}</text>
     </docTitle>
     <navMap>
       #{chapter_nav.join("\n")}
@@ -116,16 +116,16 @@ module Softcover
     end
 
     # Returns the navigation HTML based on a valid template.
-    def nav_html_template(title, nav_list)
+    def nav_html_template(escaped_title, nav_list)
 %(<?xml version="1.0" encoding="utf-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
     <head>
         <meta charset="UTF-8" />
-        <title>#{title}</title>
+        <title>#{escaped_title}</title>
     </head>
     <body>
         <nav epub:type="toc">
-            <h1>#{escape(title)}</h1>
+            <h1>#{escaped_title}</h1>
             <ol>
               #{nav_list.join("\n")}
             </ol>
@@ -545,7 +545,9 @@ module Softcover
                    id = "img-#{label}"
                    %(<item id="#{id}" href="#{href}" media-type="image/#{ext}"/>)
                  end
-        content_opf_template(manifest.title, manifest.copyright,
+
+        manifest.html_title
+        content_opf_template(manifest.html_title, manifest.copyright,
                              manifest.author, manifest.uuid, cover_id(options),
                              toc_ch, man_ch, images)
       end
@@ -590,7 +592,7 @@ module Softcover
             chapter_nav << %(</navPoint>)
           end
         end
-        toc_ncx_template(manifest.title, manifest.uuid, chapter_nav)
+        toc_ncx_template(manifest.html_title, manifest.uuid, chapter_nav)
       end
 
       def chapter_name(n)
@@ -615,7 +617,7 @@ module Softcover
                        %(<li>#{element}</li>)
                      end
         end
-        nav_html_template(manifest.title, nav_list)
+        nav_html_template(manifest.html_title, nav_list)
       end
 
       # Returns a navigation link for the chapter.
