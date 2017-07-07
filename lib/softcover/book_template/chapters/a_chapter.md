@@ -27,7 +27,7 @@ Softcover also comes with full support for syntax-highlighted source code using 
       puts "hello, world"
     end
 
-Softcover's Markdown mode also extends kramdown to support "code fencing" from GitHub-flavored Markdown:
+Softcover's Markdown mode also extends kramdown to support so-called "code fencing" from GitHub-flavored Markdown:
 
 ```ruby
 def hello
