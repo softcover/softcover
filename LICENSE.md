@@ -1,4 +1,4 @@
-Copyright (c) 2012 Nick Merwin
+Copyright (c) 2012 Michael Hartl and Nick Merwin
 
 MIT License
 
