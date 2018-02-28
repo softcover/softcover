@@ -86,10 +86,9 @@ module Softcover
         when :zip
           "Install zip (e.g., apt-get install zip)"
         when :epubcheck
-          url  = 'https://github.com/IDPF/epubcheck/releases/'
-          url += 'download/v4.0.1/epubcheck-4.0.1.zip'
-          message  = "EpubCheck 4.0.1 (#{url})\n"
-          message += "      ∟ Unzip and place epubcheck-4.0.1/ in a directory on your path"
+          url  = 'https://github.com/IDPF/epubcheck/releases/download/v4.0.2/epubcheck-4.0.2.zip'
+          message  = "EpubCheck 4.0.2 (#{url})\n"
+          message += "      ∟ Unzip and place epubcheck-4.0.2/ in a directory on your path"
         when :inkscape
           message  = "Inkscape (http://inkscape.org/)"
         else
