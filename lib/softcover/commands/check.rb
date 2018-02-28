@@ -63,7 +63,7 @@ module Softcover
         when :ghostscript
           message  = "GhostScript (should come with LaTeX)\n"
         when :convert
-          "ImageMagick (http://www.imagemagick.org/script/binary-releases.php)"
+          "ImageMagick (https://www.imagemagick.org/script/download.php)"
         when :node
           "NodeJS (http://nodejs.org/)"
         when :phantomjs
