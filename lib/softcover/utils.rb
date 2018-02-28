@@ -157,7 +157,7 @@ module Softcover::Utils
     # but we want to be able to output a LaTeX style file as well.
     # The inclusion of the ':css' symbol is necessary but doesn't actually
     # result in CSS being output unless the format is 'html'.
-    pygments = Pygments.send(:mentos, :css, [format.to_s, ''])
+    pygments = Pygments::Popen.new.send(:mentos, :css, [format.to_s, ''])
     add_highlight_class!(pygments) if format == :html
     File.open(File.join(path, "pygments.#{extension}"), 'w') do |f|
       f.write(pygments)

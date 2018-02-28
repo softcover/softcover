@@ -82,8 +82,9 @@ module Softcover
       rm(Dir.glob('*.toc'))
       rm(Dir.glob('*.out'))
       rm(Dir.glob('*.tmp.*'))
-      rm(Dir.glob(path('tmp/*')))
+      rm(Dir.glob(path('tmp/*.*')))
       rm('.highlight_cache')
+      rm('tmp/.highlight_cache')
     end
 
     # ===============================================
