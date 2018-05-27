@@ -337,10 +337,6 @@ body #book {
   margin-bottom: 0.3em;
 }
 
-#book .footnote-link {
-  margin-right: 0.05em;
-}
-
 #book a:visited.footnote-link {
   color: #002f72;
 }
