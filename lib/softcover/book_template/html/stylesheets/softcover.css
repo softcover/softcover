@@ -307,6 +307,7 @@ body #book {
 #book .footnotes {
   border-top: 1px solid black;
   margin-top: 5em;
+  padding-top: 1em;
   font-size: 90%;
 }
 
@@ -324,18 +325,6 @@ body #book {
   color: #002f72;
 }
 
-#book ol.footnotes a.arrow {
-  text-decoration: none !important;
-}
-
-#book ol.footnotes.nonumbers li {
-  list-style-type: none;
-}
-
-#book ul.footnotes.nonumbers li {
-  list-style-type: none;
-}
-
 #book .footnotes .header {
   padding-top: 1em;
   padding-bottom: 0.5em;
@@ -344,11 +333,15 @@ body #book {
   font-weight: bold;
 }
 
-#book a.arrow {
-  text-decoration: none !important;
+#book .footnote {
+  margin-bottom: 0.3em;
 }
 
-#book a:visited.arrow {
+#book .footnote-link {
+  margin-right: 0.05em;
+}
+
+#book a:visited.footnote-link {
   color: #002f72;
 }
 
