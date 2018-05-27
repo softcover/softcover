@@ -321,6 +321,10 @@ body #book {
   margin-right: 0px;
 }
 
+#book .footnote a {
+  text-decoration: underline;
+}
+
 #book sup.footnote a:visited {
   color: #002f72;
 }
@@ -334,7 +338,7 @@ body #book {
 }
 
 #book .footnote {
-  margin-bottom: 0.3em;
+  margin-bottom: 0.4em;
 }
 
 #book a:visited.footnote-link {
