@@ -44,6 +44,7 @@ module Softcover
          [:java,        'Java'],
          [:zip,         'zip'],
          [:epubcheck,   'EpubCheck'],
+         [:python2,     'Python 2']
         ]
       end
 
@@ -91,6 +92,8 @@ module Softcover
           message += "      ∟ Unzip and place epubcheck-4.0.2/ in a directory on your path"
         when :inkscape
           message  = "Inkscape (http://inkscape.org/)"
+        when :python2
+          message = "Configure your shell so that `python` runs Python 2"
         else
           raise "Unknown label #{label}"
         end
@@ -103,6 +106,7 @@ module Softcover
       # Simulate working for given time.
       # `softcover check` is more satisfying if it looks like it's doing work.
       def simulate_work(time)
+        return
         sleep time unless Softcover::test?
       end
 
