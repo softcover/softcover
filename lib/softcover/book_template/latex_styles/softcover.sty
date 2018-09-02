@@ -165,8 +165,8 @@
 \newunicodechar{↵}{\returnkey}
 \newunicodechar{⌫}{\delkey}
 \newunicodechar{␣}{\textvisiblespace}
-\newunicodechar{—}{---}
-\newunicodechar{–}{--}
+\newunicodechar{—}{\textemdash}
+\newunicodechar{–}{\textendash}
 \newunicodechar{™}{\texttrademark}
 \newunicodechar{©}{\copyright}
 \newunicodechar{®}{\textregistered}
@@ -190,6 +190,8 @@
 \newunicodechar{Ī}{\={I}}
 \newunicodechar{Ō}{\={O}}
 \newunicodechar{Ū}{\={U}}
+\newunicodechar{«}{\guillemotleft}
+\newunicodechar{»}{\guillemotright}
 
 \usepackage{latex_styles/language_customization}
 
@@ -204,6 +206,15 @@
     \let'\textquotesingle
     \let\PYZsq\textquotesingle}
 \endgroup
+
+% Add smallcaps
+\usepackage{fontspec}
+\setmainfont[ItalicFont     = Times Italic,
+             BoldFont       = Times Bold,
+             BoldItalicFont = Times Bold Italic,
+             SmallCapsFont=Bodoni 72 Smallcaps]
+            {Times}
+\setmonofont{Courier}
 
 % Include custom commands.
 \usepackage{latex_styles/custom}
