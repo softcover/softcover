@@ -24,7 +24,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'thor', '~> 0.18.1'
   gem.add_dependency 'activesupport', '~> 4.2.3'
   gem.add_dependency 'i18n', '~> 0.7.0'
-  gem.add_dependency 'rest-client', '~> 1.7.3'
+  gem.add_dependency 'rest-client', '~> 1.8.0'
   gem.add_dependency 'curb', '~> 0.8.5'
   gem.add_dependency 'ruby-progressbar', '~> 1.4.2'
   gem.add_dependency 'maruku', '~> 0.7.1'
