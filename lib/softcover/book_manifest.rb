@@ -290,7 +290,7 @@ class Softcover::BookManifest < OpenStruct
 
   # Returns chapters for the PDF.
   def pdf_chapter_names
-    chaps = chapters.reject { |chapter| chapter.slug.match(/frontmatter/) }.
+    chaps = chapters.reject { |chapter| chapter.slug == 'frontmatter' }.
                      collect(&:slug)
     frontmatter? ? frontmatter + chaps : chaps
   end
