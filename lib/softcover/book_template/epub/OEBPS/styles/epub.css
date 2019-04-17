@@ -23,6 +23,10 @@ body {
   padding-left: 2em;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  text-align: left;
+}
+
 .highlight pre {
   font-size: 80%;
   font-weight: bold;
