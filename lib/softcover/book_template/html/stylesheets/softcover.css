@@ -409,6 +409,10 @@ body #book {
   padding-top: 1.2em;
 }
 
+#book #table_of_contents li.chapter-star.backmatter-start{
+  padding-top: 1.2em;
+}
+
 #book #table_of_contents ul li {
   padding-left: 3.6em;
 }

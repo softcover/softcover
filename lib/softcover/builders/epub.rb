@@ -596,7 +596,13 @@ module Softcover
       end
 
       def chapter_name(n)
-        n == 0 ? language_labels["frontmatter"] : strip_html(chapters[n].menu_heading)
+        if n == 0
+          language_labels["frontmatter"]
+        elsif n == 99999
+          language_labels["backmatter"]
+        else
+          strip_html(chapters[n].menu_heading)
+        end
       end
 
       # Strip HTML elements from the given text.

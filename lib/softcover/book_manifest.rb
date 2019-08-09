@@ -58,7 +58,7 @@ class Softcover::BookManifest < OpenStruct
         footnote_node.remove
       end
       html = doc.inner_html
-      if chapter_number.zero? || article?
+      if chapter_number.zero? || article? || chapter_number == 99999
         html
       else
         "#{chapter_label(chapter_number)}: #{html}"
@@ -129,7 +129,9 @@ class Softcover::BookManifest < OpenStruct
       tex_filename = filename + '.tex'
       self.chapters = []
       self.frontmatter = []
+      self.backmatter = []
       base_contents = File.read(tex_filename)
+
       if base_contents.match(/frontmatter/)
         @frontmatter = true
         chapters.push Chapter.new(slug:  'frontmatter',
@@ -137,12 +139,25 @@ class Softcover::BookManifest < OpenStruct
                                   sections: nil,
                                   chapter_number: 0)
       end
+
+      if base_contents.match(/backmatter/)
+        @backmatter = true
+      end
+
       raw_frontmatter = remove_frontmatter(base_contents, frontmatter)
+      raw_backmatter = remove_backmatter(base_contents, backmatter)
+
       if frontmatter?
         self.frontmatter = chapter_includes(raw_frontmatter)
       else
         self.frontmatter = []
       end
+      if backmatter?
+        self.backmatter = chapter_includes(raw_backmatter)
+      else
+        self.backmatter = []
+      end
+
       chapter_includes(base_contents).each_with_index do |name, i|
         slug = File.basename(name, '.*')
         chapter_title_regex = /^\s*\\chapter{(.*)}/
@@ -172,6 +187,13 @@ class Softcover::BookManifest < OpenStruct
                                   title: chapter_title,
                                   sections: sections,
                                   chapter_number: i + 1)
+      end
+      
+      if backmatter?
+        chapters.push Chapter.new(slug:  'backmatter',
+                                  title: language_labels["backmatter"],
+                                  sections: nil,
+                                  chapter_number: 99999)
       end
     end
     write_master_latex_file(self)
@@ -243,9 +265,20 @@ class Softcover::BookManifest < OpenStruct
     $1
   end
 
+  # Removes backmatter
+  def remove_backmatter(base_contents, backmatter)
+    base_contents.gsub!(/\\backmatter(.*)\\end{document}/m, '')
+    $1
+  end
+
   # Returns true if the book has frontmatter.
   def frontmatter?
     @frontmatter
+  end
+
+  # Returns true if the book has a backmatter.
+  def backmatter?
+    @backmatter
   end
 
   # Returns the first full chapter.
@@ -290,9 +323,15 @@ class Softcover::BookManifest < OpenStruct
 
   # Returns chapters for the PDF.
   def pdf_chapter_names
-    chaps = chapters.reject { |chapter| chapter.slug == 'frontmatter' }.
+    chaps = chapters.reject { |chapter| chapter.slug == 'frontmatter' or chapter.slug == 'backmatter' }.
                      collect(&:slug)
-    frontmatter? ? frontmatter + chaps : chaps
+    if frontmatter
+      chaps = frontmatter + chaps
+    end
+    if backmatter
+      chaps = chaps + backmatter
+    end
+    chaps
   end
 
   # Returns the full chapter filenames for the PDF.
@@ -411,7 +450,8 @@ class Softcover::BookManifest < OpenStruct
 
     def verify_paths!
       chapter_file_paths do |chapter_path|
-        next if chapter_path =~ /frontmatter/
+        next if chapter_path =~ /(front|back)matter/
+
         unless File.exist?(chapter_path)
           $stderr.puts "ERROR -- document not built"
           $stderr.puts "Chapter file '#{chapter_path}'' not found"

@@ -98,6 +98,8 @@ module Softcover
       # unnecessary conversions.
       def polytex(chapter, markdown)
         File.write(chapter.cache_filename, digest(markdown))
+
+        puts chapter.cache_filename
         p = Polytexnic::Pipeline.new(markdown,
                                      source: :markdown,
                                      custom_commands: Softcover.custom_styles,
@@ -168,6 +170,7 @@ module Softcover
             node.remove
           end
         end
+
         xml.css('#book>div').each do |node|
           # Include the title page info.
           if node['id'] == 'title_page'
@@ -179,6 +182,9 @@ module Softcover
               current_chapter = manifest.chapters[chapter_number]
               node['data-chapter'] = current_chapter.slug
               chapter_number += 1
+            elsif id == 'backmatter' and manifest.chapters[-1].chapter_number == 99999
+              current_chapter = manifest.chapters[-1]
+              node['data-chapter'] = current_chapter.slug
             end
 
             reference_cache[node['data-tralics-id']] = current_chapter
