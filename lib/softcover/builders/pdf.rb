@@ -149,12 +149,11 @@ module Softcover
 
         # Copies the style file to ensure it's always fresh.
         def copy_polytexnic_sty(options)
-          # TODO: uncomment back, handle Linux fonts
-          # softcover_sty  = File.join(Softcover::Directories::STYLES,
-          #                            'softcover.sty')
-          # source_sty     = File.join(Softcover::Utils.template_dir(options), 
-          #                            softcover_sty)
-          # FileUtils.cp source_sty, softcover_sty
+          softcover_sty  = File.join(Softcover::Directories::STYLES,
+                                     'softcover.sty')
+          source_sty     = File.join(Softcover::Utils.template_dir(options), 
+                                     softcover_sty)
+          FileUtils.cp source_sty, softcover_sty
         end
     end
   end
