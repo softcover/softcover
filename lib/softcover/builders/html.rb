@@ -99,7 +99,6 @@ module Softcover
       def polytex(chapter, markdown)
         File.write(chapter.cache_filename, digest(markdown))
 
-        puts chapter.cache_filename
         p = Polytexnic::Pipeline.new(markdown,
                                      source: :markdown,
                                      custom_commands: Softcover.custom_styles,
