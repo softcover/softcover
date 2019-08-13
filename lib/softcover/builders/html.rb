@@ -182,7 +182,7 @@ module Softcover
               current_chapter = manifest.chapters[chapter_number]
               node['data-chapter'] = current_chapter.slug
               chapter_number += 1
-            elsif id == 'backmatter' and manifest.chapters[-1].chapter_number == 99999
+            elsif id == 'backmatter' && manifest.chapters[-1].chapter_number == 99999
               current_chapter = manifest.chapters[-1]
               node['data-chapter'] = current_chapter.slug
             end
@@ -217,7 +217,11 @@ module Softcover
               id = target['id']
               ref_chapter = if target['data-tralics-id'].nil?
                               # This branch is true for chapter-star.
-                              chapter
+                              if manifest.backmatter? && target['class'] =~ /backmatter/
+                                manifest.last_chapter
+                              else
+                                chapter
+                              end
                             else
                               ref_map[target['data-tralics-id']]
                             end

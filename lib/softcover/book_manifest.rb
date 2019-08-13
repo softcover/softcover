@@ -287,6 +287,11 @@ class Softcover::BookManifest < OpenStruct
     frontmatter? ? chapters[1] : chapters[0]
   end
 
+  # Returns the last chapter
+  def last_chapter
+    chapters[-1]
+  end
+
   # Returns true if converting Markdown source.
   def markdown?
     @source == :markdown || @source == :md
@@ -323,7 +328,7 @@ class Softcover::BookManifest < OpenStruct
 
   # Returns chapters for the PDF.
   def pdf_chapter_names
-    chaps = chapters.reject { |chapter| chapter.slug == 'frontmatter' or chapter.slug == 'backmatter' }.
+    chaps = chapters.reject { |chapter| chapter.slug == 'frontmatter' || chapter.slug == 'backmatter' }.
                      collect(&:slug)
     if frontmatter
       chaps = frontmatter + chaps

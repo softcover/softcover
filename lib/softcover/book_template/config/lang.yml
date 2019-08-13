@@ -11,4 +11,5 @@ listing: Listing
 equation: Equation
 eq: Eq
 frontmatter: Frontmatter
+backmatter: Backmatter
 contents: Contents
