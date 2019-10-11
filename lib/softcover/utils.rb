@@ -263,7 +263,7 @@ module Softcover::Utils
       version_4 = path('epubcheck-4.0.2/epubcheck.jar')
       first_path(version_4) || get_filename(:'epubcheck') || ""
     when :inkscape
-      default = '/Applications/Inkscape.app/Contents/MacOS/Inkscape'
+      default = '/Applications/Inkscape.app/Contents/Resources/bin/inkscape'
       filename_or_default(:inkscape, default)
     when :phantomjs
       phantomjs = get_filename(label)
