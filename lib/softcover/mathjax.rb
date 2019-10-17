@@ -5,6 +5,7 @@ module Softcover
     def self.config(options = {})
       chapter_number = if options[:chapter_number]
                          if (options[:chapter_number].zero? ||
+                             options[:chapter_number] == 99999 ||
                              Softcover::Utils.article?)
                              false
                            else
