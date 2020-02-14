@@ -31,6 +31,8 @@ module Softcover
           'img'  => %w{id class src alt},
           'em'   => %w{id class},
           'code' => %w{id class},
+          'section' => %w{id class},
+          'aside' => %w{id class},
           'blockquote' => %w{id class},
           'strong' => %w{id class},
           'table'   => %w{id class},
