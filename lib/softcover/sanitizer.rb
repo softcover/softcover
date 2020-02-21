@@ -14,7 +14,7 @@ module Softcover
       sanitize_options = {
         elements: %w{div span p a ul ol li h1 h2 h3 h4
                      pre em sup table tbody thead tr td img code strong
-                     blockquote small},
+                     blockquote small br section aside},
         remove_contents: %w{script},
         attributes: {
           'div' => %w{id class data-tralics-id data-number data-chapter},
@@ -31,7 +31,10 @@ module Softcover
           'img'  => %w{id class src alt},
           'em'   => %w{id class},
           'code' => %w{id class},
+          'section' => %w{id class},
+          'aside' => %w{id class},
           'blockquote' => %w{id class},
+          'br' => %w{id class},
           'strong' => %w{id class},
           'table'   => %w{id class},
           'tbody'   => %w{id class},

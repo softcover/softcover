@@ -25,3 +25,5 @@ pygments.sty
 .project_id
 spec/fixtures/md-book/log/tralics.log
 .ruby-*
+.idea
+.rakeTasks
