@@ -27,3 +27,4 @@ spec/fixtures/md-book/log/tralics.log
 .ruby-*
 .idea
 .rakeTasks
+vendor
