@@ -29,7 +29,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'ruby-progressbar', '~> 1.4.2'
   gem.add_dependency 'maruku', '~> 0.7.1'
   gem.add_dependency 'pygments.rb', '~> 1.2.1'
-  gem.add_dependency 'kramdown', '>= 1.14.0'
+  gem.add_dependency 'kramdown', '>= 1.6.0'
 
   gem.add_dependency 'sinatra', '~> 1.4.4'
   gem.add_dependency 'thin', '~> 1.6.1'
