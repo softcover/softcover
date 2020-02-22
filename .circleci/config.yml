@@ -11,9 +11,10 @@ jobs:
           name: install deps
           command: |-
               gem install -v 2.1.4 bundler
+              sudo apt-get update -qq
+              sudo apt-get install -qy cabextract
               wget http://ftp.de.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.6_all.deb
               sudo dpkg -i ttf-mscorefonts-installer_3.6_all.deb
-              sudo apt-get update -qq
               sudo apt-get install -qy --no-install-recommends texlive-full texlive-fonts-recommended
               sudo apt-get install -qq inkscape ghostscript
               sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh
