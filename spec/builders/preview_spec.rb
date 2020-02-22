@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+return if ENV['TRAVIS']
+
 describe Softcover::Builders::Preview do
 
   before(:all) do
