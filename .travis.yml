@@ -4,7 +4,7 @@ rvm:
 before_install:
   - gem install -v 2.1.4 bundler
   - sudo apt-get update -qq
-  - sudo apt-get install -qq texlive texlive-xetex texlive-fonts-extra texlive-latex-extra texlive-plain-extra
+  - sudo apt-get install -qy --no-install-recommends texlive-full texlive-fonts-recommended
   - sudo apt-get install -qq inkscape ghostscript
   - sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh
   - export PATH=$PATH:`echo ~`
