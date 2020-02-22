@@ -10,6 +10,6 @@ before_install:
   - export PATH=$PATH:`echo ~`
   - curl -O -L https://github.com/IDPF/epubcheck/releases/download/v4.0.2/epubcheck-4.0.2.zip && unzip epubcheck-4.0.2.zip -d ~
   - curl -o ~/kindlegen http://softcover-binaries.s3.amazonaws.com/kindlegen && chmod +x ~/kindlegen
-  - gem i softcover && softcover check
+  #  - gem i softcover && softcover check # NOTE: enable to troubleshoot tex, gs, calibre, epubcheck, kindlegen issus
 
 script: "bundle exec rspec -f d"

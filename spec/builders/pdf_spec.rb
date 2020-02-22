@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe Softcover::Builders::Pdf do
+  if ENV['CI']
+    before { skip }
+  end
 
   context "for a PolyTeX book" do
     before(:all) do
