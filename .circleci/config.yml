@@ -12,13 +12,13 @@ jobs:
           command: |-
               gem install -v 2.1.4 bundler
               sudo apt-get update -qq
-              sudo apt-get install -qq texlive texlive-xetex texlive-fonts-extra texlive-latex-extra texlive-plain-extra
+              sudo apt-get install -qq texlive texlive-xetex texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra texlive-plain-extra
               sudo apt-get install -qq inkscape ghostscript
               sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh
               export PATH=$PATH:`echo ~`
               curl -O -L https://github.com/IDPF/epubcheck/releases/download/v4.0.2/epubcheck-4.0.2.zip && unzip epubcheck-4.0.2.zip -d ~
               curl -o ~/kindlegen http://softcover-binaries.s3.amazonaws.com/kindlegen && chmod +x ~/kindlegen
-              gem i softcover && softcover check # NOTE: enable to troubleshoot tex, gs, calibre, epubcheck, kindlegen issus
+          # gem i softcover && softcover check # NOTE: enable to troubleshoot tex, gs, calibre, epubcheck, kindlegen issus
       - ruby/bundle-install
       - run:
           name: specs
