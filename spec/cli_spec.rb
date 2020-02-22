@@ -157,19 +157,19 @@ describe Softcover::CLI do
 
       it_should_behave_like "book"
     end
-  end
 
-  describe "Markdown books" do
+    describe "Markdown books" do
 
-    before(:all) do
-      remove_book
-      chdir_to_fixtures
-      silence { `softcover new book` }
-      chdir_to_book
+      before(:all) do
+        remove_book
+        chdir_to_fixtures
+        silence { `softcover new book` }
+        chdir_to_book
+      end
+      after(:all) { remove_book }
+
+      it_should_behave_like "book"
     end
-    after(:all) { remove_book }
-
-    it_should_behave_like "book"
   end
 
   describe "stubbed commands" do
