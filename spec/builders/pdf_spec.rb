@@ -1,6 +1,7 @@
 require 'spec_helper'
 
-return if ENV['CI']
+# NOTE: these specs hang on Travis
+# return if ENV['CI']
 
 describe Softcover::Builders::Pdf do
 
