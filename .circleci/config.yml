@@ -12,8 +12,7 @@ jobs:
           command: |-
               gem install -v 2.1.4 bundler
               sudo apt-get update -qq
-              echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections; sudo apt update && sudo apt -y install ttf-mscorefonts-installer
-              sudo apt-get install -qq texlive texlive-xetex texlive-latex-recommended texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra texlive-plain-extra
+              sudo apt-get install -qy --no-install-recommends texlive-full fonts-texgyre latexml xindy
               sudo apt-get install -qq inkscape ghostscript
               sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh
               echo 'export PATH=$PATH:`echo ~`' >> $BASH_ENV
