@@ -11,11 +11,9 @@ jobs:
           name: install deps
           command: |-
               gem install -v 2.1.4 bundler
-              echo "deb http://us-west-2.ec2.archive.ubuntu.com/ubuntu/ trusty multiverse
-              deb http://us-west-2.ec2.archive.ubuntu.com/ubuntu/ trusty-updates multiverse
-              deb http://us-west-2.ec2.archive.ubuntu.com/ubuntu/ trusty-backports main restricted universe multiverse" | sudo tee /etc/apt/sources.list.d/multiverse.list
+              wget http://ftp.de.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.6_all.deb
+              sudo dpkg -i ttf-mscorefonts-installer_3.6_all.deb
               sudo apt-get update -qq
-              sudo apt-get install -qy ttf-mscorefonts-installer
               sudo apt-get install -qy --no-install-recommends texlive-full texlive-fonts-recommended
               sudo apt-get install -qq inkscape ghostscript
               sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh
