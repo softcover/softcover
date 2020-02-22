@@ -4,7 +4,7 @@ rvm:
 before_install:
   - gem install -v 2.1.4 bundler
   - sudo apt-get update -qq
-  - sudo apt-get install -qy cabextract
+  - sudo apt-get install -qy cabextract xfonts-utils
   - wget http://ftp.de.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.6_all.deb
   - sudo dpkg -i ttf-mscorefonts-installer_3.6_all.deb
   - sudo apt-get install -qy --no-install-recommends texlive-full texlive-fonts-recommended
