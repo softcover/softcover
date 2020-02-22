@@ -2,7 +2,7 @@ rvm:
   - "2.6.1"
 
 before_install:
-  - gem install -v 2.1.4 bundler --no-rdoc --no-ri
+  - gem install -v 2.1.4 bundler
   - sudo apt-get update -qq
   - sudo apt-get install -qq texlive texlive-xetex texlive-latex-extra
   - sudo apt-get install -qq inkscape
