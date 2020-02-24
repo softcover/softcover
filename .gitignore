@@ -3,7 +3,6 @@
 .bundle
 .config
 .yardoc
-Gemfile.lock
 InstalledFiles
 _yardoc
 coverage
@@ -25,3 +24,6 @@ pygments.sty
 .project_id
 spec/fixtures/md-book/log/tralics.log
 .ruby-*
+.idea
+.rakeTasks
+vendor

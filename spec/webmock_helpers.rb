@@ -9,9 +9,9 @@ module WebmockHelpers
 
   def headers(with_content_length=true)
     hash = { 'Accept'=>'application/json',
-      'Accept-Encoding'=>'gzip, deflate',
+      'Accept-Encoding'=>/.+/,
       'Content-Type'=>'application/json',
-      'User-Agent'=>'Ruby'
+      'User-Agent'=>/.+/
     }
     hash['Content-Length'] = /.+/ if with_content_length
     hash
@@ -19,14 +19,14 @@ module WebmockHelpers
 
   def stub_valid_login(email, pass, api_key=TEST_API_KEY)
     stub_request(:post, "#{api_base_url}/login").
-      with(:body => { "email" => email, "password" => pass },
+      with(:body => { "email" => email, "password" => pass }.to_json,
            :headers => headers ).
       to_return(:status => 200, :body => {api_key: api_key}.to_json)
   end
 
   def stub_invalid_login(email, pass)
     stub_request(:post, "#{api_base_url}/login").
-      with(:body => { "email" => email, "password" => pass },
+      with(:body => { "email" => email, "password" => pass }.to_json,
            :headers => headers ).
       to_return(:status => 422, body: '')
   end
