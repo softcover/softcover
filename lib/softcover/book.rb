@@ -80,6 +80,7 @@ class Softcover::Book
 
   # Opens the book in the browser (OS X & Linux).
   def open_in_browser
+    puts url
     `#{open} #{url}`
   end
 
