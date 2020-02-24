@@ -7,7 +7,7 @@ before_install:
   - sudo apt-get install -qy cabextract xfonts-utils
   - wget http://ftp.de.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.6_all.deb
   - sudo dpkg -i ttf-mscorefonts-installer_3.6_all.deb
-  - sudo apt-get install -qy --no-install-recommends texlive-full texlive-fonts-recommended texlive-latex-extra texlive-fonts-extra
+  - sudo apt-get install -qy --no-install-recommends texlive-full texlive-fonts-recommended texlive-latex-extra texlive-fonts-extra fonts-gfs-bodoni-classic
   - sudo apt-get install -qq inkscape ghostscript
   - sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh
   - export PATH=$PATH:`echo ~`
