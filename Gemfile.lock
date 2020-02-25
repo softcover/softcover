@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    softcover (1.5.12)
+    softcover (1.5.11)
       activesupport (~> 4.2.3)
       async_sinatra (~> 1.1.0)
       coffee-script (>= 2.2.0)
