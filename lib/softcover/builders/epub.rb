@@ -366,7 +366,7 @@ module Softcover
               silence { silence_stream(STDERR) { system cmd } }
             else
               puts cmd
-              system cmd
+              silence_stream(STDERR) { system cmd }
             end
           end
           rm svg_filename
