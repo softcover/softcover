@@ -229,8 +229,9 @@ module Softcover
         texmath_dir = File.join(images_dir, 'texmath')
         mkdir images_dir
         mkdir texmath_dir
-
-        File.write(path("epub/OEBPS/#{cover_filename}"), cover_page) if cover?(options)
+        if cover?(options)
+          File.write(path("epub/OEBPS/#{cover_filename}"), cover_page)
+        end
 
         pngs = []
         chapters.each_with_index do |chapter, i|
@@ -314,7 +315,7 @@ module Softcover
           # Workaround for bug in Inkscape 0.91 on MacOS X:
           # extract height/width from svg attributes and move them to style attr
           svg_height = svg['height']  # in ex
-          svg_width = svg['width']    # in ex
+          svg_width  = svg['width']   # in ex
           svg['style'] += ' height:'+svg_height+';' + ' width:'+svg_width+';'
           svg.remove_attribute('height')
           svg.remove_attribute('width')
@@ -323,25 +324,26 @@ module Softcover
           first_child.replace(svg) unless svg == first_child
           output = svg.to_xhtml
           svg_filename = File.join(texmath_dir, "#{digest(output)}.svg")
-          svg_abspath = File.join("#{Dir.pwd}", svg_filename)
+          svg_abspath  = File.join("#{Dir.pwd}", svg_filename)
           File.write(svg_filename, output)
           # Convert to PNG named:
           png_filename = svg_filename.sub('.svg', '.png')
-          png_abspath = svg_abspath.sub('.svg', '.png')
+          png_abspath  = svg_abspath.sub('.svg', '.png')
           pngs << png_filename
           #
           # Settings for texmath images in ePub / mobi
           ex2em_height_scaling = 0.51     # =1ex/1em for math png height
           ex2em_valign_scaling = 0.481482 # =1ex/1em for math png vertical-align
-          ex2pt_scale_factor = 15         # =1ex/1pt scaling for SVG-->PNG conv.
+          ex2px_scale_factor   = 20       # =1ex/1px scaling for SVG-->PNG conv.
           # These are used a three-step process below: Compute, Convert, Replace
-          # STEP1: compute height and vertical-align in `em` units
+          # STEP1: compute height and vertical-align in `ex` units
           svg_height_in_ex = Float(svg_height.gsub('ex',''))
           # MathJax sets SVG height in `ex` units but we want `em` units for PNG
           png_height = (svg_height_in_ex * ex2em_height_scaling).to_s + 'em'
           # Extract vertical-align css proprty for inline math equations:
           if svg.parent.parent.attr('class') == "inline_math"
-            vertical_align = svg['style'].scan(/vertical-align: (.*?);/).flatten.first
+            vertical_align = svg['style'].scan(/vertical-align: (.*?);/)
+            vertical_align = vertical_align.flatten.first
             if vertical_align
               valign_in_ex = Float(vertical_align.gsub('ex',''))
               png_valign = (valign_in_ex * ex2em_valign_scaling).to_s + 'em'
@@ -353,24 +355,27 @@ module Softcover
           end
           # STEP2: Generate PNG from each SVG (unless PNG exists already).
           unless File.exist?(png_filename)
-            h = ex2pt_scale_factor * svg_height_in_ex       # = PNG height in pt
             unless options[:silent] || options[:quiet]
               puts "Creating #{png_filename}"
             end
-            # generate png from the MathJax_SVG using inkscape
-            cmd = "#{inkscape} -f #{svg_abspath} -e #{png_abspath} -h #{h}pt"
+            # Generate png from the MathJax_SVG using Inkscape
+            # Use the -d option to get a sensible size:
+            #   Resolution for bitmaps and rasterized filters
+            cmd = "#{inkscape} #{svg_abspath} -o #{png_abspath} -d 2"
             if options[:silent]
               silence { silence_stream(STDERR) { system cmd } }
             else
-              silence_stream(STDERR) { system cmd }
+              puts cmd
+              system cmd
             end
           end
           rm svg_filename
           # STEP 3: Replace svg element with an equivalent png.
           png = Nokogiri::XML::Node.new('img', source)
-          png['src']    = File.join('images', 'texmath', File.basename(png_filename))
-          png['alt']    = png_filename.sub('.png', '')
-          png['style']  = 'height:' + png_height + ';'
+          png['src']   = File.join('images', 'texmath',
+                                   File.basename(png_filename))
+          png['alt']   = png_filename.sub('.png', '')
+          png['style'] = 'height:' + png_height + ';'
           if png_valign
             png['style'] += ' vertical-align:' + png_valign + ';'
           end
