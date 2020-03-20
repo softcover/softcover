@@ -20,10 +20,8 @@ jobs:
               sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh
               echo 'export PATH=$PATH:`echo ~`' >> $BASH_ENV
               curl -O -L https://github.com/IDPF/epubcheck/releases/download/v4.0.2/epubcheck-4.0.2.zip && unzip epubcheck-4.0.2.zip -d ~
-              curl -o ~/kindlegen http://softcover-binaries.s3.amazonaws.com/kindlegen && chmod +x ~/kindlegen
-              wget https://softcover-static.s3.amazonaws.com/Bodoni%2072%20Smallcaps%20Book.ttf && sudo cp 'Bodoni 72 Smallcaps Book.ttf' /usr/share/fonts/truetype/bodoni-classic
               sudo fc-cache -fsv
-          # gem i softcover && softcover check # NOTE: enable to troubleshoot tex, gs, calibre, epubcheck, kindlegen issus
+          # gem i softcover && softcover check # NOTE: enable to troubleshoot tex, gs, calibre, epubcheck, issus
       - ruby/bundle-install
       - run:
           name: specs

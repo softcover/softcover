@@ -43,7 +43,6 @@ describe Softcover::CLI do
     subject { `softcover help build:mobi` }
     it { should include '-q, [--quiet]' }
     it { should include '-s, [--silent]' }
-    it { should include '-k, [--kindlegen]' }
     it { should include '-a, [--amazon]' }
   end
 
@@ -139,7 +138,6 @@ describe Softcover::CLI do
       context "command-line options" do
         subject(:options) { `softcover help build:mobi` }
         it { should_not include 'calibre' }
-        it { should     include 'kindlegen' }
       end
     end
   end

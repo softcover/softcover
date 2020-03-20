@@ -37,24 +37,6 @@ describe Softcover::Builders::Mobi do
         end
       end
 
-      context "kindlegen" do
-        let(:command) do
-          @builder.mobi_command(@builder.mobi_filename, kindlegen: true)
-        end
-        it "should use Amazon.com's kindlegen" do
-          expect(command).to include 'kindlegen'
-        end
-      end
-
-      context "amazon" do
-        let(:command) do
-          @builder.mobi_command(@builder.mobi_filename, amazon: true)
-        end
-        it "should use Amazon.com's kindlegen" do
-          expect(command).to include 'kindlegen'
-        end
-      end
-
       context "preview" do
         let(:filename) do
           @builder.mobi_filename(preview: true)

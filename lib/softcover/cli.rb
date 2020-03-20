@@ -45,9 +45,6 @@ module Softcover
                                 desc: "Run PDF generator in nonstopmode",
                                 type: :boolean
       elsif format == 'mobi'
-        method_option :kindlegen, aliases: '-k',
-                                  desc: "Use KindleGen to build the MOBI",
-                                  type: :boolean
         method_option :amazon, aliases: '-a',
                                desc: "Build for Amazon KDP", type: :boolean
       end

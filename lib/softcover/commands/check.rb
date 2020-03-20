@@ -40,7 +40,6 @@ module Softcover
          [:phantomjs,   'PhantomJS'],
          [:inkscape,    'Inkscape'],
          [:calibre,     'Calibre'],
-         [:kindlegen,   'KindleGen'],
          [:java,        'Java'],
          [:zip,         'zip'],
          [:epubcheck,   'EpubCheck'],
@@ -70,11 +69,6 @@ module Softcover
         when :phantomjs
           message = "PhantomJS (https://phantomjs.org/download.html)\n"
           message += "      ∟ Put bin/phantomjs version 2 somewhere on your path,"
-          message += " e.g., in /usr/local/bin"
-        when :kindlegen
-          url = 'https://www.amazon.com/gp/feature.html?ie=UTF8&docId=1000765211'
-          message = "KindleGen (#{url})\n"
-          message += "      ∟ Put the kindlegen executable on your path,"
           message += " e.g., in /usr/local/bin"
         when :calibre
           url = 'https://calibre-ebook.com/'

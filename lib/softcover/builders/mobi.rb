@@ -24,12 +24,8 @@ module Softcover
       # Returns the command for making a MOBI, based on the options.
       def mobi_command(filename, options={})
         silent = options[:silent] || Softcover.test?
-        if options[:kindlegen] || options[:amazon]
-          cmd = "#{kindlegen} ebooks/#{filename}.epub"
-        else
-          cmd = "#{calibre} ebooks/#{filename}.epub ebooks/#{filename}.mobi" +
-                " #{calibre_options}"
-        end
+        cmd = "#{calibre} ebooks/#{filename}.epub ebooks/#{filename}.mobi" +
+              " #{calibre_options}"
         puts cmd unless (options[:quiet] || silent)
         cmd
       end
@@ -56,10 +52,6 @@ module Softcover
             opts << "--share-not-sync"
           end
           opts.join(" ")
-        end
-
-        def kindlegen
-          @kindlegen ||= executable(dependency_filename(:kindlegen))
         end
     end
   end
