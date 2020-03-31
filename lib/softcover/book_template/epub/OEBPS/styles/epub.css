@@ -57,6 +57,19 @@ p {
   padding: 0;
   text-indent: 0.95em;
 }
+/* No indentation in first paragraph of chapters or sections */
+div.chapter > p:first-of-type {
+  text-indent: 0;
+}
+div.section > p:first-of-type {
+  text-indent: 0;
+}
+div.chapter-star > p:first-of-type {
+  text-indent: 0;
+}
+div.section-star > p:first-of-type {
+  text-indent: 0;
+}
 
 p.noindent {
   text-indent: 0;
