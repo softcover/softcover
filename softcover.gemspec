@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
-  gem.add_dependency 'polytexnic', '~> 1.5.15'
+  gem.add_dependency 'polytexnic', '~> 1.5.16'
   gem.add_dependency 'msgpack', '~> 1.2.0'
   gem.add_dependency 'nokogiri', '>= 1.6.0', '< 2.0'
   gem.add_dependency 'thor', '>= 0.18.1', '< 2.0'
@@ -26,7 +26,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'i18n', '>= 0.7.0'
   gem.add_dependency 'rest-client', '>= 1.8.0'
   gem.add_dependency 'curb', '>= 0.9.7'
-  gem.add_dependency 'ruby-progressbar', '~> 1.4.2'
+  gem.add_dependency 'ruby-progressbar', '~> 1.10'
   gem.add_dependency 'maruku', '~> 0.7.1'
   gem.add_dependency 'pygments.rb', '~> 1.2.1'
   gem.add_dependency 'kramdown', '>= 1.6.0'
