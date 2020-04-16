@@ -275,7 +275,7 @@ module Softcover::Utils
         ""
       end
     when :python2
-      python = get_filename(:python)
+      python = get_filename(:python2)
       # Python 2 stupidly outputs the version number to STDERR instead of STDOUT.
       require 'open3'
       stdout, stderr, status = Open3.capture3("#{python} --version")
