@@ -260,7 +260,7 @@ module Softcover::Utils
       get_filename(:'ebook-convert')
     when :epubcheck
       # Finds EpubCheck anywhere on the path.
-      version_4 = path('epubcheck-4.0.2/epubcheck.jar')
+      version_4 = path('epubcheck-4.2.2/epubcheck.jar')
       first_path(version_4) || get_filename(:'epubcheck') || ""
     when :inkscape
       default = '/Applications/Inkscape.app/Contents/MacOS/inkscape'

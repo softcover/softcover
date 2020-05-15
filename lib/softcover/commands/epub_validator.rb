@@ -10,7 +10,7 @@ module Softcover
         epub = path("ebooks/#{manifest.filename}.epub")
         if File.exist?(epub)
           puts "Validating EPUB..."
-          system("#{java} -jar #{epubcheck} #{epub}")
+          system("#{java} -jar #{epubcheck} --locale en -w #{epub}")
         else
           puts "File '#{epub}' not found"
           puts "Run 'softcover build:epub' to generate"
