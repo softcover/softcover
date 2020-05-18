@@ -31,23 +31,8 @@ module Softcover
       def ensure_style_file_locations
         styles_dir = Softcover::Directories::STYLES
         mkdir styles_dir
-        fix_custom_include
         files = Dir.glob('*.sty')
         FileUtils.mv(files, styles_dir)
-      end
-
-      # Fixes the custom include.
-      # The template includes the custom style file as an example
-      # of file inclusion. Unfortunately, the location of 'custom.sty', has
-      # changed, which will result in older templates spontaneously breaking.
-      def fix_custom_include
-        first_chapter = File.join('chapters', 'a_chapter.tex')
-        if File.exist?(first_chapter)
-          text = File.read(first_chapter)
-          text.gsub!('<<(custom.sty',
-                     "<<(#{Softcover::Directories::STYLES}/custom.sty" )
-          File.write(first_chapter, text)
-        end
       end
 
       # Writes out the PolyTeXnic commands from polytexnic.

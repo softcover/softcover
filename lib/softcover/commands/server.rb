@@ -11,16 +11,14 @@ module Softcover::Commands::Server
     return if defined?(@no_listener) && @no_listener
     server_pid = Process.pid
     filter_regex = /(\.md|\.tex|custom\.sty|custom\.css|Book\.txt|book\.yml)$/
-    @listener = Listen.to('.')
-    @listener.filter(filter_regex)
-
-    @listener.change do |modified|
+    @listener = Listen.to('.', only: filter_regex, ignore: /html\//) do |modified|
       first_modified = modified.try(:first)
       unless first_modified =~ ignore_regex
         rebuild first_modified
         Process.kill("HUP", server_pid)
       end
     end
+
     @listener.start
   end
 
@@ -63,5 +61,17 @@ module Softcover::Commands::Server
     rebuild
     listen_for_changes
     start_server port, bind
+  end
+end
+
+# Listen >=2.8 patch to silence duplicate directory errors. USE AT YOUR OWN RISK
+require 'listen/record/symlink_detector'
+module Listen
+  class Record
+    class SymlinkDetector
+      def _fail(_, _)
+        fail Error, "Don't watch locally-symlinked directory twice"
+      end
+    end
   end
 end

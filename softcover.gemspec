@@ -36,7 +36,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'async_sinatra', '~> 1.1.0'
   gem.add_dependency 'sinatra-respond_to', '~> 0.9.0'
   gem.add_dependency 'coffee-script', '>= 2.2.0'
-  gem.add_dependency 'listen', '~> 1.3.1'
-  gem.add_dependency 'rb-fsevent', '~> 0.9.3'
+  gem.add_dependency 'listen', '~> 3.2.1'
   gem.add_dependency 'sanitize', '~> 4.6.3'
 end
