@@ -19,10 +19,11 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency 'polytexnic', '~> 1.5.16'
+  gem.add_dependency 'softcover-sanitizer', '~> 0.1'
   gem.add_dependency 'msgpack', '~> 1.2.0'
   gem.add_dependency 'nokogiri', '>= 1.6.0', '< 2.0'
   gem.add_dependency 'thor', '>= 0.18.1', '< 2.0'
-  gem.add_dependency 'activesupport', '~> 4.2.3'
+  gem.add_dependency 'activesupport', '~> 5'
   gem.add_dependency 'i18n', '>= 0.7.0'
   gem.add_dependency 'rest-client', '>= 1.8.0'
   gem.add_dependency 'curb', '>= 0.9.7'
