@@ -48,7 +48,7 @@ describe Softcover::CLI do
 
   context "softcover new options" do
     subject { `softcover help new` }
-    it { should include '-p, [--polytex]' }
+    it { should include '-p, --latex, -l, [--polytex]' }
     it { should include '-a, [--article]' }
   end
 
@@ -148,6 +148,19 @@ describe Softcover::CLI do
       remove_book
       chdir_to_fixtures
       silence { `softcover new book --polytex` }
+      chdir_to_book
+    end
+    after(:all) { remove_book }
+
+    it_should_behave_like "book"
+  end
+
+  describe "LaTeX books" do
+
+    before(:all) do
+      remove_book
+      chdir_to_fixtures
+      silence { `softcover new book --latex` }
       chdir_to_book
     end
     after(:all) { remove_book }

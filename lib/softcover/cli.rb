@@ -205,8 +205,8 @@ module Softcover
     method_option :polytex,
                   :type => :boolean,
                   :default => false,
-                  :aliases => "-p",
-                  :desc => "Generate a PolyTeX document."
+                  :aliases => %w[-p --latex -l],
+                  :desc => "Generate a LaTeX document."
     method_option :article,
                   :type => :boolean,
                   :default => false,
