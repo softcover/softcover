@@ -267,7 +267,7 @@ module Softcover
     # ===============================================
     # Utilities
     # ===============================================
-    desc "exercises", "Add exercise id elements as spans (warning: files are overwritten)"
+    desc "exercises", "Add exercise id elements as spans"
     define_method "exercises" do
       Softcover::Commands::Exercises.add_to_chapters!
     end
