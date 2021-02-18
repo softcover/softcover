@@ -10,7 +10,8 @@ Gem::Specification.new do |gem|
   gem.email         = ["michael@softcover.io"]
   gem.description   = %q{Command-line interface for softcover.io}
   gem.summary       = %q{An ebook production system & sales and marketing platform for technical authors}
-  gem.homepage      = "http://manual.softcover.io/book"
+  gem.homepage      = "https://manual.softcover.io/book"
+  gem.source        = "https://github.com/softcover/softcover"
   gem.license       = "MIT"
 
   gem.files         = `git ls-files`.split($/)
