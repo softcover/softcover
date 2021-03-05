@@ -10,8 +10,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["michael@softcover.io"]
   gem.description   = %q{Command-line interface for softcover.io}
   gem.summary       = %q{An ebook production system & sales and marketing platform for technical authors}
-  gem.homepage      = "https://manual.softcover.io/book"
-  gem.source        = "https://github.com/softcover/softcover"
+  gem.homepage      = "https://github.com/softcover/softcover"
   gem.license       = "MIT"
 
   gem.files         = `git ls-files`.split($/)
@@ -19,7 +18,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
-  gem.add_dependency 'polytexnic', '~> 1.6.0'
+  gem.add_dependency 'polytexnic', '~> 1.6'
   gem.add_dependency 'msgpack', '~> 1.2.0'
   gem.add_dependency 'nokogiri', '>= 1.6.0', '< 2.0'
   gem.add_dependency 'thor', '>= 0.18.1', '< 2.0'
@@ -29,7 +28,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'curb', '>= 0.9.7'
   gem.add_dependency 'ruby-progressbar', '~> 1.10'
   gem.add_dependency 'maruku', '~> 0.7.1'
-  gem.add_dependency 'pygments.rb', '~> 1.2.1'
+  gem.add_dependency 'pygments.rb', '~> 2.1'
   gem.add_dependency 'kramdown', '>= 1.6.0'
 
   gem.add_dependency 'sinatra', '~> 1.4.4'

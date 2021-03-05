@@ -43,7 +43,7 @@ module Softcover
          [:java,        'Java'],
          [:zip,         'zip'],
          [:epubcheck,   'EpubCheck'],
-         [:python2,     'Python 2']
+         [:python3,     'Python 3']
         ]
       end
 
@@ -86,8 +86,8 @@ module Softcover
           message += "      ∟ Unzip and place epubcheck-4.2.2/ in a directory on your path"
         when :inkscape
           message  = "Inkscape (https://inkscape.org/)"
-        when :python2
-          message = "Configure your shell so that `python` runs Python 2"
+        when :python3
+          message = "Configure your shell so that `python3` runs Python 3"
         else
           raise "Unknown label #{label}"
         end

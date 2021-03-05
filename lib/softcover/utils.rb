@@ -274,12 +274,9 @@ module Softcover::Utils
       else
         ""
       end
-    when :python2
-      python = get_filename(:python2)
-      # Python 2 stupidly outputs the version number to STDERR instead of STDOUT.
-      require 'open3'
-      stdout, stderr, status = Open3.capture3("#{python} --version")
-      stderr.match(/Python 2/) ? python : ""
+    when :python3
+      python = get_filename(:python3)
+      `#{python} --version`.match(/Python 3\.*/) ? python : ""
     else
       get_filename(label)
     end

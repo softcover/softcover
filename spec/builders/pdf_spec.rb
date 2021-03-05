@@ -73,7 +73,7 @@ describe Softcover::Builders::Pdf do
 
       context "after removing Book.txt" do
         before { FileUtils.rm Softcover::BookManifest::TXT_PATH }
-        it "should still build the book" do
+        it "should still build the book (run ulimit -n 1024 if this fails)" do
           expect(Softcover::BookManifest::TXT_PATH).not_to exist
           expect { @builder.build! }.not_to raise_error
         end
