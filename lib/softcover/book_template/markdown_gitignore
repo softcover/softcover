@@ -17,6 +17,7 @@ html/*.xhtml
 
 # Generated EPUB files
 epub/OEBPS/*.html
+epub/OEBPS/*.xhtml
 epub/OEBPS/*.opf
 epub/OEBPS/*.ncx
 epub/OEBPS/images
