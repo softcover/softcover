@@ -33,16 +33,16 @@ module Softcover
       desc "build:#{format}", "Build #{format.upcase}"
       if format == 'pdf'
         method_option :debug, aliases: '-d',
-                              desc: "Run raw xelatex for debugging purposes",
+                              desc: "Run raw xelatex for debugging",
                               type: :boolean
         method_option :once, aliases: '-o',
-                             desc: "Run PDF generator once (no xref update)",
+                             desc: "Run generator once",
                              type: :boolean
         method_option :'find-overfull', aliases: '-f',
                                         desc: "Find overfull hboxes",
                                         type: :boolean
         method_option :nonstop, aliases: '-n',
-                                desc: "Run PDF generator in nonstopmode",
+                                desc: "Run generator in nonstopmode",
                                 type: :boolean
       elsif format == 'mobi'
         method_option :amazon, aliases: '-a',
