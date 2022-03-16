@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
-  gem.add_dependency 'polytexnic', '~> 1.7.1'
+  gem.add_dependency 'polytexnic', '~> 1.7.2'
   gem.add_dependency 'msgpack', '~> 1.2.0'
   gem.add_dependency 'nokogiri', '>= 1.6.0', '< 2.0'
   gem.add_dependency 'thor', '>= 0.18.1', '< 2.0'
@@ -36,6 +36,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'async_sinatra', '~> 1.1.0'
   gem.add_dependency 'sinatra-respond_to', '~> 0.9.0'
   gem.add_dependency 'coffee-script', '>= 2.2.0'
-  gem.add_dependency 'listen', '~> 3.2.1'
+  gem.add_dependency 'listen', '~> 3.7.1'
   gem.add_dependency 'sanitize', '>= 4.6.3', '< 5.3.0'
 end
