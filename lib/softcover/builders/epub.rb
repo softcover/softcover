@@ -273,6 +273,12 @@ module Softcover
         end
       end
 
+      # Escapes spaces in filename directories.
+      # E.g., "Mobile Directory" becomes "Mobile\ Directory".
+      def escape_spaces(name)
+        name.gsub(' ', '\ ')
+      end
+
       # Returns HTML for HTML source that includes math.
       # As a side-effect, html_with_math creates PNGs corresponding to any
       # math in the given source. The technique involves using PhantomJS to
@@ -285,7 +291,8 @@ module Softcover
         content = File.read(File.join("html",
                                       "#{chapter.slug}.#{html_extension}"))
         pagejs = "#{File.dirname(__FILE__)}/utils/page.js"
-        url = "file://#{Dir.pwd}/html/#{chapter.slug}.#{html_extension}"
+        dir = escape_spaces(Dir.pwd)
+        url = "file://" + dir + "/html/#{chapter.slug}.#{html_extension}"
         cmd = "#{phantomjs} #{pagejs} #{url}"
         silence { silence_stream(STDERR) { system cmd } }
         # Sometimes in tests the phantomjs_source.html file is missing.
