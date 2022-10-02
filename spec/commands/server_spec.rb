@@ -15,8 +15,9 @@ describe Softcover::Commands::Server do
 
     port = 5000
     bind = "localhost"
+    fmt  = "html"
 
-    subject.run port, bind
+    subject.run port, bind, fmt
 
     expect(Softcover::App.port).to eq port
     expect(Softcover::App.bind).to eq bind
