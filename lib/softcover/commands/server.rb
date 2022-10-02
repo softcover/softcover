@@ -46,7 +46,7 @@ module Softcover::Commands::Server
       builder = Softcover::Builders::Html.new
       builder.build
     elsif fmt == "pdf"
-      system "softcover build:pdf --once --nonstop"
+      system "softcover build:pdf --once --nonstop --quiet"
     else
       raise ArgumentError, "Unrecognized format #{fmt}"
     end
@@ -56,18 +56,20 @@ module Softcover::Commands::Server
     puts e.message
   end
 
-  def start_server(port, bind)
+  def start_server(port, bind, fmt)
     require 'softcover/server/app'
-    puts "Running Softcover server on http://#{bind}:#{port}"
-    Softcover::App.set :port, port
-    Softcover::App.set :bind, bind
+    if fmt == "html"
+      puts "Running Softcover server on http://#{bind}:#{port}"
+      Softcover::App.set :port, port
+      Softcover::App.set :bind, bind
+    end
     Softcover::App.run!
   end
 
   def run(port, bind, fmt)
     rebuild(fmt)
     listen_for_changes(fmt)
-    start_server port, bind
+    start_server port, bind, fmt
   end
 end
 
