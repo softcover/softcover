@@ -7,14 +7,14 @@ module Softcover::Commands::Server
   extend self
 
   # Listens for changes to the book's source files.
-  def listen_for_changes(fmt="html")
+  def listen_for_changes(fmt="html", overfull=false)
     return if defined?(@no_listener) && @no_listener
     server_pid = Process.pid
     filter_regex = /(\.md|\.tex|custom\.sty|custom\.css|Book\.txt|book\.yml)$/
     @listener = Listen.to('.', only: filter_regex, ignore: /html\//) do |modified|
       first_modified = modified.try(:first)
       unless first_modified =~ ignore_regex
-        rebuild(fmt, first_modified)
+        rebuild(fmt, modified: first_modified, overfull: overfull)
         Process.kill("HUP", server_pid)
       end
     end
@@ -37,7 +37,7 @@ module Softcover::Commands::Server
     !Dir.glob(path('chapters/*.md')).empty?
   end
 
-  def rebuild(fmt, modified=nil)
+  def rebuild(fmt, modified: nil, overfull: nil)
     printf modified ? "=> #{File.basename modified} changed, rebuilding... " :
                       'Building...'
     t = Time.now
@@ -46,7 +46,12 @@ module Softcover::Commands::Server
       builder = Softcover::Builders::Html.new
       builder.build
     elsif fmt == "pdf"
-      system "softcover build:pdf --once --nonstop --quiet"
+      if overfull
+        options = "--find-overfull"
+      else
+        options = "--once --nonstop --quiet"
+      end
+      system "softcover build:pdf #{options}"
     else
       raise ArgumentError, "Unrecognized format #{fmt}"
     end
@@ -66,9 +71,9 @@ module Softcover::Commands::Server
     Softcover::App.run!
   end
 
-  def run(port, bind, fmt)
-    rebuild(fmt)
-    listen_for_changes(fmt)
+  def run(port, bind, fmt, overfull)
+    rebuild(fmt, overfull: overfull)
+    listen_for_changes(fmt, overfull)
     start_server port, bind, fmt
   end
 end
