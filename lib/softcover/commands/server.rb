@@ -7,14 +7,14 @@ module Softcover::Commands::Server
   extend self
 
   # Listens for changes to the book's source files.
-  def listen_for_changes(fmt="html", overfull=false)
+  def listen_for_changes(is_pdf=false, overfull=false)
     return if defined?(@no_listener) && @no_listener
     server_pid = Process.pid
     filter_regex = /(\.md|\.tex|custom\.sty|custom\.css|Book\.txt|book\.yml)$/
     @listener = Listen.to('.', only: filter_regex, ignore: /html\//) do |modified|
       first_modified = modified.try(:first)
       unless first_modified =~ ignore_regex
-        rebuild(fmt, modified: first_modified, overfull: overfull)
+        rebuild(is_pdf, modified: first_modified, overfull: overfull)
         Process.kill("HUP", server_pid)
       end
     end
@@ -37,15 +37,12 @@ module Softcover::Commands::Server
     !Dir.glob(path('chapters/*.md')).empty?
   end
 
-  def rebuild(fmt, modified: nil, overfull: nil)
+  def rebuild(is_pdf, modified: nil, overfull: nil)
     printf modified ? "=> #{File.basename modified} changed, rebuilding... " :
                       'Building...'
     t = Time.now
 
-    if fmt == "html"
-      builder = Softcover::Builders::Html.new
-      builder.build
-    elsif fmt == "pdf"
+    if is_pdf
       if overfull
         options = "--find-overfull"
       else
@@ -53,7 +50,8 @@ module Softcover::Commands::Server
       end
       system "softcover build:pdf #{options}"
     else
-      raise ArgumentError, "Unrecognized format #{fmt}"
+      builder = Softcover::Builders::Html.new
+      builder.build
     end
     puts "Done. (#{(Time.now - t).round(2)}s)"
 
@@ -61,9 +59,9 @@ module Softcover::Commands::Server
     puts e.message
   end
 
-  def start_server(port, bind, fmt)
+  def start_server(port, bind, is_pdf)
     require 'softcover/server/app'
-    if fmt == "html"
+    unless is_pdf
       puts "Running Softcover server on http://#{bind}:#{port}"
       Softcover::App.set :port, port
       Softcover::App.set :bind, bind
@@ -71,10 +69,10 @@ module Softcover::Commands::Server
     Softcover::App.run!
   end
 
-  def run(port, bind, fmt, overfull)
-    rebuild(fmt, overfull: overfull)
-    listen_for_changes(fmt, overfull)
-    start_server port, bind, fmt
+  def run(port, bind, is_pdf, overfull)
+    rebuild(is_pdf, overfull: overfull)
+    listen_for_changes(is_pdf, overfull)
+    start_server port, bind, is_pdf
   end
 end
 

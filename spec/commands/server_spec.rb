@@ -15,10 +15,10 @@ describe Softcover::Commands::Server do
 
     port     = 5000
     bind     = "localhost"
-    fmt      = "html"
+    pdf      = false
     overfull = false
 
-    subject.run port, bind, fmt, overfull
+    subject.run port, bind, pdf, overfull
 
     expect(Softcover::App.port).to eq port
     expect(Softcover::App.bind).to eq bind
