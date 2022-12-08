@@ -79,9 +79,11 @@ GEM
     minitest (5.16.3)
     msgpack (1.2.10)
     netrc (0.11.0)
-    nokogiri (1.13.8-arm64-darwin)
+    nokogiri (1.13.10-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.13.8-x86_64-darwin)
+    nokogiri (1.13.10-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.13.10-x86_64-linux)
       racc (~> 1.4)
     nokogumbo (2.0.5)
       nokogiri (~> 1.8, >= 1.8.4)
@@ -96,7 +98,7 @@ GEM
       method_source (~> 1.0)
     public_suffix (5.0.0)
     pygments.rb (2.3.0)
-    racc (1.6.0)
+    racc (1.6.1)
     rack (1.6.13)
     rack-protection (1.5.5)
       rack
@@ -164,6 +166,7 @@ PLATFORMS
   arm64-darwin-21
   x86_64-darwin-19
   x86_64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   coveralls
