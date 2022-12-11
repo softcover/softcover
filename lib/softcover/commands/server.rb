@@ -61,9 +61,9 @@ module Softcover::Commands::Server
 
   def start_server(port, bind, is_pdf)
     require 'softcover/server/app'
+    Softcover::App.set :port, port
     unless is_pdf
       puts "Running Softcover server on http://#{bind}:#{port}"
-      Softcover::App.set :port, port
       Softcover::App.set :bind, bind
     end
     Softcover::App.run!
