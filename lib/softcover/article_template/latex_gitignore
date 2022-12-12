@@ -8,7 +8,6 @@ tmp/
 generated_polytex/
 
 .highlight_cache
-.softcover-book
 
 # Generated HTML files
 html/*.html
