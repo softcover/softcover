@@ -7,14 +7,14 @@ module Softcover::Commands::Server
   extend self
 
   # Listens for changes to the book's source files.
-  def listen_for_changes
+  def listen_for_changes(is_pdf=false, overfull=false)
     return if defined?(@no_listener) && @no_listener
     server_pid = Process.pid
     filter_regex = /(\.md|\.tex|custom\.sty|custom\.css|Book\.txt|book\.yml)$/
     @listener = Listen.to('.', only: filter_regex, ignore: /html\//) do |modified|
       first_modified = modified.try(:first)
       unless first_modified =~ ignore_regex
-        rebuild first_modified
+        rebuild(is_pdf, modified: first_modified, overfull: overfull)
         Process.kill("HUP", server_pid)
       end
     end
@@ -37,30 +37,42 @@ module Softcover::Commands::Server
     !Dir.glob(path('chapters/*.md')).empty?
   end
 
-  def rebuild(modified=nil)
+  def rebuild(is_pdf, modified: nil, overfull: nil)
     printf modified ? "=> #{File.basename modified} changed, rebuilding... " :
                       'Building...'
     t = Time.now
-    builder = Softcover::Builders::Html.new
-    builder.build
+
+    if is_pdf
+      if overfull
+        options = "--find-overfull"
+      else
+        options = "--once --nonstop --quiet"
+      end
+      system "softcover build:pdf #{options}"
+    else
+      builder = Softcover::Builders::Html.new
+      builder.build
+    end
     puts "Done. (#{(Time.now - t).round(2)}s)"
 
   rescue Softcover::BookManifest::NotFound => e
     puts e.message
   end
 
-  def start_server(port, bind)
+  def start_server(port, bind, is_pdf)
     require 'softcover/server/app'
-    puts "Running Softcover server on http://#{bind}:#{port}"
     Softcover::App.set :port, port
-    Softcover::App.set :bind, bind
+    unless is_pdf
+      puts "Running Softcover server on http://#{bind}:#{port}"
+      Softcover::App.set :bind, bind
+    end
     Softcover::App.run!
   end
 
-  def run(port, bind)
-    rebuild
-    listen_for_changes
-    start_server port, bind
+  def run(port, bind, is_pdf, overfull)
+    rebuild(is_pdf, overfull: overfull)
+    listen_for_changes(is_pdf, overfull)
+    start_server port, bind, is_pdf
   end
 end
 

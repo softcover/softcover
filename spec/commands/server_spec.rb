@@ -13,10 +13,12 @@ describe Softcover::Commands::Server do
   it '#run' do
     Softcover::App.should_receive :run!
 
-    port = 5000
-    bind = "localhost"
+    port     = 5000
+    bind     = "localhost"
+    pdf      = false
+    overfull = false
 
-    subject.run port, bind
+    subject.run port, bind, pdf, overfull
 
     expect(Softcover::App.port).to eq port
     expect(Softcover::App.bind).to eq bind

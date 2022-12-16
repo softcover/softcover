@@ -22,7 +22,7 @@ module Softcover
         		str += line
 
         		case line
-        		when %r{\\subsubsection{Exercises}}
+        		when %r{\\subsection{Exercises}}
         			in_exercise = true
         		when %r{\\end{enumerate}}
         			in_exercise = false

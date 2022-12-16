@@ -1,6 +1,6 @@
 # Softcover
 
-[![CircleCI](https://circleci.com/gh/softcover/softcover.svg?style=shield)](https://circleci.com/gh/softcover/softcover) [![Coverage Status](https://coveralls.io/repos/softcover/softcover/badge.svg)](https://coveralls.io/github/softcover/softcover)
+[![Coverage Status](https://coveralls.io/repos/softcover/softcover/badge.svg)](https://coveralls.io/github/softcover/softcover)
 
 Softcover is an ebook typesetting system for technical authors. This is the main gem, `softcover`, which depends on `polytexnic` to convert Markdown or PolyTeX input to HTML and LaTeX, and thence to EPUB, MOBI, and PDF. Authors can use Softcover to publish and optionally sell the resulting ebooks (as well as associated digital goods such as screencasts) on the [Softcover publishing platform](http://www.softcover.io/).
 
