@@ -16,7 +16,7 @@ PATH
       pygments.rb (~> 2.1)
       rest-client (>= 1.8.0)
       ruby-progressbar (~> 1.10)
-      sanitize (>= 4.6.3, < 5.3.0)
+      sanitize (>= 4.6.3, < 6.1.0)
       sinatra (~> 1.4.4)
       sinatra-respond_to (~> 0.9.0)
       thin (~> 1.6.1)
@@ -79,12 +79,12 @@ GEM
     minitest (5.16.3)
     msgpack (1.2.10)
     netrc (0.11.0)
-    nokogiri (1.13.10-arm64-darwin)
+    nokogiri (1.14.1-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.13.10-x86_64-darwin)
+    nokogiri (1.14.1-x86_64-darwin)
       racc (~> 1.4)
-    nokogumbo (2.0.5)
-      nokogiri (~> 1.8, >= 1.8.4)
+    nokogiri (1.14.1-x86_64-linux)
+      racc (~> 1.4)
     polytexnic (1.8.0)
       json (~> 2.3.0)
       kramdown (>= 2.0, < 3.0)
@@ -96,7 +96,7 @@ GEM
       method_source (~> 1.0)
     public_suffix (5.0.1)
     pygments.rb (2.3.1)
-    racc (1.6.1)
+    racc (1.6.2)
     rack (1.6.13)
     rack-protection (1.5.5)
       rack
@@ -123,10 +123,9 @@ GEM
     ruby-prof (1.4.3)
     ruby-progressbar (1.11.0)
     safe_yaml (1.0.4)
-    sanitize (5.2.3)
+    sanitize (6.0.1)
       crass (~> 1.0.2)
-      nokogiri (>= 1.8.0)
-      nokogumbo (~> 2.0)
+      nokogiri (>= 1.12.0)
     simplecov (0.16.1)
       docile (~> 1.1)
       json (>= 1.8, < 3)
@@ -164,6 +163,7 @@ PLATFORMS
   arm64-darwin-21
   x86_64-darwin-19
   x86_64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   coveralls
