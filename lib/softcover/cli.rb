@@ -103,7 +103,12 @@ module Softcover
     method_option :overfull, type: :boolean, default: false
     def server
       if Softcover::BookManifest::valid_directory?
-        Softcover::Commands::Server.run options[:port], options[:bind],
+        if options[:pdf]
+          port = 5000
+        else
+          port = options[:port]
+        end
+        Softcover::Commands::Server.run port, options[:bind],
                                         options[:pdf], options[:overfull]
       else
         puts 'Not in a valid book directory.'
