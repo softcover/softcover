@@ -97,16 +97,16 @@ module Softcover
     # ===============================================
 
     desc 'server', 'Run local server'
-    method_option :port, type: :numeric, default: 4000, aliases: '-p'
+    method_option :port, type: :numeric, aliases: '-p'
     method_option :bind, type: :string, default: '0.0.0.0', aliases: '-o'
     method_option :pdf, type: :boolean, default: false
     method_option :overfull, type: :boolean, default: false
     def server
       if Softcover::BookManifest::valid_directory?
         if options[:pdf]
-          port = 5000
+          port = options[:port] || 5000
         else
-          port = options[:port]
+          port = options[:port] || 4000
         end
         Softcover::Commands::Server.run port, options[:bind],
                                         options[:pdf], options[:overfull]
