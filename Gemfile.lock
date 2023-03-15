@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    softcover (1.8.0)
+    softcover (1.8.1)
       activesupport (= 4.2.11.3)
       async_sinatra (~> 1.1.0)
       coffee-script (>= 2.2.0)
@@ -98,7 +98,7 @@ GEM
     rack (1.6.13)
     rack-protection (1.5.5)
       rack
-    rack-test (2.0.2)
+    rack-test (2.1.0)
       rack (>= 1.3)
     rake (13.0.6)
     rb-fsevent (0.11.2)
