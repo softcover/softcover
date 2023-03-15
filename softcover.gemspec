@@ -20,9 +20,9 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'polytexnic', '~> 1.8.0'
   gem.add_dependency 'msgpack', '~> 1.2.0'
-  gem.add_dependency 'nokogiri', '>= 1.6.0', '< 2.0'
+  gem.add_dependency 'nokogiri', '>= 1.14.0', '< 2.0'
   gem.add_dependency 'thor', '>= 0.18.1', '< 2.0'
-  gem.add_dependency 'activesupport', '~> 4.2.3'
+  gem.add_dependency 'activesupport', '4.2.11.3'
   gem.add_dependency 'i18n', '>= 0.7.0'
   gem.add_dependency 'rest-client', '>= 1.8.0'
   gem.add_dependency 'curb', '>= 0.9.7'
@@ -37,5 +37,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'sinatra-respond_to', '~> 0.9.0'
   gem.add_dependency 'coffee-script', '>= 2.2.0'
   gem.add_dependency 'listen', '~> 3.7.1'
-  gem.add_dependency 'sanitize', '>= 4.6.3', '< 5.3.0'
+  gem.add_dependency 'sanitize', '~> 6.0.1'
 end
