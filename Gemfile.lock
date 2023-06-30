@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    softcover (1.8.1)
+    softcover (1.8.2)
       activesupport (= 4.2.11.3)
       async_sinatra (= 1.1.0)
       coffee-script (= 2.4.1)
@@ -80,6 +80,8 @@ GEM
     msgpack (1.2.10)
     netrc (0.11.0)
     nokogiri (1.15.2-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.15.2-x86_64-darwin)
       racc (~> 1.4)
     polytexnic (1.8.2)
       json (= 2.3.1)
