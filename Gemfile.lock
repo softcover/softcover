@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    softcover (1.8.2)
+    softcover (1.8.3)
       activesupport (= 4.2.11.3)
       async_sinatra (= 1.1.0)
       coffee-script (= 2.4.1)
@@ -30,7 +30,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
-    addressable (2.8.4)
+    addressable (2.8.5)
       public_suffix (>= 2.0.2, < 6.0)
     async_sinatra (1.1.0)
       rack (>= 1.4.1)
@@ -76,7 +76,7 @@ GEM
     mime-types (3.4.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2023.0218.1)
-    minitest (5.18.1)
+    minitest (5.19.0)
     msgpack (1.2.10)
     netrc (0.11.0)
     nokogiri (1.15.2-arm64-darwin)
@@ -92,7 +92,7 @@ GEM
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
-    public_suffix (5.0.1)
+    public_suffix (5.0.3)
     pygments.rb (2.3.1)
     racc (1.7.1)
     rack (1.6.13)
@@ -109,7 +109,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    rexml (3.2.5)
+    rexml (3.2.6)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
@@ -175,4 +175,4 @@ DEPENDENCIES
   webmock (~> 3)
 
 BUNDLED WITH
-   2.3.10
+   2.4.18
