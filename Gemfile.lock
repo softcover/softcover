@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    softcover (1.8.3)
+    softcover (1.9.0)
       activesupport (= 4.2.11.3)
       async_sinatra (= 1.1.0)
       coffee-script (= 2.4.1)
@@ -12,7 +12,7 @@ PATH
       maruku (= 0.7.3)
       msgpack (= 1.2.10)
       nokogiri (= 1.15.2)
-      polytexnic (= 1.8.2)
+      polytexnic (= 1.9.0)
       pygments.rb (= 2.3.1)
       rest-client (= 2.1.0)
       ruby-progressbar (= 1.13.0)
@@ -73,9 +73,9 @@ GEM
       rb-inotify (~> 0.9, >= 0.9.10)
     maruku (0.7.3)
     method_source (1.0.0)
-    mime-types (3.4.1)
+    mime-types (3.5.0)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2023.0218.1)
+    mime-types-data (3.2023.0808)
     minitest (5.19.0)
     msgpack (1.2.10)
     netrc (0.11.0)
@@ -83,7 +83,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.15.2-x86_64-darwin)
       racc (~> 1.4)
-    polytexnic (1.8.2)
+    polytexnic (1.9.0)
       json (= 2.3.1)
       kramdown (= 2.4.0)
       msgpack (= 1.2.10)
