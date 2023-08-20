@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
-  gem.add_dependency 'polytexnic', '1.9.0'
+  gem.add_dependency 'polytexnic', '~> 1.9'
   gem.add_dependency 'msgpack', '1.2.10'
   gem.add_dependency 'nokogiri', '1.15.2'
   gem.add_dependency 'thor', '1.2.2'
