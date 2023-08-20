@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    softcover (1.9.0)
+    softcover (1.9.1)
       activesupport (= 4.2.11.3)
       async_sinatra (= 1.1.0)
       coffee-script (= 2.4.1)
@@ -12,7 +12,7 @@ PATH
       maruku (= 0.7.3)
       msgpack (= 1.2.10)
       nokogiri (= 1.15.2)
-      polytexnic (= 1.9.0)
+      polytexnic (~> 1.9)
       pygments.rb (= 2.3.1)
       rest-client (= 2.1.0)
       ruby-progressbar (= 1.13.0)
@@ -83,7 +83,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.15.2-x86_64-darwin)
       racc (~> 1.4)
-    polytexnic (1.9.0)
+    polytexnic (1.9.1)
       json (= 2.3.1)
       kramdown (= 2.4.0)
       msgpack (= 1.2.10)
