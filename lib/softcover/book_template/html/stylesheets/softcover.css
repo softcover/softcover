@@ -476,3 +476,20 @@ body #book {
 #book span.intersentencespace {
   margin-right: 0.2em;
 }
+
+/* Proof environment. */
+/* The default content before and after ("Proof. " and "∎") can be overridden */
+/* in a user stylesheet. */
+.proof {
+  padding-bottom: 1em;
+  padding-top: 1em;
+}
+.proof p:first-child:before {
+  content: "Proof. ";
+  font-style: italic;
+  margin-right: 0.2em;
+}
+.proof p:last-child:after {
+  content: "∎";
+  float: right;
+}
