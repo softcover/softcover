@@ -149,9 +149,11 @@ module Softcover
 
         # Copies the style file to ensure it's always fresh.
         def copy_polytexnic_sty(options)
+          opts = options.dup
+          opts[:article] = true if article?
           softcover_sty  = File.join(Softcover::Directories::STYLES,
                                      'softcover.sty')
-          source_sty     = File.join(Softcover::Utils.template_dir(options), 
+          source_sty     = File.join(Softcover::Utils.template_dir(opts),
                                      softcover_sty)
           FileUtils.cp source_sty, softcover_sty
         end
