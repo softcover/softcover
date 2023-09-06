@@ -217,10 +217,26 @@
             {Times New Roman}
 \setmonofont{Courier}
 
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\theoremstyle{remark}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{claim}[theorem]{Claim}
+
 % Restore the default "theorem" theorem style.
 % This can still be overriden in custom style files
 % or in the main file.
-\theoremstyle{theorem}
+\theoremstyle{plain}
 
 % Include custom commands.
 \usepackage{latex_styles/custom}
