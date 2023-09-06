@@ -477,12 +477,46 @@ body #book {
   margin-right: 0.2em;
 }
 
-/* Proof environment. */
+/* Theorem and proof environments. */
+/* Theorems, lemmas, etc., are "plain" style. */
+/* Definitions, axioms, etc., are "definition" style. */
+/* Remarks and claims are "remark" style. */
+/* See http://www.ams.org/arc/tex/amscls/amsthdoc.pdf */
+/* Most but not all of the AMS types are supported by PolyTeXnic. */
+.plain, .definition, .remark {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+.plain .number, .definition .number, .remark .number {
+  font-style: normal;
+  margin-right: 0.1em;
+}
+.plain {
+  font-style: italic;
+}
+.number .theorem_description {
+  font-weight: normal;
+}
+/* Definitions are "definition" style, which basically means non-italic. */
+/* This is actually the default, but we include it here for completeness. */
+.definition {
+  font-style: normal;
+}
+/* The remark style involves an italic label and no boldface. */
+.remark {
+  font-style: normal;
+}
+.remark .number {
+  font-weight: normal;
+}
+.remark_label {
+  font-style: italic;
+}
 /* The default content before and after ("Proof. " and "∎") can be overridden */
 /* in a user stylesheet. */
 .proof {
-  padding-bottom: 1em;
-  padding-top: 1em;
+  padding-bottom: 0.5em;
+  padding-top: 0.5em;
 }
 .proof p:first-child:before {
   content: "Proof. ";
@@ -490,6 +524,7 @@ body #book {
   margin-right: 0.2em;
 }
 .proof p:last-child:after {
+  /* U+220E ∎ END OF PROOF */
   content: "∎";
   float: right;
 }
