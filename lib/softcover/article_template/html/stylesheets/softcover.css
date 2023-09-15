@@ -518,6 +518,9 @@ body #book {
   padding-bottom: 0.5em;
   padding-top: 0.5em;
 }
+.proof em.proof_label {
+  margin-right: 0.3em;
+}
 .proof p:last-child:after {
   /* U+220E ∎ END OF PROOF */
   content: "∎";
