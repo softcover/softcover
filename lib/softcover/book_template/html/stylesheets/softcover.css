@@ -518,11 +518,6 @@ body #book {
   padding-bottom: 0.5em;
   padding-top: 0.5em;
 }
-.proof p:first-child:before {
-  content: "Proof. ";
-  font-style: italic;
-  margin-right: 0.2em;
-}
 .proof p:last-child:after {
   /* U+220E ∎ END OF PROOF */
   content: "∎";
