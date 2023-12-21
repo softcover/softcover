@@ -23,7 +23,8 @@ jobs:
         sudo apt-get update -qq
         sudo apt-get install -qy cabextract
         wget http://ftp.de.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.7_all.deb
-        sudo dpkg -i ttf-mscorefonts-installer_3.7_all.deb
+        sudo dpkg -i ttf-mscorefonts-installer_3.7_all.deb || true
+        sudo apt-get install -f
         sudo apt-get install -qy --no-install-recommends texlive-full texlive-fonts-recommended texlive-latex-extra texlive-fonts-extra fonts-gfs-bodoni-classic
         sudo apt-get install -qq inkscape ghostscript
         sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh
