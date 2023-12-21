@@ -27,6 +27,7 @@ jobs:
         sudo apt-get install -f
         sudo apt-get install -qy --no-install-recommends texlive-full texlive-fonts-recommended texlive-latex-extra texlive-fonts-extra fonts-gfs-bodoni-classic
         sudo apt-get install -qq inkscape ghostscript
+        sudo apt-get install -y libopengl0
         sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh
         echo 'export PATH=$PATH:`echo ~`' >> $BASH_ENV
         curl -O -L https://github.com/IDPF/epubcheck/releases/download/v4.0.2/epubcheck-4.0.2.zip && unzip epubcheck-4.0.2.zip -d ~
