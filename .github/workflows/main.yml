@@ -1,0 +1,39 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.6.1
+
+    - name: Install bundler
+      run: gem install -v 2.1.4 bundler
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install -qy cabextract
+        wget http://ftp.de.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.6_all.deb
+        sudo dpkg -i ttf-mscorefonts-installer_3.6_all.deb
+        sudo apt-get install -qy --no-install-recommends texlive-full texlive-fonts-recommended texlive-latex-extra texlive-fonts-extra fonts-gfs-bodoni-classic
+        sudo apt-get install -qq inkscape ghostscript
+        sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh
+        echo 'export PATH=$PATH:`echo ~`' >> $BASH_ENV
+        curl -O -L https://github.com/IDPF/epubcheck/releases/download/v4.0.2/epubcheck-4.0.2.zip && unzip epubcheck-4.0.2.zip -d ~
+        sudo fc-cache -fsv
+
+    - name: Bundle install
+      run: bundle install
+
+    - name: Run tests
+      run: bundle exec rspec -f d
+
