@@ -5,7 +5,7 @@
    <fo:simple-page-master master-name="single_column">
 		<fo:region-body margin-bottom="3pt" margin-top="0.5em" margin-left="3pt" margin-right="3pt"/>
     </fo:simple-page-master>
-  
+
     <fo:simple-page-master master-name="single_column_head">
 		<fo:region-before extent="8.3em"/>
 		<fo:region-body margin-bottom="3pt" margin-top="6em" margin-left="3pt" margin-right="3pt"/>
