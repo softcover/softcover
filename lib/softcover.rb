@@ -1,4 +1,6 @@
 require 'polytexnic'
+require 'active_support'
+require 'active_support/core_ext/hash/keys'
 require 'active_support/core_ext/string'
 require 'tilt/coffee'
 require 'tilt/erb'

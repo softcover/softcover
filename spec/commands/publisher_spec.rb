@@ -14,7 +14,7 @@ describe Softcover::Commands::Publisher do
       end
 
       it "rejects the publish" do
-        expect(subject.publish!).to be_false
+        expect(subject.publish!).to be_falsy
       end
     end
 
@@ -26,7 +26,7 @@ describe Softcover::Commands::Publisher do
       end
 
       it "publishes" do
-        expect(subject.publish!(publish_options)).to be_true
+        expect(subject.publish!(publish_options)).to be_truthy
       end
     end
   end
@@ -38,7 +38,7 @@ describe Softcover::Commands::Publisher do
       end
 
       it "rejects the unpublish" do
-        expect(subject.unpublish!).to be_false
+        expect(subject.unpublish!).to be_falsy
       end
     end
 
@@ -52,12 +52,12 @@ describe Softcover::Commands::Publisher do
       end
 
       it "unpublishes" do
-        expect(subject.unpublish!).to be_true
+        expect(subject.unpublish!).to be_truthy
       end
 
       it "removes book config" do
         subject.unpublish!
-        expect(Softcover::BookConfig.exists?).to be_false
+        expect(Softcover::BookConfig.exists?).to be_falsy
       end
     end
 
@@ -72,7 +72,7 @@ describe Softcover::Commands::Publisher do
       end
 
       it "does not unpublish" do
-        expect(subject.unpublish!).to be_false
+        expect(subject.unpublish!).to be_falsy
       end
     end
 
@@ -89,7 +89,7 @@ describe Softcover::Commands::Publisher do
         before { stub_destroy_book_by_slug book }
 
         it "unpublishes" do
-          expect(subject.unpublish!(book.slug)).to be_true
+          expect(subject.unpublish!(book.slug)).to be_truthy
         end
       end
 
@@ -98,7 +98,7 @@ describe Softcover::Commands::Publisher do
         before { stub_destroy_book_by_invalid_slug slug }
 
         it "does not unpublish" do
-          expect(subject.unpublish!(slug)).to be_false
+          expect(subject.unpublish!(slug)).to be_falsy
         end
       end
     end

@@ -37,4 +37,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'coffee-script', '2.4.1'
   gem.add_dependency 'listen', '3.7.1'
   gem.add_dependency 'sanitize', '6.0.1'
+  gem.add_dependency 'base64', '0.2.0'
+  gem.add_dependency 'mutex_m', '0.3.0'
 end

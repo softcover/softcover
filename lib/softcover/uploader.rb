@@ -18,7 +18,7 @@ module Softcover
         bar = ProgressBar.create title:     "Starting Upload...",
                                  format:    "%t |%B| %P%% %e",
                                  total:     total_size,
-                                 smoothing: 0.75,
+                                 projector: { type: 'smoothing', strength: 0.75 },
                                  output:    Softcover::Output.stream
 
         upload_host = "http://#{@bucket}.s3.amazonaws.com"

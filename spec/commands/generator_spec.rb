@@ -18,11 +18,11 @@ describe Softcover::Commands::Generator do
 
     after(:all) do
       chdir_to_non_book
-      FileUtils.rm_rf name
+      FileUtils.rm_rf @name
     end
 
     it "should copy files" do
-      expect(Softcover::Commands::Generator.verify!).to be_true
+      expect(Softcover::Commands::Generator.verify!).to be_truthy
     end
 
     describe "book.yml" do

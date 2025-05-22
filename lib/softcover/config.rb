@@ -29,7 +29,7 @@ module Softcover
       end
 
       def exists?
-        File.exists?(file_path)
+        File.exist?(file_path)
       end
 
       protected
@@ -56,7 +56,7 @@ module Softcover
 
   class Config < BaseConfig
     def self.path
-      File.exists?(".softcover") ? ".softcover" : "~/.softcover"
+      File.exist?(".softcover") ? ".softcover" : "~/.softcover"
     end
   end
 end

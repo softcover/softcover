@@ -96,7 +96,7 @@ module Softcover::Commands::Publisher
     require "rest_client"
     require "softcover/client"
 
-    if slug.present?
+    if slug && slug.present?
       begin
         res = Softcover::Client.new.destroy_book_by_slug(slug)
         if res["errors"]

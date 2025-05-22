@@ -223,7 +223,7 @@ class Softcover::Book
     return if files.empty?
 
     manifest_path = File.join(path, "manifest.yml")
-    manifest = File.exists?(manifest_path) ? File.read(manifest_path) : nil
+    manifest = File.exist?(manifest_path) ? File.read(manifest_path) : nil
 
     res = @client.get_media_upload_params path, files, manifest, options
 

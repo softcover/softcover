@@ -38,7 +38,8 @@ module Softcover::Utils
 
   def logged_in?
     require 'softcover/config'
-    Softcover::Config['api_key'].present?
+    key = Softcover::Config['api_key']
+    key && key.present?
   end
 
   def html_extension

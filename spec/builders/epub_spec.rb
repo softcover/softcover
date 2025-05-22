@@ -137,13 +137,13 @@ describe Softcover::Builders::Epub do
 
       context "math? method" do
         it "should return true when there's math" do
-          expect(builder.math?('\(')).to be_true
-          expect(builder.math?('\[')).to be_true
-          expect(builder.math?('\begin{equation}')).to be_true
+          expect(builder.math?('\(')).to be_truthy
+          expect(builder.math?('\[')).to be_truthy
+          expect(builder.math?('\begin{equation}')).to be_truthy
         end
 
         it "should return false when there's no math" do
-          expect(builder.math?('foo')).to be_false
+          expect(builder.math?('foo')).to be_falsy
         end
       end
 
@@ -161,7 +161,7 @@ describe Softcover::Builders::Epub do
           expect(fragment).to exist
         end
         # Make sure at least one template file has math.
-        expect(has_math).to be_true
+        expect(has_math).to be_truthy
       end
 
       describe "cover file" do

@@ -84,7 +84,7 @@ describe Softcover::App do
       def expect_server_response_of_type(type)
         expect(last_response).to be_ok
         expect(last_response.content_type).to match type
-        expect(last_response.content_length > 0).to be_true
+        expect(last_response.content_length > 0).to be_truthy
       end
     end
   end
