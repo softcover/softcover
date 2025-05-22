@@ -31,7 +31,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'kramdown', '2.4.0'
 
   gem.add_dependency 'sinatra', '1.4.8'
-  gem.add_dependency 'thin', '1.6.4'
+  gem.add_dependency 'thin', '1.8.2'
   gem.add_dependency 'async_sinatra', '1.1.0'
   gem.add_dependency 'sinatra-respond_to', '0.9.0'
   gem.add_dependency 'coffee-script', '2.4.1'

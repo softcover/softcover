@@ -20,7 +20,7 @@ PATH
       sanitize (= 6.0.1)
       sinatra (= 1.4.8)
       sinatra-respond_to (= 0.9.0)
-      thin (= 1.6.4)
+      thin (= 1.8.2)
       thor (= 1.2.2)
 
 GEM
@@ -126,7 +126,8 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.3)
-    ruby-prof (1.7.1)
+    ruby-prof (1.7.2)
+      base64
     ruby-progressbar (1.13.0)
     safe_yaml (1.0.4)
     sanitize (6.0.1)
@@ -138,10 +139,10 @@ GEM
       tilt (>= 1.3, < 3)
     sinatra-respond_to (0.9.0)
       sinatra (~> 1.3)
-    thin (1.6.4)
+    thin (1.8.2)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0, >= 1.0.4)
-      rack (~> 1.0)
+      rack (>= 1, < 3)
     thor (1.2.2)
     thread_safe (0.3.6)
     tilt (2.6.0)
