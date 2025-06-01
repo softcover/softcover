@@ -26,8 +26,9 @@ describe Softcover::Output do
 
   it 'redirects output' do
     Softcover::Output.stream = $stderr
-    $stderr.should_receive(:puts).with('hello')
-    $stderr.should_receive(:print).twice.with('hello')
+    expect($stderr).to receive(:puts).with('hello')
+    expect($stderr).to receive(:print).twice.with('hello')
+    
 
     OutputTest.puts_hello
     OutputTest.print_hello
@@ -35,7 +36,7 @@ describe Softcover::Output do
   end
 
   it 'redirects system command output' do
-    Softcover::Output.stream.should_receive(:puts)
+    expect(Softcover::Output.stream).to receive(:puts)
     OutputTest.system_cmd
   end
 end

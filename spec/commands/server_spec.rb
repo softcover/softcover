@@ -11,7 +11,7 @@ describe Softcover::Commands::Server do
   end
 
   it '#run' do
-    Softcover::App.should_receive :run!
+    expect(Softcover::App).to receive(:run!)
 
     port     = 5000
     bind     = "localhost"

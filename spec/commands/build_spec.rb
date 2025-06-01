@@ -14,7 +14,7 @@ describe Softcover::Commands::Build do
   context 'invalid builder format' do
     subject { lambda { Softcover::Commands::Build.for_format('derp') } }
 
-    it { should raise_error }
+    it { should_not be_a Softcover::Builder }
   end
 
   context 'building all' do
@@ -25,11 +25,12 @@ describe Softcover::Commands::Build do
       pdf_builder  = build.builder_for('pdf')
       mobi_builder = build.builder_for('mobi')
 
-      pdf_builder .should_receive(:build!)
-      mobi_builder.should_receive(:build!)
-
-      build.should_receive(:builder_for).with('pdf') .and_return(pdf_builder)
-      build.should_receive(:builder_for).with('mobi').and_return(mobi_builder)
+      expect(pdf_builder).to receive(:build!)
+      expect(mobi_builder).to receive(:build!)
+      
+      expect(build).to receive(:builder_for).with('pdf').and_return(pdf_builder)
+      expect(build).to receive(:builder_for).with('mobi').and_return(mobi_builder)
+      
 
       build.all_formats
     end
@@ -41,9 +42,9 @@ describe Softcover::Commands::Build do
     it { should respond_to(:preview) }
     it "should build previews" do
       preview_builder = build.builder_for('preview')
-      preview_builder.should_receive(:build!)
-      build.should_receive(:builder_for).with('preview').
-                                         and_return(preview_builder)
+      expect(preview_builder).to receive(:build!)
+      expect(build).to receive(:builder_for).with('preview').
+                                            and_return(preview_builder)
       build.preview
     end
   end

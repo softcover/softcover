@@ -6,12 +6,12 @@ describe Softcover::Commands::Opener do
 
   it 'opens in browser' do
     opened = false
-    Softcover::Book.any_instance.stub(:open_in_browser) do
+    allow_any_instance_of(Softcover::Book).to receive(:open_in_browser) do
       opened = true
     end
 
     Softcover::Commands::Opener.open!
 
-    expect(opened).to be_true
+    expect(opened).to be_truthy
   end
 end

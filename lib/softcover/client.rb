@@ -101,7 +101,7 @@ module Softcover
       end
 
       def params_with_key(params)
-        @api_key.present? ? params.merge({api_key: @api_key}) : params
+        @api_key && @api_key.present? ? params.merge({api_key: @api_key}) : params
       end
 
       def formatted_headers(headers={})

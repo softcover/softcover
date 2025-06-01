@@ -27,7 +27,7 @@ describe Softcover::Commands::Check do
   describe "missing dependencies" do
     before do
       Softcover::Commands::Check.dependency_labels.each do |label|
-        Softcover::Commands::Check.stub(:present?).with(label).and_return(false)
+        allow(Softcover::Commands::Check).to receive(:present?).with(label).and_return(false)
       end
     end
 

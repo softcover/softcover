@@ -13,7 +13,7 @@ describe Softcover::Commands::EpubValidator do
     after(:all) { remove_book }
 
     subject { silence { Softcover::Commands::EpubValidator.validate! }  }
-    it { should be_true }
+    it { should be_truthy }
   end
 
   context 'epub file not exists' do

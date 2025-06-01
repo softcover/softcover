@@ -1,9 +1,10 @@
-require 'coveralls'
-Coveralls::Output.silent = !ENV['CI']
-Coveralls.wear!
+# require 'coveralls'
+# Coveralls::Output.silent = !ENV['CI']
+# Coveralls.wear!
 
 require 'rubygems'
 require 'bundler/setup'
+require 'rspec/its'
 require 'webmock/rspec'
 require 'webmock_helpers'
 require 'ostruct'
@@ -48,6 +49,10 @@ RSpec.configure do |config|
   end
 
   config.include WebmockHelpers
+
+  RSpec::Expectations.configuration.on_potential_false_positives = :nothing
+
+  config.raise_errors_for_deprecations!
 end
 
 TEST_API_KEY = 'asdfasdfasdfasdfasdf'

@@ -50,7 +50,7 @@ describe Softcover::BookManifest do
 
     context "with mixed Markdown & PolyTeX files" do
       before do
-        manifest.stub(:source_files).and_return(['foo.md', 'bar.tex'])
+        allow(manifest).to receive(:source_files).and_return(['foo.md', 'bar.tex'])
       end
 
       it "should have the right basenames" do

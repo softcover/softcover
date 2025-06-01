@@ -13,10 +13,11 @@ LC_ALL="en_US.UTF-8"
 gemspec
 
 group :test do
-  gem 'rspec', '2.14.1'
+  gem 'rspec', '3.13.0'
+  gem 'rspec-its', '~> 2.0'
   gem 'safe_yaml', '1.0.4'
   gem 'webmock', '~> 3',  require: false
-  gem 'coveralls', require: false
+  # gem 'coveralls', require: false
   gem 'rack-test'
   gem 'ruby-prof'
   gem 'pry'

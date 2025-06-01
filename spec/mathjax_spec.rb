@@ -21,7 +21,7 @@ describe Softcover::Mathjax do
 
     context "with a custom.sty" do
 
-      before { Softcover.stub(:custom_styles).and_return(custom_sty) }
+      before { allow(Softcover).to receive(:custom_styles).and_return(custom_sty) }
 
       it "should include the custom macros" do
         expect(config).to include foo
