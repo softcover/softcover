@@ -56,6 +56,7 @@ GEM
     execjs (2.10.0)
     ffi (1.17.2-arm64-darwin)
     ffi (1.17.2-x86_64-darwin)
+    ffi (1.17.2-x86_64-linux-gnu)
     hashdiff (1.2.0)
     http-accept (1.7.0)
     http-cookie (1.0.8)
@@ -109,7 +110,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    rexml (3.4.1)
+    rexml (3.4.2)
     rspec (3.13.0)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
@@ -159,6 +160,7 @@ PLATFORMS
   arm64-darwin-24
   x86_64-darwin-19
   x86_64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   pry
